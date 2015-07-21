@@ -92,6 +92,16 @@ $type: flex;
 				@content;
 			}
 		}
+	} @else if $type == static {
+		@if $root {
+			@at-root .#{$nested-component} {
+				@content;
+			}
+		} @else { 
+			.#{$nested-component} {
+				@content;
+			}
+		}
 	}
 }
 
@@ -283,7 +293,7 @@ $extend-settings: true;
 
 // Map Deep Merge
 // http://git.io/vmBVH
-// Customized for use with Kayzen UIX
+// Customized for use with modular.scss
 //-----------------------------------------------------------------
 
 @function config($map-old, $map-new, $overwrite: true, $nested: false) {
