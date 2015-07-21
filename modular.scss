@@ -1,0 +1,319 @@
+//=================================================================
+// Utilities
+//=================================================================
+
+//-----------------------------------------------------------------
+// Modular CSS Mixins 
+//-----------------------------------------------------------------
+
+// Component
+// Define the main component
+//-----------------------------------------------------------------
+
+// 	Usage
+// 
+// 	@include component(header) {
+//		...
+// 	}
+//
+// 	<div class="header">...</div>
+
+// Set the default selector type (flex, chain, static)
+$type: flex;
+
+@mixin component(
+	$component, 
+	$type: $type,
+	$selector: class
+) {
+	$component: $component !global;
+	@if $selector == class {
+		@if $type == flex {
+			.#{$component},
+			[class*="#{$component}-"] {
+				@content;
+			}	
+		} @else if $type == chain {
+			[class*="#{$component}-"] {
+				@content;
+			}
+		} @else if $type == static {
+			.#{$component} {
+				@content;
+			}
+		}
+	} @else if $selector == data {
+		[data-#{$component}] {
+			@content;
+		}
+	} 
+}
+
+// Nested Component
+// Nest components for appropriate specificity
+//-----------------------------------------------------------------
+
+// 	Usage
+// 
+// 	@include component(header) {
+//		@include nested-component(container) {
+//			...
+//		}
+// 	}
+//
+// 	<div class="header">
+// 		<div class="container">
+//			...
+//		</div>
+// 	</div>
+
+@mixin nested-component($nested-component, $type: flex, $root: false) {
+	@if $type == flex {
+		@if $root {
+			@at-root {
+				.#{$nested-component},
+				[class*="#{$nested-component}-"] {
+					@content;
+				}
+			}
+		} @else { 
+			.#{$nested-component},
+			[class*="#{$nested-component}-"] {
+				@content;
+			}
+		}
+	} @else if $type == chain {
+		@if $root {
+			@at-root [class*="#{$nested-component}-"] {
+				@content;
+			}
+		} @else { 
+			[class*="#{$nested-component}-"] {
+				@content;
+			}
+		}
+	}
+}
+
+// Modifiers 
+// Add a modifier to an existing component
+//-----------------------------------------------------------------
+
+//	Usage
+//
+//	@include component(header) {
+//		@include modifier(side) {
+//			...
+//		}
+//	}
+//
+//	<div class="header-side">...</div>
+
+@mixin modifier($modifier) {
+	@at-root [class*="#{$component}-"][class*="-#{$modifier}"] {
+		@content
+	}
+}
+
+// Nested Modifiers 
+// Nest a modifier for appropriate specificity
+//-----------------------------------------------------------------
+
+//	Usage
+//
+//	@include component(button) {
+//		@include modifier(white) {
+//			@include nested-modifier(border) {
+//				...
+//			}
+//		}
+//	}
+//
+//	<div class="button-white-border">...</div>
+
+@mixin nested-modifier($modifier) {
+	&[class*="-#{$modifier}"] {
+		@content;
+	}
+}
+
+// Extend Modifiers
+// Extend one or more modifiers of a component
+//-----------------------------------------------------------------
+
+//	Usage
+
+//	@include component(button) {
+//
+//		@include modifier(round)   {...}
+//		@include modifier(large)  {...}
+//		@include modifier(success) {...}
+//
+//		@include modifier(primary) {
+//			@include extend(round, large, success);
+//		}	
+//
+//	}
+//
+//	<div class="button-primary">...</div>
+
+@mixin extend($modifiers...) {
+	@each $modifier in $modifiers {
+		@extend [class*="#{$component}-"][class*="-#{$modifier}"];
+	}
+}
+
+// Component Setting
+// Add a configurable setting to a component
+//-----------------------------------------------------------------
+
+//	Usage
+//
+//	@mixin billboard($config: ()) {
+//
+//		$billboard: config((
+//			full-screen : false
+//		), $config) !global;
+//
+//		@include component(billboard) {
+//			@include setting(full-screen) {
+//				...
+//			}
+//		}
+//
+//	}
+//
+//	@include billboard: ((
+//		full-screen : true
+//	));
+//
+//	<div class="billboard">...</div>
+
+// Extend each setting as a modifier by default?
+$extend-settings: true;
+
+@mixin setting($setting) {
+	@at-root %#{$component}-#{$setting} {	
+		@content;
+	}
+	@if map-get($config, extend-settings) {
+		@include modifier($setting) {	
+			@extend %#{$component}-#{$setting};
+		}
+	}
+	@if map-get($config, $setting) {
+		@extend %#{$component}-#{$setting};
+	}
+}
+
+//-----------------------------------------------------------------
+// Advanced Functions
+//-----------------------------------------------------------------
+
+// Reverse Map Function
+// http://git.io/vLfuz
+//-----------------------------------------------------------------
+
+@function reverse-map ($map) {	
+    $keys: map-keys($map);
+    $map-reversed: ();    
+    @for $i from length($keys) through 1 {
+        $map-reversed: map-merge(
+            $map-reversed, (nth($keys, $i): map-get($map, nth($keys, $i)))
+        );
+    }
+    $result: $map-reversed; 
+    @return $result;
+}
+
+// Map-Set Function
+// http://git.io/vmBKD
+//-----------------------------------------------------------------
+
+@function get-keys($keys, $counter) {
+	$return: ();
+	@for $i from 1 to $counter {
+		$return: append($return, nth($keys, $i));
+	}
+	@return $return;
+}
+
+@function map-set($map, $key, $value) {
+	@return map-merge($map, ($key: $value));
+}
+
+@function map-set-deep($map, $keys, $value) {
+	
+	$private-sassy-maps-suppress-warnings: true !global;
+	$length: length($keys);
+	$get-keys: ();
+	$map-level: ();
+
+	@if $length > 1 {
+		$get-keys: get-keys($keys, $length);
+		$map-level: map-get-deep($map, $get-keys);
+	}
+  	$merge: (nth($keys, $length): $value);
+	@if $map-level {
+		$merge: map-merge($map-level, $merge);
+	}
+	@for $i from ($length * -1 + 1) through -1 {
+		$j: abs($i);
+		$key: nth($keys, $j);
+		// @debug $get-keys;
+		@if $j > 1 {
+			$get-keys: get-keys($keys, $j);
+			$map-level: map-get-deep($map, $get-keys);
+			@if $map-level {
+				$merge: map-merge($map-level, ($key: $merge));
+			}
+			@else {
+				$merge: ($key: $merge);
+			}
+		}
+		@else {
+			$merge: ($key: $merge);
+		}
+	}
+	$map: map-merge($map, $merge);
+	$private-sassy-maps-suppress-warnings: false !global;
+	@return $map;
+  
+}
+
+// Map Deep Merge
+// http://git.io/vmBVH
+// Customized for use with Kayzen UIX
+//-----------------------------------------------------------------
+
+@function config($map-old, $map-new, $overwrite: true, $nested: false) {
+	// Custom code to set default keys for a component
+	@if not $nested {
+		$map-old: map-merge((
+			selector-type   : $type,
+			extend-settings : $extend-settings
+		), $map-old);
+	}
+	// Iterate through each value of the new map
+	@each $key, $new-value in $map-new {
+		// Check if that value already exists on the old map
+		@if map-has-key($map-old, $key) {
+			// There is an existing key
+			$old-value: map-get($map-old, $key);
+			@if type-of($new-value) == map and type-of($old-value) == map {
+				// If both are maps, recurse regardless of $overwrite
+				$merged-value: config($old-value, $new-value, $nested: true);
+				$map-old: map-set($map-old, $key, $merged-value);	
+			} @else {
+				// Otherwise check $overwrite
+				@if $overwrite{
+					$map-old: map-set($map-old, $key, $new-value);
+				}
+			}
+		} @else {
+			// There is no existing key to add
+			$map-old: map-set($map-old, $key, $new-value);
+		}
+	}
+	@return $map-old;
+}
