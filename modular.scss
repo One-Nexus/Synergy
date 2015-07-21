@@ -1,10 +1,10 @@
-//=================================================================
-// Utilities
-//=================================================================
+/*-----------------------------------------------------------------
 
-//-----------------------------------------------------------------
-// Modular CSS Mixins 
-//-----------------------------------------------------------------
+Modular
+Made by @esr360
+http://github.com/esr360/Modular/
+	
+-----------------------------------------------------------------*/
 
 // Component
 // Define the main component
@@ -67,7 +67,7 @@ $type: flex;
 //		</div>
 // 	</div>
 
-@mixin nested-component($nested-component, $type: flex, $root: false) {
+@mixin nested-component($nested-component, $type: $type, $root: false) {
 	@if $type == flex {
 		@if $root {
 			@at-root {
