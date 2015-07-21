@@ -220,22 +220,6 @@ $extend-settings: true;
 // Advanced Functions
 //-----------------------------------------------------------------
 
-// Reverse Map Function
-// http://git.io/vLfuz
-//-----------------------------------------------------------------
-
-@function reverse-map ($map) {	
-    $keys: map-keys($map);
-    $map-reversed: ();    
-    @for $i from length($keys) through 1 {
-        $map-reversed: map-merge(
-            $map-reversed, (nth($keys, $i): map-get($map, nth($keys, $i)))
-        );
-    }
-    $result: $map-reversed; 
-    @return $result;
-}
-
 // Map-Set Function
 // http://git.io/vmBKD
 //-----------------------------------------------------------------
