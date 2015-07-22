@@ -23,30 +23,23 @@ $type: flex;
 
 @mixin component(
 	$component, 
-	$type: $type,
-	$selector: class
+	$type: $type
 ) {
 	$component: $component !global;
-	@if $selector == class {
-		@if $type == flex {
-			.#{$component},
-			[class*="#{$component}-"] {
-				@content;
-			}	
-		} @else if $type == chain {
-			[class*="#{$component}-"] {
-				@content;
-			}
-		} @else if $type == static {
-			.#{$component} {
-				@content;
-			}
-		}
-	} @else if $selector == data {
-		[data-#{$component}] {
+	@if $type == flex {
+		.#{$component},
+		[class*="#{$component}-"] {
+			@content;
+		}	
+	} @else if $type == chain {
+		[class*="#{$component}-"] {
 			@content;
 		}
-	} 
+	} @else if $type == static {
+		.#{$component} {
+			@content;
+		}
+	}
 }
 
 // Nested Component
@@ -206,13 +199,13 @@ $extend-settings: true;
 	@at-root %#{$component}-#{$setting} {	
 		@content;
 	}
+	@if map-get($config, $setting) != false {
+		@extend %#{$component}-#{$setting};
+	}
 	@if map-get($config, extend-settings) {
 		@include modifier($setting) {	
 			@extend %#{$component}-#{$setting};
 		}
-	}
-	@if map-get($config, $setting) {
-		@extend %#{$component}-#{$setting};
 	}
 }
 
