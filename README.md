@@ -61,7 +61,7 @@ Well, no. Perhaps this was true many years ago, but today, [any performance impa
 
 *Why bother using a mixin for this? Why not just write the wildcard selector?*
 
-For starters, writing `[class*="component-"]` over and over again can become tedious. Secondly, for our root styles we also need them to be applied to the naked `.component` class, meaning we would now have to write:
+For starters, writing `[class*="component-"]` over and over again can become tedious. Secondly, for our core styles we also need them to be applied to the naked `.component` class, meaning we would now have to write:
 
 ```css
 .component,
