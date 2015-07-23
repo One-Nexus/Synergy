@@ -53,7 +53,20 @@ I'm glad you asked. The answer is simple - [wildcard selectors](#). Under the ho
 
 Well, no. Perhaps this was true many years ago, but today, [any performance impact is negilable](http://www.telerik.com/blogs/css_tip_star_selector_not_that_bad) (and this article is 3 years old). [Further reading](http://benfrain.com/css-performance-revisited-selectors-bloat-expensive-styles/). 
 
-## Configuring a Module
+*Why bother using a mixin for this? Why not just write the wildcard selector?*
+
+For starters, writing `[class*="component-"]` over and over again can become tedious. Secondly, for our root styles we also need them to be applied to the naked `.component` class, meaning we would now have to write:
+
+```css
+.component,
+[class*="component-"] {
+	...
+}
+```
+
+Which is exactly what the  "component" mixin does. The [nested-components](#) and [modifiers](#) mixins in particular become extremely useful for managing and maintainig a sensible CSS output, keeping it as clean and minimal as possible.
+
+### Configuring a Module
 
 Modular allows you to create confirguble components with customizable parameters. To configure a new module, create a mixin named after your module (ensure the name is unique):
 
@@ -63,7 +76,7 @@ Modular allows you to create confirguble components with customizable parameters
 }
 ```
 
-The `$config` variable is required to accept the configurable options, which are defined inside the mixin:
+The `$config` variable is required to accept the custom options when including the mixin; the default options are defined inside the mixin:
 
 ```css
 @mixin header($config: ()) {
@@ -72,7 +85,7 @@ The `$config` variable is required to accept the configurable options, which are
 			
 			/* Options */
 			dark : false,
-			side : left
+			top  : 50px
 			
 		), $config) !global;
 		
@@ -81,7 +94,7 @@ The `$config` variable is required to accept the configurable options, which are
 }
 ```
 
-We now have the basis for our example module. Next, the actual component itself:
+In the example above, we have two different types of options; a bool and a number. Typically, the "setting" mixin used in the example below would be used for options which are bools (although strictly speaking, it's used for options which are able to have a value of "false" - read further on for examples). We now have the basis for our example module. Next, the actual component itself:
 
 ```css
 @mixin header($config: ()) {
@@ -90,13 +103,17 @@ We now have the basis for our example module. Next, the actual component itself:
 			
 			/* Options */
 			dark : false,
-			side : left
+			top  : 50px
 			
 		), $config) !global;
 		
 
 		@include component(header) {
 			
+			// Core Styles
+			margin-top: map-get($header, top);
+			
+			// Settings
 			@include setting(dark) {
 				background-color: black;
 			}
@@ -106,11 +123,20 @@ We now have the basis for our example module. Next, the actual component itself:
 }
 ```
 
-We can now create our header with the following HTML:
+To call an option, the "map-get" feature of Sass is used. To create an optional setting, the "setting" mixin is used. We can now create our header with the following HTML:
 
 ```html
 <div class="header">
 	...
 </div>
+```
 
-We can easily create a dark header by setting the "dark" option to "true".
+We can now easily create a dark header by setting the "dark" option to "true". Alternatively, we can add a modifier of "dark" to our header, regardless of the settings value:
+
+```html
+<div class="header-dark">
+	...
+</div>
+```
+
+## Documentation
