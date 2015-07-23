@@ -45,6 +45,12 @@ The above code would allow for the use of all of the following:
 <div class="button-success-large">Success Large Button</div>
 ```
 
+And, crazily enough, you could also use the original BEM syntax of:
+
+```html
+<div class="button  button--large  button--success">Large Success Button</div>
+```
+
 ### But how?
 
 I'm glad you asked. The answer is simple - [wildcard selectors](#). Under the hood, Modular has created a wildcard selector for the component and each modifier
@@ -140,3 +146,5 @@ We can now easily create a dark header by setting the "dark" option to "true". A
 ```
 
 ## Documentation
+
+### Component
