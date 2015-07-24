@@ -194,6 +194,40 @@ The static option creates only the naked selector for your component; ie - `.sel
 }
 ```
 
+### Nested Component
+
+Nested components are either components which already exist which you wish to overwrite due to their context, or sub-componenets which relate to your main component. This mixin accepts 3 parameters:
+
+* **$nested-component** - the name of your component to be nested (required)
+* **$type** - as above, this can be either `flex` (default), `chain` or `static` (optional)
+* **$root** - defines whether the component should be generated outside the parent component - false by default (optional)
+
+```css
+@include component(header) {
+
+	@include nested-component(logo) {
+		/* header logo styles */	
+	}
+	
+	@include nested-component(wrap-header, $root: true) {
+		/* wrap-header sub-component styles */	
+	}
+	
+}
+```
+
+> For the sake of simplicity and to demonstrate what the above code is doing, the below code isn't an exact output of the above code .
+
+```css
+.header .logo {
+	/* header logo styles */
+}
+
+.wrap-header {
+	/* wrap-header sub-component styles */	
+}
+```
+
 ### Modifier
 
 The `modifier` mixin generates the selector for any modifier of your component, for example a **small** or **large** modifier. This mixin accepts only 1 paramter:
@@ -221,7 +255,7 @@ The `nested-modifier` mixin is used to nest modifiers within one another, meanin
 
 * **$modifier** - the name of your modifier (required)
 
-* **`print`** used below isn't a real/valid property and is used for demonstrational purposes only*
+_**`print`** used below isn't a real/valid property and is used for demonstrational purposes only_
 
 ```css
 @include component(button) {
