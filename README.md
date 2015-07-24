@@ -223,9 +223,12 @@ Nested components are either components which already exist which you wish to ov
 }
 ```
 
-In the example above there is a **logo** component and a **header** component. If we want to apply some unique styles to the logo only when placed in context of the **header** component, the standard `nested-component` mixin can be used.
-
-The **wrap-header** sub-component above is generated outside of the main **header** component. *Why would you want to do this?* It is good practice to only nest if absolutely neccessery, and since `.wrap-header` is already a unique class, `.header .wrap-header` would be too specific. This is a result of setting the `$root` parameter to **true**. 
+```html
+<div class="wrap-header">
+	<div class="header">
+		<div class="logo">...</div>
+	</div>
+</div>
 
 #### Modifier
 
