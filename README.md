@@ -290,17 +290,17 @@ This means that in your HTML the element would require both the **border** and *
 This mixin allows you to extend multiple modifiers into a new, seperate modifer, essentially combining several modifiers into one.
 
 ```css
-	@include component(button) {
+@include component(button) {
 
-		@include modifier(round)   {...}
-		@include modifier(large)   {...}
-		@include modifier(success) {...}
+	@include modifier(round)   {...}
+	@include modifier(large)   {...}
+	@include modifier(success) {...}
 
-		@include modifier(primary) {
-			@include extend(round, large, success);
-		}	
+	@include modifier(primary) {
+		@include extend(round, large, success);
+	}	
 
-	}
+}
 ```
 
 ```html
