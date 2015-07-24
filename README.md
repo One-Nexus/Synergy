@@ -147,7 +147,9 @@ We can now easily create a dark header by setting the "dark" option to "true". A
 
 ## Documentation
 
-### Component
+### Mixins
+
+#### Component
 
 The `component` mixin is what generates the selectors for your component/module. The mixin accepts 2 parameters:
 
@@ -156,7 +158,7 @@ The `component` mixin is what generates the selectors for your component/module.
 
 **$type** can be one of three values: `flex` (default), `chain` and `static`. By default, `flex` is enabled for all componenets. To globally change the default type, change the `$type` variable at the top of **modular.scss**.
 
-#### Flex
+##### Flex
 
 This is the default value for a component; it creates wildcards for both `.component` and `[class*="component-"]`, allowing you to use both the naked component as well as modifiers. Whilst this is the most flexible option, it does mean the generated CSS is slightly greater, which is what the other 2 options are for.
 
@@ -174,7 +176,7 @@ Or if using the default `$type` value, you do not need to pass a second parmeter
 }
 ```
 
-#### Chain
+##### Chain
 
 The chain option should be used if you are looking to optimise your CSS output, and you know your component will not exist as a naked selector without modifiers. Ie - this option outputs only `[class*="component-"]`, thefore you cannot use `.component` to achieve any styles.
 
@@ -184,7 +186,7 @@ The chain option should be used if you are looking to optimise your CSS output, 
 }
 ```
 
-#### Static
+##### Static
 
 The static option creates only the naked selector for your component; ie - `.selector`, meaning no modifiers can be used. This option is only available for consistency; it probably makes more sense to just write `.component` instead of using the mixin in this case - I'll let you think about that one.
 
@@ -194,7 +196,7 @@ The static option creates only the naked selector for your component; ie - `.sel
 }
 ```
 
-### Nested Component
+#### Nested Component
 
 Nested components are either components which already exist which you wish to overwrite due to their context, or sub-componenets which relate to your main component. This mixin accepts 3 parameters:
 
@@ -225,7 +227,7 @@ In the example above there is a **logo** component and a **header** component. I
 
 The **wrap-header** sub-component above is generated outside of the main **header** component. *Why would you want to do this?* It is good practice to only nest if absolutely neccessery, and since `.wrap-header` is already a unique class, `.header .wrap-header` would be too specific. This is a result of setting the `$root` parameter to **true**. 
 
-### Modifier
+#### Modifier
 
 The `modifier` mixin generates the selector for any modifier of your component, for example a **small** or **large** modifier. This mixin accepts only 1 paramter:
 
@@ -246,7 +248,7 @@ The `modifier` mixin generates the selector for any modifier of your component, 
 }
 ```
 
-### Nested Modifier
+#### Nested Modifier
 
 The `nested-modifier` mixin is used to nest modifiers within one another, meaning that both modifiers must be passed to the element for the styles to take effect. Again, this mixin accepts only 1 parameter:
 
@@ -285,7 +287,7 @@ This means that in your HTML the element would require both the **border** and *
 
 > If you try to nest the regular modifier mixin, it will output the CSS as if it weren't nested. It is essential to use the `nested-modifier` mixin for any nested modifiers. Other than that, modifiers can be infinitely nested.
 
-### Extend Modifiers
+#### Extend Modifiers
 
 This mixin allows you to extend multiple modifiers into a new, seperate modifer, essentially combining several modifiers into one.
 
@@ -306,3 +308,5 @@ This mixin allows you to extend multiple modifiers into a new, seperate modifer,
 ```html
 <div class="button-primary">...</div>
 ```
+
+### Module configuration
