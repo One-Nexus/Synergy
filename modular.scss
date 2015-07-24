@@ -21,10 +21,7 @@ http://github.com/esr360/Modular/
 // Set the default selector type (flex, chain, static)
 $type: flex;
 
-@mixin component(
-	$component, 
-	$type: $type
-) {
+@mixin component($component, $type: $type) {
 	$component: $component !global;
 	@if $type == flex {
 		.#{$component},

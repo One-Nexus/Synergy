@@ -70,7 +70,7 @@ For starters, writing `[class*="component-"]` over and over again can become ted
 }
 ```
 
-Which is exactly what the  "component" mixin does. The [nested-components](#) and [modifiers](#) mixins in particular become extremely useful for managing and maintainig a sensible CSS output, keeping it as clean and minimal as possible.
+Which is exactly what the  "component" mixin does. The reason `[class*="component"]` on its own isn't used is because this can cause undesired effects elsewhere in your styles. A very simple example would be if you wanted to use a `.buttons` class in the presence on a **button** component - `[class*="button"]` would target this class and apply the core button styles to it. Using `[class*="button-"]` is a fairly safe selector in a project we have control over, in terms of potential conflicts.
 
 ### Configuring a Module
 
@@ -148,3 +148,42 @@ We can now easily create a dark header by setting the "dark" option to "true". A
 ## Documentation
 
 ### Component
+
+The `component` mixin is what generates the selectors for your component/module. The mixin accepts 2 parameters:
+
+* **$component** - the name of your component
+* **$type** - this defines how the mixin generates the selectors for your component
+
+**$type** can be one of three values: `flex` (default), `chain` and `static`. By default, `flex` is enabled for all componenets. To globally change the default type, change the `$type` variable at the top of **modular.scss**.
+
+#### Flex
+
+This is the default value for a componenet; it creates wildcards for both `.component` and `[class*="component-"]`, allowing you to use both the naked component as well as modifiers. Whilst this is the most flexible option, it does mean the generated CSS is slightly greater, which is what the other 2 options are for.
+
+```css
+@include component(header, flex) {
+	...
+}
+```
+
+Or if using the default `$type` value, you do not need to enter a second parmeter:
+
+```css
+@include component(header) {
+	...
+}
+```
+
+#### Chain
+
+The chain option should be used if you are looking to optimise your CSS output, and you know your component will not exist as a naked selector without modifiers. Ie - this option outputs only `[class*="component-"]`, thefore you cannot use `.component` to achieve any styles.
+
+```css
+@include component(header, flex) {
+	...
+}
+```
+
+#### Static
+
+The static option creates only the naked selector for your component; ie - `.elector`, meaning no modifiers can be used. This options is only available for consistency; it probably makes more sense to just write `.component` instead of using the mixin in this case.
