@@ -151,8 +151,8 @@ We can now easily create a dark header by setting the "dark" option to "true". A
 
 The `component` mixin is what generates the selectors for your component/module. The mixin accepts 2 parameters:
 
-* **$component** - the name of your component
-* **$type** - this defines how the mixin generates the selectors for your component
+* **$component** - the name of your component (required)
+* **$type** - this defines how the mixin generates the selectors for your component (optional)
 
 **$type** can be one of three values: `flex` (default), `chain` and `static`. By default, `flex` is enabled for all componenets. To globally change the default type, change the `$type` variable at the top of **modular.scss**.
 
@@ -192,4 +192,62 @@ The static option creates only the naked selector for your component; ie - `.sel
 @include component(header, static) {
 	...
 }
+```
+
+### Modifier
+
+The `modifier` mixin generates the selector for any modifier of your component, for example a **small** or **large** modifier. This mixin accepts only 1 paramter:
+
+* **$modifier** - the name of your modifier (required)
+
+
+```css
+@include component(button) {
+	
+	@include modifier(small) {
+		font-size: 0.75em;
+	}
+	
+	@include modifier(large) {
+		font-size: 1.5em;
+	}
+	
+}
+```
+
+### Nested Modifier
+
+The `nested-modifier` mixin is used to nest modifiers within one another, meaning that both modifiers must be passed to the element for the styles to take effect. Again, this mixin accepts only 1 parameter:
+
+* **$modifier** - the name of your modifier (required)
+
+*styles used below are pseudo styles only and are not real/valid properties*
+
+```css
+@include component(button) {
+	
+	print: "null";
+
+	@include modifier(white) {
+		print: "foo";
+	}
+	
+	@include modifier(border) {
+		print: "bar";
+		@include nested-modifier(white) {
+			print: "baz";
+		}
+	}
+	
+}
+```
+
+This means that in your HTML the element would require both the **border** and **white** modifiers for the styles to take place:
+
+```html
+<div class="button">null</div>
+<div class="button-white">foo</div>
+<div class="button-border">bar</div>
+<div class="button-border-white">baz</div>
+<div class="button-white-border">baz</div>
 ```
