@@ -4,7 +4,7 @@
 
 ## Overview
 
-Modular aims to take modular CSS architecting to the next level. Similar in principle to the popular BEM convention, Modular is based off the idea of having "components" (modules) and "modifiers". 
+Modular aims to take modular CSS architecting to the next level. Similar in principle to the popular BEM convention, Modular is based off the idea of having **modules**, **components** and **modifiers**. 
 
 Have you ever found yourself using BEM and ending up with HTML like this?
 
@@ -158,7 +158,7 @@ The `component` mixin is what generates the selectors for your component/module.
 
 #### Flex
 
-This is the default value for a componenet; it creates wildcards for both `.component` and `[class*="component-"]`, allowing you to use both the naked component as well as modifiers. Whilst this is the most flexible option, it does mean the generated CSS is slightly greater, which is what the other 2 options are for.
+This is the default value for a component; it creates wildcards for both `.component` and `[class*="component-"]`, allowing you to use both the naked component as well as modifiers. Whilst this is the most flexible option, it does mean the generated CSS is slightly greater, which is what the other 2 options are for.
 
 ```css
 @include component(header, flex) {
@@ -166,7 +166,7 @@ This is the default value for a componenet; it creates wildcards for both `.comp
 }
 ```
 
-Or if using the default `$type` value, you do not need to enter a second parmeter:
+Or if using the default `$type` value, you do not need to pass a second parmeter here:
 
 ```css
 @include component(header) {
@@ -179,11 +179,17 @@ Or if using the default `$type` value, you do not need to enter a second parmete
 The chain option should be used if you are looking to optimise your CSS output, and you know your component will not exist as a naked selector without modifiers. Ie - this option outputs only `[class*="component-"]`, thefore you cannot use `.component` to achieve any styles.
 
 ```css
-@include component(header, flex) {
+@include component(header, chain) {
 	...
 }
 ```
 
 #### Static
 
-The static option creates only the naked selector for your component; ie - `.elector`, meaning no modifiers can be used. This options is only available for consistency; it probably makes more sense to just write `.component` instead of using the mixin in this case.
+The static option creates only the naked selector for your component; ie - `.selector`, meaning no modifiers can be used. This option is only available for consistency; it probably makes more sense to just write `.component` instead of using the mixin in this case - I'll let you think about that one.
+
+```css
+@include component(header, static) {
+	...
+}
+```
