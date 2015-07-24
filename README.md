@@ -221,7 +221,7 @@ The `nested-modifier` mixin is used to nest modifiers within one another, meanin
 
 * **$modifier** - the name of your modifier (required)
 
-*styles used below are pseudo styles only and are not real/valid properties*
+* **`print`** used below isn't a real/valid property and is used for demonstrational purposes only*
 
 ```css
 @include component(button) {
@@ -251,3 +251,5 @@ This means that in your HTML the element would require both the **border** and *
 <div class="button-border-white">baz</div>
 <div class="button-white-border">baz</div>
 ```
+
+> If you try to nest the regular modifier mixin, it will output the CSS as if it weren't nested. It is essential to use the `nested-modifier` mixin for any nested modifiers. Other than that, modifiers can be infinitely nested.
