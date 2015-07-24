@@ -229,6 +229,7 @@ Nested components are either components which already exist which you wish to ov
 		<div class="logo">...</div>
 	</div>
 </div>
+```
 
 #### Modifier
 
