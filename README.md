@@ -4,7 +4,7 @@
 
 ## Overview
 
-Modular aims to take modular CSS architecting to the next level. Similar in principle to the popular BEM convention, Modular is based off the idea of having **modules**, **components** and **modifiers**. 
+Modular aims to take modular CSS architecting to the next level. Similar in principle to the popular [BEM](http://csswizardry.com/2013/01/mindbemding-getting-your-head-round-bem-syntax/) convention, Modular is based off the idea of having **modules**, **components** and **modifiers**. 
 
 Have you ever found yourself using BEM and ending up with HTML like this?
 
@@ -18,7 +18,7 @@ What if you could just do this:
 <div class="button-large-success">Large Success Button</div>
 ```
 
-The benefits of using this HTML over conventional BEM syntax are self apparant. However, you may be looking at that and be thinking of several reasons why it wouldn't work; what if I want to only use the "button" class on its own? What if I only want a large button, or only want a success button? Well, with Modular, all this is possible.
+The benefits of using this HTML over conventional BEM syntax are self apparant. However, you may be looking at that thinking of several reasons why it wouldn't work; what if I want to only use the "button" class on its own? What if I only want a large button, or only want a success button? Well, with Modular, all this is possible.
 
 ```css
 @include component(button) {
@@ -53,7 +53,7 @@ And, crazily enough, you could also use the original BEM syntax of:
 
 ### But how?
 
-I'm glad you asked. The answer is simple - [wildcard selectors](#). Under the hood, Modular has created a wildcard selector for the component and each modifier
+I'm glad you asked. The answer is simple - [wildcard selectors](http://www.surfingsuccess.com/css/css-wildcard-css-attribute-selector.html). Under the hood, Modular has created a wildcard selector for the component and each modifier
 
 *But aren't wildcard selectors bad for performance?*
 
@@ -70,7 +70,7 @@ For starters, writing `[class*="component-"]` over and over again can become ted
 }
 ```
 
-Which is exactly what the  "component" mixin does. The reason `[class*="component"]` on its own isn't used is because this can cause undesired effects elsewhere in your styles. A very simple example would be if you wanted to use a `.buttons` class in the presence on a **button** component - `[class*="button"]` would target this class and apply the core button styles to it. Using `[class*="button-"]` is a fairly safe selector in a project we have control over, in terms of potential conflicts.
+Which is exactly what the  **component** mixin does. The reason `[class*="component"]` on its own isn't used is because this can cause undesired effects elsewhere in your styles. A very simple example would be if you wanted to use a `.buttons` class in the presence on a **button** component - `[class*="button"]` would target this class and apply the core button styles to it. Using `[class*="button-"]` is a fairly safe selector in a project we have control over, in terms of potential conflicts.
 
 ### Configuring a Module
 
@@ -100,7 +100,7 @@ The `$config` variable is required to accept the custom options when including t
 }
 ```
 
-In the example above, we have two different types of options; a bool and a number. Typically, the "setting" mixin used in the example below would be used for options which are bools (although strictly speaking, it's used for options which are able to have a value of "false" - read further on for examples). We now have the basis for our example module. Next, the actual component itself:
+In the example above, we have two different types of options; a bool and a number. Typically, the **setting** mixin used in the example below would be used for options which are bools (although strictly speaking, it's used for options which are able to have a value of "false" - read further on for examples). We now have the basis for our example module. Next, the actual component itself:
 
 ```css
 @mixin header($config: ()) {
@@ -148,6 +148,14 @@ We can now easily create a dark header by setting the "dark" option to "true". A
 ## Complete Documentation
 
 ### Mixins
+
+* [Component](#)
+* [Nested Component](#)
+* [Modifier](#)
+* [Nested Modifier](#)
+* [Extend Modifiers](#)
+* [Setting](#)
+* [Option](#)
 
 #### Component
 
@@ -416,6 +424,7 @@ In some cases, you may require a hybrid of the above 2 options. You may have a s
 				/* right side styles */
 			}
 		}
+		
 }
 ```
 
@@ -473,5 +482,72 @@ The above example is assuming we have a setup where the header's position is con
 
 * `left: 0;` for a left header
 * `right: 0;` for a right header
+
+#### Including Your Module
+
+Our module is now ready to be include; to include the module with the default settings you have created, all that's required is:
+
+```css
+@include header;
+```
+
+To include your header with customised options, this is done like so:
+
+```css
+@include header((
+	dark : true,
+	top  : 0,
+	side : left	
+))
+```
+
+And that's it, you now have a completely custoimzable header which can be modified with extreme ease.
+
+An example project's configuration file may look something like this:
+
+```css
+//-----------------------------------------------------------------
+// Theme Config
+//-----------------------------------------------------------------
+	
+	// Globally disable the extension of settings to modifiers
+	$extend-settings           : false;
+
+	@include logo;
+	
+	@include header((
+		selector-type          : static,
+		absolute               : true,
+		bar                    : true,
+		bg-color               : transparent,
+		top-position           : 50px
+	));
+	
+	@include footer;
+	@include breadcrumb;
+	
+	@include navigation((
+		no-icons               : true,
+		link-color             : white,
+	));
+	
+	@include dropdown;
+	
+	@include buttons ((
+		extend-settings        : true,
+		selector-type          : chain
+	))
+	
+	@include promo-banner;
+	
+	@include billboard((
+		selector-type          : static,
+		full-screen            : true,
+		overlay                : true,
+		bg-image               : "/images/billboard-1.jpg",
+		wrapper-width          : 960px;
+	));
+	
+```
 
 ### More Examples
