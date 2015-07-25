@@ -22,14 +22,14 @@ The benefits of using this HTML over conventional BEM syntax are self apparant. 
 
 ```js
 @include component(button) {
-	/* core button styles */
+	// core button styles
 	...
 	@include modifier(large) {
-		/* large button styles */
+		// large button styles
 		...
 	}
 	@include modifier(success) {
-		/* success button styles */
+		// success button styles
 		...
 	}
 }
@@ -224,7 +224,7 @@ Nested components are either components which already exist which you wish to ov
 	}
 	
 	@include nested-component(wrap-header, $root: true) {
-		/* wrap-header sub-component styles */	
+		// wrap-header sub-component styles
 	}
 	
 }
@@ -329,7 +329,7 @@ As outlined in the [overview](#) section, Modular allows you to configure your c
 
 		$header: config((
 			
-			/* Options */
+			// Options
 			dark : false,
 			top  : 50px
 			
@@ -370,7 +370,7 @@ If you are watching your CSS output, you may wish to remove these modifiers (and
 
 		$header: config((
 			
-			/* Options */
+			// Options
 			extend-settings: false,
 			dark : false,
 			top  : 50px
@@ -407,7 +407,7 @@ In some cases, you may require a hybrid of the above 2 options. You may have a s
 
 		$header: config((
 			
-			/* Options */
+			// Options
 			side: false; // left or right
 			
 		), $config) !global;
@@ -415,12 +415,12 @@ In some cases, you may require a hybrid of the above 2 options. You may have a s
 		...
 		
 		@include setting(side) {
-			/* core side header styles*/
+			// core side header styles
 			@include option(left) {
-				/* left side styles */
+				// left side styles
 			}
 			@include option(right)
-				/* right side styles */
+				// right side styles
 			}
 		}
 		
@@ -462,7 +462,7 @@ In some circumstances, we can achieve the same thing without having to use the `
 
 		$header: config((
 			
-			/* Options */
+			// Options
 			side: left;
 			
 		), $config) !global;
@@ -470,7 +470,7 @@ In some circumstances, we can achieve the same thing without having to use the `
 		...
 		
 		@include setting(side) {
-			/* Side-Header Styles */
+			// Side-Header Styles
 			...
 			#{map-get($header, side)}: 0; // left: 0;
 		}
