@@ -145,7 +145,7 @@ We can now easily create a dark header by setting the "dark" option to "true". A
 </div>
 ```
 
-## Documentation
+## Complete Documentation
 
 ### Mixins
 
@@ -313,4 +313,104 @@ This mixin allows you to extend multiple modifiers into a new, seperate modifer,
 <div class="button-primary">...</div>
 ```
 
-### Module configuration
+### Module Configuration
+
+As outlined in the [overview](#) section, Modular allows you to configure your components with customizable options.
+
+```css
+@mixin header($config: ()) {
+
+		$header: config((
+			
+			/* Options */
+			dark : false,
+			top  : 50px
+			
+		), $config) !global;
+		
+
+		@include component(header) {
+			
+			// Core Styles
+			margin-top: map-get($header, top);
+			
+			// Settings
+			@include setting(dark) {
+				background-color: black;
+			}
+			
+		}
+		
+}
+```
+
+For all intents and purposes, there are 2 types of options; bools and non-bools. A bool option is one whose value determines whether or not some code should be applied. A non-bool option is one whose value is used as a value for a CSS property. In the above example we have one of each.
+
+#### Bool Options
+
+If your option is a bool, you can use the `setting` mixin. The styles added within this mixin will automatically be applied to the component is the option is set to **true**. Alternatively, since by default adding a setting also creates a modifier for the setting, you can apply the styles by adding the modifier to your HTML tag, regardless of the settings value:
+
+```html
+<div class="header-dark">
+	...
+</div>
+```
+
+If you are watching your CSS output, you may wish to remove these modifiers (and related wildcard selectors) from the generated styles and only use them conditionally. To do so, you can pass the `exteding-settings` options to your module's config, and set it to **false**:
+
+```css
+@mixin header($config: ()) {
+
+		$header: config((
+			
+			/* Options */
+			extend-settings: false,
+			dark : false,
+			top  : 50px
+			
+		), $config) !global;
+		
+		...
+		
+}
+```
+
+To disable the extension of settings globally by default, set the `$extend-settings` variable in **modular.scss** to **false**. This is defined above the settings mixin.
+
+#### Non-Bool Options
+
+If your option is a CSS property, to call the option in your component the **map-get** function is used, like so:
+
+```css
+margin-top: map-get($header, top);
+```
+
+which will generate:
+
+```css
+margin-top: 50px;
+```
+
+#### Hybrid Options
+
+In some cases, you may require a hybrid of the above 2 options. You may have a set of styles you wish to use conditionally, and you may wish for these styles to vary depending on the value passed. Let's look at the following example:
+
+```css
+@mixin header($config: ()) {
+
+		$header: config((
+			
+			/* Options */
+			side: false; // left or right
+			
+		), $config) !global;
+		
+		...
+		
+		@include setting(side) {
+			/* Side-Header Styles */
+			...
+			#{map-get($header, side)}: 0;
+		}
+}
+```
