@@ -505,7 +505,7 @@ And that's it, you now have a completely custoimzable header which can be modifi
 
 An example project's configuration file may look something like this:
 
-```css
+```js
 //-----------------------------------------------------------------
 // Theme Config
 //-----------------------------------------------------------------
