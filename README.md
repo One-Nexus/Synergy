@@ -393,7 +393,7 @@ margin-top: 50px;
 
 #### Hybrid Options
 
-In some cases, you may require a hybrid of the above 2 options. You may have a set of styles you wish to use conditionally, and you may wish for these styles to vary depending on the value passed. Let's look at the following example:
+In some cases, you may require a hybrid of the above 2 options. You may have a set of styles you wish to use conditionally, and you may wish for these styles to vary depending on the value passed. Let's look at the following example - imagine we have a side header on our website, and we want to easily change whether it appears on the left or right hand side:
 
 ```css
 @mixin header($config: ()) {
@@ -408,9 +408,70 @@ In some cases, you may require a hybrid of the above 2 options. You may have a s
 		...
 		
 		@include setting(side) {
-			/* Side-Header Styles */
-			...
-			#{map-get($header, side)}: 0;
+			/* core side header styles*/
+			@include option(left) {
+				/* left side styles */
+			}
+			@include option(right)
+				/* right side styles */
+			}
 		}
 }
 ```
+
+The above example inserts an optional set of styles if `side` is set to anything other than **false**. Depending on the value of your setting, we can choose to include additional styles. Again, by default these options are extended as modifiers so you can use them regardless of the option's setting:
+
+```html
+<div class="header-side-left">..</div>
+```
+
+```html
+<div class="header-side-right">..</div>
+```
+
+If you've completely followed this documentation so far you may have already picked up on the fact you can also use:
+
+```html
+<div class="header-left-side">..</div>
+```
+
+```html
+<div class="header-right-side">..</div>
+```
+
+And just to reiterate, with the `side` option set to either left or right in our above example, we don't need to pass any modifiers to our HTML, we just use:
+
+```html
+<div class="header">...</div>
+```
+
+##### Getting Creative
+
+In some circumstances, we can achieve the same thing without having to use the `option` mixin. Consider the above example; "left" and "right" are both also CSS properties, so we can pass the setting's value as a CSS property:
+
+```css
+@mixin header($config: ()) {
+
+		$header: config((
+			
+			/* Options */
+			side: left;
+			
+		), $config) !global;
+		
+		...
+		
+		@include setting(side) {
+			/* Side-Header Styles */
+			...
+			#{map-get($header, side)}: 0; // left: 0;
+		}
+}
+```
+
+The above example is assuming we have a setup where the header's position is controlled via:
+
+* `left: 0;` for a left header
+* `right: 0;` for a right header
+
+### More Examples
