@@ -458,7 +458,7 @@ And just to reiterate, with the `side` option set to either left or right in our
 
 In some circumstances, we can achieve the same thing without having to use the `option` mixin. Consider the above example; "left" and "right" are both also CSS properties, so we can pass the setting's value as a CSS property:
 
-```css
+```js
 @mixin header($config: ()) {
 
 		$header: config((
