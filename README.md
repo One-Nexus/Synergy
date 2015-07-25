@@ -20,7 +20,7 @@ What if you could just do this:
 
 The benefits of using this HTML over conventional BEM syntax are self apparant. However, you may be looking at that thinking of several reasons why it wouldn't work; what if I want to only use the "button" class on its own? What if I only want a large button, or only want a success button? Well, with Modular, all this is possible.
 
-```css
+```js
 @include component(button) {
 	/* core button styles */
 	...
@@ -76,7 +76,7 @@ Which is exactly what the  **component** mixin does. The reason `[class*="compon
 
 Modular allows you to create confirguble components with customizable parameters. To configure a new module, create a mixin named after your module (ensure the name is unique):
 
-```css
+```js
 @mixin header($config: ()) {
 	...	
 }
@@ -84,12 +84,12 @@ Modular allows you to create confirguble components with customizable parameters
 
 The `$config` variable is required to accept the custom options when including the mixin; the default options are defined inside the mixin:
 
-```css
+```js
 @mixin header($config: ()) {
 
 		$header: config((
 			
-			/* Options */
+			// Options
 			dark : false,
 			top  : 50px
 			
@@ -102,12 +102,12 @@ The `$config` variable is required to accept the custom options when including t
 
 In the example above, we have two different types of options; a bool and a number. Typically, the **setting** mixin used in the example below would be used for options which are bools (although strictly speaking, it's used for options which are able to have a value of "false" - read further on for examples). We now have the basis for our example module. Next, the actual component itself:
 
-```css
+```js
 @mixin header($config: ()) {
 
 		$header: config((
 			
-			/* Options */
+			// Options
 			dark : false,
 			top  : 50px
 			
@@ -212,8 +212,7 @@ Nested components are either components which already exist which you wish to ov
 * **$type** - as above, this can be either `flex` (default), `chain` or `static` (optional)
 * **$root** - defines whether the component should be generated outside the parent component - false by default (optional)
 
-```css
-
+```js
 @include component(logo) {
 	font-size: 1em;	
 }
@@ -246,7 +245,7 @@ The `modifier` mixin generates the selector for any modifier of your component, 
 * **$modifier** - the name of your modifier (required)
 
 
-```css
+```js
 @include component(button) {
 	
 	@include modifier(small) {
@@ -268,7 +267,7 @@ The `nested-modifier` mixin is used to nest modifiers within one another, meanin
 
 _**`print`** used below isn't a real/valid property and is used for demonstrational purposes only_
 
-```css
+```js
 @include component(button) {
 	
 	print: "null";
@@ -303,7 +302,7 @@ This means that in your HTML the element would require both the **border** and *
 
 This mixin allows you to extend multiple modifiers into a new, seperate modifer, essentially combining several modifiers into one.
 
-```css
+```js
 @include component(button) {
 
 	@include modifier(round)   {...}
@@ -325,7 +324,7 @@ This mixin allows you to extend multiple modifiers into a new, seperate modifer,
 
 As outlined in the [overview](#) section, Modular allows you to configure your components with customizable options.
 
-```css
+```js
 @mixin header($config: ()) {
 
 		$header: config((
@@ -366,7 +365,7 @@ If your option is a bool, you can use the `setting` mixin. The styles added with
 
 If you are watching your CSS output, you may wish to remove these modifiers (and related wildcard selectors) from the generated styles and only use them conditionally. To do so, you can pass the `exteding-settings` options to your module's config, and set it to **false**:
 
-```css
+```js
 @mixin header($config: ()) {
 
 		$header: config((
@@ -389,13 +388,13 @@ To disable the extension of settings globally by default, set the `$extend-setti
 
 If your option is a CSS property, to call the option in your component the **map-get** function is used, like so:
 
-```css
+```js
 margin-top: map-get($header, top);
 ```
 
 which will generate:
 
-```css
+```js
 margin-top: 50px;
 ```
 
@@ -403,7 +402,7 @@ margin-top: 50px;
 
 In some cases, you may require a hybrid of the above 2 options. You may have a set of styles you wish to use conditionally, and you may wish for these styles to vary depending on the value passed. Let's look at the following example - imagine we have a side header on our website, and we want to easily change whether it appears on the left or right hand side:
 
-```css
+```js
 @mixin header($config: ()) {
 
 		$header: config((
@@ -475,6 +474,7 @@ In some circumstances, we can achieve the same thing without having to use the `
 			...
 			#{map-get($header, side)}: 0; // left: 0;
 		}
+		
 }
 ```
 
@@ -487,13 +487,13 @@ The above example is assuming we have a setup where the header's position is con
 
 Our module is now ready to be include; to include the module with the default settings you have created, all that's required is:
 
-```css
+```js
 @include header;
 ```
 
 To include your header with customised options, this is done like so:
 
-```css
+```js
 @include header((
 	dark : true,
 	top  : 0,
