@@ -206,6 +206,21 @@ $extend-settings: true;
 	}
 }
 
+// Option
+@mixin option($option) {
+	@at-root %#{$component}-#{$option} {	
+		@content;
+	}
+	@if map-get($config, $setting) == $option {
+		@extend %#{$component}-#{$option};
+	}
+	@if map-get($config, extend-settings) {
+		@include modifier($option) {
+			@extend %#{$component}-#{$option};
+		}
+	}
+}
+
 //-----------------------------------------------------------------
 // Advanced Functions
 //-----------------------------------------------------------------
