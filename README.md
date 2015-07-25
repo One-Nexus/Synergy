@@ -498,7 +498,7 @@ To include your header with customised options, this is done like so:
 	dark : true,
 	top  : 0,
 	side : left	
-))
+));
 ```
 
 And that's it, you now have a completely custoimzable header which can be modified with extreme ease.
@@ -536,7 +536,7 @@ An example project's configuration file may look something like this:
 	@include buttons ((
 		extend-settings        : true,
 		selector-type          : chain
-	))
+	));
 	
 	@include promo-banner;
 	
