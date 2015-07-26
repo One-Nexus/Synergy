@@ -116,7 +116,7 @@ In the example above, we have two different types of options; a bool and a numbe
 	@include component(header) {
 		
 		// Core Styles
-		margin-top: map-get($header, top);
+		margin-top: map-get($config, top);
 		
 		// Settings
 		@include setting(dark) {
@@ -337,7 +337,7 @@ As outlined in the [overview](#overview) section, Modular allows you to configur
 	@include component(header) {
 		
 		// Core Styles
-		margin-top: map-get($header, top);
+		margin-top: map-get($config, top);
 		
 		// Settings
 		@include setting(dark) {
@@ -372,8 +372,10 @@ Your configuration can also be infinitely nested, like so:
 		)
 		
 	), $config) !global;
+	
+	...
 		
-}// @mixin header
+}// @mixin global
 ```
 
 #### Bool Options
@@ -412,7 +414,7 @@ To disable the extension of settings globally by default, set the `$extend-setti
 If your option is a CSS property, to call the option in your component the **map-get** function is used, like so:
 
 ```js
-margin-top: map-get($header, top);
+margin-top: map-get($config, top);
 ```
 
 which will generate:
@@ -497,7 +499,7 @@ In some circumstances, we can achieve the same thing without having to use the `
 		@include setting(side) {
 			// Side-Header Styles
 			...
-			#{map-get($header, side)}: 0; // left: 0;
+			#{map-get($config, side)}: 0; // left: 0;
 		}
 		
 	}// component(header)
@@ -529,88 +531,6 @@ To include your header with customised options, this is done like so:
 ```
 
 And that's it, you now have a completely custoimzable header which can be modified with extreme ease.
-
-#### Setting Up A Full Project
-
-Let's create a simple example project with a header and some buttons, taking a complete modular approach.
-
-First, we'll create our main project's Sass files:
-
-```css
-_header.scss
-_buttons.scss
-app.scss
-```
-
-##### app.scss
-
-```css
-@import "header";
-@import "buttons";
-```
-##### _header.scss
-
-```js
-@mixin header($config: ()) {
-
-	//-------------------------------------------------------------
-	// Config
-	//-------------------------------------------------------------
-
-	$config: config((
-		
-		background : transparent,
-		top        : 50px,
-		dark       : false,
-		dark-color : rgba(black, 0.8),
-		side       : false;
-		side-width : 100%;
-		
-	), $config) !global;
-		
-	//-------------------------------------------------------------
-	// Component
-	//-------------------------------------------------------------
-
-	@include component(header) {
-		
-	// Core Styles
-	//-------------------------------------------------------------
-		
-		background: map-get($header, background);	
-		margin-top: map-get($header, top);
-		
-	// Settings
-	//-------------------------------------------------------------
-	
-		@include setting(dark) {
-			background: map-get($header, dark-color);	
-		}
-		
-		@include setting(side) {
-			// Core Side-Header Styles
-			position: fixed;
-			top: 0;
-			width: map-get($header, side-width);
-			z-index: 99;
-			@include option(left) {
-				left: 0;
-			}
-			@include option(right)
-				right: 0;
-			}
-		}
-		
-	} // component(header)
-		
-}// @mixin header
-```
-
-##### _buttons.scss
-
-```js
-
-```
 
 #### Global Configuration
 
@@ -649,23 +569,214 @@ This is entirely possible using Modular, and requires only one additional variab
 	
 	$grid: $config !global;
 	
+	...
+	
 } // @mixin grid
 ```
 
 As long as our other modules are included after this one, we can now access the breakpoint values using:
 
-```css
+```js
 map-get(map-get($grid, breakpoints), break-1);
 ```
 
-Piece of cake, right? I'm sure you'd agree repeating this over and over in your other modules would quickly become tedious, so for something like this you could create a function similar to the following:
+Piece of cake, right? I'm sure you'd agree repeating this over and over in your other modules would quickly become tedious, so for something like this you could create a function underneath the main mixin for your module, similar to the following:
 
+```js
 @function breakpoint($breakpoint) {
-	map-get(map-get($grid, breakpoints), $breakpoint);
+	@return map-get(map-get($grid, breakpoints), $breakpoint);
+}
+```
+
+We can now access any of our breakpoints from any subsequent modules using `breakpoint(break-1)` for example.
+
+#### Setting Up A Full Project
+
+Let's create a simple example project with a typography file, some buttons and a header, taking a complete modular approach.
+
+First, we'll create our main project's Sass files:
+
+```css
+_typography.scss
+_buttons.scss
+_header.scss
+app.scss
+```
+
+##### app.scss
+
+```css
+@import "typography";
+@import "buttons";
+@import "header";
+```
+
+##### _typography.scss
+
+```js
+@mixin typography($config: ()) {
+
+	$config: config((
+		colors: (
+			primary   : blue,
+			secondary : green
+		),
+		sizes: (
+			small     : 0.8em,
+			regular   : 1em,
+			large     : 1.4em			
+		)
+	))
+	
+	$typography: $config !global;
+
+} // @mixin typography
+
+@function color($color) {
+	@return map-get(map-get($typography, colors), $color);
 }
 
-We can now access any of our breaking using `break(break-1)` for example.
+@function size($size) {
+	@return map-get(map-get($typography, sizes), $size);
+}
+```
 
-### More Examples
+##### _buttons.scss
+
+```js
+@mixin buttons($config: ()) {
+
+	//-------------------------------------------------------------
+	// Config
+	//-------------------------------------------------------------
+
+	$config: config((
+		
+		// Core Styles
+		line-height  : 1.4,
+		side-spacing : 0.5em,
+		background   : grey,
+		color        : white,
+		// Modifiers
+		radius       : 0.4em
+		
+	), $config) !global;
+	
+	//-------------------------------------------------------------
+	// Component
+	//-------------------------------------------------------------
+	
+	@include component(button) {
+		
+	// Core Styles
+	//-------------------------------------------------------------
+		
+		display: inline-block;
+		line-height: map-get($config, line-height);
+		padding: 0 map-get($config, side-spacing);
+		background: map-get($config, background);
+		color: map-get($config, color);
+		
+	// Modifiers
+	//-------------------------------------------------------------
+		
+		// Patterns
+		
+		@include modifier(round) {
+			border-radius: map-get($config, radius);
+		}
+		
+		@include modifier(block) {
+			display: block;
+		}
+		
+		// Colors
+		
+		@include modifier(primary) {
+			background: color(primary); // blue
+		}
+		
+		@include modifier(secondary) {
+			background: color(secondary); // green
+		}
+		
+		// Sizes
+		
+		@include modifier(small) {
+			font-size: size(small); // 0.8em	
+		}
+		
+		@include modifier(large) {
+			font-size: size(large); // 1.4em	
+		}
+		
+		// Styles
+		
+		@include modifier(primary) {
+			@include extend(round, primary, large);
+		}
+		
+	} // component(button)
+	
+} // @mixin buttons
+```
+
+##### _header.scss
+
+```js
+@mixin header($config: ()) {
+
+	//-------------------------------------------------------------
+	// Config
+	//-------------------------------------------------------------
+
+	$config: config((
+		
+		background : color(primary), // blue
+		top        : 50px,
+		dark       : false,
+		dark-color : rgba(black, 0.8),
+		side       : false;
+		side-width : 100%;
+		
+	), $config) !global;
+		
+	//-------------------------------------------------------------
+	// Component
+	//-------------------------------------------------------------
+
+	@include component(header) {
+		
+	// Core Styles
+	//-------------------------------------------------------------
+		
+		background: map-get($config, background);	
+		margin-top: map-get($config, top);
+		
+	// Settings
+	//-------------------------------------------------------------
+	
+		@include setting(dark) {
+			background: map-get($config, dark-color);	
+		}
+		
+		@include setting(side) {
+			// Core Side-Header Styles
+			position: fixed;
+			top: 0;
+			width: map-get($config, side-width);
+			z-index: 99;
+			@include option(left) {
+				left: 0;
+			}
+			@include option(right)
+				right: 0;
+			}
+		}
+		
+	} // component(header)
+		
+}// @mixin header
+```
 
 ### Credits & Notes
