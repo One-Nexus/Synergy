@@ -325,7 +325,7 @@ This mixin allows you to extend multiple modifiers into a new, seperate modifer,
 
 ### Module Configuration
 
-As outlined in the [overview](#) section, Modular allows you to configure your components with customizable options.
+As outlined in the [overview](#overview) section, Modular allows you to configure your components with customizable options.
 
 ```js
 @mixin header($config: ()) {
