@@ -87,46 +87,49 @@ The `$config` variable is required to accept the custom options when including t
 ```js
 @mixin header($config: ()) {
 
-		$header: config((
-			
-			// Options
-			dark : false,
-			top  : 50px
-			
-		), $config) !global;
+	$header: config((
 		
-		...
+		// Options
+		dark : false,
+		top  : 50px
+		
+	), $config) !global;
+	
+	...
 		
 }
 ```
 
 In the example above, we have two different types of options; a bool and a number. Typically, the **setting** mixin used in the example below would be used for options which are bools (although strictly speaking, it's used for options which are able to have a value of "false" - read further on for examples). We now have the basis for our example module. Next, the actual component itself:
 
+**Note:** If using the **setting** mixin as seen below, you will need to add a global variable of `$config`, passing the already existing variable which holds your module's config - in our example it is `$header`.
+
 ```js
 @mixin header($config: ()) {
 
-		$header: config((
-			
-			// Options
-			dark : false,
-			top  : 50px
-			
-		), $config) !global;
+	$header: config((
 		
+		// Options
+		dark : false,
+		top  : 50px
+		
+	), $config) !global;
+	
+	$config: $header !global;
 
-		@include component(header) {
-			
-			// Core Styles
-			margin-top: map-get($header, top);
-			
-			// Settings
-			@include setting(dark) {
-				background-color: black;
-			}
-			
+	@include component(header) {
+		
+		// Core Styles
+		margin-top: map-get($header, top);
+		
+		// Settings
+		@include setting(dark) {
+			background-color: black;
 		}
 		
-}
+	}// component(header)
+		
+}// @mixin header
 ```
 
 To call an option, the "map-get" feature of Sass is used. To create an optional setting, the "setting" mixin is used. We can now create our header with the following HTML:
@@ -149,13 +152,13 @@ We can now easily create a dark header by setting the "dark" option to "true". A
 
 ### Mixins
 
-* [Component](#)
-* [Nested Component](#)
-* [Modifier](#)
-* [Nested Modifier](#)
-* [Extend Modifiers](#)
-* [Setting](#)
-* [Option](#)
+* [Component](#component)
+* [Nested Component](#nested-component)
+* [Modifier](#modifier)
+* [Nested Modifier](#nested-modifier)
+* [Extend Modifiers](#extended-modifiers)
+* [Setting](#module-configuration)
+* [Option](#hybrid-options)
 
 #### Component
 
@@ -327,28 +330,29 @@ As outlined in the [overview](#) section, Modular allows you to configure your c
 ```js
 @mixin header($config: ()) {
 
-		$header: config((
-			
-			// Options
-			dark : false,
-			top  : 50px
-			
-		), $config) !global;
+	$header: config((
 		
+		// Options
+		dark : false,
+		top  : 50px
+		
+	), $config) !global;
+	
+	$config: $header !global;
 
-		@include component(header) {
-			
-			// Core Styles
-			margin-top: map-get($header, top);
-			
-			// Settings
-			@include setting(dark) {
-				background-color: black;
-			}
-			
+	@include component(header) {
+		
+		// Core Styles
+		margin-top: map-get($header, top);
+		
+		// Settings
+		@include setting(dark) {
+			background-color: black;
 		}
 		
-}
+	}// component(header)
+		
+}// @mixin header
 ```
 
 For all intents and purposes, there are 2 types of options; bools and non-bools. A bool option is one whose value determines whether or not some code should be applied. A non-bool option is one whose value is used as a value for a CSS property. In the above example we have one of each.
@@ -368,16 +372,16 @@ If you are watching your CSS output, you may wish to remove these modifiers (and
 ```js
 @mixin header($config: ()) {
 
-		$header: config((
-			
-			// Options
-			extend-settings: false,
-			dark : false,
-			top  : 50px
-			
-		), $config) !global;
+	$header: config((
 		
-		...
+		// Options
+		extend-settings: false,
+		dark : false,
+		top  : 50px
+		
+	), $config) !global;
+	
+	...
 		
 }
 ```
@@ -405,14 +409,16 @@ In some cases, you may require a hybrid of the above 2 options. You may have a s
 ```js
 @mixin header($config: ()) {
 
-		$header: config((
-			
-			// Options
-			side: false; // left or right
-			
-		), $config) !global;
+	$header: config((
 		
-		...
+		// Options
+		side: false; // left or right
+		
+	), $config) !global;
+	
+	$config: $header !global;
+	
+	@include component(header) {
 		
 		@include setting(side) {
 			// core side header styles
@@ -424,7 +430,9 @@ In some cases, you may require a hybrid of the above 2 options. You may have a s
 			}
 		}
 		
-}
+	} // component(header)
+		
+}// @mixin header
 ```
 
 The above example inserts an optional set of styles if `side` is set to anything other than **false**. Depending on the value of your setting, we can choose to include additional styles. Again, by default these options are extended as modifiers so you can use them regardless of the option's setting:
@@ -460,14 +468,16 @@ In some circumstances, we can achieve the same thing without having to use the `
 ```js
 @mixin header($config: ()) {
 
-		$header: config((
-			
-			// Options
-			side: left;
-			
-		), $config) !global;
+	$header: config((
 		
-		...
+		// Options
+		side: left;
+		
+	), $config) !global;
+	
+	$config: $header !global;
+	
+	@include component(header) {
 		
 		@include setting(side) {
 			// Side-Header Styles
@@ -475,7 +485,9 @@ In some circumstances, we can achieve the same thing without having to use the `
 			#{map-get($header, side)}: 0; // left: 0;
 		}
 		
-}
+	}// component(header)
+	
+}// @mixin header
 ```
 
 The above example is assuming we have a setup where the header's position is controlled via:
@@ -485,7 +497,7 @@ The above example is assuming we have a setup where the header's position is con
 
 #### Including Your Module
 
-Our module is now ready to be include; to include the module with the default settings you have created, all that's required is:
+Our module is now ready to be included; to include the module with the default settings you have created, all that's required is:
 
 ```js
 @include header;
@@ -503,51 +515,90 @@ To include your header with customised options, this is done like so:
 
 And that's it, you now have a completely custoimzable header which can be modified with extreme ease.
 
-An example project's configuration file may look something like this:
+#### Setting Up A Full Project
+
+Let's create a simple example project with a header and some buttons, taking a complete modular approach.
+
+First, we'll create our main project's Sass files:
+
+```css
+_header.scss
+_buttons.scss
+app.scss
+```
+
+##### app.scss
+
+```css
+@import "header";
+@import "buttons";
+```
+##### _header.scss
 
 ```js
-//-----------------------------------------------------------------
-// Theme Config
-//-----------------------------------------------------------------
-	
-	// Globally disable the extension of settings to modifiers
-	$extend-settings           : false;
+@mixin header($config: ()) {
 
-	@include logo;
+	//-------------------------------------------------------------
+	// Config
+	//-------------------------------------------------------------
+
+	$header: config((
+		
+		background : transparent,
+		top        : 50px,
+		dark       : false,
+		dark-color : rgba(black, 0.8),
+		side       : false;
+		side-width : 100%;
+		
+	), $config) !global;
 	
-	@include header((
-		selector-type          : static,
-		absolute               : true,
-		bar                    : true,
-		bg-color               : transparent,
-		top-position           : 50px
-	));
+	$config: $header !global;
+		
+	//-------------------------------------------------------------
+	// Component
+	//-------------------------------------------------------------
+
+	@include component(header) {
+		
+	// Core Styles
+	//-------------------------------------------------------------
+		
+		background: map-get($header, background);	
+		margin-top: map-get($header, top);
+		
+	// Settings
+	//-------------------------------------------------------------
 	
-	@include footer;
-	@include breadcrumb;
-	
-	@include navigation((
-		no-icons               : true,
-		link-color             : white,
-	));
-	
-	@include dropdown;
-	
-	@include buttons ((
-		extend-settings        : true,
-		selector-type          : chain
-	));
-	
-	@include promo-banner;
-	
-	@include billboard((
-		selector-type          : static,
-		full-screen            : true,
-		overlay                : true,
-		bg-image               : "/images/billboard-1.jpg",
-		wrapper-width          : 960px;
-	));
-	
+		@include setting(dark) {
+			background: map-get($header, dark-color);	
+		}
+		
+		@include setting(side) {
+			// Core Side-Header Styles
+			position: fixed;
+			top: 0;
+			width: map-get($header, side-width);
+			z-index: 99;
+			@include option(left) {
+				left: 0;
+			}
+			@include option(right)
+				right: 0;
+			}
+		}
+		
+	} // component(header)
+		
+}// @mixin header
+```
+
+##### _buttons.scss
+
+```js
+
 ```
 
 ### More Examples
+
+### Credits & Notes
