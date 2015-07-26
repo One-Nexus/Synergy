@@ -351,6 +351,31 @@ As outlined in the [overview](#overview) section, Modular allows you to configur
 
 For all intents and purposes, there are 2 types of options; bools and non-bools. A bool option is one whose value determines whether or not some code should be applied. A non-bool option is one whose value is used as a value for a CSS property. In the above example we have one of each.
 
+Your configuration can also be infinitely nested, like so:
+
+```js
+@mixin global($config: ()) {
+
+	$config: config((
+		
+		// Options
+		typography: (
+			sizes: (
+				size-1    : 1em,
+				size-2    : 1.2em,
+				size-3    : 1.6em
+			),
+			colors: (
+				primary   : red,
+				secondary : blue
+			)
+		)
+		
+	), $config) !global;
+		
+}// @mixin header
+```
+
 #### Bool Options
 
 If your option is a bool, you can use the `setting` mixin. The styles added within this mixin will automatically be applied to the component is the option is set to **true**. Alternatively, since by default adding a setting also creates a modifier for the setting, you can apply the styles by adding the modifier to your HTML tag, regardless of the settings value:
@@ -586,6 +611,60 @@ app.scss
 ```js
 
 ```
+
+#### Global Configuration
+
+What if you want to create a module whose options can be accessed by other modules? For example, say you have a module for your grid system and have configured some breakpoint values - you then may wish to access these values from throughout your project:
+
+```js
+@mixin grid($config: ()) {
+	
+	$config: ((
+		breakpoints: ((
+			break-1: 420px,
+			break-2: 740px,
+			break-3: 960px,
+			break-4: 1200px
+		));
+	), $config) !global;
+	
+	...
+	
+} // @mixin grid
+```
+
+This is entirely possible using Modular, and requires only one additional variable in your module, underneath the config:
+
+```js
+@mixin grid($config: ()) {
+	
+	$config: ((
+		breakpoints: ((
+			break-1: 420px,
+			break-2: 740px,
+			break-3: 960px,
+			break-4: 1200px
+		));
+	), $config) !global;
+	
+	$grid: $config !global;
+	
+} // @mixin grid
+```
+
+As long as our other modules are included after this one, we can now access the breakpoint values using:
+
+```css
+map-get(map-get($grid, breakpoints), break-1);
+```
+
+Piece of cake, right? I'm sure you'd agree repeating this over and over in your other modules would quickly become tedious, so for something like this you could create a function similar to the following:
+
+@function breakpoint($breakpoint) {
+	map-get(map-get($grid, breakpoints), $breakpoint);
+}
+
+We can now access any of our breaking using `break(break-1)` for example.
 
 ### More Examples
 
