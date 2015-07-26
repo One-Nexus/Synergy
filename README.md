@@ -148,7 +148,7 @@ We can now easily create a dark header by setting the "dark" option to "true". A
 </div>
 ```
 
-## Complete Documentation
+## Advanced Documentation
 
 ### Mixins
 
