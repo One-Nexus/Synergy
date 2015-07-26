@@ -87,7 +87,7 @@ The `$config` variable is required to accept the custom options when including t
 ```js
 @mixin header($config: ()) {
 
-	$header: config((
+	$config: config((
 		
 		// Options
 		dark : false,
@@ -102,20 +102,16 @@ The `$config` variable is required to accept the custom options when including t
 
 In the example above, we have two different types of options; a bool and a number. Typically, the **setting** mixin used in the example below would be used for options which are bools (although strictly speaking, it's used for options which are able to have a value of "false" - read further on for examples). We now have the basis for our example module. Next, the actual component itself:
 
-**Note:** If using the **setting** mixin as seen below, you will need to add a global variable of `$config`, passing the already existing variable which holds your module's config - in our example it is `$header`.
-
 ```js
 @mixin header($config: ()) {
 
-	$header: config((
+	$config: config((
 		
 		// Options
 		dark : false,
 		top  : 50px
 		
 	), $config) !global;
-	
-	$config: $header !global;
 
 	@include component(header) {
 		
@@ -330,15 +326,13 @@ As outlined in the [overview](#overview) section, Modular allows you to configur
 ```js
 @mixin header($config: ()) {
 
-	$header: config((
+	$config: config((
 		
 		// Options
 		dark : false,
 		top  : 50px
 		
 	), $config) !global;
-	
-	$config: $header !global;
 
 	@include component(header) {
 		
@@ -372,7 +366,7 @@ If you are watching your CSS output, you may wish to remove these modifiers (and
 ```js
 @mixin header($config: ()) {
 
-	$header: config((
+	$config: config((
 		
 		// Options
 		extend-settings: false,
@@ -409,14 +403,12 @@ In some cases, you may require a hybrid of the above 2 options. You may have a s
 ```js
 @mixin header($config: ()) {
 
-	$header: config((
+	$config: config((
 		
 		// Options
 		side: false; // left or right
 		
 	), $config) !global;
-	
-	$config: $header !global;
 	
 	@include component(header) {
 		
@@ -468,14 +460,12 @@ In some circumstances, we can achieve the same thing without having to use the `
 ```js
 @mixin header($config: ()) {
 
-	$header: config((
+	$config: config((
 		
 		// Options
 		side: left;
 		
 	), $config) !global;
-	
-	$config: $header !global;
 	
 	@include component(header) {
 		
@@ -542,7 +532,7 @@ app.scss
 	// Config
 	//-------------------------------------------------------------
 
-	$header: config((
+	$config: config((
 		
 		background : transparent,
 		top        : 50px,
@@ -552,8 +542,6 @@ app.scss
 		side-width : 100%;
 		
 	), $config) !global;
-	
-	$config: $header !global;
 		
 	//-------------------------------------------------------------
 	// Component
