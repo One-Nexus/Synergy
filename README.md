@@ -619,6 +619,8 @@ app.scss
 @import "typography";
 @import "buttons";
 @import "header";
+@import "theme";
+
 ```
 
 ##### _typography.scss
