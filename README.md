@@ -156,6 +156,15 @@ We can now easily create a dark header by setting the "dark" option to "true". A
 * [Setting](#module-configuration)
 * [Option](#hybrid-options)
 
+### Module Configuration
+
+* [Bool Options](#)
+* [Non-Bool Options](#)
+* [Hybrid Options](#)
+* [Including Your Module](#)
+* [Global Configuration](#)
+* [Setting Up A Project](#)
+
 #### Component
 
 The `component` mixin is what generates the selectors for your component/module. The mixin accepts 2 parameters:
@@ -590,7 +599,7 @@ Piece of cake, right? I'm sure you'd agree repeating this over and over in your 
 
 We can now access any of our breakpoints from any subsequent modules using `breakpoint(break-1)` for example.
 
-#### Setting Up A Full Project
+#### Setting Up A Project
 
 Let's create a simple example project with a typography file, some buttons and a header, taking a complete modular approach.
 
@@ -600,6 +609,7 @@ First, we'll create our main project's Sass files:
 _typography.scss
 _buttons.scss
 _header.scss
+_theme.scss
 app.scss
 ```
 
@@ -693,21 +703,21 @@ app.scss
 		// Colors
 		
 		@include modifier(primary) {
-			background: color(primary); // blue
+			background: color(primary);
 		}
 		
 		@include modifier(secondary) {
-			background: color(secondary); // green
+			background: color(secondary);
 		}
 		
 		// Sizes
 		
 		@include modifier(small) {
-			font-size: size(small); // 0.8em	
+			font-size: size(small);	
 		}
 		
 		@include modifier(large) {
-			font-size: size(large); // 1.4em	
+			font-size: size(large);	
 		}
 		
 		// Styles
@@ -732,7 +742,7 @@ app.scss
 
 	$config: config((
 		
-		background : color(primary), // blue
+		background : color(primary),
 		top        : 50px,
 		dark       : false,
 		dark-color : rgba(black, 0.8),
@@ -777,6 +787,26 @@ app.scss
 	} // component(header)
 		
 }// @mixin header
+```
+
+##### _theme.scss
+
+```js
+
+@include typography((
+	colors: (
+		primary   : purple,
+		secondary :	blue
+	)
+));
+
+@include buttons;
+
+@include header((
+	dark          : true,
+	top           : 0
+));
+
 ```
 
 ### Credits & Notes
