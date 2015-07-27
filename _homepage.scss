@@ -1,0 +1,173 @@
+//=================================================================
+// Typography
+//=================================================================
+
+@mixin typography($config: ()) {
+
+    $typography: config((
+        colors: (
+            primary   : blue,
+            secondary : green
+        ),
+        sizes: (
+            small     : 0.8em,
+            regular   : 1em,
+            large     : 1.4em           
+        )
+    ), $config) !global;
+
+} // @mixin typography
+
+@function color($color) {
+    @return map-get(map-get($typography, colors), $color);
+}
+
+@function size($size) {
+    @return map-get(map-get($typography, sizes), $size);
+}
+
+@include typography;
+
+//=================================================================
+// Buttons
+//=================================================================
+
+@mixin buttons($config: ()) {
+
+    //-------------------------------------------------------------
+    // Config
+    //-------------------------------------------------------------
+
+    $buttons: config((
+
+        // Core Styles
+        line-height  : 1.4,
+        side-spacing : 0.5em,
+        background   : grey,
+        color        : white,
+        // Modifiers
+        radius       : 0.4em
+
+    ), $config);
+
+    //-------------------------------------------------------------
+    // Component
+    //-------------------------------------------------------------
+
+    @include component(button) {
+
+    // Core Styles
+    //-------------------------------------------------------------
+
+        display: inline-block;
+        line-height: map-get($buttons, line-height);
+        padding: 0 map-get($buttons, side-spacing);
+        background: map-get($buttons, background);
+        color: map-get($buttons, color);
+
+    // Modifiers
+    //-------------------------------------------------------------
+
+        // Patterns
+		
+        @include modifier(round) {
+            border-radius: map-get($buttons, radius);
+        }
+
+        @include modifier(block) {
+            display: block;
+        }
+
+        // Colors
+
+        @include modifier(primary) {
+            background: color(primary);
+        }
+
+        @include modifier(secondary) {
+            background: color(secondary);
+        }
+
+        // Sizes
+
+        @include modifier(small) {
+            font-size: size(small); 
+        }
+
+        @include modifier(large) {
+            font-size: size(large); 
+        }
+
+        // Semantic Styles
+
+        @include modifier(purchase) {
+            @include extend(round, primary, large);
+        }
+
+    } // component(button)
+
+} // @mixin buttons
+
+@include buttons;
+
+//=================================================================
+// Header
+//=================================================================
+
+@mixin header($config: ()) {
+
+    //-------------------------------------------------------------
+    // Config
+    //-------------------------------------------------------------
+
+    $header: config((
+
+        background : color(primary),
+        top        : 50px,
+        dark       : false,
+        dark-color : rgba(black, 0.8),
+        side       : false,
+        side-width : 100%
+
+    ), $config);
+	
+	$config: $header !global;
+
+    //-------------------------------------------------------------
+    // Component
+    //-------------------------------------------------------------
+
+    @include component(header) {
+
+    // Core Styles
+    //-------------------------------------------------------------
+
+        background: map-get($header, background);   
+        margin-top: map-get($header, top);
+
+    // Settings
+    //-------------------------------------------------------------
+
+        @include setting(dark) {
+            background: map-get($header, dark-color);   
+        }
+
+        @include setting(side) {
+            // Core Side-Header Styles
+            position: fixed;
+            top: 0;
+            width: map-get($header, side-width);
+            z-index: 99;
+            @include option(left) {
+                left: 0;
+            }
+            @include option(right) {
+                right: 0;
+            }
+        }
+
+    } // component(header)
+
+} // @mixin header
+
+@include header;

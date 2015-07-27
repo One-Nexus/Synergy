@@ -1,0 +1,54 @@
+/*-----------------------------------------------------------------
+
+Modular
+Made by @esr360
+http://github.com/esr360/Modular/
+	
+-----------------------------------------------------------------*/
+.button,
+[class*="button-"] {
+  display: inline-block;
+  line-height: 1.4;
+  padding: 0 0.5em;
+  background: grey;
+  color: white;
+}
+[class*="button-"][class*="-round"], [class*="button-"][class*="-purchase"] {
+  border-radius: 0.4em;
+}
+[class*="button-"][class*="-block"] {
+  display: block;
+}
+[class*="button-"][class*="-primary"], [class*="button-"][class*="-purchase"] {
+  background: blue;
+}
+[class*="button-"][class*="-secondary"] {
+  background: green;
+}
+[class*="button-"][class*="-small"] {
+  font-size: 0.8em;
+}
+[class*="button-"][class*="-large"], [class*="button-"][class*="-purchase"] {
+  font-size: 1.4em;
+}
+
+.header,
+[class*="header-"] {
+  background: blue;
+  margin-top: 50px;
+}
+[class*="header-"][class*="-dark"] {
+  background: rgba(0, 0, 0, 0.8);
+}
+[class*="header-"][class*="-side"] {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 99;
+}
+[class*="-left"][class*="header-"][class*="-side"] {
+  left: 0;
+}
+[class*="-right"][class*="header-"][class*="-side"] {
+  right: 0;
+}

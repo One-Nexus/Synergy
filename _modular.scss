@@ -193,6 +193,7 @@ $type: flex;
 $extend-settings: true;
 
 @mixin setting($setting) {
+	$setting: $setting !global;
 	@at-root %#{$component}-#{$setting} {	
 		@content;
 	}
