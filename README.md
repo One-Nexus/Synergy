@@ -74,7 +74,7 @@ Which is exactly what the  **component** mixin does. The reason `[class*="compon
 
 ### Configuring a Module
 
-Modular allows you to create confirguble components with customizable parameters. To configure a new module, create a mixin named after your module (ensure the name is unique):
+Modular allows you to create confirguble components with customizable settings. To configure a new module, create a mixin named after your module (ensure the name is unique):
 
 ```js
 @mixin header($config: ()) {
@@ -100,7 +100,7 @@ The `$config` variable is required to accept the custom options when including t
 }
 ```
 
-In the example above, we have two different types of options; a bool and a number. Typically, the **setting** mixin used in the example below would be used for options which are bools (although strictly speaking, it's used for options which are able to have a value of "false" - read further on for examples). We now have the basis for our example module. Next, the actual component itself:
+In the example above, we have two different types of options; a bool and a number. Typically, the **setting** mixin used in the example below would be used for options which are bools (although strictly speaking, it's used for options which are able to have a value of "false" - see the [Hybrid Options](#hybrid-options) section for more info). We now have the basis for our example module. Next, the actual component itself:
 
 ```js
 @mixin header($config: ()) {
@@ -158,12 +158,12 @@ We can now easily create a dark header by setting the "dark" option to "true". A
 
 ### Module Configuration
 
-* [Bool Options](#)
-* [Non-Bool Options](#)
-* [Hybrid Options](#)
-* [Including Your Module](#)
-* [Global Configuration](#)
-* [Setting Up A Project](#)
+* [Bool Options](#bool-options)
+* [Non-Bool Options](#non-bool-options)
+* [Hybrid Options](#hybrid-options)
+* [Including Your Module](#including-your-module)
+* [Global Configuration](#global-configuration)
+* [Setting Up A Project](#setting-up-a-project)
 
 #### Component
 
