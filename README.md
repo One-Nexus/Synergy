@@ -123,9 +123,9 @@ In the example above, we have two different types of options; a bool and a numbe
 			background-color: black;
 		}
 		
-	}// component(header)
+	} // component(header)
 		
-}// @mixin header
+} // @mixin header
 ```
 
 To call an option, the "map-get" feature of Sass is used. To create an optional setting, the "setting" mixin is used. We can now create our header with the following HTML:
@@ -136,7 +136,7 @@ To call an option, the "map-get" feature of Sass is used. To create an optional 
 </div>
 ```
 
-We can now easily create a dark header by setting the "dark" option to "true". Alternatively, we can add a modifier of "dark" to our header, regardless of the settings value:
+We can now easily create a dark header by setting the "dark" option to "true". Alternatively, we can add a modifier of "dark" to our header, regardless of the setting's value:
 
 ```html
 <div class="header-dark">
@@ -184,7 +184,7 @@ The `component` mixin is what generates the selectors for your component/module.
 
 This is the default value for a component; it creates wildcards for both `.component` and `[class*="component-"]`, allowing you to use both the naked component as well as modifiers. Whilst this is the most flexible option, it does mean the generated CSS is slightly greater, which is what the other 2 options are for.
 
-Or if using the default `$type` value, you do not need to pass a second parmeter here:
+Or if using the default `$type` value of **flex**, you do not need to pass a second parmeter here:
 
 ```css
 @include component(header) {
@@ -246,6 +246,16 @@ Nested components are either components which already exist which you wish to ov
 </div>
 ```
 
+Remember that the reason we're using these mixins is so we can easily attach modifiers to our selectors, so we may end up with something like this at some point:
+
+```html
+<div class="wrap-header-full-screen">
+	<div class="header-green">
+		<div class="logo-christmas">...</div>
+	</div>
+</div>
+```
+
 #### Modifier
 
 The `modifier` mixin generates the selector for any modifier of your component, for example a **small** or **large** modifier. This mixin accepts only 1 paramter:
@@ -255,6 +265,8 @@ The `modifier` mixin generates the selector for any modifier of your component, 
 
 ```js
 @include component(button) {
+	
+	...
 	
 	@include modifier(small) {
 		font-size: 0.75em;
@@ -267,9 +279,22 @@ The `modifier` mixin generates the selector for any modifier of your component, 
 }
 ```
 
+```html
+<div class="button">Button</div>
+<div class="button-small">Button</div>
+<div class="button-large">Button</div>
+```
+
+You can use any number of modifiers on a single element in the HTML, and in any order, for example:
+
+```html
+<div class="button-large-round-primary">...</div>
+<div class="button-primary-large-round">...</div>
+```
+
 #### Nested Modifier
 
-The `nested-modifier` mixin is used to nest modifiers within one another, meaning that both modifiers must be passed to the element for the styles to take effect. Again, this mixin accepts only 1 parameter:
+The `nested-modifier` mixin is used to nest modifiers within one another, meaning that both modifiers must be passed to the element's HTML for the styles to take effect. Again, this mixin accepts only 1 parameter:
 
 * **$modifier** - the name of your modifier (required)
 
@@ -304,7 +329,7 @@ This means that in your HTML the element would require both the **border** and *
 <div class="button-white-border">baz</div>
 ```
 
-> If you try to nest the regular modifier mixin, it will output the CSS as if it weren't nested. It is essential to use the `nested-modifier` mixin for any nested modifiers. Other than that, modifiers can be infinitely nested.
+> If you try to nest the regular modifier mixin, it will output the CSS as if it weren't nested. It is essential to use the `nested-modifier` mixin for any nested modifiers. Other than that, nested-modifiers can be infinitely nested.
 
 #### Extend Modifiers
 
@@ -353,9 +378,9 @@ As outlined in the [overview](#overview) section, Modular allows you to configur
 			background-color: black;
 		}
 		
-	}// component(header)
+	} // component(header)
 		
-}// @mixin header
+} // @mixin header
 ```
 
 For all intents and purposes, there are 2 types of options; bools and non-bools. A bool option is one whose value determines whether or not some code should be applied. A non-bool option is one whose value is used as a value for a CSS property. In the above example we have one of each.
@@ -384,12 +409,32 @@ Your configuration can also be infinitely nested, like so:
 	
 	...
 		
-}// @mixin global
+} // @mixin global
+```
+
+When your configuration is more than one level deep, to access the values using `map-get`, you will end up having to do something like:
+
+```js
+map-get(map-get($config, colors), primary);
+```
+
+Piece of cake, right? I'm sure you'd agree repeating this over and over in your other modules would quickly become tedious, so for something like this you could create a function underneath the main mixin for your module, similar to the following:
+
+```js
+@function breakpoint($color) {
+	@return map-get(map-get($config, colors), $color);
+}
+```
+
+You can now access the **colors** map from your config using `color(primary)`, for example:
+
+```css
+background-color: color(primary);
 ```
 
 #### Bool Options
 
-If your option is a bool, you can use the `setting` mixin. The styles added within this mixin will automatically be applied to the component is the option is set to **true**. Alternatively, since by default adding a setting also creates a modifier for the setting, you can apply the styles by adding the modifier to your HTML tag, regardless of the settings value:
+If your option is a bool, you can use the `setting` mixin. The styles added within this mixin will automatically be applied to the component if the option is set to **true**. Alternatively, since by default adding a setting also creates a modifier for the setting, you can apply the styles by adding the modifier to your HTML tag, regardless of the settings value:
 
 ```html
 <div class="header-dark">
@@ -397,7 +442,7 @@ If your option is a bool, you can use the `setting` mixin. The styles added with
 </div>
 ```
 
-If you are watching your CSS output, you may wish to remove these modifiers (and related wildcard selectors) from the generated styles and only use them conditionally. To do so, you can pass the `exteding-settings` options to your module's config, and set it to **false**:
+If you are watching your CSS output, you may wish to remove these modifiers (and related wildcard selectors) from the generated styles and only use them conditionally. To do so, you can pass the `exteding-settings` option to your module's config, and set it to **false**:
 
 ```js
 @mixin header($config: ()) {
@@ -416,7 +461,7 @@ If you are watching your CSS output, you may wish to remove these modifiers (and
 }
 ```
 
-To disable the extension of settings globally by default, set the `$extend-settings` variable in **modular.scss** to **false**. This is defined above the settings mixin.
+To disable the extension of settings globally by default, set the `$extend-settings` variable in **modular.scss** to **false**. This is defined above the `settings` mixin.
 
 #### Non-Bool Options
 
@@ -460,10 +505,10 @@ In some cases, you may require a hybrid of the above 2 options. You may have a s
 		
 	} // component(header)
 		
-}// @mixin header
+} // @mixin header
 ```
 
-The above example inserts an optional set of styles if `side` is set to anything other than **false**. Depending on the value of your setting, we can choose to include additional styles. Again, by default these options are extended as modifiers so you can use them regardless of the option's setting:
+The above example inserts an optional set of styles if `side` is set to anything other than **false**. Depending on the value of your setting, we can choose to include additional styles by using the `option` mixin. Again, by default these options are extended as modifiers so you can use them regardless of the setting's value:
 
 ```html
 <div class="header-side-left">..</div>
@@ -511,9 +556,9 @@ In some circumstances, we can achieve the same thing without having to use the `
 			#{map-get($config, side)}: 0; // left: 0;
 		}
 		
-	}// component(header)
+	} // component(header)
 	
-}// @mixin header
+} // @mixin header
 ```
 
 The above example is assuming we have a setup where the header's position is controlled via:
@@ -581,23 +626,18 @@ This is entirely possible using Modular, and requires only one additional variab
 	...
 	
 } // @mixin grid
-```
 
-As long as our other modules are included after this one, we can now access the breakpoint values using:
-
-```js
-map-get(map-get($grid, breakpoints), break-1);
-```
-
-Piece of cake, right? I'm sure you'd agree repeating this over and over in your other modules would quickly become tedious, so for something like this you could create a function underneath the main mixin for your module, similar to the following:
-
-```js
+// Mixin to easily access breakpoints map
 @function breakpoint($breakpoint) {
 	@return map-get(map-get($grid, breakpoints), $breakpoint);
 }
 ```
 
-We can now access any of our breakpoints from any subsequent modules using `breakpoint(break-1)` for example.
+As long as our other modules are included after this one, we can now access the breakpoint values using:
+
+```js
+width: breakpoint(break-3);
+```
 
 #### Setting Up A Project
 
@@ -722,15 +762,23 @@ _theme.scss
 			font-size: size(large);	
 		}
 		
-		// Styles
+		// Semantic Styles
 		
-		@include modifier(primary) {
+		@include modifier(purchase) {
 			@include extend(round, primary, large);
 		}
 		
 	} // component(button)
 	
 } // @mixin buttons
+
+//	<div class="button-round">...</div>
+//	<div class="button-block">...</div>
+//	<div class="button-primary">...</div>
+//	<div class="button-secondary">...</div>
+//	<div class="button-small">...</div>
+//	<div class="button-large">...</div>
+//	<div class="button-purchase">...</div>
 ```
 
 ##### _header.scss
@@ -788,7 +836,7 @@ _theme.scss
 		
 	} // component(header)
 		
-}// @mixin header
+} // @mixin header
 ```
 
 ##### _theme.scss
