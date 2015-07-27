@@ -1,6 +1,6 @@
 # Modular
 
-> A set of SCSS mixins for architecting intelligent, modular & scalable CSS.
+> A set of Sass mixins for architecting modular, configurable and scalable CSS.
 
 ## Overview
 
