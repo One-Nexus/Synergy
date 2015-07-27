@@ -655,12 +655,17 @@ _theme.scss
 
 ##### app.scss
 
-```css
+```js
+// Modular
+@import "modular";
+
+// Project Partials
 @import "typography";
 @import "buttons";
 @import "header";
-@import "theme";
 
+// Theme
+@import "theme";
 ```
 
 ##### _typography.scss
@@ -691,6 +696,12 @@ _theme.scss
 @function size($size) {
 	@return map-get(map-get($typography, sizes), $size);
 }
+
+//	color: color(primary);
+//	color: color(secondary);
+//	font-size: size(small);
+//	font-size: size(regular);
+//	font-size: size(large);
 ```
 
 ##### _buttons.scss
@@ -772,12 +783,14 @@ _theme.scss
 	
 } // @mixin buttons
 
+//	<div class="button">...</div>
 //	<div class="button-round">...</div>
 //	<div class="button-block">...</div>
 //	<div class="button-primary">...</div>
 //	<div class="button-secondary">...</div>
 //	<div class="button-small">...</div>
 //	<div class="button-large">...</div>
+//	<div class="button-primary-round-large">...</div>
 //	<div class="button-purchase">...</div>
 ```
 
@@ -837,6 +850,12 @@ _theme.scss
 	} // component(header)
 		
 } // @mixin header
+
+//	<div class="header">...</div>
+//	<div class="header-dark">...</div>
+//	<div class="header-side-left">...</div>
+//	<div class="header-side-right">...</div>
+//	<div class="header-dark-side-right">...</div>
 ```
 
 ##### _theme.scss
@@ -858,6 +877,8 @@ _theme.scss
 ));
 
 ```
+
+Every configurable aspect of our project can now quickly and easily be changed from just one file, whilst retaining a completely modular architecture.
 
 ### Credits & Notes
 
