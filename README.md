@@ -606,11 +606,11 @@ Let's create a simple example project with a typography file, some buttons and a
 First, we'll create our main project's Sass files:
 
 ```css
+app.scss
 _typography.scss
 _buttons.scss
 _header.scss
 _theme.scss
-app.scss
 ```
 
 ##### app.scss
