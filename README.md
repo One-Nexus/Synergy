@@ -18,7 +18,7 @@ What if you could just do this:
 <div class="button-large-success">Large Success Button</div>
 ```
 
-The benefits of using this HTML over conventional BEM syntax are self apparant. However, you may be looking at that thinking of several reasons why it wouldn't work; what if I want to only use the "button" class on its own? What if I only want a large button, or only want a success button? Well, with Modular, all this is possible.
+The benefits of using this HTML over conventional BEM syntax are self-apparant. However, you may be looking at that thinking of several reasons why it wouldn't work; what if I want to only use the "button" class on its own? What if I only want a large button, or only want a success button? Well, with Modular, all this is possible.
 
 ```js
 @include component(button) {
@@ -860,3 +860,19 @@ _theme.scss
 ```
 
 ### Credits & Notes
+
+* [Sassy Maps](https://github.com/at-import/sassy-maps)
+* [Bringing Configuration Objects To Sass](http://hugogiraudel.com/2014/05/05/bringing-configuration-objects-to-sass/)
+
+#### Caveats
+
+It's important to understand the CSS that is generated when using Modular in order to avoid potential conflicts. One common example might be if you have a **header** component which generates this CSS:
+
+```css
+.header,
+[class*="header-"] {
+	...	
+}
+```
+
+If you then try to add the class **header-wrapper**, the header component's core styles would also be applied to this class, as the component is looking for any class that begins with "header-".
