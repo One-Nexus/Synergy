@@ -215,7 +215,7 @@ $extend-settings: true;
 		@extend %#{$component}-#{$option};
 	}
 	@if map-get($config, extend-settings) {
-		@include modifier($option) {
+		@include nested-modifier($option) {
 			@extend %#{$component}-#{$option};
 		}
 	}
