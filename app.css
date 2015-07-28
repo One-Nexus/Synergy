@@ -8,8 +8,11 @@ http://github.com/esr360/Modular/
 .button,
 [class*="button-"] {
   display: inline-block;
-  line-height: 1.4;
-  padding: 0 0.5em;
+  text-decoration: none;
+  transition: 0.4s;
+  border: 1px solid transparent;
+  line-height: 2.4;
+  padding: 0 1em;
   background: grey;
   color: white;
 }
@@ -19,8 +22,20 @@ http://github.com/esr360/Modular/
 [class*="button-"][class*="-block"] {
   display: block;
 }
+[class*="button-"][class*="-border"] {
+  background: transparent;
+  color: white;
+  border-color: white;
+}
+[class*="button-"][class*="-border"]:hover {
+  background: white;
+  color: #183C4C;
+}
 [class*="button-"][class*="-primary"], [class*="button-"][class*="-purchase"] {
-  background: blue;
+  background: #15bbf2;
+}
+[class*="button-"][class*="-primary"]:hover, [class*="button-"][class*="-purchase"]:hover {
+  background: #0b9ac9;
 }
 [class*="button-"][class*="-secondary"] {
   background: green;
@@ -32,23 +47,55 @@ http://github.com/esr360/Modular/
   font-size: 1.4em;
 }
 
-.header,
-[class*="header-"] {
-  background: blue;
-  margin-top: 50px;
+img {
+  max-width: 100%;
 }
-[class*="header-"][class*="-dark"] {
-  background: rgba(0, 0, 0, 0.8);
+
+body {
+  padding: 0;
+  margin: 0;
+  background: url("bg.jpg");
+  font-family: 'Raleway', sans-serif;
+  color: white;
 }
-[class*="header-"][class*="-side"] {
-  position: fixed;
+body:before {
+  content: "";
+  background: rgba(0, 0, 0, 0.6);
+  position: absolute;
   top: 0;
-  width: 100%;
-  z-index: 99;
-}
-[class*="-left"][class*="header-"][class*="-side"] {
   left: 0;
+  height: 100%;
+  width: 100%;
 }
-[class*="-right"][class*="header-"][class*="-side"] {
+
+.container {
+  width: 960px;
+  max-width: 95%;
+  margin: auto;
+}
+
+.main-container {
+  text-align: center;
+  position: absolute;
+  left: 0;
   right: 0;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+      -ms-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+
+.logo {
+  display: inline-block;
+}
+.logo img {
+  display: block;
+}
+
+h3 {
+  font-weight: lighter;
+}
+
+.bgroup {
+  padding-top: 0.75em;
 }

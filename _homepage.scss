@@ -26,8 +26,6 @@
     @return map-get(map-get($typography, sizes), $size);
 }
 
-@include typography;
-
 //=================================================================
 // Buttons
 //=================================================================
@@ -60,6 +58,9 @@
     //-------------------------------------------------------------
 
         display: inline-block;
+		text-decoration: none;
+		transition: 0.4s;
+		border: 1px solid transparent;
         line-height: map-get($buttons, line-height);
         padding: 0 map-get($buttons, side-spacing);
         background: map-get($buttons, background);
@@ -78,10 +79,23 @@
             display: block;
         }
 
+		@include modifier(border) {
+			background: transparent;
+			color: white;
+			border-color: white;
+			&:hover {
+				background: white;
+				color: #183C4C;
+			}
+		}
+		
         // Colors
 
         @include modifier(primary) {
             background: color(primary);
+			&:hover {
+				background: darken(color(primary), 10%);
+			}
         }
 
         @include modifier(secondary) {
@@ -107,8 +121,6 @@
     } // component(button)
 
 } // @mixin buttons
-
-@include buttons;
 
 //=================================================================
 // Header
@@ -170,4 +182,68 @@
 
 } // @mixin header
 
-@include header;
+//=================================================================
+// Homepage Styles
+//=================================================================
+
+@include typography((
+	colors: (
+		primary: #15bbf2
+	)
+));
+
+@include buttons((
+	line-height: 2.4,
+	side-spacing: 1em
+));
+
+img {
+	max-width: 100%;
+}
+
+body {
+	padding: 0;
+	margin: 0;
+	background: url("bg.jpg");
+	font-family: 'Raleway', sans-serif;
+	color: white;
+	&:before {
+		content: "";
+		background: rgba(black, 0.6);
+		position: absolute;
+		top: 0;
+		left: 0;
+		height: 100%;
+		width: 100%;
+	}
+}
+
+.container {
+	width: 960px;
+	max-width: 95%;
+	margin: auto;
+}
+
+.main-container {
+	text-align: center;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+.logo {
+	display: inline-block;
+	img {
+		display: block;
+	}
+}
+
+h3 {
+	font-weight: lighter;
+}
+
+.bgroup {
+	padding-top: 0.75em;
+}
