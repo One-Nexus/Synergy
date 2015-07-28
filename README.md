@@ -10,6 +10,7 @@
 
 ```html
 bower install Modular
+```
 
 ## Overview
 
