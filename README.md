@@ -73,7 +73,7 @@ For starters, writing `[class*="component-"]` over and over again can become ted
 }
 ```
 
-Which is exactly what the  **component** mixin does. The reason `[class*="component"]` on its own isn't used is because this can cause undesired effects elsewhere in your styles. A very simple example would be if you wanted to use a `.buttons` class in the presence on a **button** component - `[class*="button"]` would target this class and apply the core button styles to it. Using `[class*="button-"]` is a fairly safe selector in a project we have control over, in terms of potential conflicts.
+Which is exactly what the  **`component()`** mixin does. The reason `[class*="component"]` on its own isn't used is because this can cause undesired effects elsewhere in your styles. A very simple example would be if you wanted to use a `.buttons` class in the presence on a **button** component - `[class*="button"]` would target this class and apply the core button styles to it. Using `[class*="button-"]` is a fairly safe selector in a project we have control over, in terms of potential conflicts.
 
 ### Configuring a Module
 
@@ -183,12 +183,12 @@ Read the [Advanced Documentation](#module-configuration) section to find out how
 
 #### Component
 
-The `component` mixin is what generates the selectors for your component/module. The mixin accepts 2 parameters:
+The **`component()`** mixin is what generates the selectors for your component/module. The mixin accepts 2 parameters:
 
-* **$component** - the name of your component [required]
-* **$type** - this defines how the mixin generates the selectors for your component [optional]
+* **`$component`** - the name of your component [required]
+* **`$type`** - this defines how the mixin generates the selectors for your component [optional]
 
-**$type** can be one of three values: `flex` (default), `chain` and `static`. By default, `flex` is enabled for all componenets. To globally change the default type, change the `$type` variable at the top of **modular.scss**.
+**`$type`** can be one of three values: `flex` (default), `chain` and `static`. By default, `flex` is enabled for all componenets. To globally change the default type, change the `$type` variable at the top of **modular.scss**.
 
 ##### Flex
 
@@ -200,7 +200,7 @@ The `component` mixin is what generates the selectors for your component/module.
 
 This is the default value for a component; it creates wildcards for both `.component` and `[class*="component-"]`, allowing you to use both the naked component as well as modifiers. Whilst this is the most flexible option, it does mean the generated CSS is slightly greater, which is what the other 2 options are for.
 
-Or if using the default `$type` value of **flex**, you do not need to pass a second parmeter here:
+Or if using the default `$type` value of **`flex`**, you do not need to pass a second parmeter here:
 
 ```css
 @include component(header) {
@@ -232,9 +232,9 @@ The static option creates only the naked selector for your component; ie - `.sel
 
 Nested components are either components which already exist which you wish to overwrite due to their context, or sub-componenets which relate to your main component. This mixin accepts 3 parameters:
 
-* **$nested-component** - the name of your component to be nested (required)
-* **$type** - as above, this can be either `flex` (default), `chain` or `static` (optional)
-* **$root** - defines whether the component should be generated outside the parent component - false by default (optional)
+* **`$nested-component`** - the name of your component to be nested [required]
+* **`$type`** - as above, this can be either `flex` (default), `chain` or `static` [optional]
+* **`$root`** - defines whether the component should be generated outside the parent component - false by default [optional]
 
 ```js
 @include component(logo) {
@@ -248,7 +248,7 @@ Nested components are either components which already exist which you wish to ov
 	}
 	
 	@include nested-component(wrap-header, $root: true) {
-		// wrap-header sub-component styles
+		// wrap-header styles
 	}
 	
 }
@@ -262,21 +262,11 @@ Nested components are either components which already exist which you wish to ov
 </div>
 ```
 
-Remember that the reason we're using these mixins is so we can easily attach modifiers to our selectors, so we may end up with something like this at some point:
-
-```html
-<div class="wrap-header-full-screen">
-	<div class="header-green">
-		<div class="logo-christmas">...</div>
-	</div>
-</div>
-```
-
 #### Modifier
 
-The `modifier` mixin generates the selector for any modifier of your component, for example a **small** or **large** modifier. This mixin accepts only 1 paramter:
+The **`modifier()`** mixin generates the selector for any modifier of your component, for example a **small** or **large** modifier. This mixin accepts only 1 paramter:
 
-* **$modifier** - the name of your modifier (required)
+* **`$modifier`** - the name of your modifier [required]
 
 
 ```js
@@ -310,9 +300,9 @@ You can use any number of modifiers on a single element in the HTML, and in any 
 
 #### Nested Modifier
 
-The `nested-modifier` mixin is used to nest modifiers within one another, meaning that both modifiers must be passed to the element's HTML for the styles to take effect. Again, this mixin accepts only 1 parameter:
+The **`nested-modifier()`** mixin is used to nest modifiers within one another, meaning that both modifiers must be passed to the element's HTML for the styles to take effect. Again, this mixin accepts only 1 parameter:
 
-* **$modifier** - the name of your modifier (required)
+* **`$modifier`** - the name of your modifier [required]
 
 _**`print`** used below isn't a real/valid property and is used for demonstrational purposes only_
 
@@ -376,18 +366,44 @@ As outlined in the [overview](#overview) section, Modular allows you to configur
 ```js
 @mixin header($config: ()) {
 
-	$config: config((
+	$header: config((
+		
+		// Options
+		top  : 50px,
+		bg-color : black
+		
+	), $config);
+
+	@include component(header) {
+		
+		// Core Styles
+		margin-top: map-get($header, top);
+		background-color: map-get($header, bg-color);
+		
+	} // component(header)
+		
+} // @mixin header
+```
+
+For all intents and purposes, there are 2 types of options; bools and non-bools. A bool option is one whose value determines whether or not some code should be applied. A non-bool option is one whose value is used as a value for a CSS property. In the below example there is one of each.
+
+```js
+@mixin header($config: ()) {
+
+	$header: config((
 		
 		// Options
 		dark : false,
 		top  : 50px
 		
-	), $config) !global;
+	), $config);
+	
+	$config: $header !global;
 
 	@include component(header) {
 		
 		// Core Styles
-		margin-top: map-get($config, top);
+		margin-top: map-get($header, top);
 		
 		// Settings
 		@include setting(dark) {
@@ -399,14 +415,38 @@ As outlined in the [overview](#overview) section, Modular allows you to configur
 } // @mixin header
 ```
 
-For all intents and purposes, there are 2 types of options; bools and non-bools. A bool option is one whose value determines whether or not some code should be applied. A non-bool option is one whose value is used as a value for a CSS property. In the above example we have one of each.
+There are two new additions above to note: the `!global` variable, and the `setting()` mixin. The `!global` variable is our variable which contains the settings re-defined as `$config` and passed as a global variable to the `setting()` mixin, which is what controls whether or not the contained code should be generated.
 
-Your configuration can also be infinitely nested, like so:
+Instead of adding the new `$config` variable, you can do the following if your module's config is not required to be accessed globally by other modules:
+
+```js
+@mixin header($config: ()) {
+
+	$config: config((
+		
+		// Options
+		dark : false,
+		top  : 50px
+		
+	), $config) !global;
+	
+	...
+
+}
+```
+
+Which means to access your options you must alter the variable used when using `map-get`, like so:
+
+```css
+margin-top: map-get($config, top);
+```
+
+Your configuration can be infinitely nested, like so:
 
 ```js
 @mixin global($config: ()) {
 
-	$config: config((
+	$global: config((
 		
 		// Options
 		typography: (
@@ -431,14 +471,14 @@ Your configuration can also be infinitely nested, like so:
 When your configuration is more than one level deep, to access the values using `map-get`, you will end up having to do something like:
 
 ```js
-map-get(map-get($config, colors), primary);
+map-get(map-get(map-get($config, typography), colors), primary;
 ```
 
 Piece of cake, right? I'm sure you'd agree repeating this over and over in your other modules would quickly become tedious, so for something like this you could create a function underneath the main mixin for your module, similar to the following:
 
 ```js
-@function breakpoint($color) {
-	@return map-get(map-get($config, colors), $color);
+@function color($color) {
+	map-get(map-get(map-get($config, typography), colors), $color;
 }
 ```
 
@@ -450,7 +490,7 @@ background-color: color(primary);
 
 #### Bool Options
 
-If your option is a bool, you can use the `setting` mixin. The styles added within this mixin will automatically be applied to the component if the option is set to **true**. Alternatively, since by default adding a setting also creates a modifier for the setting, you can apply the styles by adding the modifier to your HTML tag, regardless of the settings value:
+If your option is a bool, you can use the `setting` mixin. The styles added within this mixin will automatically be applied to the component if the option is set to **true**. Alternatively, since by default adding a setting will also create a modifier for the setting, you can apply the styles by adding the modifier to your HTML tag, regardless of the settings value:
 
 ```html
 <div class="header-dark">
@@ -458,7 +498,7 @@ If your option is a bool, you can use the `setting` mixin. The styles added with
 </div>
 ```
 
-If you are watching your CSS output, you may wish to remove these modifiers (and related wildcard selectors) from the generated styles and only use them conditionally. To do so, you can pass the `exteding-settings` option to your module's config, and set it to **false**:
+If you are watching your CSS output, you may wish to remove these modifiers (and related wildcard selectors) from the generated styles and only use them conditionally. To do so, you can pass the `extend-settings` option to your module's config, and set it to **false**:
 
 ```js
 @mixin header($config: ()) {
@@ -477,14 +517,14 @@ If you are watching your CSS output, you may wish to remove these modifiers (and
 }
 ```
 
-To disable the extension of settings globally by default, set the `$extend-settings` variable in **modular.scss** to **false**. This is defined above the `settings` mixin.
+To disable the extension of settings globally by default, set the `$extend-settings` variable in **modular.scss** to **false**. This is defined above the `settings()` mixin.
 
 #### Non-Bool Options
 
 If your option is a CSS property, to call the option in your component the **map-get** function is used, like so:
 
 ```js
-margin-top: map-get($config, top);
+margin-top: map-get($header, top);
 ```
 
 which will generate:
@@ -524,7 +564,7 @@ In some cases, you may require a hybrid of the above 2 options. You may have a s
 } // @mixin header
 ```
 
-The above example inserts an optional set of styles if `side` is set to anything other than **false**. Depending on the value of your setting, we can choose to include additional styles by using the `option` mixin. Again, by default these options are extended as modifiers so you can use them regardless of the setting's value:
+The above example inserts an optional set of styles if `side` is set to anything other than **false**. Depending on the value of your setting, we can choose to include additional styles by using the `option()` mixin. Again, by default these options are extended as modifiers so you can use them regardless of the setting's value:
 
 ```html
 <div class="header-side-left">..</div>
@@ -552,7 +592,7 @@ And just to reiterate, with the `side` option set to either left or right in our
 
 ##### Getting Creative
 
-In some circumstances, we can achieve the same thing without having to use the `option` mixin. Consider the above example; "left" and "right" are both also CSS properties, so we can pass the setting's value as a CSS property:
+In some circumstances, we can achieve the same thing without having to use the `option()` mixin. Consider the above example; "left" and "right" are both also CSS properties, so we can pass the setting's value as a CSS property:
 
 ```js
 @mixin header($config: ()) {
