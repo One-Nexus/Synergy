@@ -6,6 +6,11 @@
 * [Overview](#overview)
 * [Advanced Documentation](#advanced-documentation)
 
+#### Bower Installation:
+
+```html
+bower install Modular
+
 ## Overview
 
 Modular aims to take modular CSS architecting to the next level. Similar in principle to the popular [BEM](http://csswizardry.com/2013/01/mindbemding-getting-your-head-round-bem-syntax/) convention, Modular is based off the idea of having **modules**, **components** and **modifiers**. 
