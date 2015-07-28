@@ -105,6 +105,24 @@ The `$config` variable is what will later serve any custom options when the modu
 
 > `config()` is a custom function which merges multi-dimensional maps - above it is being used to merge the default options with any custom options.
 
+To allow any subsequent modules to access the current module's options, set the config variable (eg: `$header`) to `!global`:
+
+```js
+@mixin header($config: ()) {
+
+	$header: config((
+		
+		// Options
+		top      : 50px,
+		bg-color : black
+		
+	), $config) !global;
+	
+	...
+		
+}
+```
+
 We now have the basis for our example module. Next, the actual component itself:
 
 ```js
