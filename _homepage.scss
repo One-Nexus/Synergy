@@ -204,7 +204,8 @@ img {
 body {
 	padding: 0;
 	margin: 0;
-	background: url("bg.jpg");
+	background-color: #183C4C;
+	background-image: url("bg.jpg");
 	font-family: 'Raleway', sans-serif;
 	color: white;
 	&:before {
@@ -215,6 +216,9 @@ body {
 		left: 0;
 		height: 100%;
 		width: 100%;
+	}
+	@media (min-width: 960px) {
+		background-size: cover;		
 	}
 }
 
