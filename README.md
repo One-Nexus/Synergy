@@ -162,7 +162,7 @@ To call an option, the [**map-get**](http://sass-lang.com/documentation/Sass/Scr
 </div>
 ```
 
-Read the [Advanced Documentation](#module-configuration) section to find out how to use bool options, for something like:
+Read the [Advanced Documentation](#module-configuration-1) section to find out how to use bool options, for something like:
 
 ```js
 @mixin header($config: ()) {
