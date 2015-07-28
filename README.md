@@ -433,7 +433,7 @@ For all intents and purposes, there are 2 types of options; bools and non-bools.
 } // @mixin header
 ```
 
-There are two new additions above to note: the `!global` variable, and the `setting()` mixin. The `!global` variable is our variable which contains the settings re-defined as `$config` and passed as a global variable to the `setting()` mixin, which is what controls whether or not the contained code should be generated.
+There are 2 new additions above to note: the `!global` variable, and the `setting()` mixin. The `!global` variable is our variable which contains the settings re-defined as `$config` and passed as a global variable to the `setting()` mixin, which is what controls whether or not the contained code should be generated.
 
 Instead of adding the new `$config` variable, you can do the following if your module's config is not required to be accessed globally by other modules:
 
@@ -521,14 +521,14 @@ If you are watching your CSS output, you may wish to remove these modifiers (and
 ```js
 @mixin header($config: ()) {
 
-	$config: config((
+	$header: config((
 		
 		// Options
 		extend-settings: false,
 		dark : false,
 		top  : 50px
 		
-	), $config) !global;
+	), $config);
 	
 	...
 		
@@ -558,12 +558,14 @@ In some cases, you may require a hybrid of the above 2 options. You may have a s
 ```js
 @mixin header($config: ()) {
 
-	$config: config((
+	$header: config((
 		
 		// Options
 		side: false; // left or right
 		
-	), $config) !global;
+	), $config);
+	
+	$config: $header !global;
 	
 	@include component(header) {
 		
@@ -615,12 +617,14 @@ In some circumstances, we can achieve the same thing without having to use the `
 ```js
 @mixin header($config: ()) {
 
-	$config: config((
+	$header: config((
 		
 		// Options
 		side: left;
 		
-	), $config) !global;
+	), $config);
+	
+	$config: $header !global;
 	
 	@include component(header) {
 		
@@ -667,26 +671,26 @@ What if you want to create a module whose options can be accessed by other modul
 ```js
 @mixin grid($config: ()) {
 	
-	$config: ((
+	$grid: ((
 		breakpoints: ((
 			break-1: 420px,
 			break-2: 740px,
 			break-3: 960px,
 			break-4: 1200px
 		));
-	), $config) !global;
+	), $config);
 	
 	...
 	
 } // @mixin grid
 ```
 
-This is entirely possible using Modular, and requires only one additional variable in your module, underneath the config:
+This is entirely possible using Modular, and requires the addition of the `!global` flag:
 
 ```js
 @mixin grid($config: ()) {
 	
-	$config: ((
+	$grid: ((
 		breakpoints: ((
 			break-1: 420px,
 			break-2: 740px,
@@ -694,8 +698,6 @@ This is entirely possible using Modular, and requires only one additional variab
 			break-4: 1200px
 		));
 	), $config) !global;
-	
-	$grid: $config !global;
 	
 	...
 	
@@ -747,28 +749,26 @@ _theme.scss
 ```js
 @mixin typography($config: ()) {
 
-	$config: config((
-		colors: (
-			primary   : blue,
-			secondary : green
-		),
-		sizes: (
-			small     : 0.8em,
-			regular   : 1em,
-			large     : 1.4em			
-		)
-	))
-	
-	$typography: $config !global;
+    $typography: config((
+        colors: (
+            primary   : blue,
+            secondary : green
+        ),
+        sizes: (
+            small     : 0.8em,
+            regular   : 1em,
+            large     : 1.4em           
+        )
+    ), $config) !global;
 
 } // @mixin typography
 
 @function color($color) {
-	@return map-get(map-get($typography, colors), $color);
+    @return map-get(map-get($typography, colors), $color);
 }
 
 @function size($size) {
-	@return map-get(map-get($typography, sizes), $size);
+    @return map-get(map-get($typography, sizes), $size);
 }
 
 //	color: color(primary);
@@ -783,78 +783,78 @@ _theme.scss
 ```js
 @mixin buttons($config: ()) {
 
-	//-------------------------------------------------------------
-	// Config
-	//-------------------------------------------------------------
+    //-------------------------------------------------------------
+    // Config
+    //-------------------------------------------------------------
 
-	$config: config((
+    $buttons: config((
+
+        // Core Styles
+        line-height  : 1.4,
+        side-spacing : 0.5em,
+        background   : grey,
+        color        : white,
+        // Modifiers
+        radius       : 0.4em
+
+    ), $config);
+
+    //-------------------------------------------------------------
+    // Component
+    //-------------------------------------------------------------
+
+    @include component(button) {
+
+    // Core Styles
+    //-------------------------------------------------------------
+
+        display: inline-block;
+        line-height: map-get($buttons, line-height);
+        padding: 0 map-get($buttons, side-spacing);
+        background: map-get($buttons, background);
+        color: map-get($buttons, color);
+
+    // Modifiers
+    //-------------------------------------------------------------
+
+        // Patterns
 		
-		// Core Styles
-		line-height  : 1.4,
-		side-spacing : 0.5em,
-		background   : grey,
-		color        : white,
-		// Modifiers
-		radius       : 0.4em
-		
-	), $config) !global;
-	
-	//-------------------------------------------------------------
-	// Component
-	//-------------------------------------------------------------
-	
-	@include component(button) {
-		
-	// Core Styles
-	//-------------------------------------------------------------
-		
-		display: inline-block;
-		line-height: map-get($config, line-height);
-		padding: 0 map-get($config, side-spacing);
-		background: map-get($config, background);
-		color: map-get($config, color);
-		
-	// Modifiers
-	//-------------------------------------------------------------
-		
-		// Patterns
-		
-		@include modifier(round) {
-			border-radius: map-get($config, radius);
-		}
-		
-		@include modifier(block) {
-			display: block;
-		}
-		
-		// Colors
-		
-		@include modifier(primary) {
-			background: color(primary);
-		}
-		
-		@include modifier(secondary) {
-			background: color(secondary);
-		}
-		
-		// Sizes
-		
-		@include modifier(small) {
-			font-size: size(small);	
-		}
-		
-		@include modifier(large) {
-			font-size: size(large);	
-		}
-		
-		// Semantic Styles
-		
-		@include modifier(purchase) {
-			@include extend(round, primary, large);
-		}
-		
-	} // component(button)
-	
+        @include modifier(round) {
+            border-radius: map-get($buttons, radius);
+        }
+
+        @include modifier(block) {
+            display: block;
+        }
+
+        // Colors
+
+        @include modifier(primary) {
+            background: color(primary);
+        }
+
+        @include modifier(secondary) {
+            background: color(secondary);
+        }
+
+        // Sizes
+
+        @include modifier(small) {
+            font-size: size(small); 
+        }
+
+        @include modifier(large) {
+            font-size: size(large); 
+        }
+
+        // Semantic Styles
+
+        @include modifier(purchase) {
+            @include extend(round, primary, large);
+        }
+
+    } // component(button)
+
 } // @mixin buttons
 
 //	<div class="button">...</div>
@@ -873,57 +873,60 @@ _theme.scss
 ```js
 @mixin header($config: ()) {
 
-	//-------------------------------------------------------------
-	// Config
-	//-------------------------------------------------------------
+    //-------------------------------------------------------------
+    // Config
+    //-------------------------------------------------------------
 
-	$config: config((
-		
-		background : color(primary),
-		top        : 50px,
-		dark       : false,
-		dark-color : rgba(black, 0.8),
-		side       : false,
-		side-width : 100%
-		
-	), $config) !global;
-		
-	//-------------------------------------------------------------
-	// Component
-	//-------------------------------------------------------------
+    $header: config((
 
-	@include component(header) {
-		
-	// Core Styles
-	//-------------------------------------------------------------
-		
-		background: map-get($config, background);	
-		margin-top: map-get($config, top);
-		
-	// Settings
-	//-------------------------------------------------------------
+        background : color(primary),
+        top        : 50px,
+        dark       : false,
+        dark-color : rgba(black, 0.8),
+        side       : false,
+        side-width : 100%
+
+    ), $config);
 	
-		@include setting(dark) {
-			background: map-get($config, dark-color);	
-		}
-		
-		@include setting(side) {
-			// Core Side-Header Styles
-			position: fixed;
-			top: 0;
-			width: map-get($config, side-width);
-			z-index: 99;
-			@include option(left) {
-				left: 0;
-			}
-			@include option(right)
-				right: 0;
-			}
-		}
-		
-	} // component(header)
-		
+	$config: $header !global;
+
+    //-------------------------------------------------------------
+    // Component
+    //-------------------------------------------------------------
+
+    @include component(header) {
+
+    // Core Styles
+    //-------------------------------------------------------------
+
+        background: map-get($header, background);   
+        margin-top: map-get($header, top);
+
+    // Settings
+    //-------------------------------------------------------------
+
+        @include setting(dark) {
+            background: map-get($header, dark-color);   
+        }
+
+        @include setting(side) {
+            // Core Side-Header Styles
+            position: fixed;
+            top: 0;
+            width: map-get($header, side-width);
+            z-index: 99;
+            @include option(left) {
+                left: 0;
+            }
+            @include option(right) {
+                right: 0;
+            }
+        }
+
+    } // component(header)
+
 } // @mixin header
+
 
 //	<div class="header">...</div>
 //	<div class="header-dark">...</div>
