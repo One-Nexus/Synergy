@@ -1,4 +1,5 @@
-# Modular
+
+[![Modular](https://raw.githubusercontent.com/esr360/Modular/gh-pages/logo-small.png "Modular Logo")](https://github.com/esr360/Modular)
 
 > A set of Sass mixins for architecting modular, configurable and scalable CSS.
 

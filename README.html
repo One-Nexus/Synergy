@@ -1,0 +1,783 @@
+<p><a href="https://github.com/esr360/Modular"><img src="https://raw.githubusercontent.com/esr360/Modular/gh-pages/logo-small.png" alt="Modular" title="Modular Logo"></a></p>
+<blockquote>
+<p>A set of Sass mixins for architecting modular, configurable and scalable CSS.</p>
+</blockquote>
+<ul>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#advanced-documentation">Advanced Documentation</a></li>
+</ul>
+<h2 id="overview">Overview</h2>
+<p>Modular aims to take modular CSS architecting to the next level. Similar in principle to the popular <a href="http://csswizardry.com/2013/01/mindbemding-getting-your-head-round-bem-syntax/">BEM</a> convention, Modular is based off the idea of having <strong>modules</strong>, <strong>components</strong> and <strong>modifiers</strong>. </p>
+<p>Have you ever found yourself using BEM and ending up with HTML like this?</p>
+<pre><code class="lang-html">&lt;div class=&quot;button  button--large  button--success&quot;&gt;Large Success Button&lt;/div&gt;
+</code></pre>
+<p>What if you could just do this:</p>
+<pre><code class="lang-html">&lt;div class=&quot;button-large-success&quot;&gt;Large Success Button&lt;/div&gt;
+</code></pre>
+<p>The benefits of using this HTML over conventional BEM syntax are self-apparant. However, you may be looking at that thinking of several reasons why it wouldn&#39;t work; what if I want to only use the &quot;button&quot; class on its own? What if I only want a large button, or only want a success button? Well, with Modular, all this is possible.</p>
+<pre><code class="lang-js">@include component(button) {
+    // core button styles
+    ...
+    @include modifier(large) {
+        // large button styles
+        ...
+    }
+    @include modifier(success) {
+        // success button styles
+        ...
+    }
+}
+</code></pre>
+<p>The above code would allow for the use of all of the following:</p>
+<pre><code class="lang-html">&lt;div class=&quot;button&quot;&gt;Button&lt;/div&gt;
+&lt;div class=&quot;button-large&quot;&gt;Large Button&lt;/div&gt;
+&lt;div class=&quot;button-success&quot;&gt;Success Button&lt;/div&gt;
+&lt;div class=&quot;button-large-success&quot;&gt;Large Success Button&lt;/div&gt;
+&lt;div class=&quot;button-success-large&quot;&gt;Success Large Button&lt;/div&gt;
+</code></pre>
+<p>And, crazily enough, you could also use the original BEM syntax of:</p>
+<pre><code class="lang-html">&lt;div class=&quot;button  button--large  button--success&quot;&gt;Large Success Button&lt;/div&gt;
+</code></pre>
+<h3 id="but-how-">But how?</h3>
+<p>I&#39;m glad you asked. The answer is simple - <a href="http://www.surfingsuccess.com/css/css-wildcard-css-attribute-selector.html">wildcard selectors</a>. Under the hood, Modular has created a wildcard selector for the component and each modifier</p>
+<p><em>But aren&#39;t wildcard selectors bad for performance?</em></p>
+<p>Well, no. Perhaps this was true many years ago, but today, <a href="http://www.telerik.com/blogs/css_tip_star_selector_not_that_bad">any performance impact is negilable</a> (and this article is 3 years old). <a href="http://benfrain.com/css-performance-revisited-selectors-bloat-expensive-styles/">Further reading</a>. </p>
+<p><em>Why bother using a mixin for this? Why not just write the wildcard selector?</em></p>
+<p>For starters, writing <code>[class*=&quot;component-&quot;]</code> over and over again can become tedious. Secondly, for our core styles we also need them to be applied to the naked <code>.component</code> class, meaning we would now have to write:</p>
+<pre><code class="lang-css">.component,
+[class*=&quot;component-&quot;] {
+    ...
+}
+</code></pre>
+<p>Which is exactly what the  <strong><code>component()</code></strong> mixin does. The reason <code>[class*=&quot;component&quot;]</code> on its own isn&#39;t used is because this can cause undesired effects elsewhere in your styles. A very simple example would be if you wanted to use a <code>.buttons</code> class in the presence on a <strong>button</strong> component - <code>[class*=&quot;button&quot;]</code> would target this class and apply the core button styles to it. Using <code>[class*=&quot;button-&quot;]</code> is a fairly safe selector in a project we have control over, in terms of potential conflicts.</p>
+<h3 id="configuring-a-module">Configuring a Module</h3>
+<p>Modular allows you to create confirguble components with customizable settings. To configure a new module, create a mixin named after your module (ensure the name is unique):</p>
+<pre><code class="lang-js">@mixin header($config: ()) {
+    ...    
+}
+</code></pre>
+<p>The <code>$config</code> variable is what will later serve any custom options when the module is included. For the default options, a new variable named after your module is used, in our example this is <code>$header</code>:</p>
+<pre><code class="lang-js">@mixin header($config: ()) {
+
+    $header: config((
+
+        // Options
+        top      : 50px,
+        bg-color : black
+
+    ), $config);
+
+    ...
+
+}
+</code></pre>
+<blockquote>
+<p><code>config()</code> is a custom function which merges multi-dimensional maps - above it is being used to merge the default options with any custom options.</p>
+</blockquote>
+<p>To allow any subsequent modules to access the current module&#39;s options, set the config variable (eg: <code>$header</code>) to <code>!global</code>:</p>
+<pre><code class="lang-js">@mixin header($config: ()) {
+
+    $header: config((
+
+        // Options
+        top      : 50px,
+        bg-color : black
+
+    ), $config) !global;
+
+    ...
+
+}
+</code></pre>
+<p>We now have the basis for our example module. Next, the actual component itself:</p>
+<pre><code class="lang-js">@mixin header($config: ()) {
+
+    $header: config((
+
+        // Options
+        top  : 50px,
+        bg-color : black
+
+    ), $config);
+
+    @include component(header) {
+
+        // Core Styles
+        margin-top: map-get($header, top);
+        background-color: map-get($header, bg-color);
+
+    } // component(header)
+
+} // @mixin header
+</code></pre>
+<p>To call an option, the <a href="http://sass-lang.com/documentation/Sass/Script/Functions.html#map_get-instance_method"><strong>map-get</strong></a> feature of Sass is used. We can now create our header with the following HTML:</p>
+<pre><code class="lang-html">&lt;div class=&quot;header&quot;&gt;
+    ...
+&lt;/div&gt;
+</code></pre>
+<p>Read the <a href="#module-configuration">Advanced Documentation</a> section to find out how to use bool options, for something like:</p>
+<pre><code class="lang-js">@mixin header($config: ()) {
+
+    $header: config((
+
+        // Options
+        dark : false,
+        side : false // left or right
+
+    ), $config);
+
+    ...
+
+}
+
+@include header((
+    dark : true,
+    side : left    
+))
+</code></pre>
+<h2 id="advanced-documentation">Advanced Documentation</h2>
+<h3 id="mixins">Mixins</h3>
+<ul>
+<li><a href="#component">Component</a></li>
+<li><a href="#nested-component">Nested Component</a></li>
+<li><a href="#modifier">Modifier</a></li>
+<li><a href="#nested-modifier">Nested Modifier</a></li>
+<li><a href="#extended-modifiers">Extend Modifiers</a></li>
+<li><a href="#module-configuration">Setting</a></li>
+<li><a href="#hybrid-options">Option</a></li>
+</ul>
+<h3 id="module-configuration">Module Configuration</h3>
+<ul>
+<li><a href="#bool-options">Bool Options</a></li>
+<li><a href="#non-bool-options">Non-Bool Options</a></li>
+<li><a href="#hybrid-options">Hybrid Options</a></li>
+<li><a href="#including-your-module">Including Your Module</a></li>
+<li><a href="#global-configuration">Global Configuration</a></li>
+<li><a href="#setting-up-a-project">Setting Up A Project</a></li>
+</ul>
+<h4 id="component">Component</h4>
+<p>The <strong><code>component()</code></strong> mixin is what generates the selectors for your component/module. The mixin accepts 2 parameters:</p>
+<ul>
+<li><strong><code>$component</code></strong> - the name of your component [required]</li>
+<li><strong><code>$type</code></strong> - this defines how the mixin generates the selectors for your component [optional]</li>
+</ul>
+<p><strong><code>$type</code></strong> can be one of three values: <code>flex</code> (default), <code>chain</code> and <code>static</code>. By default, <code>flex</code> is enabled for all componenets. To globally change the default type, change the <code>$type</code> variable at the top of <strong>modular.scss</strong>.</p>
+<h5 id="flex">Flex</h5>
+<pre><code class="lang-css">@include component(header, flex) {
+    ...
+}
+</code></pre>
+<p>This is the default value for a component; it creates wildcards for both <code>.component</code> and <code>[class*=&quot;component-&quot;]</code>, allowing you to use both the naked component as well as modifiers. Whilst this is the most flexible option, it does mean the generated CSS is slightly greater, which is what the other 2 options are for.</p>
+<p>Or if using the default <code>$type</code> value of <strong><code>flex</code></strong>, you do not need to pass a second parmeter here:</p>
+<pre><code class="lang-css">@include component(header) {
+    ...
+}
+</code></pre>
+<h5 id="chain">Chain</h5>
+<pre><code class="lang-css">@include component(header, chain) {
+    ...
+}
+</code></pre>
+<p>The chain option should be used if you are looking to optimise your CSS output, and you know your component will not exist as a naked selector without modifiers. Ie - this option outputs only <code>[class*=&quot;component-&quot;]</code>, thefore you cannot use <code>.component</code> to achieve any styles.</p>
+<h5 id="static">Static</h5>
+<pre><code class="lang-css">@include component(header, static) {
+    ...
+}
+</code></pre>
+<p>The static option creates only the naked selector for your component; ie - <code>.selector</code>, meaning no modifiers can be used. This option is only available for consistency; it probably makes more sense to just write <code>.component</code> instead of using the mixin in this case - I&#39;ll let you think about that one.</p>
+<h4 id="nested-component">Nested Component</h4>
+<p>Nested components are either components which already exist which you wish to overwrite due to their context, or sub-componenets which relate to your main component. This mixin accepts 3 parameters:</p>
+<ul>
+<li><strong><code>$nested-component</code></strong> - the name of your component to be nested [required]</li>
+<li><strong><code>$type</code></strong> - as above, this can be either <code>flex</code> (default), <code>chain</code> or <code>static</code> [optional]</li>
+<li><strong><code>$root</code></strong> - defines whether the component should be generated outside the parent component - false by default [optional]</li>
+</ul>
+<pre><code class="lang-js">@include component(logo) {
+    font-size: 1em;    
+}
+
+@include component(header) {
+
+    @include nested-component(logo) {
+        font-size: 2em;    
+    }
+
+    @include nested-component(wrap-header, $root: true) {
+        // wrap-header styles
+    }
+
+}
+</code></pre>
+<pre><code class="lang-html">&lt;div class=&quot;wrap-header&quot;&gt;
+    &lt;div class=&quot;header&quot;&gt;
+        &lt;div class=&quot;logo&quot;&gt;...&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<h4 id="modifier">Modifier</h4>
+<p>The <strong><code>modifier()</code></strong> mixin generates the selector for any modifier of your component, for example a <strong>small</strong> or <strong>large</strong> modifier. This mixin accepts only 1 paramter:</p>
+<ul>
+<li><strong><code>$modifier</code></strong> - the name of your modifier [required]</li>
+</ul>
+<pre><code class="lang-js">@include component(button) {
+
+    ...
+
+    @include modifier(small) {
+        font-size: 0.75em;
+    }
+
+    @include modifier(large) {
+        font-size: 1.5em;
+    }
+
+}
+</code></pre>
+<pre><code class="lang-html">&lt;div class=&quot;button&quot;&gt;Button&lt;/div&gt;
+&lt;div class=&quot;button-small&quot;&gt;Button&lt;/div&gt;
+&lt;div class=&quot;button-large&quot;&gt;Button&lt;/div&gt;
+</code></pre>
+<p>You can use any number of modifiers on a single element in the HTML, and in any order, for example:</p>
+<pre><code class="lang-html">&lt;div class=&quot;button-large-round-primary&quot;&gt;...&lt;/div&gt;
+&lt;div class=&quot;button-primary-large-round&quot;&gt;...&lt;/div&gt;
+</code></pre>
+<h4 id="nested-modifier">Nested Modifier</h4>
+<p>The <strong><code>nested-modifier()</code></strong> mixin is used to nest modifiers within one another, meaning that both modifiers must be passed to the element&#39;s HTML for the styles to take effect. Again, this mixin accepts only 1 parameter:</p>
+<ul>
+<li><strong><code>$modifier</code></strong> - the name of your modifier [required]</li>
+</ul>
+<p><em><strong><code>print</code></strong> used below isn&#39;t a real/valid property and is used for demonstrational purposes only</em></p>
+<pre><code class="lang-js">@include component(button) {
+
+    print: &quot;null&quot;;
+
+    @include modifier(white) {
+        print: &quot;foo&quot;;
+    }
+
+    @include modifier(border) {
+        print: &quot;bar&quot;;
+        @include nested-modifier(white) {
+            print: &quot;baz&quot;;
+        }
+    }
+
+}
+</code></pre>
+<p>This means that in your HTML the element would require both the <strong>border</strong> and <strong>white</strong> modifiers for the styles to take place:</p>
+<pre><code class="lang-html">&lt;div class=&quot;button&quot;&gt;null&lt;/div&gt;
+&lt;div class=&quot;button-white&quot;&gt;foo&lt;/div&gt;
+&lt;div class=&quot;button-border&quot;&gt;bar&lt;/div&gt;
+&lt;div class=&quot;button-border-white&quot;&gt;baz&lt;/div&gt;
+&lt;div class=&quot;button-white-border&quot;&gt;baz&lt;/div&gt;
+</code></pre>
+<blockquote>
+<p>If you try to nest the regular modifier mixin, it will output the CSS as if it weren&#39;t nested. It is essential to use the <code>nested-modifier</code> mixin for any nested modifiers. Other than that, nested-modifiers can be infinitely nested.</p>
+</blockquote>
+<h4 id="extend-modifiers">Extend Modifiers</h4>
+<p>This mixin allows you to extend multiple modifiers into a new, seperate modifer, essentially combining several modifiers into one.</p>
+<pre><code class="lang-js">@include component(button) {
+
+    @include modifier(round)   {...}
+    @include modifier(large)   {...}
+    @include modifier(success) {...}
+
+    @include modifier(primary) {
+        @include extend(round, large, success);
+    }    
+
+}
+</code></pre>
+<pre><code class="lang-html">&lt;div class=&quot;button-primary&quot;&gt;...&lt;/div&gt;
+</code></pre>
+<h3 id="module-configuration">Module Configuration</h3>
+<p>As outlined in the <a href="#overview">overview</a> section, Modular allows you to configure your components with customizable options.</p>
+<pre><code class="lang-js">@mixin header($config: ()) {
+
+    $header: config((
+
+        // Options
+        top  : 50px,
+        bg-color : black
+
+    ), $config);
+
+    @include component(header) {
+
+        // Core Styles
+        margin-top: map-get($header, top);
+        background-color: map-get($header, bg-color);
+
+    } // component(header)
+
+} // @mixin header
+</code></pre>
+<p>For all intents and purposes, there are 2 types of options; bools and non-bools. A bool option is one whose value determines whether or not some code should be applied. A non-bool option is one whose value is used as a value for a CSS property. In the below example there is one of each.</p>
+<pre><code class="lang-js">@mixin header($config: ()) {
+
+    $header: config((
+
+        // Options
+        dark : false,
+        top  : 50px
+
+    ), $config);
+
+    $config: $header !global;
+
+    @include component(header) {
+
+        // Core Styles
+        margin-top: map-get($header, top);
+
+        // Settings
+        @include setting(dark) {
+            background-color: black;
+        }
+
+    } // component(header)
+
+} // @mixin header
+</code></pre>
+<p>There are 2 new additions above to note: the <code>!global</code> variable, and the <code>setting()</code> mixin. The <code>!global</code> variable is our variable which contains the settings re-defined as <code>$config</code> and passed as a global variable to the <code>setting()</code> mixin, which is what controls whether or not the contained code should be generated.</p>
+<p>Instead of adding the new <code>$config</code> variable, you can do the following if your module&#39;s config is not required to be accessed globally by other modules:</p>
+<pre><code class="lang-js">@mixin header($config: ()) {
+
+    $config: config((
+
+        // Options
+        dark : false,
+        top  : 50px
+
+    ), $config) !global;
+
+    ...
+
+}
+</code></pre>
+<p>Which means to access your options you must alter the variable used when using <code>map-get</code>, like so:</p>
+<pre><code class="lang-css">margin-top: map-get($config, top);
+</code></pre>
+<p>Your configuration can be infinitely nested, like so:</p>
+<pre><code class="lang-js">@mixin global($config: ()) {
+
+    $global: config((
+
+        // Options
+        typography: (
+            sizes: (
+                size-1    : 1em,
+                size-2    : 1.2em,
+                size-3    : 1.6em
+            ),
+            colors: (
+                primary   : red,
+                secondary : blue
+            )
+        )
+
+    ), $config) !global;
+
+    ...
+
+} // @mixin global
+</code></pre>
+<p>When your configuration is more than one level deep, to access the values using <code>map-get</code>, you will end up having to do something like:</p>
+<pre><code class="lang-js">map-get(map-get(map-get($config, typography), colors), primary;
+</code></pre>
+<p>Piece of cake, right? I&#39;m sure you&#39;d agree repeating this over and over in your other modules would quickly become tedious, so for something like this you could create a function underneath the main mixin for your module, similar to the following:</p>
+<pre><code class="lang-js">@function color($color) {
+    map-get(map-get(map-get($config, typography), colors), $color;
+}
+</code></pre>
+<p>You can now access the <strong>colors</strong> map from your config using <code>color(primary)</code>, for example:</p>
+<pre><code class="lang-css">background-color: color(primary);
+</code></pre>
+<h4 id="bool-options">Bool Options</h4>
+<p>If your option is a bool, you can use the <code>setting</code> mixin. The styles added within this mixin will automatically be applied to the component if the option is set to <strong>true</strong>. Alternatively, since by default adding a setting will also create a modifier for the setting, you can apply the styles by adding the modifier to your HTML tag, regardless of the settings value:</p>
+<pre><code class="lang-html">&lt;div class=&quot;header-dark&quot;&gt;
+    ...
+&lt;/div&gt;
+</code></pre>
+<p>If you are watching your CSS output, you may wish to remove these modifiers (and related wildcard selectors) from the generated styles and only use them conditionally. To do so, you can pass the <code>extend-settings</code> option to your module&#39;s config, and set it to <strong>false</strong>:</p>
+<pre><code class="lang-js">@mixin header($config: ()) {
+
+    $header: config((
+
+        // Options
+        extend-settings: false,
+        dark : false,
+        top  : 50px
+
+    ), $config);
+
+    ...
+
+}
+</code></pre>
+<p>To disable the extension of settings globally by default, set the <code>$extend-settings</code> variable in <strong>modular.scss</strong> to <strong>false</strong>. This is defined above the <code>settings()</code> mixin.</p>
+<h4 id="non-bool-options">Non-Bool Options</h4>
+<p>If your option is a CSS property, to call the option in your component the <strong>map-get</strong> function is used, like so:</p>
+<pre><code class="lang-js">margin-top: map-get($header, top);
+</code></pre>
+<p>which will generate:</p>
+<pre><code class="lang-js">margin-top: 50px;
+</code></pre>
+<h4 id="hybrid-options">Hybrid Options</h4>
+<p>In some cases, you may require a hybrid of the above 2 options. You may have a set of styles you wish to use conditionally, and you may wish for these styles to vary depending on the value passed. Let&#39;s look at the following example - imagine we have a side header on our website, and we want to easily change whether it appears on the left or right hand side:</p>
+<pre><code class="lang-js">@mixin header($config: ()) {
+
+    $header: config((
+
+        // Options
+        side: false; // left or right
+
+    ), $config);
+
+    $config: $header !global;
+
+    @include component(header) {
+
+        @include setting(side) {
+            // core side header styles
+            @include option(left) {
+                // left side styles
+            }
+            @include option(right)
+                // right side styles
+            }
+        }
+
+    } // component(header)
+
+} // @mixin header
+</code></pre>
+<p>The above example inserts an optional set of styles if <code>side</code> is set to anything other than <strong>false</strong>. Depending on the value of your setting, we can choose to include additional styles by using the <code>option()</code> mixin. Again, by default these options are extended as modifiers so you can use them regardless of the setting&#39;s value:</p>
+<pre><code class="lang-html">&lt;div class=&quot;header-side-left&quot;&gt;..&lt;/div&gt;
+</code></pre>
+<pre><code class="lang-html">&lt;div class=&quot;header-side-right&quot;&gt;..&lt;/div&gt;
+</code></pre>
+<p>If you&#39;ve completely followed this documentation so far you may have already picked up on the fact you can also use:</p>
+<pre><code class="lang-html">&lt;div class=&quot;header-left-side&quot;&gt;..&lt;/div&gt;
+</code></pre>
+<pre><code class="lang-html">&lt;div class=&quot;header-right-side&quot;&gt;..&lt;/div&gt;
+</code></pre>
+<p>And just to reiterate, with the <code>side</code> option set to either left or right in our above example, we don&#39;t need to pass any modifiers to our HTML, we just use:</p>
+<pre><code class="lang-html">&lt;div class=&quot;header&quot;&gt;...&lt;/div&gt;
+</code></pre>
+<h5 id="getting-creative">Getting Creative</h5>
+<p>In some circumstances, we can achieve the same thing without having to use the <code>option()</code> mixin. Consider the above example; &quot;left&quot; and &quot;right&quot; are both also CSS properties, so we can pass the setting&#39;s value as a CSS property:</p>
+<pre><code class="lang-js">@mixin header($config: ()) {
+
+    $header: config((
+
+        // Options
+        side: left;
+
+    ), $config);
+
+    $config: $header !global;
+
+    @include component(header) {
+
+        @include setting(side) {
+            // Side-Header Styles
+            ...
+            #{map-get($config, side)}: 0; // left: 0;
+        }
+
+    } // component(header)
+
+} // @mixin header
+</code></pre>
+<p>The above example is assuming we have a setup where the header&#39;s position is controlled via:</p>
+<ul>
+<li><code>left: 0;</code> for a left header</li>
+<li><code>right: 0;</code> for a right header</li>
+</ul>
+<h4 id="including-your-module">Including Your Module</h4>
+<p>Our module is now ready to be included; to include the module with the default settings you have created, all that&#39;s required is:</p>
+<pre><code class="lang-js">@include header;
+</code></pre>
+<p>To include your header with customised options, this is done like so:</p>
+<pre><code class="lang-js">@include header((
+    dark : true,
+    top  : 0,
+    side : left    
+));
+</code></pre>
+<p>And that&#39;s it, you now have a completely custoimzable header which can be modified with extreme ease.</p>
+<h4 id="global-configuration">Global Configuration</h4>
+<p>What if you want to create a module whose options can be accessed by other modules? For example, say you have a module for your grid system and have configured some breakpoint values - you then may wish to access these values from throughout your project:</p>
+<pre><code class="lang-js">@mixin grid($config: ()) {
+
+    $grid: ((
+        breakpoints: ((
+            break-1: 420px,
+            break-2: 740px,
+            break-3: 960px,
+            break-4: 1200px
+        ));
+    ), $config);
+
+    ...
+
+} // @mixin grid
+</code></pre>
+<p>This is entirely possible using Modular, and requires the addition of the <code>!global</code> flag:</p>
+<pre><code class="lang-js">@mixin grid($config: ()) {
+
+    $grid: ((
+        breakpoints: ((
+            break-1: 420px,
+            break-2: 740px,
+            break-3: 960px,
+            break-4: 1200px
+        ));
+    ), $config) !global;
+
+    ...
+
+} // @mixin grid
+
+// Mixin to easily access breakpoints map
+@function breakpoint($breakpoint) {
+    @return map-get(map-get($grid, breakpoints), $breakpoint);
+}
+</code></pre>
+<p>As long as our other modules are included after this one, we can now access the breakpoint values using:</p>
+<pre><code class="lang-js">width: breakpoint(break-3);
+</code></pre>
+<h4 id="setting-up-a-project">Setting Up A Project</h4>
+<p>Let&#39;s create a simple example project with a typography file, some buttons and a header, taking a complete modular approach.</p>
+<p>First, we&#39;ll create our main project&#39;s Sass files:</p>
+<pre><code class="lang-css">app.scss
+_typography.scss
+_buttons.scss
+_header.scss
+_theme.scss
+</code></pre>
+<h5 id="app-scss">app.scss</h5>
+<pre><code class="lang-js">// Modular
+@import &quot;modular&quot;;
+
+// Project Partials
+@import &quot;typography&quot;;
+@import &quot;buttons&quot;;
+@import &quot;header&quot;;
+
+// Theme
+@import &quot;theme&quot;;
+</code></pre>
+<h5 id="_typography-scss">_typography.scss</h5>
+<pre><code class="lang-js">@mixin typography($config: ()) {
+
+    $typography: config((
+        colors: (
+            primary   : blue,
+            secondary : green
+        ),
+        sizes: (
+            small     : 0.8em,
+            regular   : 1em,
+            large     : 1.4em           
+        )
+    ), $config) !global;
+
+} // @mixin typography
+
+@function color($color) {
+    @return map-get(map-get($typography, colors), $color);
+}
+
+@function size($size) {
+    @return map-get(map-get($typography, sizes), $size);
+}
+
+//    color: color(primary);
+//    color: color(secondary);
+//    font-size: size(small);
+//    font-size: size(regular);
+//    font-size: size(large);
+</code></pre>
+<h5 id="_buttons-scss">_buttons.scss</h5>
+<pre><code class="lang-js">@mixin buttons($config: ()) {
+
+    //-------------------------------------------------------------
+    // Config
+    //-------------------------------------------------------------
+
+    $buttons: config((
+
+        // Core Styles
+        line-height  : 1.4,
+        side-spacing : 0.5em,
+        background   : grey,
+        color        : white,
+        // Modifiers
+        radius       : 0.4em
+
+    ), $config);
+
+    //-------------------------------------------------------------
+    // Component
+    //-------------------------------------------------------------
+
+    @include component(button) {
+
+    // Core Styles
+    //-------------------------------------------------------------
+
+        display: inline-block;
+        line-height: map-get($buttons, line-height);
+        padding: 0 map-get($buttons, side-spacing);
+        background: map-get($buttons, background);
+        color: map-get($buttons, color);
+
+    // Modifiers
+    //-------------------------------------------------------------
+
+        // Patterns
+
+        @include modifier(round) {
+            border-radius: map-get($buttons, radius);
+        }
+
+        @include modifier(block) {
+            display: block;
+        }
+
+        // Colors
+
+        @include modifier(primary) {
+            background: color(primary);
+        }
+
+        @include modifier(secondary) {
+            background: color(secondary);
+        }
+
+        // Sizes
+
+        @include modifier(small) {
+            font-size: size(small); 
+        }
+
+        @include modifier(large) {
+            font-size: size(large); 
+        }
+
+        // Semantic Styles
+
+        @include modifier(purchase) {
+            @include extend(round, primary, large);
+        }
+
+    } // component(button)
+
+} // @mixin buttons
+
+//    &lt;div class=&quot;button&quot;&gt;...&lt;/div&gt;
+//    &lt;div class=&quot;button-round&quot;&gt;...&lt;/div&gt;
+//    &lt;div class=&quot;button-block&quot;&gt;...&lt;/div&gt;
+//    &lt;div class=&quot;button-primary&quot;&gt;...&lt;/div&gt;
+//    &lt;div class=&quot;button-secondary&quot;&gt;...&lt;/div&gt;
+//    &lt;div class=&quot;button-small&quot;&gt;...&lt;/div&gt;
+//    &lt;div class=&quot;button-large&quot;&gt;...&lt;/div&gt;
+//    &lt;div class=&quot;button-primary-round-large&quot;&gt;...&lt;/div&gt;
+//    &lt;div class=&quot;button-purchase&quot;&gt;...&lt;/div&gt;
+</code></pre>
+<h5 id="_header-scss">_header.scss</h5>
+<pre><code class="lang-js">@mixin header($config: ()) {
+
+    //-------------------------------------------------------------
+    // Config
+    //-------------------------------------------------------------
+
+    $header: config((
+
+        background : color(primary),
+        top        : 50px,
+        dark       : false,
+        dark-color : rgba(black, 0.8),
+        side       : false,
+        side-width : 100%
+
+    ), $config);
+
+    $config: $header !global;
+
+    //-------------------------------------------------------------
+    // Component
+    //-------------------------------------------------------------
+
+    @include component(header) {
+
+    // Core Styles
+    //-------------------------------------------------------------
+
+        background: map-get($header, background);   
+        margin-top: map-get($header, top);
+
+    // Settings
+    //-------------------------------------------------------------
+
+        @include setting(dark) {
+            background: map-get($header, dark-color);   
+        }
+
+        @include setting(side) {
+            // Core Side-Header Styles
+            position: fixed;
+            top: 0;
+            width: map-get($header, side-width);
+            z-index: 99;
+            @include option(left) {
+                left: 0;
+            }
+            @include option(right) {
+                right: 0;
+            }
+        }
+
+    } // component(header)
+
+} // @mixin header
+
+
+//    &lt;div class=&quot;header&quot;&gt;...&lt;/div&gt;
+//    &lt;div class=&quot;header-dark&quot;&gt;...&lt;/div&gt;
+//    &lt;div class=&quot;header-side-left&quot;&gt;...&lt;/div&gt;
+//    &lt;div class=&quot;header-side-right&quot;&gt;...&lt;/div&gt;
+//    &lt;div class=&quot;header-dark-side-right&quot;&gt;...&lt;/div&gt;
+</code></pre>
+<h5 id="_theme-scss">_theme.scss</h5>
+<pre><code class="lang-js">
+@include typography((
+    colors: (
+        primary   : purple,
+        secondary :    blue
+    )
+));
+
+@include buttons;
+
+@include header((
+    dark          : true,
+    top           : 0
+));
+</code></pre>
+<p>Every configurable aspect of our project can now quickly and easily be changed from just one file, whilst retaining a completely modular architecture.</p>
+<h3 id="credits-notes">Credits &amp; Notes</h3>
+<ul>
+<li><a href="https://github.com/at-import/sassy-maps">Sassy Maps</a></li>
+<li><a href="http://hugogiraudel.com/2014/05/05/bringing-configuration-objects-to-sass/">Bringing Configuration Objects To Sass</a></li>
+</ul>
+<h4 id="caveats">Caveats</h4>
+<p>It&#39;s important to understand the CSS that is generated when using Modular in order to avoid potential conflicts. One common example might be if you have a <strong>header</strong> component which generates this CSS:</p>
+<pre><code class="lang-css">.header,
+[class*=&quot;header-&quot;] {
+    ...    
+}
+</code></pre>
+<p>If you then try to add the class <strong>header-wrapper</strong>, the header component&#39;s core styles would also be applied to this class, as the component is looking for any class that begins with &quot;header-&quot;.</p>
