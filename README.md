@@ -6,7 +6,7 @@
 * [Overview](#overview)
 * [Advanced Documentation](#advanced-documentation)
 
-#### Bower Installation:
+##### Bower Installation:
 
 ```html
 bower install Modular
