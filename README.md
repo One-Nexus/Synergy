@@ -2,6 +2,9 @@
 
 > A set of Sass mixins for architecting modular, configurable and scalable CSS.
 
+* [Overview](#overview)
+* [Advanced Documentation](#advanced-documentation)
+
 ## Overview
 
 Modular aims to take modular CSS architecting to the next level. Similar in principle to the popular [BEM](http://csswizardry.com/2013/01/mindbemding-getting-your-head-round-bem-syntax/) convention, Modular is based off the idea of having **modules**, **components** and **modifiers**. 
@@ -82,53 +85,51 @@ Modular allows you to create confirguble components with customizable settings. 
 }
 ```
 
-The `$config` variable is required to accept the custom options when including the mixin; the default options are defined inside the mixin:
+The `$config` variable is what will later serve any custom options when the module is included. For the default options, a new variable named after your module is used, in our example this is `$header`:
 
 ```js
 @mixin header($config: ()) {
 
-	$config: config((
+	$header: config((
 		
 		// Options
-		dark : false,
-		top  : 50px
+		top      : 50px,
+		bg-color : black
 		
-	), $config) !global;
+	), $config);
 	
 	...
 		
 }
 ```
 
-In the example above, we have two different types of options; a bool and a number. Typically, the **setting** mixin used in the example below would be used for options which are bools (although strictly speaking, it's used for options which are able to have a value of "false" - see the [Hybrid Options](#hybrid-options) section for more info). We now have the basis for our example module. Next, the actual component itself:
+> `config()` is a custom function which merges multi-dimensional maps - above it is being used to merge the default options with any custom options.
+
+We now have the basis for our example module. Next, the actual component itself:
 
 ```js
 @mixin header($config: ()) {
 
-	$config: config((
+	$header: config((
 		
 		// Options
-		dark : false,
-		top  : 50px
+		top  : 50px,
+		bg-color : black
 		
-	), $config) !global;
+	), $config);
 
 	@include component(header) {
 		
 		// Core Styles
-		margin-top: map-get($config, top);
-		
-		// Settings
-		@include setting(dark) {
-			background-color: black;
-		}
+		margin-top: map-get($header, top);
+		background-color: map-get($header, bg-color);
 		
 	} // component(header)
 		
 } // @mixin header
 ```
 
-To call an option, the "map-get" feature of Sass is used. To create an optional setting, the "setting" mixin is used. We can now create our header with the following HTML:
+To call an option, the [**map-get**](http://sass-lang.com/documentation/Sass/Script/Functions.html#map_get-instance_method) feature of Sass is used. We can now create our header with the following HTML:
 
 ```html
 <div class="header">
@@ -136,12 +137,27 @@ To call an option, the "map-get" feature of Sass is used. To create an optional 
 </div>
 ```
 
-We can now easily create a dark header by setting the "dark" option to "true". Alternatively, we can add a modifier of "dark" to our header, regardless of the setting's value:
+Read the [Advanced Documentation](#module-configuration) section to find out how to use bool options, for something like:
 
-```html
-<div class="header-dark">
+```js
+@mixin header($config: ()) {
+
+	$header: config((
+		
+		// Options
+		dark : false,
+		side : false // left or right
+		
+	), $config);
+	
 	...
-</div>
+		
+}
+
+@include header((
+	dark : true,
+	side : left	
+))
 ```
 
 ## Advanced Documentation
@@ -169,8 +185,8 @@ We can now easily create a dark header by setting the "dark" option to "true". A
 
 The `component` mixin is what generates the selectors for your component/module. The mixin accepts 2 parameters:
 
-* **$component** - the name of your component (required)
-* **$type** - this defines how the mixin generates the selectors for your component (optional)
+* **$component** - the name of your component [required]
+* **$type** - this defines how the mixin generates the selectors for your component [optional]
 
 **$type** can be one of three values: `flex` (default), `chain` and `static`. By default, `flex` is enabled for all componenets. To globally change the default type, change the `$type` variable at the top of **modular.scss**.
 
@@ -809,8 +825,8 @@ _theme.scss
 		top        : 50px,
 		dark       : false,
 		dark-color : rgba(black, 0.8),
-		side       : false;
-		side-width : 100%;
+		side       : false,
+		side-width : 100%
 		
 	), $config) !global;
 		
