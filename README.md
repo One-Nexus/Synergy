@@ -84,7 +84,7 @@ Which is exactly what the  **`component()`** mixin does. The reason `[class*="co
 
 ### Configuring a Module
 
-Modular allows you to create confirguble components with customizable settings. To configure a new module, create a mixin named after your module (ensure the name is unique):
+Modular allows you to create configurable components with customizable settings. To configure a new module, create a mixin named after your module (ensure the name is unique):
 
 ```js
 @mixin header($config: ()) {
