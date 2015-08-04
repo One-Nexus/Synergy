@@ -263,36 +263,70 @@ The static option creates only the naked selector for your component; ie - `.sel
 
 #### Nested Component
 
-Nested components are either components which already exist which you wish to overwrite due to their context, or sub-componenets which relate to your main component. This mixin accepts 3 parameters:
+The `nested-component()` mixin should be used when you want to create a new root component from within an existing component. Generally this would be used for creating components which relate to the parent component, but which aren't bound to it. This mixin accepts 2 parameters:
 
-* **`$nested-component`** - the name of your component to be nested [required]
+* **`$component`** - the name of your new component [required]
 * **`$type`** - as above, this can be either `flex` (default), `chain` or `static` [optional]
-* **`$root`** - defines whether the component should be generated outside the parent component - false by default [optional]
 
 ```js
-@include component(logo) {
-	font-size: 1em;	
-}
-
 @include component(header) {
 
-	@include nested-component(logo) {
-		font-size: 2em;	
-	}
-	
-	@include nested-component(wrap-header, $root: true) {
-		// wrap-header styles
+	@include nested-component(navigation) {
+		...
 	}
 	
 }
 ```
 
 ```html
-<div class="wrap-header">
-	<div class="header">
-		<div class="logo">...</div>
-	</div>
+<div class="navigation">
+	...
 </div>
+```
+
+#### Sub-Component
+
+Because of how the wildcard selectors are generated, it is not possible to create relating components which begin with the same namespace. For example, if you have a `header` component with the default `$type` of `flex`, it would not be possible to create a `header-wrapper` class, as the *hyphen* is reserved for component modifiers. There are several options to get around this, including:
+
+* camelCase (headerWrapper)
+* reversed wording (wrap-header)
+* underscore (header_wraper)
+
+To keep as similar to BEM as possible, Modular provies an easy way to create relating components using underscores, eg - `header_wrapper`. The `sub-component` mixin accepts 2 parameters:
+
+* **`$sub-component`** - the name of your sub-component [required]
+* **`$type`** - as above, this can be either `flex` (default), `chain` or `static` [optional]
+
+```js
+@include component(header) {
+	
+	@include sub-component(wrapper) {
+		...	
+	}	
+	
+}
+```
+
+```html
+<div class="header_wrapper">...</div>
+```
+
+Sub-Components work like regular components, so you can add modifiers:
+
+```js
+@include component(header) {
+	
+	@include sub-component(wrapper) {
+		@include modifier(full-screen) {
+			...
+		}
+	}
+		
+}
+```
+
+```html
+<div class="header_wrapper-full-screen">...</div>
 ```
 
 #### Modifier
