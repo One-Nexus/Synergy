@@ -19,7 +19,7 @@ Modular aims to take modular CSS architecting to the next level. Similar in prin
 Have you ever found yourself using BEM and ending up with HTML like this?
 
 ```html
-<div class="button  button--large  button--success">Large Success Button</div>
+<div class="button button--large button--success">Large Success Button</div>
 ```
 
 What if you could just do this:
@@ -58,7 +58,7 @@ The above code would allow for the use of all of the following:
 And, crazily enough, you could also use the original BEM syntax of:
 
 ```html
-<div class="button  button--large  button--success">Large Success Button</div>
+<div class="button button--large button--success">Large Success Button</div>
 ```
 
 ### But how?
@@ -92,7 +92,7 @@ Modular allows you to create confirguble components with customizable settings. 
 }
 ```
 
-The `$config` variable is what will later serve any custom options when the module is included. For the default options, a new variable named after your module is used, in our example this is `$header`:
+The `$config` variable passed to the mixin is what will serve any custom options when the module is included. For the default options, a new variable named after your module is used, in our example this is `$header`. Underneath, we pass the options to a common variable: `$config`. This is so every module has a common variable that can be accessed by the Modular mixins:
 
 ```js
 @mixin header($config: ()) {
@@ -104,6 +104,8 @@ The `$config` variable is what will later serve any custom options when the modu
 		bg-color : black
 		
 	), $config);
+	
+	$config: $header !global;
 	
 	...
 		
@@ -125,6 +127,8 @@ To allow any subsequent modules to access the current module's options, set the 
 		
 	), $config) !global;
 	
+	$config: $header !global;
+	
 	...
 		
 }
@@ -142,6 +146,8 @@ We now have the basis for our example module. Next, the actual component itself:
 		bg-color : black
 		
 	), $config);
+	
+	$config: $header !global;
 
 	@include component(header) {
 		
@@ -191,6 +197,8 @@ Read the [Advanced Documentation](#module-configuration-1) section to find out h
 
 * [Component](#component)
 * [Nested Component](#nested-component)
+* [Sub-Component](#nested-component)
+* [Overwrite](#Overwrite)
 * [Modifier](#modifier)
 * [Nested Modifier](#nested-modifier)
 * [Extend Modifiers](#extended-modifiers)

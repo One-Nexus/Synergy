@@ -12,7 +12,7 @@
 <h2 id="overview">Overview</h2>
 <p>Modular aims to take modular CSS architecting to the next level. Similar in principle to the popular <a href="http://csswizardry.com/2013/01/mindbemding-getting-your-head-round-bem-syntax/">BEM</a> convention, Modular is based off the idea of having <strong>modules</strong>, <strong>components</strong> and <strong>modifiers</strong>. </p>
 <p>Have you ever found yourself using BEM and ending up with HTML like this?</p>
-<pre><code class="lang-html">&lt;div class=&quot;button  button--large  button--success&quot;&gt;Large Success Button&lt;/div&gt;
+<pre><code class="lang-html">&lt;div class=&quot;button button--large button--success&quot;&gt;Large Success Button&lt;/div&gt;
 </code></pre>
 <p>What if you could just do this:</p>
 <pre><code class="lang-html">&lt;div class=&quot;button-large-success&quot;&gt;Large Success Button&lt;/div&gt;
@@ -39,7 +39,7 @@
 &lt;div class=&quot;button-success-large&quot;&gt;Success Large Button&lt;/div&gt;
 </code></pre>
 <p>And, crazily enough, you could also use the original BEM syntax of:</p>
-<pre><code class="lang-html">&lt;div class=&quot;button  button--large  button--success&quot;&gt;Large Success Button&lt;/div&gt;
+<pre><code class="lang-html">&lt;div class=&quot;button button--large button--success&quot;&gt;Large Success Button&lt;/div&gt;
 </code></pre>
 <h3 id="but-how-">But how?</h3>
 <p>I&#39;m glad you asked. The answer is simple - <a href="http://www.surfingsuccess.com/css/css-wildcard-css-attribute-selector.html">wildcard selectors</a>. Under the hood, Modular has created a wildcard selector for the component and each modifier</p>
@@ -59,7 +59,7 @@
     ...    
 }
 </code></pre>
-<p>The <code>$config</code> variable is what will later serve any custom options when the module is included. For the default options, a new variable named after your module is used, in our example this is <code>$header</code>:</p>
+<p>The <code>$config</code> variable passed to the mixin is what will serve any custom options when the module is included. For the default options, a new variable named after your module is used, in our example this is <code>$header</code>. Underneath, we pass the options to a common variable: <code>$config</code>. This is so every module has a common variable that can be accessed by the Modular mixins:</p>
 <pre><code class="lang-js">@mixin header($config: ()) {
 
     $header: config((
@@ -69,6 +69,8 @@
         bg-color : black
 
     ), $config);
+
+    $config: $header !global;
 
     ...
 
@@ -88,6 +90,8 @@
 
     ), $config) !global;
 
+    $config: $header !global;
+
     ...
 
 }
@@ -102,6 +106,8 @@
         bg-color : black
 
     ), $config);
+
+    $config: $header !global;
 
     @include component(header) {
 
@@ -143,6 +149,8 @@
 <ul>
 <li><a href="#component">Component</a></li>
 <li><a href="#nested-component">Nested Component</a></li>
+<li><a href="#nested-component">Sub-Component</a></li>
+<li><a href="#Overwrite">Overwrite</a></li>
 <li><a href="#modifier">Modifier</a></li>
 <li><a href="#nested-modifier">Nested Modifier</a></li>
 <li><a href="#extended-modifiers">Extend Modifiers</a></li>
