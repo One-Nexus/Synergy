@@ -197,8 +197,8 @@ Read the [Advanced Documentation](#module-configuration-1) section to find out h
 
 * [Component](#component)
 * [Nested Component](#nested-component)
-* [Sub-Component](#nested-component)
-* [Overwrite](#Overwrite)
+* [Sub-Component](#sub-component)
+* [Overwrite](#overwrite)
 * [Modifier](#modifier)
 * [Nested Modifier](#nested-modifier)
 * [Extend Modifiers](#extended-modifiers)
@@ -327,6 +327,35 @@ Sub-Components work like regular components, so you can add modifiers:
 
 ```html
 <div class="header_wrapper-full-screen">...</div>
+```
+
+#### Overwrite
+
+This mixin allows you to overwrite the styles of existing components and modifiers when in context of another component. The `overwrite` mixin accepts 2 parameters:
+
+* **`$component`** - the name of the component you wish to overwrite [required]
+* **`$type`** - as above, this can be either `flex` (default), `chain` or `static` [optional]
+
+```js
+@include component(logo) {
+	font-size: 1em;	
+}
+
+@include component(header) {
+
+	@include overwrite(logo) {
+		font-sie: 1.5em;
+	}
+	
+}
+```
+
+```html
+<div class="header">
+	<div class="logo">
+		...
+	</div>
+</div>	
 ```
 
 #### Modifier
