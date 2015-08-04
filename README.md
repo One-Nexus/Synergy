@@ -213,7 +213,7 @@ The **`component()`** mixin is what generates the selectors for your component/m
 * **`$component`** - the name of your component [required]
 * **`$type`** - this defines how the mixin generates the selectors for your component [optional]
 
-**`$type`** can be one of three values: `flex` (default), `chain` and `static`. By default, `flex` is enabled for all componenets. To globally change the default type, change the `$type` variable at the top of **modular.scss**.
+**`$type`** can be one of three values: `flex` (default), `chain` and `static`. By default, `flex` is enabled for all componenets. To globally change the default type, change the `$type` variable at the top of **_modular.scss**.
 
 ##### Flex
 
