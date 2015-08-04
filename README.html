@@ -59,7 +59,7 @@
     ...    
 }
 </code></pre>
-<p>The <code>$config</code> variable passed to the mixin is what will serve any custom options when the module is included. For the default options, a new variable named after your module is used, in our example this is <code>$header</code>. Underneath, we pass the options to a common variable: <code>$config</code>. This is so every module has a common variable that can be accessed by the Modular mixins:</p>
+<p>The <code>$config</code> variable passed to the mixin is what will serve any custom options when the module is included. For the default options, a new variable named after your module is used, in our example this is <code>$header</code>. Underneath, we pass the options to a common global variable: <code>$config !global</code>. This is so every module has a common variable that can be accessed by the Modular mixins:</p>
 <pre><code class="lang-js">@mixin header($config: ()) {
 
     $header: config((

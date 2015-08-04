@@ -92,7 +92,7 @@ Modular allows you to create configurable components with customizable settings.
 }
 ```
 
-The `$config` variable passed to the mixin is what will serve any custom options when the module is included. For the default options, a new variable named after your module is used, in our example this is `$header`. Underneath, we pass the options to a common variable: `$config`. This is so every module has a common variable that can be accessed by the Modular mixins:
+The `$config` variable passed to the mixin is what will serve any custom options when the module is included. For the default options, a new variable named after your module is used, in our example this is `$header`. Underneath, we pass the options to a common global variable: `$config !global`. This is so every module has a common variable that can be accessed by the Modular mixins:
 
 ```js
 @mixin header($config: ()) {
