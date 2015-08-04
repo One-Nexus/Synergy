@@ -465,16 +465,18 @@ As outlined in the [overview](#overview) section, Modular allows you to configur
 	$header: config((
 		
 		// Options
-		top  : 50px,
-		bg-color : black
+		bg-color : black,
+		top      : 50px
 		
 	), $config);
+	
+	$config: $header !global;
 
 	@include component(header) {
 		
 		// Core Styles
-		margin-top: map-get($header, top);
 		background-color: map-get($header, bg-color);
+		margin-top: map-get($header, top);
 		
 	} // component(header)
 		
@@ -509,32 +511,6 @@ For all intents and purposes, there are 2 types of options; bools and non-bools.
 	} // component(header)
 		
 } // @mixin header
-```
-
-There are 2 new additions above to note: the `!global` variable, and the `setting()` mixin. The `!global` variable is our variable which contains the settings re-defined as `$config` and passed as a global variable to the `setting()` mixin, which is what controls whether or not the contained code should be generated.
-
-Instead of adding the new `$config` variable, you can do the following if your module's config is not required to be accessed globally by other modules:
-
-```js
-@mixin header($config: ()) {
-
-	$config: config((
-		
-		// Options
-		dark : false,
-		top  : 50px
-		
-	), $config) !global;
-	
-	...
-
-}
-```
-
-Which means to access your options you must alter the variable used when using `map-get`, like so:
-
-```css
-margin-top: map-get($config, top);
 ```
 
 Your configuration can be infinitely nested, like so:

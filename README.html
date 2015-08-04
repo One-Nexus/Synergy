@@ -356,16 +356,18 @@
     $header: config((
 
         // Options
-        top  : 50px,
-        bg-color : black
+        bg-color : black,
+        top      : 50px
 
     ), $config);
+
+    $config: $header !global;
 
     @include component(header) {
 
         // Core Styles
-        margin-top: map-get($header, top);
         background-color: map-get($header, bg-color);
+        margin-top: map-get($header, top);
 
     } // component(header)
 
@@ -397,25 +399,6 @@
     } // component(header)
 
 } // @mixin header
-</code></pre>
-<p>There are 2 new additions above to note: the <code>!global</code> variable, and the <code>setting()</code> mixin. The <code>!global</code> variable is our variable which contains the settings re-defined as <code>$config</code> and passed as a global variable to the <code>setting()</code> mixin, which is what controls whether or not the contained code should be generated.</p>
-<p>Instead of adding the new <code>$config</code> variable, you can do the following if your module&#39;s config is not required to be accessed globally by other modules:</p>
-<pre><code class="lang-js">@mixin header($config: ()) {
-
-    $config: config((
-
-        // Options
-        dark : false,
-        top  : 50px
-
-    ), $config) !global;
-
-    ...
-
-}
-</code></pre>
-<p>Which means to access your options you must alter the variable used when using <code>map-get</code>, like so:</p>
-<pre><code class="lang-css">margin-top: map-get($config, top);
 </code></pre>
 <p>Your configuration can be infinitely nested, like so:</p>
 <pre><code class="lang-js">@mixin global($config: ()) {
