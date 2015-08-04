@@ -54,7 +54,7 @@
 </code></pre>
 <p>Which is exactly what the  <strong><code>component()</code></strong> mixin does. The reason <code>[class*=&quot;component&quot;]</code> on its own isn&#39;t used is because this can cause undesired effects elsewhere in your styles. A very simple example would be if you wanted to use a <code>.buttons</code> class in the presence on a <strong>button</strong> component - <code>[class*=&quot;button&quot;]</code> would target this class and apply the core button styles to it. Using <code>[class*=&quot;button-&quot;]</code> is a fairly safe selector in a project we have control over, in terms of potential conflicts.</p>
 <h3 id="configuring-a-module">Configuring a Module</h3>
-<p>Modular allows you to create confirguble components with customizable settings. To configure a new module, create a mixin named after your module (ensure the name is unique):</p>
+<p>Modular allows you to create configurable components with customizable settings. To configure a new module, create a mixin named after your module (ensure the name is unique):</p>
 <pre><code class="lang-js">@mixin header($config: ()) {
     ...    
 }
