@@ -15,6 +15,8 @@
             large     : 1.4em           
         )
     ), $config) !global;
+	
+	$config: $typography !global;
 
 } // @mixin typography
 
@@ -47,6 +49,8 @@
         radius       : 0.4em
 
     ), $config);
+	
+	$config: $buttons !global;
 
     //-------------------------------------------------------------
     // Component
@@ -181,6 +185,60 @@
     } // component(header)
 
 } // @mixin header
+
+//=================================================================
+// Test Component
+//=================================================================
+
+@mixin test($config: ()) {
+
+    //-------------------------------------------------------------
+    // Config
+    //-------------------------------------------------------------
+
+    $test: config((
+    ), $config);
+	
+	$config: $test !global;
+
+	@include component(test) {
+		
+		@include nested-component(test-1) {
+			content: "test-1";
+			@include modifier(test-2) {
+				content: "test-2";
+			}
+			@include overwrite(test-3) {
+				content: "test-3";
+				@include nested-modifier(test-4) {
+					content: "test-4";
+				}
+			}
+		}
+		
+		@include sub-component(sub) {
+			content: "test-4";
+			@include nested-modifier(sub_modifier) {
+				content: "test-5";
+			}
+		}
+		
+		@include overwrite(overwrite) {
+			content: "test-6";
+			@include nested-modifier(overwrite_modifier) {
+				content: "test-7";
+			}
+		}
+		
+		@include modifier(modifier) {
+			content: "test-8";
+		}
+		
+	}
+	
+}
+
+@include test;
 
 //=================================================================
 // Homepage Styles

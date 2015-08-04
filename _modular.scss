@@ -6,7 +6,23 @@ http://github.com/esr360/Modular/
 	
 -----------------------------------------------------------------*/
 
-// Component
+//-----------------------------------------------------------------
+// Mixins
+//-----------------------------------------------------------------
+
+//	1. component()
+//	2. nested-component()
+//	3. sub-component()
+// 	4. overwrite()
+//	5. modifier()
+//	6. nested-modifier()
+//	7. extend-modifiers()
+//	8. setting()
+// 	9. option()
+
+//-----------------------------------------------------------------
+
+// 1. Component
 // Define the main component
 //-----------------------------------------------------------------
 
@@ -21,7 +37,7 @@ http://github.com/esr360/Modular/
 // Set the default selector type (flex, chain, static)
 $type: flex;
 
-@mixin component($component, $type: $type) {
+@mixin component($component, $type: map-get($config, selector-type)) {
 	$component: $component !global;
 	@if $type == flex {
 		.#{$component},
@@ -39,75 +55,121 @@ $type: flex;
 	}
 }
 
-// Nested Component
-// Nest components for appropriate specificity
+// 2. Nested Component
+// Create a root component from within another component
 //-----------------------------------------------------------------
 
 // 	Usage
 // 
 // 	@include component(header) {
-//		@include nested-component(container) {
+//		@include nested-component(navigation) {
 //			...
 //		}
 // 	}
 //
-// 	<div class="header">
-// 		<div class="container">
-//			...
-//		</div>
+// 	<div class="navigation">
+// 		...
 // 	</div>
 
-@mixin nested-component($nested-component, $type: $type, $root: false) {
-	@if $type == flex {
-		@if $root {
-			@at-root {
-				.#{$nested-component},
-				[class*="#{$nested-component}-"] {
-					@content;
-				}
-			}
-		} @else { 
-			.#{$nested-component},
-			[class*="#{$nested-component}-"] {
+@mixin nested-component($component, $type: $type) {
+	$component: $component !global;
+	@at-root {
+		@if $type == flex {
+			.#{$component},
+			[class*="#{$component}-"] {
 				@content;
 			}
-		}
-	} @else if $type == chain {
-		@if $root {
-			@at-root [class*="#{$nested-component}-"] {
+		} @else if $type == chain {
+			[class*="#{$component}-"] {
 				@content;
 			}
-		} @else { 
-			[class*="#{$nested-component}-"] {
-				@content;
-			}
-		}
-	} @else if $type == static {
-		@if $root {
-			@at-root .#{$nested-component} {
-				@content;
-			}
-		} @else { 
-			.#{$nested-component} {
+		} @else if $type == static {
+			.#{$component} {
 				@content;
 			}
 		}
 	}
 }
 
-// Modifiers 
+// 3. Sub-Component
+// Create a sub-component based off the main component
+//-----------------------------------------------------------------
+
+// 	Usage
+//
+//	@include component(header) {
+//		@include sub-component(wrapper) {
+//			...
+//		}
+//	}
+//
+//	<div class="header_wrapper">...</div>
+
+@mixin sub-component($sub-component, $type: $type) {
+	@at-root {
+		@if $type == flex {
+			.#{$component}_#{$sub-component},
+			[class*="#{$component}_#{$sub-component}-"] {
+				@content;
+			}
+		} @else if $type == chain {
+			[class*="#{$component}_#{$sub-component}-"] {
+				@content;
+			}
+		} @else if $type == static {
+			.#{$component}_#{$sub-component} {
+				@content;
+			}
+		}
+	}
+}
+
+// 4. Overwrite
+// Overwrite a component in context of another
+//-----------------------------------------------------------------
+
+// 	Usage
+// 
+// 	@include component(header) {
+//		@include overwrite(logo) {
+//			...
+//		}
+// 	}
+//
+// 	<div class="header">
+//		<div class="logo">...</div>
+//	</div>
+
+@mixin overwrite($component, $type: $type) {
+	@if $type == flex {
+		.#{$component},
+		[class*="#{$component}-"] {
+			@content;
+		}	
+	} @else if $type == chain {
+		[class*="#{$component}-"] {
+			@content;
+		}
+	} @else if $type == static {
+		.#{$component} {
+			@content;
+		}
+	}
+}
+
+// 5. Modifiers 
 // Add a modifier to an existing component
 //-----------------------------------------------------------------
 
 //	Usage
 //
-//	@include component(header) {
-//		@include modifier(side) {
+//	@include component(button) {
+//		@include modifier(large) {
 //			...
 //		}
 //	}
 //
-//	<div class="header-side">...</div>
+//	<div class="button-large">...</div>
 
 @mixin modifier($modifier) {
 	@at-root [class*="#{$component}-"][class*="-#{$modifier}"] {
@@ -115,7 +177,7 @@ $type: flex;
 	}
 }
 
-// Nested Modifiers 
+// 6. Nested Modifiers 
 // Nest a modifier for appropriate specificity
 //-----------------------------------------------------------------
 
@@ -137,7 +199,7 @@ $type: flex;
 	}
 }
 
-// Extend Modifiers
+// 7. Extend Modifiers
 // Extend one or more modifiers of a component
 //-----------------------------------------------------------------
 
@@ -163,7 +225,7 @@ $type: flex;
 	}
 }
 
-// Component Setting
+// 8. Setting
 // Add a configurable setting to a component
 //-----------------------------------------------------------------
 
@@ -173,7 +235,9 @@ $type: flex;
 //
 //		$billboard: config((
 //			full-screen : false
-//		), $config) !global;
+//		), $config);
+//		
+//		$config: $billboard !global;
 //
 //		@include component(billboard) {
 //			@include setting(full-screen) {
@@ -186,8 +250,6 @@ $type: flex;
 //	@include billboard: ((
 //		full-screen : true
 //	));
-//
-//	<div class="billboard">...</div>
 
 // Extend each setting as a modifier by default?
 $extend-settings: true;
@@ -207,7 +269,37 @@ $extend-settings: true;
 	}
 }
 
-// Option
+// 9. Option
+// Add an option to an existing setting
+//-----------------------------------------------------------------
+
+//	Usage
+//
+//	@mixin header($config: ()) {
+//
+//		$header: config((
+//			side : false
+//		), $config);
+//		
+//		$config: $header !global;
+//
+//		@include component(header) {
+//			@include setting(side) {
+//				@include option(left) {
+//					...
+//				}
+//				@include option(right) {
+//					...
+//				}
+//			}
+//		}
+//
+//	}
+//
+//	@include header: ((
+//		side : left
+//	));
+
 @mixin option($option) {
 	@at-root %#{$component}-#{$option} {	
 		@content;
@@ -225,6 +317,22 @@ $extend-settings: true;
 //-----------------------------------------------------------------
 // Advanced Functions
 //-----------------------------------------------------------------
+
+// Reverse Map Function
+// http://git.io/vLfuz
+//-----------------------------------------------------------------
+
+@function reverse-map ($map) {	
+    $keys: map-keys($map);
+    $map-reversed: ();    
+    @for $i from length($keys) through 1 {
+        $map-reversed: map-merge(
+            $map-reversed, (nth($keys, $i): map-get($map, nth($keys, $i)))
+        );
+    }
+    $result: $map-reversed; 
+    @return $result;
+}
 
 // Map-Set Function
 // http://git.io/vmBKD
@@ -283,7 +391,7 @@ $extend-settings: true;
 
 // Map Deep Merge
 // http://git.io/vmBVH
-// Customized for use with modular.scss
+// Customized for use with Modular
 //-----------------------------------------------------------------
 
 @function config($map-old, $map-new, $overwrite: true, $nested: false) {
