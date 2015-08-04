@@ -290,7 +290,7 @@ Because of how the wildcard selectors are generated, it is not possible to creat
 
 * camelCase (headerWrapper)
 * reversed wording (wrap-header)
-* underscore (header_wraper)
+* underscore (header_wrapper)
 
 To keep as similar to BEM as possible, Modular provies an easy way to create relating components using underscores, eg - `header_wrapper`. The `sub-component` mixin accepts 2 parameters:
 
