@@ -72,6 +72,7 @@ $type: flex;
 // 	</div>
 
 @mixin nested-component($component, $type: $type) {
+	$component: $component !global;
 	@at-root {
 		@if $type == flex {
 			.#{$component},
