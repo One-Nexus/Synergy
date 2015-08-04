@@ -18,7 +18,6 @@ $RECYCLE.BIN/
 *.cfg
 
 #TODO list
-
 tod.txt
 
 # =========================
@@ -34,7 +33,6 @@ tod.txt
 
 # Icon must ends with two \r.
 Icon
-
 
 # Thumbnails
 ._*
