@@ -203,35 +203,35 @@
 
 	@include component(test) {
 		
-		@include nested-component(test-1) {
+		@include nested-component(alpha) {
 			content: "test-1";
-			@include modifier(test-2) {
+			@include nested-modifier(alphaModifier) {
 				content: "test-2";
 			}
-			@include overwrite(test-3) {
+			@include overwrite(beta) {
 				content: "test-3";
-				@include nested-modifier(test-4) {
+				@include nested-modifier(alphaBetaModifier) {
 					content: "test-4";
 				}
 			}
 		}
 		
-		@include sub-component(sub) {
-			content: "test-4";
-			@include nested-modifier(sub_modifier) {
-				content: "test-5";
+		@include sub-component(gamma) {
+			content: "test-5";
+			@include nested-modifier(gammaModifier) {
+				content: "test-6";
 			}
 		}
 		
-		@include overwrite(overwrite) {
-			content: "test-6";
-			@include nested-modifier(overwrite_modifier) {
-				content: "test-7";
+		@include overwrite(delta) {
+			content: "test-7";
+			@include nested-modifier(deltaModifier) {
+				content: "test-8";
 			}
 		}
 		
-		@include modifier(modifier) {
-			content: "test-8";
+		@include modifier(testModifier) {
+			content: "test-9";
 		}
 		
 	}
