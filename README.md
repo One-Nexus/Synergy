@@ -337,7 +337,7 @@ This mixin allows you to overwrite the styles of existing components and modifie
 
 #### Overwrite-Sub
 
-As above, this mixin is used for overwriting styles for an existing sub-component in alternative context. 2 parameters are accepted for the `overwritr-sub()` mixin:
+As above, this mixin is used for overwriting styles for an existing sub-component in alternative context. 2 parameters are accepted for the `overwrite-sub()` mixin:
 
 * `$sub-component` - the name of the component you wish to overwrite [required]
 * `$type` - as above, this can be either `flex` (default), `chain` or `static` [optional]
