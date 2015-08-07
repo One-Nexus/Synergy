@@ -1062,3 +1062,11 @@ Released: 7th August 2015
 * adding `overwrite()` mixin
 * adding `sub-component()` mixin
 * re-coded `modifier()` mixin to work on nested objects
+
+#### Version 2.1.0
+
+Released: 7th August 2015
+
+###### Release Notes
+
+* adding `overwrite-sub()` mixin
