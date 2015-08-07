@@ -52,7 +52,7 @@
     ...
 }
 </code></pre>
-<p>Which is exactly what the  <strong><code>component()</code></strong> mixin does. The reason <code>[class*=&quot;component&quot;]</code> on its own isn&#39;t used is because this can cause undesired effects elsewhere in your styles. A very simple example would be if you wanted to use a <code>.buttons</code> class in the presence on a <strong>button</strong> component - <code>[class*=&quot;button&quot;]</code> would target this class and apply the core button styles to it. Using <code>[class*=&quot;button-&quot;]</code> is a fairly safe selector in a project we have control over, in terms of potential conflicts.</p>
+<p>Which is exactly what the  <code>component()</code> mixin does. The reason <code>[class*=&quot;component&quot;]</code> on its own isn&#39;t used is because this can cause undesired effects elsewhere in your styles. A very simple example would be if you wanted to use a <code>.buttons</code> class in the presence on a <strong>button</strong> component - <code>[class*=&quot;button&quot;]</code> would target this class and apply the core button styles to it. Using <code>[class*=&quot;button-&quot;]</code> is a fairly safe selector in a project we have control over, in terms of potential conflicts.</p>
 <h3 id="configuring-a-module">Configuring a Module</h3>
 <p>Modular allows you to create configurable components with customizable settings. To configure a new module, create a mixin named after your module (ensure the name is unique):</p>
 <pre><code class="lang-js">@mixin header($config: ()) {
@@ -166,19 +166,19 @@
 <li><a href="#setting-up-a-project">Setting Up A Project</a></li>
 </ul>
 <h4 id="component">Component</h4>
-<p>The <strong><code>component()</code></strong> mixin is what generates the selectors for your component/module. The mixin accepts 2 parameters:</p>
+<p>The <code>component()</code> mixin is what generates the selectors for your component/module. The mixin accepts 2 parameters:</p>
 <ul>
-<li><strong><code>$component</code></strong> - the name of your component [required]</li>
-<li><strong><code>$type</code></strong> - this defines how the mixin generates the selectors for your component [optional]</li>
+<li><code>$component</code> - the name of your component [required]</li>
+<li><code>$type</code> - this defines how the mixin generates the selectors for your component [optional]</li>
 </ul>
-<p><strong><code>$type</code></strong> can be one of three values: <code>flex</code> (default), <code>chain</code> and <code>static</code>. By default, <code>flex</code> is enabled for all componenets. To globally change the default type, change the <code>$type</code> variable at the top of <strong>_modular.scss</strong>.</p>
+<p><code>$type</code> can be one of three values: <code>flex</code> (default), <code>chain</code> and <code>static</code>. By default, <code>flex</code> is enabled for all componenets. To globally change the default type, change the <code>$type</code> variable at the top of <strong>_modular.scss</strong>.</p>
 <h5 id="flex">Flex</h5>
 <pre><code class="lang-css">@include component(header, flex) {
     ...
 }
 </code></pre>
 <p>This is the default value for a component; it creates wildcards for both <code>.component</code> and <code>[class*=&quot;component-&quot;]</code>, allowing you to use both the naked component as well as modifiers. Whilst this is the most flexible option, it does mean the generated CSS is slightly greater, which is what the other 2 options are for.</p>
-<p>Or if using the default <code>$type</code> value of <strong><code>flex</code></strong>, you do not need to pass a second parmeter here:</p>
+<p>Or if using the default <code>$type</code> value of <code>flex</code>, you do not need to pass a second parmeter here:</p>
 <pre><code class="lang-css">@include component(header) {
     ...
 }
@@ -204,8 +204,8 @@
 </ul>
 <p>To keep as similar to BEM as possible, Modular provies an easy way to create relating components using underscores, eg - <code>header_wrapper</code>. The <code>sub-component</code> mixin accepts 2 parameters:</p>
 <ul>
-<li><strong><code>$sub-component</code></strong> - the name of your sub-component [required]</li>
-<li><strong><code>$type</code></strong> - as above, this can be either <code>flex</code> (default), <code>chain</code> or <code>static</code> [optional]</li>
+<li><code>$sub-component</code> - the name of your sub-component [required]</li>
+<li><code>$type</code> - as above, this can be either <code>flex</code> (default), <code>chain</code> or <code>static</code> [optional]</li>
 </ul>
 <pre><code class="lang-js">@include component(header) {
 
@@ -233,8 +233,8 @@
 <h4 id="overwrite">Overwrite</h4>
 <p>This mixin allows you to overwrite the styles of existing components and modifiers when in context of another component. The <code>overwrite</code> mixin accepts 2 parameters:</p>
 <ul>
-<li><strong><code>$component</code></strong> - the name of the component you wish to overwrite [required]</li>
-<li><strong><code>$type</code></strong> - as above, this can be either <code>flex</code> (default), <code>chain</code> or <code>static</code> [optional]</li>
+<li><code>$component</code> - the name of the component you wish to overwrite [required]</li>
+<li><code>$type</code> - as above, this can be either <code>flex</code> (default), <code>chain</code> or <code>static</code> [optional]</li>
 </ul>
 <pre><code class="lang-js">@include component(logo) {
     font-size: 1em;    
@@ -255,9 +255,9 @@
 &lt;/div&gt;
 </code></pre>
 <h4 id="modifier">Modifier</h4>
-<p>The <strong><code>modifier()</code></strong> mixin generates the selector for any modifier of your component, for example a <strong>small</strong> or <strong>large</strong> modifier. This mixin accepts only 1 paramter:</p>
+<p>The <code>modifier()</code> mixin generates the selector for any modifier of your component, for example a <strong>small</strong> or <strong>large</strong> modifier. This mixin accepts only 1 paramter:</p>
 <ul>
-<li><strong><code>$modifier</code></strong> - the name of your modifier [required]</li>
+<li><code>$modifier</code> - the name of your modifier [required]</li>
 </ul>
 <pre><code class="lang-js">@include component(button) {
 
@@ -282,11 +282,11 @@
 &lt;div class=&quot;button-primary-large-round&quot;&gt;...&lt;/div&gt;
 </code></pre>
 <h4 id="nested-modifier">Nested Modifier</h4>
-<p>The <strong><code>nested-modifier()</code></strong> mixin is used to nest modifiers within one another, meaning that both modifiers must be passed to the element&#39;s HTML for the styles to take effect. Again, this mixin accepts only 1 parameter:</p>
+<p>The <code>nested-modifier()</code> mixin is used to nest modifiers within one another, meaning that both modifiers must be passed to the element&#39;s HTML for the styles to take effect. Again, this mixin accepts only 1 parameter:</p>
 <ul>
-<li><strong><code>$modifier</code></strong> - the name of your modifier [required]</li>
+<li><code>$modifier</code> - the name of your modifier [required]</li>
 </ul>
-<p><em><strong><code>print</code></strong> used below isn&#39;t a real/valid property and is used for demonstrational purposes only</em></p>
+<p><em><code>print</code> used below isn&#39;t a real/valid property and is used for demonstrational purposes only</em></p>
 <pre><code class="lang-js">@include component(button) {
 
     print: &quot;null&quot;;

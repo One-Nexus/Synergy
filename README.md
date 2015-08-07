@@ -80,7 +80,7 @@ For starters, writing `[class*="component-"]` over and over again can become ted
 }
 ```
 
-Which is exactly what the  **`component()`** mixin does. The reason `[class*="component"]` on its own isn't used is because this can cause undesired effects elsewhere in your styles. A very simple example would be if you wanted to use a `.buttons` class in the presence on a **button** component - `[class*="button"]` would target this class and apply the core button styles to it. Using `[class*="button-"]` is a fairly safe selector in a project we have control over, in terms of potential conflicts.
+Which is exactly what the  `component()` mixin does. The reason `[class*="component"]` on its own isn't used is because this can cause undesired effects elsewhere in your styles. A very simple example would be if you wanted to use a `.buttons` class in the presence on a **button** component - `[class*="button"]` would target this class and apply the core button styles to it. Using `[class*="button-"]` is a fairly safe selector in a project we have control over, in terms of potential conflicts.
 
 ### Configuring a Module
 
@@ -215,12 +215,12 @@ Read the [Advanced Documentation](#module-configuration-1) section to find out h
 
 #### Component
 
-The **`component()`** mixin is what generates the selectors for your component/module. The mixin accepts 2 parameters:
+The `component()` mixin is what generates the selectors for your component/module. The mixin accepts 2 parameters:
 
-* **`$component`** - the name of your component [required]
-* **`$type`** - this defines how the mixin generates the selectors for your component [optional]
+* `$component` - the name of your component [required]
+* `$type` - this defines how the mixin generates the selectors for your component [optional]
 
-**`$type`** can be one of three values: `flex` (default), `chain` and `static`. By default, `flex` is enabled for all componenets. To globally change the default type, change the `$type` variable at the top of **_modular.scss**.
+`$type` can be one of three values: `flex` (default), `chain` and `static`. By default, `flex` is enabled for all componenets. To globally change the default type, change the `$type` variable at the top of **_modular.scss**.
 
 ##### Flex
 
@@ -232,7 +232,7 @@ The **`component()`** mixin is what generates the selectors for your component/m
 
 This is the default value for a component; it creates wildcards for both `.component` and `[class*="component-"]`, allowing you to use both the naked component as well as modifiers. Whilst this is the most flexible option, it does mean the generated CSS is slightly greater, which is what the other 2 options are for.
 
-Or if using the default `$type` value of **`flex`**, you do not need to pass a second parmeter here:
+Or if using the default `$type` value of `flex`, you do not need to pass a second parmeter here:
 
 ```css
 @include component(header) {
@@ -270,8 +270,8 @@ Because of how the wildcard selectors are generated, it is not possible to creat
 
 To keep as similar to BEM as possible, Modular provies an easy way to create relating components using underscores, eg - `header_wrapper`. The `sub-component` mixin accepts 2 parameters:
 
-* **`$sub-component`** - the name of your sub-component [required]
-* **`$type`** - as above, this can be either `flex` (default), `chain` or `static` [optional]
+* `$sub-component` - the name of your sub-component [required]
+* `$type` - as above, this can be either `flex` (default), `chain` or `static` [optional]
 
 ```js
 @include component(header) {
@@ -309,8 +309,8 @@ Sub-Components work like regular components, so you can add modifiers:
 
 This mixin allows you to overwrite the styles of existing components and modifiers when in context of another component. The `overwrite` mixin accepts 2 parameters:
 
-* **`$component`** - the name of the component you wish to overwrite [required]
-* **`$type`** - as above, this can be either `flex` (default), `chain` or `static` [optional]
+* `$component` - the name of the component you wish to overwrite [required]
+* `$type` - as above, this can be either `flex` (default), `chain` or `static` [optional]
 
 ```js
 @include component(logo) {
@@ -336,9 +336,9 @@ This mixin allows you to overwrite the styles of existing components and modifie
 
 #### Modifier
 
-The **`modifier()`** mixin generates the selector for any modifier of your component, for example a **small** or **large** modifier. This mixin accepts only 1 paramter:
+The `modifier()` mixin generates the selector for any modifier of your component, for example a **small** or **large** modifier. This mixin accepts only 1 paramter:
 
-* **`$modifier`** - the name of your modifier [required]
+* `$modifier` - the name of your modifier [required]
 
 
 ```js
@@ -372,11 +372,11 @@ You can use any number of modifiers on a single element in the HTML, and in any 
 
 #### Nested Modifier
 
-The **`nested-modifier()`** mixin is used to nest modifiers within one another, meaning that both modifiers must be passed to the element's HTML for the styles to take effect. Again, this mixin accepts only 1 parameter:
+The `nested-modifier()` mixin is used to nest modifiers within one another, meaning that both modifiers must be passed to the element's HTML for the styles to take effect. Again, this mixin accepts only 1 parameter:
 
-* **`$modifier`** - the name of your modifier [required]
+* `$modifier` - the name of your modifier [required]
 
-_**`print`** used below isn't a real/valid property and is used for demonstrational purposes only_
+_`print` used below isn't a real/valid property and is used for demonstrational purposes only_
 
 ```js
 @include component(button) {
