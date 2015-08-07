@@ -13,11 +13,12 @@ http://github.com/esr360/Modular/
 //	1. component()
 //	2. sub-component()
 // 	3. overwrite()
-//	4. modifier()
-//	5. nested-modifier()
-//	6. extend-modifiers()
-//	7. setting()
-// 	8. option()
+//	4. overwrite-sub()
+//	5. modifier()
+//	6. nested-modifier()
+//	7. extend-modifiers()
+//	8. setting()
+// 	9. option()
 
 //-----------------------------------------------------------------
 
@@ -88,7 +89,7 @@ $type: flex;
 }
 
 // 3. Overwrite
-// Overwrite a component in context of another
+// Overwrite a component in alternate context
 //-----------------------------------------------------------------
 
 // 	Usage
@@ -120,7 +121,48 @@ $type: flex;
 	}
 }
 
-// 4. Modifiers 
+// 4. Overwrite-Sub
+// Overwrite a sub-component in alternate context
+//-----------------------------------------------------------------
+
+// 	Usage
+// 
+// 	@include component(form) {
+//
+//		@include sub-component(input) {
+//			...
+//		}
+//
+//		@include modifier(html5) {
+//			@include overwrite-sub(input) {
+//				...
+//			}
+//		}
+//
+// 	}
+//
+// 	<div class="form-html5">
+//		<input class="form_input" type="text" />
+//	</div>
+
+@mixin overwrite-sub($sub-component, $type: $type) {
+	@if $type == flex {
+		.#{$component}_#{$sub-component},
+		[class*="#{$component}_#{$sub-component}-"] {
+			@content;
+		}	
+	} @else if $type == chain {
+		[class*="#{$component}_#{$sub-component}-"] {
+			@content;
+		}
+	} @else if $type == static {
+		.#{$component}_#{$sub-component} {
+			@content;
+		}
+	}
+}
+
+// 5. Modifiers 
 // Add a modifier to an existing component
 //-----------------------------------------------------------------
 
@@ -158,7 +200,7 @@ $type: flex;
 	}
 }
 
-// 5. Nested Modifier
+// 6. Nested Modifier
 // Nest a modifier for appropriate specificity
 //-----------------------------------------------------------------
 
@@ -180,7 +222,7 @@ $type: flex;
 	}
 }
 
-// 6. Extend Modifiers
+// 7. Extend Modifiers
 // Extend one or more modifiers of a component
 //-----------------------------------------------------------------
 
@@ -206,7 +248,7 @@ $type: flex;
 	}
 }
 
-// 7. Setting
+// 8. Setting
 // Add a configurable setting to a component
 //-----------------------------------------------------------------
 
@@ -250,7 +292,7 @@ $extend-settings: true;
 	}
 }
 
-// 8. Option
+// 9. Option
 // Add an option to an existing setting
 //-----------------------------------------------------------------
 

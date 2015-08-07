@@ -198,6 +198,7 @@ Read the [Advanced Documentation](#module-configuration-1) section to find out h
 * [Component](#component)
 * [Sub-Component](#sub-component)
 * [Overwrite](#overwrite)
+* [Overwrite-Sub](#overwrite-sub)
 * [Modifier](#modifier)
 * [Nested Modifier](#nested-modifier)
 * [Extend Modifiers](#extended-modifiers)
@@ -307,7 +308,7 @@ Sub-Components work like regular components, so you can add modifiers:
 
 #### Overwrite
 
-This mixin allows you to overwrite the styles of existing components and modifiers when in context of another component. The `overwrite` mixin accepts 2 parameters:
+This mixin allows you to overwrite the styles of existing components and modifiers when in context of another component. The `overwrite()` mixin accepts 2 parameters:
 
 * `$component` - the name of the component you wish to overwrite [required]
 * `$type` - as above, this can be either `flex` (default), `chain` or `static` [optional]
@@ -333,6 +334,13 @@ This mixin allows you to overwrite the styles of existing components and modifie
 	</div>
 </div>	
 ```
+
+#### Overwrite-Sub
+
+As above, this mixin is used for overwriting styles for an existing sub-component in alternative context. 2 parameters are accepted for the `overwritr-sub()` mixin:
+
+* `$sub-component` - the name of the component you wish to overwrite [required]
+* `$type` - as above, this can be either `flex` (default), `chain` or `static` [optional]
 
 #### Modifier
 

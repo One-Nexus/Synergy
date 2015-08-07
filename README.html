@@ -150,6 +150,7 @@
 <li><a href="#component">Component</a></li>
 <li><a href="#sub-component">Sub-Component</a></li>
 <li><a href="#overwrite">Overwrite</a></li>
+<li><a href="#overwrite-sub">Overwrite-Sub</a></li>
 <li><a href="#modifier">Modifier</a></li>
 <li><a href="#nested-modifier">Nested Modifier</a></li>
 <li><a href="#extended-modifiers">Extend Modifiers</a></li>
@@ -231,7 +232,7 @@
 <pre><code class="lang-html">&lt;div class=&quot;header_wrapper-full-screen&quot;&gt;...&lt;/div&gt;
 </code></pre>
 <h4 id="overwrite">Overwrite</h4>
-<p>This mixin allows you to overwrite the styles of existing components and modifiers when in context of another component. The <code>overwrite</code> mixin accepts 2 parameters:</p>
+<p>This mixin allows you to overwrite the styles of existing components and modifiers when in context of another component. The <code>overwrite()</code> mixin accepts 2 parameters:</p>
 <ul>
 <li><code>$component</code> - the name of the component you wish to overwrite [required]</li>
 <li><code>$type</code> - as above, this can be either <code>flex</code> (default), <code>chain</code> or <code>static</code> [optional]</li>
@@ -254,6 +255,12 @@
     &lt;/div&gt;
 &lt;/div&gt;
 </code></pre>
+<h4 id="overwrite-sub">Overwrite-Sub</h4>
+<p>As above, this mixin is used for overwriting styles for an existing sub-component in alternative context. 2 parameters are accepted for the <code>overwritr-sub()</code> mixin:</p>
+<ul>
+<li><code>$sub-component</code> - the name of the component you wish to overwrite [required]</li>
+<li><code>$type</code> - as above, this can be either <code>flex</code> (default), <code>chain</code> or <code>static</code> [optional]</li>
+</ul>
 <h4 id="modifier">Modifier</h4>
 <p>The <code>modifier()</code> mixin generates the selector for any modifier of your component, for example a <strong>small</strong> or <strong>large</strong> modifier. This mixin accepts only 1 paramter:</p>
 <ul>
