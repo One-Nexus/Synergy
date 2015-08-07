@@ -342,6 +342,28 @@ As above, this mixin is used for overwriting styles for an existing sub-componen
 * `$sub-component` - the name of the component you wish to overwrite [required]
 * `$type` - as above, this can be either `flex` (default), `chain` or `static` [optional]
 
+```js
+@include component(form) {
+
+	@include sub-component(input) {
+		...
+	}
+
+	@include modifier(html5) {
+		@include overwrite-sub(input) {
+			...
+		}
+	}
+
+
+```
+
+```html
+<div class="form-html5">
+	<input class="form_input" type="text" />
+</div>	
+```
+
 #### Modifier
 
 The `modifier()` mixin generates the selector for any modifier of your component, for example a **small** or **large** modifier. This mixin accepts only 1 paramter:

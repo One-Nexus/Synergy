@@ -261,6 +261,22 @@
 <li><code>$sub-component</code> - the name of the component you wish to overwrite [required]</li>
 <li><code>$type</code> - as above, this can be either <code>flex</code> (default), <code>chain</code> or <code>static</code> [optional]</li>
 </ul>
+<pre><code class="lang-js">@include component(form) {
+
+    @include sub-component(input) {
+        ...
+    }
+
+    @include modifier(html5) {
+        @include overwrite-sub(input) {
+            ...
+        }
+    }
+</code></pre>
+<pre><code class="lang-html">&lt;div class=&quot;form-html5&quot;&gt;
+    &lt;input class=&quot;form_input&quot; type=&quot;text&quot; /&gt;
+&lt;/div&gt;
+</code></pre>
 <h4 id="modifier">Modifier</h4>
 <p>The <code>modifier()</code> mixin generates the selector for any modifier of your component, for example a <strong>small</strong> or <strong>large</strong> modifier. This mixin accepts only 1 paramter:</p>
 <ul>
