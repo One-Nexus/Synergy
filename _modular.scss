@@ -11,14 +11,13 @@ http://github.com/esr360/Modular/
 //-----------------------------------------------------------------
 
 //	1. component()
-//	2. nested-component()
-//	3. sub-component()
-// 	4. overwrite()
-//	5. modifier()
-//	6. nested-modifier()
-//	7. extend-modifiers()
-//	8. setting()
-// 	9. option()
+//	2. sub-component()
+// 	3. overwrite()
+//	4. modifier()
+//	5. nested-modifier()
+//	6. extend-modifiers()
+//	7. setting()
+// 	8. option()
 
 //-----------------------------------------------------------------
 
@@ -55,43 +54,7 @@ $type: flex;
 	}
 }
 
-// 2. Nested Component
-// Create a root component from within another component
-//-----------------------------------------------------------------
-
-// 	Usage
-// 
-// 	@include component(header) {
-//		@include nested-component(navigation) {
-//			...
-//		}
-// 	}
-//
-// 	<div class="navigation">
-// 		...
-// 	</div>
-
-@mixin nested-component($component, $type: $type) {
-	$component: $component !global;
-	@at-root {
-		@if $type == flex {
-			.#{$component},
-			[class*="#{$component}-"] {
-				@content;
-			}
-		} @else if $type == chain {
-			[class*="#{$component}-"] {
-				@content;
-			}
-		} @else if $type == static {
-			.#{$component} {
-				@content;
-			}
-		}
-	}
-}
-
-// 3. Sub-Component
+// 2. Sub-Component
 // Create a sub-component based off the main component
 //-----------------------------------------------------------------
 
@@ -124,7 +87,7 @@ $type: flex;
 	}
 }
 
-// 4. Overwrite
+// 3. Overwrite
 // Overwrite a component in context of another
 //-----------------------------------------------------------------
 
@@ -157,7 +120,7 @@ $type: flex;
 	}
 }
 
-// 5. Modifiers 
+// 4. Modifiers 
 // Add a modifier to an existing component
 //-----------------------------------------------------------------
 
@@ -172,12 +135,30 @@ $type: flex;
 //	<div class="button-large">...</div>
 
 @mixin modifier($modifier) {
-	@at-root [class*="#{$component}-"][class*="-#{$modifier}"] {
-		@content
+	$selectors: &;
+	@if map-get($config, selector-type) == flex {
+		$selectors: ();
+		$i: 1;
+		@each $item in & {
+		    $i: $i + 1;
+		    @if $i == 2 {
+		        $i: 0;
+		    }@else{
+		        $selectors: append($selectors, $item);
+		    }
+		}
+		$selectors: to-string($selectors, ", ");
+	} @else {
+		$selectors: &;
+	}
+	@at-root #{$selectors} {
+		&[class*="-#{$modifier}"] {
+			@content;
+		}
 	}
 }
 
-// 6. Nested Modifiers 
+// 5. Nested Modifier
 // Nest a modifier for appropriate specificity
 //-----------------------------------------------------------------
 
@@ -199,7 +180,7 @@ $type: flex;
 	}
 }
 
-// 7. Extend Modifiers
+// 6. Extend Modifiers
 // Extend one or more modifiers of a component
 //-----------------------------------------------------------------
 
@@ -225,7 +206,7 @@ $type: flex;
 	}
 }
 
-// 8. Setting
+// 7. Setting
 // Add a configurable setting to a component
 //-----------------------------------------------------------------
 
@@ -263,13 +244,13 @@ $extend-settings: true;
 		@extend %#{$component}-#{$setting};
 	}
 	@if map-get($config, extend-settings) {
-		@include modifier($setting) {	
+		@include nested-modifier($setting) {	
 			@extend %#{$component}-#{$setting};
 		}
 	}
 }
 
-// 9. Option
+// 8. Option
 // Add an option to an existing setting
 //-----------------------------------------------------------------
 
@@ -308,7 +289,7 @@ $extend-settings: true;
 		@extend %#{$component}-#{$option};
 	}
 	@if map-get($config, extend-settings) {
-		@include nested-modifier($option) {
+		@include modifier($option) {
 			@extend %#{$component}-#{$option};
 		}
 	}
@@ -318,20 +299,23 @@ $extend-settings: true;
 // Advanced Functions
 //-----------------------------------------------------------------
 
-// Reverse Map Function
-// http://git.io/vLfuz
+// To String
+// http://hugogiraudel.com/2013/08/08/advanced-sass-list-functions/
+// Customized for use with Modular
 //-----------------------------------------------------------------
 
-@function reverse-map ($map) {	
-    $keys: map-keys($map);
-    $map-reversed: ();    
-    @for $i from length($keys) through 1 {
-        $map-reversed: map-merge(
-            $map-reversed, (nth($keys, $i): map-get($map, nth($keys, $i)))
-        );
-    }
-    $result: $map-reversed; 
-    @return $result;
+@function to-string($list, $glue: '', $is-nested: false, $recursive: false) {
+	$result: null;
+	@for $i from 1 through length($list) {
+		$e: nth($list, $i);
+		@if type-of($e) == list and $recursive {
+			$result: $result#{to-string($e, $glue, true)};
+		}  
+		@else {
+			$result: if($i != length($list) or $is-nested, $result#{$e}#{$glue}, $result#{$e});
+		}
+	}
+	@return $result;
 }
 
 // Map-Set Function
@@ -351,12 +335,10 @@ $extend-settings: true;
 }
 
 @function map-set-deep($map, $keys, $value) {
-	
 	$private-sassy-maps-suppress-warnings: true !global;
 	$length: length($keys);
 	$get-keys: ();
 	$map-level: ();
-
 	@if $length > 1 {
 		$get-keys: get-keys($keys, $length);
 		$map-level: map-get-deep($map, $get-keys);
@@ -386,7 +368,6 @@ $extend-settings: true;
 	$map: map-merge($map, $merge);
 	$private-sassy-maps-suppress-warnings: false !global;
 	@return $map;
-  
 }
 
 // Map Deep Merge

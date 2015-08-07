@@ -196,7 +196,6 @@ Read the [Advanced Documentation](#module-configuration-1) section to find out h
 ### Mixins
 
 * [Component](#component)
-* [Nested Component](#nested-component)
 * [Sub-Component](#sub-component)
 * [Overwrite](#overwrite)
 * [Modifier](#modifier)
@@ -260,29 +259,6 @@ The chain option should be used if you are looking to optimise your CSS output, 
 ```
 
 The static option creates only the naked selector for your component; ie - `.selector`, meaning no modifiers can be used. This option is only available for consistency; it probably makes more sense to just write `.component` instead of using the mixin in this case - I'll let you think about that one.
-
-#### Nested Component
-
-The `nested-component()` mixin should be used when you want to create a new root component from within an existing component. Generally this would be used for creating components which relate to the parent component, but which aren't bound to it. This mixin accepts 2 parameters:
-
-* **`$component`** - the name of your new component [required]
-* **`$type`** - as above, this can be either `flex` (default), `chain` or `static` [optional]
-
-```js
-@include component(header) {
-
-	@include nested-component(navigation) {
-		...
-	}
-	
-}
-```
-
-```html
-<div class="navigation">
-	...
-</div>
-```
 
 #### Sub-Component
 
@@ -432,6 +408,21 @@ This means that in your HTML the element would require both the **border** and *
 ```
 
 > If you try to nest the regular modifier mixin, it will output the CSS as if it weren't nested. It is essential to use the `nested-modifier` mixin for any nested modifiers. Other than that, nested-modifiers can be infinitely nested.
+
+##### Alternate Use-Case
+
+```js
+@include component(header) {
+
+	@include modifier(side) {
+		...
+		@include nested-modifier(left) {
+			...
+		}
+	}
+	
+}
+```
 
 #### Extend Modifiers
 

@@ -148,7 +148,6 @@
 <h3 id="mixins">Mixins</h3>
 <ul>
 <li><a href="#component">Component</a></li>
-<li><a href="#nested-component">Nested Component</a></li>
 <li><a href="#sub-component">Sub-Component</a></li>
 <li><a href="#overwrite">Overwrite</a></li>
 <li><a href="#modifier">Modifier</a></li>
@@ -196,24 +195,6 @@
 }
 </code></pre>
 <p>The static option creates only the naked selector for your component; ie - <code>.selector</code>, meaning no modifiers can be used. This option is only available for consistency; it probably makes more sense to just write <code>.component</code> instead of using the mixin in this case - I&#39;ll let you think about that one.</p>
-<h4 id="nested-component">Nested Component</h4>
-<p>The <code>nested-component()</code> mixin should be used when you want to create a new root component from within an existing component. Generally this would be used for creating components which relate to the parent component, but which aren&#39;t bound to it. This mixin accepts 2 parameters:</p>
-<ul>
-<li><strong><code>$component</code></strong> - the name of your new component [required]</li>
-<li><strong><code>$type</code></strong> - as above, this can be either <code>flex</code> (default), <code>chain</code> or <code>static</code> [optional]</li>
-</ul>
-<pre><code class="lang-js">@include component(header) {
-
-    @include nested-component(navigation) {
-        ...
-    }
-
-}
-</code></pre>
-<pre><code class="lang-html">&lt;div class=&quot;navigation&quot;&gt;
-    ...
-&lt;/div&gt;
-</code></pre>
 <h4 id="sub-component">Sub-Component</h4>
 <p>Because of how the wildcard selectors are generated, it is not possible to create relating components which begin with the same namespace. For example, if you have a <code>header</code> component with the default <code>$type</code> of <code>flex</code>, it would not be possible to create a <code>header-wrapper</code> class, as the <em>hyphen</em> is reserved for component modifiers. There are several options to get around this, including:</p>
 <ul>
@@ -333,6 +314,18 @@
 <blockquote>
 <p>If you try to nest the regular modifier mixin, it will output the CSS as if it weren&#39;t nested. It is essential to use the <code>nested-modifier</code> mixin for any nested modifiers. Other than that, nested-modifiers can be infinitely nested.</p>
 </blockquote>
+<h5 id="alternate-use-case">Alternate Use-Case</h5>
+<pre><code class="lang-js">@include component(header) {
+
+    @include modifier(side) {
+        ...
+        @include nested-modifier(left) {
+            ...
+        }
+    }
+
+}
+</code></pre>
 <h4 id="extend-modifiers">Extend Modifiers</h4>
 <p>This mixin allows you to extend multiple modifiers into a new, seperate modifer, essentially combining several modifiers into one.</p>
 <pre><code class="lang-js">@include component(button) {
