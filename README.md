@@ -1019,3 +1019,16 @@ It's important to understand the CSS that is generated when using Modular in ord
 ```
 
 If you then try to add the class **header-wrapper**, the header component's core styles would also be applied to this class, as the component is looking for any class that begins with "header-".
+
+### Changelog
+
+#### Version 2.0.0
+
+Released: 7th August 2015
+
+##### Release Notes
+
+* removing `nested-component()` mixin
+* adding `overwrite()` mixin
+* adding `sub-component()` mixin
+* re-coded `modifier()` mixin to work on nested objects
