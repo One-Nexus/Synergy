@@ -1026,7 +1026,7 @@ If you then try to add the class **header-wrapper**, the header component's core
 
 Released: 7th August 2015
 
-##### Release Notes
+###### Release Notes
 
 * removing `nested-component()` mixin
 * adding `overwrite()` mixin
