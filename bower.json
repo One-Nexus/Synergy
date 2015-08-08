@@ -1,6 +1,6 @@
 {
 	"name":"Modular",
-	"description":"A set of Sass mixins for architecting modular, configurable and scalable CSS.",
+	"description":"A library of Sass mixins for architecting modular, configurable and scalable CSS.",
 	"version":"2.4.0",
 	"main":[
 		"_modular.scss"	
