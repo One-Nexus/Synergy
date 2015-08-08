@@ -218,8 +218,16 @@ Read the [Advanced Documentation](#module-configuration-1) section to find out h
 
 The `component()` mixin is what generates the selectors for your component/module. The mixin accepts 2 parameters:
 
-* `$component` - the name of your component [required]
-* `$type` - this defines how the mixin generates the selectors for your component [optional]
+* `$components` - the name of your component(s) [required]
+* `$type` - this defines how the mixin generates the selectors for your component(s) [optional]
+
+`$components` is usually a single value but can also be a list, eg. `"header, footer"` or `(header, footer)`, should you wish to apply styles to more than one main component. For such instances, an *alias* mixin of `components()` is available:
+
+```css
+@include components("header, footer") {
+	...
+}
+```
 
 `$type` can be one of three values: `flex` (default), `chain` and `static`. By default, `flex` is enabled for all componenets. To globally change the default type, change the `$type` variable at the top of **_modular.scss**.
 
@@ -271,13 +279,25 @@ Because of how the wildcard selectors are generated, it is not possible to creat
 
 To keep as similar to BEM as possible, Modular provies an easy way to create relating components using underscores, eg - `header_wrapper`. The `sub-component` mixin accepts 2 parameters:
 
-* `$sub-component` - the name of your sub-component [required]
+* `$sub-components` - the name of your sub-component(s) [required]
 * `$type` - as above, this can be either `flex` (default), `chain` or `static` [optional]
 
 ```js
 @include component(header) {
 	
 	@include sub-component(wrapper) {
+		...	
+	}	
+	
+}
+```
+
+##### Alias Mixin For Multiple Components
+
+```js
+@include component(footer) {
+	
+	@include sub-components("nav, copyright") {
 		...	
 	}	
 	
@@ -310,10 +330,14 @@ Sub-Components work like regular components, so you can add modifiers:
 
 This mixin allows you to overwrite the styles of existing components and modifiers when in context of another component. The `overwrite()` mixin accepts 2 parameters:
 
-* `$component` - the name of the component you wish to overwrite [required]
+* `$components` - the name of the component(s) you wish to overwrite [required]
 * `$type` - as above, this can be either `flex` (default), `chain` or `static` [optional]
 
 ```js
+@include components("nav, logo") {
+	color: black;	
+}
+
 @include component(logo) {
 	font-size: 1em;	
 }
@@ -322,6 +346,10 @@ This mixin allows you to overwrite the styles of existing components and modifie
 
 	@include overwrite(logo) {
 		font-sie: 1.5em;
+	}
+	
+	@include overwrite("nav, logo") {
+		color: white;
 	}
 	
 }
@@ -339,7 +367,7 @@ This mixin allows you to overwrite the styles of existing components and modifie
 
 As above, this mixin is used for overwriting styles for an existing sub-component in alternative context. 2 parameters are accepted for the `overwrite-sub()` mixin:
 
-* `$sub-component` - the name of the component you wish to overwrite [required]
+* `$sub-components` - the name of the component(s) you wish to overwrite [required]
 * `$type` - as above, this can be either `flex` (default), `chain` or `static` [optional]
 
 ```js
@@ -354,14 +382,34 @@ As above, this mixin is used for overwriting styles for an existing sub-componen
 			...
 		}
 	}
-
-
+}
 ```
 
 ```html
 <div class="form-html5">
 	<input class="form_input" type="text" />
 </div>	
+```
+
+##### Alias Mixin For Multiple Components
+
+```js
+@include component(form) {
+
+	@include sub-component(input) {
+		...
+	}
+	
+	@include sub-component(group) {
+		...
+	}
+
+	@include modifier(html5) {
+		@include overwrite-subs("input, group") {
+			...
+		}
+	}
+}
 ```
 
 #### Modifier
@@ -447,6 +495,9 @@ This means that in your HTML the element would require both the **border** and *
 	@include modifier(side) {
 		...
 		@include nested-modifier(left) {
+			...
+		}
+		@include nested-modifier(right) {
 			...
 		}
 	}

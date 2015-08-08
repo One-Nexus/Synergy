@@ -169,9 +169,14 @@
 <h4 id="component">Component</h4>
 <p>The <code>component()</code> mixin is what generates the selectors for your component/module. The mixin accepts 2 parameters:</p>
 <ul>
-<li><code>$component</code> - the name of your component [required]</li>
-<li><code>$type</code> - this defines how the mixin generates the selectors for your component [optional]</li>
+<li><code>$components</code> - the name of your component(s) [required]</li>
+<li><code>$type</code> - this defines how the mixin generates the selectors for your component(s) [optional]</li>
 </ul>
+<p><code>$components</code> is usually a single value but can also be a list, eg. <code>&quot;header, footer&quot;</code> or <code>(header, footer)</code>, should you wish to apply styles to more than one main component. For such instances, an <em>alias</em> mixin of <code>components()</code> is available:</p>
+<pre><code class="lang-css">@include components(&quot;header, footer&quot;) {
+    ...
+}
+</code></pre>
 <p><code>$type</code> can be one of three values: <code>flex</code> (default), <code>chain</code> and <code>static</code>. By default, <code>flex</code> is enabled for all componenets. To globally change the default type, change the <code>$type</code> variable at the top of <strong>_modular.scss</strong>.</p>
 <h5 id="flex">Flex</h5>
 <pre><code class="lang-css">@include component(header, flex) {
@@ -205,12 +210,21 @@
 </ul>
 <p>To keep as similar to BEM as possible, Modular provies an easy way to create relating components using underscores, eg - <code>header_wrapper</code>. The <code>sub-component</code> mixin accepts 2 parameters:</p>
 <ul>
-<li><code>$sub-component</code> - the name of your sub-component [required]</li>
+<li><code>$sub-components</code> - the name of your sub-component(s) [required]</li>
 <li><code>$type</code> - as above, this can be either <code>flex</code> (default), <code>chain</code> or <code>static</code> [optional]</li>
 </ul>
 <pre><code class="lang-js">@include component(header) {
 
     @include sub-component(wrapper) {
+        ...    
+    }    
+
+}
+</code></pre>
+<h5 id="alias-mixin-for-multiple-components">Alias Mixin For Multiple Components</h5>
+<pre><code class="lang-js">@include component(footer) {
+
+    @include sub-components(&quot;nav, copyright&quot;) {
         ...    
     }    
 
@@ -234,10 +248,14 @@
 <h4 id="overwrite">Overwrite</h4>
 <p>This mixin allows you to overwrite the styles of existing components and modifiers when in context of another component. The <code>overwrite()</code> mixin accepts 2 parameters:</p>
 <ul>
-<li><code>$component</code> - the name of the component you wish to overwrite [required]</li>
+<li><code>$components</code> - the name of the component(s) you wish to overwrite [required]</li>
 <li><code>$type</code> - as above, this can be either <code>flex</code> (default), <code>chain</code> or <code>static</code> [optional]</li>
 </ul>
-<pre><code class="lang-js">@include component(logo) {
+<pre><code class="lang-js">@include components(&quot;nav, logo&quot;) {
+    color: black;    
+}
+
+@include component(logo) {
     font-size: 1em;    
 }
 
@@ -245,6 +263,10 @@
 
     @include overwrite(logo) {
         font-sie: 1.5em;
+    }
+
+    @include overwrite(&quot;nav, logo&quot;) {
+        color: white;
     }
 
 }
@@ -258,7 +280,7 @@
 <h4 id="overwrite-sub">Overwrite-Sub</h4>
 <p>As above, this mixin is used for overwriting styles for an existing sub-component in alternative context. 2 parameters are accepted for the <code>overwrite-sub()</code> mixin:</p>
 <ul>
-<li><code>$sub-component</code> - the name of the component you wish to overwrite [required]</li>
+<li><code>$sub-components</code> - the name of the component(s) you wish to overwrite [required]</li>
 <li><code>$type</code> - as above, this can be either <code>flex</code> (default), <code>chain</code> or <code>static</code> [optional]</li>
 </ul>
 <pre><code class="lang-js">@include component(form) {
@@ -272,10 +294,29 @@
             ...
         }
     }
+}
 </code></pre>
 <pre><code class="lang-html">&lt;div class=&quot;form-html5&quot;&gt;
     &lt;input class=&quot;form_input&quot; type=&quot;text&quot; /&gt;
 &lt;/div&gt;
+</code></pre>
+<h5 id="alias-mixin-for-multiple-components">Alias Mixin For Multiple Components</h5>
+<pre><code class="lang-js">@include component(form) {
+
+    @include sub-component(input) {
+        ...
+    }
+
+    @include sub-component(group) {
+        ...
+    }
+
+    @include modifier(html5) {
+        @include overwrite-subs(&quot;input, group&quot;) {
+            ...
+        }
+    }
+}
 </code></pre>
 <h4 id="modifier">Modifier</h4>
 <p>The <code>modifier()</code> mixin generates the selector for any modifier of your component, for example a <strong>small</strong> or <strong>large</strong> modifier. This mixin accepts only 1 paramter:</p>
@@ -343,6 +384,9 @@
     @include modifier(side) {
         ...
         @include nested-modifier(left) {
+            ...
+        }
+        @include nested-modifier(right) {
             ...
         }
     }
