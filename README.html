@@ -207,15 +207,15 @@
 <p>The static option creates only the naked selector for your component; ie - <code>.selector</code>, meaning no modifiers can be used. This option is only available for consistency; it probably makes more sense to just write <code>.component</code> instead of using the mixin in this case - I&#39;ll let you think about that one.</p>
 <h4 id="advanced-example">Advanced Example</h4>
 <pre><code class="lang-css">@include components((header, footer), static) {
-    ...
+    /* apply to both header and footer components */
 }
 
 @include component(header, static) {
-    ...
+    /* apply only to header */
 }
 
 @include component(footer, static) {
-    ...
+    /* apply only to footer */
 }
 </code></pre>
 <h4 id="sub-component">Sub-Component</h4>
@@ -261,6 +261,35 @@
     }    
 
 }
+</code></pre>
+<h4 id="advanced-example">Advanced Example</h4>
+<pre><code class="lang-css">@include component(footer) {
+
+    ...
+
+    @include sub-component(wrapper, static) {
+        ...    
+    }
+
+    @include sub-components(&quot;nav, copyright&quot;, static) {
+        display: table-cell;
+        vertical-align: middle;
+    }
+
+}
+</code></pre>
+<pre><code class="lang-html">&lt;footer class=&quot;footer&quot;&gt;
+    &lt;div class=&quot;footer_wrapper&quot;&gt;
+        &lt;div class=&quot;footer_nav&quot;&gt;
+            ...
+            &lt;/div&gt;
+        &lt;div&gt;
+        &lt;div class=&quot;footer_copyright&quot;&gt;
+            ...
+            &lt;/div&gt;
+        &lt;div&gt;
+    &lt;/div&gt;
+&lt;/footer&gt;
 </code></pre>
 <h4 id="overwrite">Overwrite</h4>
 <p>This mixin allows you to overwrite the styles of existing components and modifiers when in context of another component. The <code>overwrite()</code> mixin accepts 2 parameters:</p>

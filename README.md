@@ -279,15 +279,15 @@ The static option creates only the naked selector for your component; ie - `.sel
 
 ```css
 @include components((header, footer), static) {
-	...
+	/* apply to both header and footer components */
 }
 
 @include component(header, static) {
-	...
+	/* apply only to header */
 }
 
 @include component(footer, static) {
-	...
+	/* apply only to footer */
 }
 ```
 
@@ -346,6 +346,40 @@ Sub-Components work like regular components, so you can add modifiers:
 	}	
 	
 }
+```
+
+#### Advanced Example
+
+```css
+@include component(footer) {
+	
+	...
+	
+	@include sub-component(wrapper, static) {
+		...	
+	}
+	
+	@include sub-components("nav, copyright", static) {
+		display: table-cell;
+		vertical-align: middle;
+	}
+	
+}
+```
+
+```html
+<footer class="footer">
+	<div class="footer_wrapper">
+		<div class="footer_nav">
+			...
+			</div>
+		<div>
+		<div class="footer_copyright">
+			...
+			</div>
+		<div>
+	</div>
+</footer>
 ```
 
 #### Overwrite
