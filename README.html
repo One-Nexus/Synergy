@@ -172,6 +172,10 @@
 <li><code>$components</code> - the name of your component(s) [required]</li>
 <li><code>$type</code> - this defines how the mixin generates the selectors for your component(s) [optional]</li>
 </ul>
+<pre><code class="lang-css">@include component(header) {
+    ...
+}
+</code></pre>
 <p><code>$components</code> is usually a single value but can also be a list, eg. <code>&quot;header, footer&quot;</code> or <code>(header, footer)</code>, should you wish to apply styles to more than one main component. For such instances, an <em>alias</em> mixin of <code>components()</code> is available:</p>
 <pre><code class="lang-css">@include components(&quot;header, footer&quot;) {
     ...

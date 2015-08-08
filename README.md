@@ -221,6 +221,12 @@ The `component()` mixin is what generates the selectors for your component/modul
 * `$components` - the name of your component(s) [required]
 * `$type` - this defines how the mixin generates the selectors for your component(s) [optional]
 
+```css
+@include component(header) {
+	...
+}
+```
+
 `$components` is usually a single value but can also be a list, eg. `"header, footer"` or `(header, footer)`, should you wish to apply styles to more than one main component. For such instances, an *alias* mixin of `components()` is available:
 
 ```css
