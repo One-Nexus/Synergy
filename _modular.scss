@@ -201,7 +201,7 @@ $type: flex;
 //
 //	<div class="button-large">...</div>
 
-@mixin modifier($modifier) {
+@mixin modifier($modifiers) {
 	$selectors: &;
 	@if map-get($config, selector-type) == flex {
 		$selectors: ();
@@ -219,9 +219,21 @@ $type: flex;
 		$selectors: &;
 	}
 	@at-root #{$selectors} {
-		&[class*="-#{$modifier}"] {
+		$modifier-selectors: ();
+		@each $modifier in $modifiers {
+			$modifier-selectors: join($modifier-selectors, '&[class*="-#{$modifier}"]')
+		}
+		$modifier-selectors: to-string($modifier-selectors, ", ");
+		#{$modifier-selectors} {
 			@content;
 		}
+	}
+}
+
+// Alias for multiple modifiers
+@mixin modifiers($modifiers) {
+	@include modifier($modifiers) {
+		@content;
 	}
 }
 
@@ -241,8 +253,20 @@ $type: flex;
 //
 //	<div class="button-white-border">...</div>
 
-@mixin nested-modifier($modifier) {
-	&[class*="-#{$modifier}"] {
+@mixin nested-modifier($modifiers) {
+	$selectors: ();
+	@each $modifier in $modifiers {
+		$selectors: join($selectors, '&[class*="-#{$modifier}"]');
+	}
+	$selectors: to-string($selectors, ", ");
+	#{$selectors} {
+		@content;
+	}
+}
+
+// Alias for multiple modifiers
+@mixin nested-modifiers($modifiers) {
+	@include nested-modifier($modifiers) {
 		@content;
 	}
 }
