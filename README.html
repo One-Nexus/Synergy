@@ -205,6 +205,19 @@
 }
 </code></pre>
 <p>The static option creates only the naked selector for your component; ie - <code>.selector</code>, meaning no modifiers can be used. This option is only available for consistency; it probably makes more sense to just write <code>.component</code> instead of using the mixin in this case - I&#39;ll let you think about that one.</p>
+<h4 id="advanced-example">Advanced Example</h4>
+<pre><code class="lang-js">@include components((header, footer), static) {
+    ...
+}
+
+@include component(header, static) {
+    ...
+}
+
+@include component(footer, static) {
+    ...
+}
+</code></pre>
 <h4 id="sub-component">Sub-Component</h4>
 <p>Because of how the wildcard selectors are generated, it is not possible to create relating components which begin with the same namespace. For example, if you have a <code>header</code> component with the default <code>$type</code> of <code>flex</code>, it would not be possible to create a <code>header-wrapper</code> class, as the <em>hyphen</em> is reserved for component modifiers. There are several options to get around this, including:</p>
 <ul>

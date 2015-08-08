@@ -275,6 +275,22 @@ The chain option should be used if you are looking to optimise your CSS output, 
 
 The static option creates only the naked selector for your component; ie - `.selector`, meaning no modifiers can be used. This option is only available for consistency; it probably makes more sense to just write `.component` instead of using the mixin in this case - I'll let you think about that one.
 
+#### Advanced Example
+
+```js
+@include components((header, footer), static) {
+	...
+}
+
+@include component(header, static) {
+	...
+}
+
+@include component(footer, static) {
+	...
+}
+```
+
 #### Sub-Component
 
 Because of how the wildcard selectors are generated, it is not possible to create relating components which begin with the same namespace. For example, if you have a `header` component with the default `$type` of `flex`, it would not be possible to create a `header-wrapper` class, as the *hyphen* is reserved for component modifiers. There are several options to get around this, including:
