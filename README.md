@@ -349,13 +349,13 @@ This mixin allows you to overwrite the styles of existing components and modifie
 }
 
 @include component(header) {
-
-	@include overwrite(logo) {
-		font-sie: 1.5em;
-	}
 	
 	@include overwrite("logo, nav") {
 		color: white;
+	}
+
+	@include overwrite(logo) {
+		font-sie: 1.5em;
 	}
 	
 }

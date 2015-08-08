@@ -265,12 +265,12 @@
 
 @include component(header) {
 
-    @include overwrite(logo) {
-        font-sie: 1.5em;
-    }
-
     @include overwrite(&quot;logo, nav&quot;) {
         color: white;
+    }
+
+    @include overwrite(logo) {
+        font-sie: 1.5em;
     }
 
 }
