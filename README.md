@@ -371,7 +371,7 @@ Sub-Components work like regular components, so you can add modifiers:
 	<div class="footer_wrapper">
 		<div class="footer_nav">
 			...
-			</div>
+		</div>
 		<div>
 		<div class="footer_copyright">
 			...
