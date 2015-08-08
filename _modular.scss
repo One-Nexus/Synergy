@@ -162,7 +162,8 @@ $type: flex;
 //		<input class="form_input" type="text" />
 //	</div>
 
-@mixin overwrite-sub($sub-components, $type: $type) {
+@mixin overwrite-sub($sub-components, $type: $type, $parent: null) {
+	$component: if($parent != null, $parent, $component);
 	$selectors: ();
 	@each $sub-component in $sub-components {
 		@if $type == flex {
