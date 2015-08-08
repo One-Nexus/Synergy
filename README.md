@@ -360,8 +360,7 @@ Sub-Components work like regular components, so you can add modifiers:
 	}
 	
 	@include sub-components("nav, copyright", static) {
-		display: table-cell;
-		vertical-align: middle;
+		display: inline-block;
 	}
 	
 }
