@@ -176,8 +176,8 @@
     ...
 }
 </code></pre>
-<p><code>$components</code> is usually a single value but can also be a list, eg. <code>&quot;header, footer&quot;</code> or <code>(header, footer)</code>, should you wish to apply styles to more than one main component. For such instances, an <em>alias</em> mixin of <code>components()</code> is available:</p>
-<pre><code class="lang-css">@include components(&quot;header, footer&quot;) {
+<p><code>$components</code> is usually a single value but can also be a list, eg. <code>(header, footer)</code>, should you wish to apply styles to more than one main component. For such instances, an <em>alias</em> mixin of <code>components()</code> is available:</p>
+<pre><code class="lang-css">@include components((header, footer)) {
     ...
 }
 </code></pre>
@@ -228,7 +228,7 @@
 <h5 id="alias-mixin-for-multiple-components">Alias Mixin For Multiple Components</h5>
 <pre><code class="lang-js">@include component(footer) {
 
-    @include sub-components(&quot;nav, copyright&quot;) {
+    @include sub-components((nav, copyright)) {
         ...    
     }    
 
@@ -255,7 +255,7 @@
 <li><code>$components</code> - the name of the component(s) you wish to overwrite [required]</li>
 <li><code>$type</code> - as above, this can be either <code>flex</code> (default), <code>chain</code> or <code>static</code> [optional]</li>
 </ul>
-<pre><code class="lang-js">@include components(&quot;logo, nav&quot;) {
+<pre><code class="lang-js">@include components((logo, nav)) {
     color: black;    
 }
 
@@ -265,7 +265,7 @@
 
 @include component(header) {
 
-    @include overwrite(&quot;logo, nav&quot;) {
+    @include overwrite((logo, nav)) {
         color: white;
     }
 
@@ -327,7 +327,7 @@
     }
 
     @include modifier(html5) {
-        @include overwrite-subs(&quot;input, group&quot;) {
+        @include overwrite-subs((input, group)) {
             ...
         }
     }

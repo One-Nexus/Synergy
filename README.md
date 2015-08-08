@@ -227,10 +227,10 @@ The `component()` mixin is what generates the selectors for your component/modul
 }
 ```
 
-`$components` is usually a single value but can also be a list, eg. `"header, footer"` or `(header, footer)`, should you wish to apply styles to more than one main component. For such instances, an *alias* mixin of `components()` is available:
+`$components` is usually a single value but can also be a list, eg. `(header, footer)`, should you wish to apply styles to more than one main component. For such instances, an *alias* mixin of `components()` is available:
 
 ```css
-@include components("header, footer") {
+@include components((header, footer)) {
 	...
 }
 ```
@@ -303,7 +303,7 @@ To keep as similar to BEM as possible, Modular provies an easy way to create rel
 ```js
 @include component(footer) {
 	
-	@include sub-components("nav, copyright") {
+	@include sub-components((nav, copyright)) {
 		...	
 	}	
 	
@@ -340,7 +340,7 @@ This mixin allows you to overwrite the styles of existing components and modifie
 * `$type` - as above, this can be either `flex` (default), `chain` or `static` [optional]
 
 ```js
-@include components("logo, nav") {
+@include components((logo, nav)) {
 	color: black;	
 }
 
@@ -350,7 +350,7 @@ This mixin allows you to overwrite the styles of existing components and modifie
 
 @include component(header) {
 	
-	@include overwrite("logo, nav") {
+	@include overwrite((logo, nav)) {
 		color: white;
 	}
 
@@ -422,7 +422,7 @@ As above, this mixin is used for overwriting styles for an existing sub-componen
 	}
 
 	@include modifier(html5) {
-		@include overwrite-subs("input, group") {
+		@include overwrite-subs((input, group)) {
 			...
 		}
 	}
