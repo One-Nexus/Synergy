@@ -1052,6 +1052,22 @@ If you then try to add the class **header-wrapper**, the header component's core
 
 ### Changelog
 
+#### Version 2.2.0
+
+Released: 8th August 2015
+
+###### Release Notes
+
+* adding ability to accept multiple components per mixin
+
+#### Version 2.1.0
+
+Released: 7th August 2015
+
+###### Release Notes
+
+* adding `overwrite-sub()` mixin
+
 #### Version 2.0.0
 
 Released: 7th August 2015
@@ -1062,11 +1078,3 @@ Released: 7th August 2015
 * adding `overwrite()` mixin
 * adding `sub-component()` mixin
 * re-coded `modifier()` mixin to work on nested objects
-
-#### Version 2.1.0
-
-Released: 7th August 2015
-
-###### Release Notes
-
-* adding `overwrite-sub()` mixin
