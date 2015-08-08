@@ -5,6 +5,7 @@
 
 * [Overview](#overview)
 * [Advanced Documentation](#advanced-documentation)
+* [Changelog](#changelog)
 
 ##### Bower Installation:
 
