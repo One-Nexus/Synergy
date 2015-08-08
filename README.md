@@ -298,18 +298,6 @@ To keep as similar to BEM as possible, Modular provies an easy way to create rel
 }
 ```
 
-##### Alias Mixin For Multiple Components
-
-```js
-@include component(footer) {
-	
-	@include sub-components((nav, copyright)) {
-		...	
-	}	
-	
-}
-```
-
 ```html
 <div class="header_wrapper">...</div>
 ```
@@ -330,6 +318,18 @@ Sub-Components work like regular components, so you can add modifiers:
 
 ```html
 <div class="header_wrapper-full-screen">...</div>
+```
+
+##### Alias Mixin For Multiple Components
+
+```js
+@include component(footer) {
+	
+	@include sub-components((nav, copyright)) {
+		...	
+	}	
+	
+}
 ```
 
 #### Overwrite

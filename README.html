@@ -225,15 +225,6 @@
 
 }
 </code></pre>
-<h5 id="alias-mixin-for-multiple-components">Alias Mixin For Multiple Components</h5>
-<pre><code class="lang-js">@include component(footer) {
-
-    @include sub-components((nav, copyright)) {
-        ...    
-    }    
-
-}
-</code></pre>
 <pre><code class="lang-html">&lt;div class=&quot;header_wrapper&quot;&gt;...&lt;/div&gt;
 </code></pre>
 <p>Sub-Components work like regular components, so you can add modifiers:</p>
@@ -248,6 +239,15 @@
 }
 </code></pre>
 <pre><code class="lang-html">&lt;div class=&quot;header_wrapper-full-screen&quot;&gt;...&lt;/div&gt;
+</code></pre>
+<h5 id="alias-mixin-for-multiple-components">Alias Mixin For Multiple Components</h5>
+<pre><code class="lang-js">@include component(footer) {
+
+    @include sub-components((nav, copyright)) {
+        ...    
+    }    
+
+}
 </code></pre>
 <h4 id="overwrite">Overwrite</h4>
 <p>This mixin allows you to overwrite the styles of existing components and modifiers when in context of another component. The <code>overwrite()</code> mixin accepts 2 parameters:</p>
