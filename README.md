@@ -359,7 +359,7 @@ Sub-Components work like regular components, so you can add modifiers:
 		...	
 	}
 	
-	@include sub-components("nav, copyright", static) {
+	@include sub-components((nav, copyright), static) {
 		display: inline-block;
 	}
 	
