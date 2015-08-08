@@ -382,10 +382,13 @@ This mixin allows you to overwrite the styles of existing components and modifie
 
 #### Overwrite-Sub
 
-As above, this mixin is used for overwriting styles for an existing sub-component in alternative context. 2 parameters are accepted for the `overwrite-sub()` mixin:
+As above, this mixin is used for overwriting styles for an existing sub-component in alternative context. 3 parameters are accepted for the `overwrite-sub()` mixin:
 
 * `$sub-components` - the name of the component(s) you wish to overwrite [required]
 * `$type` - as above, this can be either `flex` (default), `chain` or `static` [optional]
+* `$parent` - the parent of your sub-component [optional]
+
+> The `$parent` parameter is used if you are including this mixin inside a different component to your sub-component's parent.
 
 ```js
 @include component(form) {
@@ -427,6 +430,34 @@ As above, this mixin is used for overwriting styles for an existing sub-componen
 		}
 	}
 }
+```
+
+##### Using Inside a Different Component
+
+```js
+@include component(heading) {
+	
+	@include sub-component(group) {
+		...	
+	}	
+	
+}
+
+@include component(widget) {
+
+	@include overwrite-sub(group, $parent: heading) {
+		...
+	}
+	
+}
+```
+
+```html
+<div class="widget">
+	<div class="heading_group">
+		...
+	</div>	
+</div>
 ```
 
 #### Modifier
@@ -1164,6 +1195,14 @@ It's important to understand the CSS that is generated when using Modular in ord
 If you then try to add the class **header-wrapper**, the header component's core styles would also be applied to this class, as the component is looking for any class that begins with "header-".
 
 ### Changelog
+
+#### Version 2.4.0
+
+Released: 8th August 2015
+
+###### Release Notes
+
+* adding ability to overwrite sub-components from any main component
 
 #### Version 2.3.0
 

@@ -293,11 +293,15 @@
 &lt;/div&gt;
 </code></pre>
 <h4 id="overwrite-sub">Overwrite-Sub</h4>
-<p>As above, this mixin is used for overwriting styles for an existing sub-component in alternative context. 2 parameters are accepted for the <code>overwrite-sub()</code> mixin:</p>
+<p>As above, this mixin is used for overwriting styles for an existing sub-component in alternative context. 3 parameters are accepted for the <code>overwrite-sub()</code> mixin:</p>
 <ul>
 <li><code>$sub-components</code> - the name of the component(s) you wish to overwrite [required]</li>
 <li><code>$type</code> - as above, this can be either <code>flex</code> (default), <code>chain</code> or <code>static</code> [optional]</li>
+<li><code>$parent</code> - the parent of your sub-component [optional]</li>
 </ul>
+<blockquote>
+<p>The <code>$parent</code> parameter is used if you are including this mixin inside a different component to your sub-component&#39;s parent.</p>
+</blockquote>
 <pre><code class="lang-js">@include component(form) {
 
     @include sub-component(input) {
@@ -332,6 +336,29 @@
         }
     }
 }
+</code></pre>
+<h5 id="using-inside-a-different-component">Using Inside a Different Component</h5>
+<pre><code class="lang-js">@include component(heading) {
+
+    @include sub-component(group) {
+        ...    
+    }    
+
+}
+
+@include component(widget) {
+
+    @include overwrite-sub(group, $parent: heading) {
+        ...
+    }
+
+}
+</code></pre>
+<pre><code class="lang-html">&lt;div class=&quot;widget&quot;&gt;
+    &lt;div class=&quot;heading_group&quot;&gt;
+        ...
+    &lt;/div&gt;    
+&lt;/div&gt;
 </code></pre>
 <h4 id="modifier">Modifier</h4>
 <p>The <code>modifier()</code> mixin generates the selector for any modifier of your component, for example a <strong>small</strong> or <strong>large</strong> modifier. This mixin accepts only 1 paramter:</p>
@@ -938,6 +965,12 @@ _theme.scss
 </code></pre>
 <p>If you then try to add the class <strong>header-wrapper</strong>, the header component&#39;s core styles would also be applied to this class, as the component is looking for any class that begins with &quot;header-&quot;.</p>
 <h3 id="changelog">Changelog</h3>
+<h4 id="version-2-4-0">Version 2.4.0</h4>
+<p>Released: 8th August 2015</p>
+<h6 id="release-notes">Release Notes</h6>
+<ul>
+<li>adding ability to overwrite sub-components from any main component</li>
+</ul>
 <h4 id="version-2-3-0">Version 2.3.0</h4>
 <p>Released: 8th August 2015</p>
 <h6 id="release-notes">Release Notes</h6>
