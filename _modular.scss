@@ -180,6 +180,13 @@ $type: flex;
 	}
 }
 
+// Alias for multiple components
+@mixin overwrite-subs($sub-components, $type: $type) {
+	@include overwrite-sub($sub-components, $type) {
+		@content;
+	}
+}
+
 // 5. Modifiers 
 // Add a modifier to an existing component
 //-----------------------------------------------------------------
