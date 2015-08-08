@@ -206,7 +206,7 @@
 </code></pre>
 <p>The static option creates only the naked selector for your component; ie - <code>.selector</code>, meaning no modifiers can be used. This option is only available for consistency; it probably makes more sense to just write <code>.component</code> instead of using the mixin in this case - I&#39;ll let you think about that one.</p>
 <h4 id="advanced-example">Advanced Example</h4>
-<pre><code class="lang-js">@include components((header, footer), static) {
+<pre><code class="lang-css">@include components((header, footer), static) {
     ...
 }
 

@@ -277,7 +277,7 @@ The static option creates only the naked selector for your component; ie - `.sel
 
 #### Advanced Example
 
-```js
+```css
 @include components((header, footer), static) {
 	...
 }
