@@ -388,19 +388,19 @@
 &lt;div class=&quot;button-primary-large-round&quot;&gt;...&lt;/div&gt;
 </code></pre>
 <h5 id="alias-mixin-for-multiple-modifiers">Alias Mixin For Multiple Modifiers</h5>
-<pre><code class="lang-js">@include component(header) {
+<pre><code class="lang-js">@include component(button) {
 
     ...
 
-    @include modifiers((logo, nav)) {
-        display: inline-block;
+    @include modifiers((buy-now, add-to-basket)) {
+        text-transform: uppercase;
     }
 
-    @include modifier(logo) {
+    @include modifier(buy-now) {
         ...
     }
 
-    @include modifier(nav) {
+    @include modifier(add-to-basket) {
         ...
     }
 

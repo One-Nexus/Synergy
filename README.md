@@ -499,19 +499,19 @@ You can use any number of modifiers on a single element in the HTML, and in any 
 ##### Alias Mixin For Multiple Modifiers
 
 ```js
-@include component(header) {
+@include component(button) {
 	
 	...
 	
-	@include modifiers((logo, nav)) {
-		display: inline-block;
+	@include modifiers((buy-now, add-to-basket)) {
+		text-transform: uppercase;
 	}
 	
-	@include modifier(logo) {
+	@include modifier(buy-now) {
 		...
 	}
 	
-	@include modifier(nav) {
+	@include modifier(add-to-basket) {
 		...
 	}
 	
