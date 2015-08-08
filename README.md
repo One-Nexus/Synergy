@@ -275,7 +275,7 @@ The chain option should be used if you are looking to optimise your CSS output, 
 
 The static option creates only the naked selector for your component; ie - `.selector`, meaning no modifiers can be used. This option is only available for consistency; it probably makes more sense to just write `.component` instead of using the mixin in this case - I'll let you think about that one.
 
-#### Advanced Example
+##### Advanced Example
 
 ```css
 @include components((header, footer), static) {
@@ -348,7 +348,7 @@ Sub-Components work like regular components, so you can add modifiers:
 }
 ```
 
-#### Advanced Example
+##### Advanced Example
 
 ```css
 @include component(footer) {
