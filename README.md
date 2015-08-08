@@ -1103,6 +1103,7 @@ Every configurable aspect of our project can now quickly and easily be changed f
 ### Credits & Notes
 
 * [Sassy Maps](https://github.com/at-import/sassy-maps)
+* [Advanced Sass List Functions](http://hugogiraudel.com/2013/08/08/advanced-sass-list-functions/)
 * [Bringing Configuration Objects To Sass](http://hugogiraudel.com/2014/05/05/bringing-configuration-objects-to-sass/)
 
 #### Caveats
