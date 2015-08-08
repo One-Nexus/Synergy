@@ -350,7 +350,7 @@ Sub-Components work like regular components, so you can add modifiers:
 
 ##### Advanced Example
 
-```css
+```js
 @include component(footer) {
 	
 	...
