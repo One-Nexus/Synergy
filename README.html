@@ -255,7 +255,7 @@
 <li><code>$components</code> - the name of the component(s) you wish to overwrite [required]</li>
 <li><code>$type</code> - as above, this can be either <code>flex</code> (default), <code>chain</code> or <code>static</code> [optional]</li>
 </ul>
-<pre><code class="lang-js">@include components(&quot;nav, logo&quot;) {
+<pre><code class="lang-js">@include components(&quot;logo, nav&quot;) {
     color: black;    
 }
 
@@ -269,15 +269,26 @@
         font-sie: 1.5em;
     }
 
-    @include overwrite(&quot;nav, logo&quot;) {
+    @include overwrite(&quot;logo, nav&quot;) {
         color: white;
     }
 
 }
 </code></pre>
-<pre><code class="lang-html">&lt;div class=&quot;header&quot;&gt;
+<pre><code class="lang-html">&lt;div&gt;
     &lt;div class=&quot;logo&quot;&gt;
-        ...
+        I&#39;m black and 1em
+    &lt;/div&gt;
+    &lt;div class=&quot;nav&quot;&gt;
+        I&#39;m black
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;header&quot;&gt;
+    &lt;div class=&quot;logo&quot;&gt;
+        Now I&#39;m white and 1.5em
+    &lt;/div&gt;
+    &lt;div class=&quot;nav&quot;&gt;
+        Now I&#39;m white
     &lt;/div&gt;
 &lt;/div&gt;
 </code></pre>

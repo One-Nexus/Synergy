@@ -340,7 +340,7 @@ This mixin allows you to overwrite the styles of existing components and modifie
 * `$type` - as above, this can be either `flex` (default), `chain` or `static` [optional]
 
 ```js
-@include components("nav, logo") {
+@include components("logo, nav") {
 	color: black;	
 }
 
@@ -354,7 +354,7 @@ This mixin allows you to overwrite the styles of existing components and modifie
 		font-sie: 1.5em;
 	}
 	
-	@include overwrite("nav, logo") {
+	@include overwrite("logo, nav") {
 		color: white;
 	}
 	
@@ -362,9 +362,20 @@ This mixin allows you to overwrite the styles of existing components and modifie
 ```
 
 ```html
+<div>
+	<div class="logo">
+		I'm black and 1em
+	</div>
+	<div class="nav">
+		I'm black
+	</div>
+</div>
 <div class="header">
 	<div class="logo">
-		...
+		Now I'm white and 1.5em
+	</div>
+	<div class="nav">
+		Now I'm white
 	</div>
 </div>	
 ```
