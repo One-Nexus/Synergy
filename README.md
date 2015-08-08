@@ -433,7 +433,7 @@ As above, this mixin is used for overwriting styles for an existing sub-componen
 
 The `modifier()` mixin generates the selector for any modifier of your component, for example a **small** or **large** modifier. This mixin accepts only 1 paramter:
 
-* `$modifier` - the name of your modifier [required]
+* `$modifiers` - the name of your modifier(s) [required]
 
 
 ```js
@@ -465,11 +465,33 @@ You can use any number of modifiers on a single element in the HTML, and in any 
 <div class="button-primary-large-round">...</div>
 ```
 
+##### Alias Mixin For Multiple Modifiers
+
+```js
+@include component(header) {
+	
+	...
+	
+	@include modifiers((logo, nav)) {
+		display: inline-block;
+	}
+	
+	@include modifier(logo) {
+		...
+	}
+	
+	@include modifier(nav) {
+		...
+	}
+	
+}
+```
+
 #### Nested Modifier
 
 The `nested-modifier()` mixin is used to nest modifiers within one another, meaning that both modifiers must be passed to the element's HTML for the styles to take effect. Again, this mixin accepts only 1 parameter:
 
-* `$modifier` - the name of your modifier [required]
+* `$modifiers` - the name of your modifier(s) [required]
 
 _`print` used below isn't a real/valid property and is used for demonstrational purposes only_
 
@@ -515,6 +537,28 @@ This means that in your HTML the element would require both the **border** and *
 			...
 		}
 		@include nested-modifier(right) {
+			...
+		}
+	}
+	
+}
+```
+
+##### Alias Mixin For Multiple Modifiers
+
+```js
+@include component(button) {
+
+	@include modifier(buy-now) {
+		...
+	}
+	
+	@include modifier(add-to-basket) {
+		...
+	}
+	
+	@include modifier(clearance) {
+		@include nested-modifiers((buy-now, add-to-basket)) {
 			...
 		}
 	}
@@ -1120,6 +1164,14 @@ It's important to understand the CSS that is generated when using Modular in ord
 If you then try to add the class **header-wrapper**, the header component's core styles would also be applied to this class, as the component is looking for any class that begins with "header-".
 
 ### Changelog
+
+#### Version 2.3.0
+
+Released: 8th August 2015
+
+###### Release Notes
+
+* adding ability for modifier mixins to accept multiple parameters
 
 #### Version 2.2.0
 

@@ -336,7 +336,7 @@
 <h4 id="modifier">Modifier</h4>
 <p>The <code>modifier()</code> mixin generates the selector for any modifier of your component, for example a <strong>small</strong> or <strong>large</strong> modifier. This mixin accepts only 1 paramter:</p>
 <ul>
-<li><code>$modifier</code> - the name of your modifier [required]</li>
+<li><code>$modifiers</code> - the name of your modifier(s) [required]</li>
 </ul>
 <pre><code class="lang-js">@include component(button) {
 
@@ -360,10 +360,29 @@
 <pre><code class="lang-html">&lt;div class=&quot;button-large-round-primary&quot;&gt;...&lt;/div&gt;
 &lt;div class=&quot;button-primary-large-round&quot;&gt;...&lt;/div&gt;
 </code></pre>
+<h5 id="alias-mixin-for-multiple-modifiers">Alias Mixin For Multiple Modifiers</h5>
+<pre><code class="lang-js">@include component(header) {
+
+    ...
+
+    @include modifiers((logo, nav)) {
+        display: inline-block;
+    }
+
+    @include modifier(logo) {
+        ...
+    }
+
+    @include modifier(nav) {
+        ...
+    }
+
+}
+</code></pre>
 <h4 id="nested-modifier">Nested Modifier</h4>
 <p>The <code>nested-modifier()</code> mixin is used to nest modifiers within one another, meaning that both modifiers must be passed to the element&#39;s HTML for the styles to take effect. Again, this mixin accepts only 1 parameter:</p>
 <ul>
-<li><code>$modifier</code> - the name of your modifier [required]</li>
+<li><code>$modifiers</code> - the name of your modifier(s) [required]</li>
 </ul>
 <p><em><code>print</code> used below isn&#39;t a real/valid property and is used for demonstrational purposes only</em></p>
 <pre><code class="lang-js">@include component(button) {
@@ -402,6 +421,25 @@
             ...
         }
         @include nested-modifier(right) {
+            ...
+        }
+    }
+
+}
+</code></pre>
+<h5 id="alias-mixin-for-multiple-modifiers">Alias Mixin For Multiple Modifiers</h5>
+<pre><code class="lang-js">@include component(button) {
+
+    @include modifier(buy-now) {
+        ...
+    }
+
+    @include modifier(add-to-basket) {
+        ...
+    }
+
+    @include modifier(clearance) {
+        @include nested-modifiers((buy-now, add-to-basket)) {
             ...
         }
     }
@@ -900,6 +938,12 @@ _theme.scss
 </code></pre>
 <p>If you then try to add the class <strong>header-wrapper</strong>, the header component&#39;s core styles would also be applied to this class, as the component is looking for any class that begins with &quot;header-&quot;.</p>
 <h3 id="changelog">Changelog</h3>
+<h4 id="version-2-3-0">Version 2.3.0</h4>
+<p>Released: 8th August 2015</p>
+<h6 id="release-notes">Release Notes</h6>
+<ul>
+<li>adding ability for modifier mixins to accept multiple parameters</li>
+</ul>
 <h4 id="version-2-2-0">Version 2.2.0</h4>
 <p>Released: 8th August 2015</p>
 <h6 id="release-notes">Release Notes</h6>
