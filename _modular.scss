@@ -37,21 +37,29 @@ http://github.com/esr360/Modular/
 // Set the default selector type (flex, chain, static)
 $type: flex;
 
-@mixin component($component, $type: map-get($config, selector-type)) {
-	$component: $component !global;
-	@if $type == flex {
-		.#{$component},
-		[class*="#{$component}-"] {
-			@content;
-		}	
-	} @else if $type == chain {
-		[class*="#{$component}-"] {
-			@content;
+@mixin component($components, $type: map-get($config, selector-type)) {
+	$component: $components !global;
+	$selectors: ();
+	@each $component in $components {
+		@if $type == flex {
+			$selectors: join($selectors, '.#{$component}');
+			$selectors: join($selectors, '[class*="#{$component}-"]');
+		} @else if $type == chain {
+			$selectors: join($selectors, '[class*="#{$component}-"]');
+		} @else if $type == static {
+			$selectors: join($selectors, '.#{$component}');
 		}
-	} @else if $type == static {
-		.#{$component} {
-			@content;
-		}
+	}
+	$selectors: to-string($selectors, ", ");
+	#{$selectors} {
+		@content;
+	}
+}
+
+// Alias for multiple components
+@mixin components($components, $type: $type) {
+	@include component($components, $type) {
+		@content;
 	}
 }
 
@@ -69,22 +77,30 @@ $type: flex;
 //
 //	<div class="header_wrapper">...</div>
 
-@mixin sub-component($sub-component, $type: $type) {
-	@at-root {
+@mixin sub-component($sub-components, $type: $type) {
+	$selectors: ();
+	@each $sub-component in $sub-components {
 		@if $type == flex {
-			.#{$component}_#{$sub-component},
-			[class*="#{$component}_#{$sub-component}-"] {
-				@content;
-			}
+			$selectors: join($selectors, '.#{$component}_#{$sub-component}');
+			$selectors: join($selectors, '[class*="#{$component}_#{$sub-component}-"]');
 		} @else if $type == chain {
-			[class*="#{$component}_#{$sub-component}-"] {
-				@content;
-			}
+			$selectors: join($selectors, '[class*="#{$component}_#{$sub-component}-"]');
 		} @else if $type == static {
-			.#{$component}_#{$sub-component} {
-				@content;
-			}
+			$selectors: join($selectors, '.#{$component}_#{$sub-component}');
 		}
+	}
+	$selectors: to-string($selectors, ", ");
+	@at-root {
+		#{$selectors} {
+			@content;
+		}
+	}	
+}
+
+// Alias for multiple components
+@mixin sub-components($sub-components, $type: $type) {
+	@include sub-component($sub-components, $type) {
+		@content;
 	}
 }
 
@@ -104,20 +120,21 @@ $type: flex;
 //		<div class="logo">...</div>
 //	</div>
 
-@mixin overwrite($component, $type: $type) {
-	@if $type == flex {
-		.#{$component},
-		[class*="#{$component}-"] {
-			@content;
-		}	
-	} @else if $type == chain {
-		[class*="#{$component}-"] {
-			@content;
+@mixin overwrite($components, $type: $type) {
+	$selectors: ();
+	@each $component in $components {
+		@if $type == flex {
+			$selectors: join($selectors, '.#{$component}');
+			$selectors: join($selectors, '[class*="#{$component}-"]');
+		} @else if $type == chain {
+			$selectors: join($selectors, '[class*="#{$component}-"]');
+		} @else if $type == static {
+			$selectors: join($selectors, '.#{$component}');
 		}
-	} @else if $type == static {
-		.#{$component} {
-			@content;
-		}
+	}
+	$selectors: to-string($selectors, ", ");
+	#{$selectors} {
+		@content;
 	}
 }
 
@@ -145,20 +162,21 @@ $type: flex;
 //		<input class="form_input" type="text" />
 //	</div>
 
-@mixin overwrite-sub($sub-component, $type: $type) {
-	@if $type == flex {
-		.#{$component}_#{$sub-component},
-		[class*="#{$component}_#{$sub-component}-"] {
-			@content;
-		}	
-	} @else if $type == chain {
-		[class*="#{$component}_#{$sub-component}-"] {
-			@content;
+@mixin overwrite-sub($sub-components, $type: $type) {
+	$selectors: ();
+	@each $sub-component in $sub-components {
+		@if $type == flex {
+			$selectors: join($selectors, '.#{$component}_#{$sub-component}');
+			$selectors: join($selectors, '[class*="#{$component}_#{$sub-component}-"]');
+		} @else if $type == chain {
+			$selectors: join($selectors, '[class*="#{$component}_#{$sub-component}-"]');
+		} @else if $type == static {
+			$selectors: join($selectors, '.#{$component}_#{$sub-component}');
 		}
-	} @else if $type == static {
-		.#{$component}_#{$sub-component} {
-			@content;
-		}
+	}
+	$selectors: to-string($selectors, ", ");
+	#{$selectors} {
+		@content;
 	}
 }
 
