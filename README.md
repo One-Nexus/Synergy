@@ -72,7 +72,7 @@ Well, no. Perhaps this was true many years ago, but today, [any performance impa
 
 *Why bother using a mixin for this? Why not just write the wildcard selector?*
 
-For starters, writing `[class*="component-"]` over and over again can become tedious. Secondly, for our core styles we also need them to be applied to the naked `.component` class, meaning we would now have to write:
+For starters, writing `[class*="component-"]` over and over again can become tedious. Secondly, for the core styles we also need them to be applied to the naked `.component` class, meaning we would now have to write:
 
 ```scss
 .component,
@@ -131,7 +131,7 @@ To allow any subsequent modules to access the current module's options, set the 
 }
 ```
 
-We now have the basis for our example module. Next, the actual component itself:
+The basis for your module is now ready. Next, the actual component itself:
 
 ```scss
 @mixin header($custom: ()) {
@@ -155,7 +155,7 @@ We now have the basis for our example module. Next, the actual component itself:
 } // @mixin header
 ```
 
-To call an option, the [**map-get**](http://sass-lang.com/documentation/Sass/Script/Functions.html#map_get-instance_method) feature of Sass is used. We can now create our header with the following HTML:
+To call an option, the [**map-get**](http://sass-lang.com/documentation/Sass/Script/Functions.html#map_get-instance_method) feature of Sass is used. The basic header can now be created with the following HTML:
 
 ```html
 <div class="header">
@@ -486,7 +486,7 @@ This mixin allows you to overwrite the styles of existing components and modifie
 
 #### Overwrite-Sub
 
-As above, this mixin is used for overwriting styles for an existing sub-component in alternative context. 3 parameters are accepted for the `overwrite-sub()` mixin:
+As above, this mixin is used for overwriting styles for an existing sub-component in alternative context. 4 parameters are accepted for the `overwrite-sub()` mixin:
 
 * `$sub-components` - the name of the component(s) you wish to overwrite [required]
 * `$type` - as above, this can be either `flex` (default), `chain` or `static` [optional]
@@ -579,7 +579,7 @@ As above, this mixin is used for overwriting styles for an existing sub-componen
 		color: red;
 	}
 	
-	@includesub-component(icon) {
+	@include sub-component(icon) {
 		@include overwrite-sub(title, $special: adjacent-sibling) {
 			color: blue;
 		}
@@ -664,21 +664,19 @@ The `nested-modifier()` mixin is used to nest modifiers within one another, mean
 
 * `$modifiers` - the name of your modifier(s) [required]
 
-_`print` used below isn't a real/valid property and is used for demonstrational purposes only_
-
 ```scss
 @include component(button) {
 	
-	print: "null";
+	content: "null";
 
 	@include modifier(white) {
-		print: "foo";
+		content: "foo";
 	}
 	
 	@include modifier(border) {
-		print: "bar";
+		content: "bar";
 		@include nested-modifier(white) {
-			print: "baz";
+			content: "baz";
 		}
 	}
 	
@@ -944,7 +942,7 @@ margin-top: 50px;
 
 #### Hybrid Options
 
-In some cases, you may require a hybrid of the above 2 options. You may have a set of styles you wish to use conditionally, and you may wish for these styles to vary depending on the value passed. Let's look at the following example - imagine we have a side header on our website, and we want to easily change whether it appears on the left or right hand side:
+In some cases, you may require a hybrid of the above 2 options. You may have a set of styles you wish to use conditionally, and you may wish for these styles to vary depending on the value passed. Let's look at the following example - imagine your website has a side header, and you want to easily change whether it appears on the left or right hand side:
 
 ```scss
 @mixin header($custom: ()) {
@@ -993,7 +991,7 @@ If you've completely followed this documentation so far you may have already pic
 <div class="header-right-side">..</div>
 ```
 
-And just to reiterate, with the `side` option set to either left or right in our above example, we don't need to pass any modifiers to our HTML, we just use:
+And just to reiterate, with the `side` option set to either left or right in the above example, you don't need to pass any modifiers to the HTML, we just use:
 
 ```html
 <div class="header">...</div>
@@ -1044,8 +1042,8 @@ To include your header with customised options, this is done like so:
 ```scss
 @include header((
 	dark : true,
-	top  : 0,
-	side : left	
+	side : left,
+	top  : 0
 ));
 ```
 
@@ -1072,7 +1070,7 @@ What if you want to create a module whose options can be accessed by other modul
 } // @mixin grid
 ```
 
-This is entirely possible using Modular, and requires the addition of the `!global` flag:
+This is entirely possible, and requires the addition of the `!global` flag:
 
 ```scss
 @mixin grid($custom: ()) {
@@ -1096,7 +1094,7 @@ This is entirely possible using Modular, and requires the addition of the `!glob
 }
 ```
 
-As long as our other modules are included after this one, we can now access the breakpoint values using:
+As long as your other modules are included after this one, we can now access the breakpoint values using:
 
 ```scss
 width: breakpoint(break-3);
@@ -1106,7 +1104,7 @@ width: breakpoint(break-3);
 
 Let's create a simple example project with a typography file, some buttons and a header, taking a complete modular approach.
 
-First, we'll create our main project's Sass files:
+First, we'll create the main project's Sass files:
 
 ```scss
 app.scss
@@ -1340,7 +1338,7 @@ _theme.scss
 
 ```
 
-Every configurable aspect of our project can now quickly and easily be changed from just one file, whilst retaining a completely modular architecture.
+Every configurable aspect of your project can now quickly and easily be changed from just one file, whilst retaining a completely modular architecture.
 
 ### Credits & Notes
 

@@ -47,7 +47,7 @@
 <p><em>But aren&#39;t wildcard selectors bad for performance?</em></p>
 <p>Well, no. Perhaps this was true many years ago, but today, <a href="http://www.telerik.com/blogs/css_tip_star_selector_not_that_bad">any performance impact is negilable</a> (and this article is 3 years old). <a href="http://benfrain.com/css-performance-revisited-selectors-bloat-expensive-styles/">Further reading</a>. </p>
 <p><em>Why bother using a mixin for this? Why not just write the wildcard selector?</em></p>
-<p>For starters, writing <code>[class*=&quot;component-&quot;]</code> over and over again can become tedious. Secondly, for our core styles we also need them to be applied to the naked <code>.component</code> class, meaning we would now have to write:</p>
+<p>For starters, writing <code>[class*=&quot;component-&quot;]</code> over and over again can become tedious. Secondly, for the core styles we also need them to be applied to the naked <code>.component</code> class, meaning we would now have to write:</p>
 <pre><code class="lang-scss">.component,
 [class*=&quot;component-&quot;] {
     ...
@@ -93,7 +93,7 @@
 
 }
 </code></pre>
-<p>We now have the basis for our example module. Next, the actual component itself:</p>
+<p>The basis for your module is now ready. Next, the actual component itself:</p>
 <pre><code class="lang-scss">@mixin header($custom: ()) {
 
     $header: config((
@@ -114,7 +114,7 @@
 
 } // @mixin header
 </code></pre>
-<p>To call an option, the <a href="http://sass-lang.com/documentation/Sass/Script/Functions.html#map_get-instance_method"><strong>map-get</strong></a> feature of Sass is used. We can now create our header with the following HTML:</p>
+<p>To call an option, the <a href="http://sass-lang.com/documentation/Sass/Script/Functions.html#map_get-instance_method"><strong>map-get</strong></a> feature of Sass is used. The basic header can now be created with the following HTML:</p>
 <pre><code class="lang-html">&lt;div class=&quot;header&quot;&gt;
     ...
 &lt;/div&gt;
@@ -378,7 +378,7 @@
 &lt;div class=&quot;navigation&quot;&gt;...&lt;/div&gt;
 </code></pre>
 <h4 id="overwrite-sub">Overwrite-Sub</h4>
-<p>As above, this mixin is used for overwriting styles for an existing sub-component in alternative context. 3 parameters are accepted for the <code>overwrite-sub()</code> mixin:</p>
+<p>As above, this mixin is used for overwriting styles for an existing sub-component in alternative context. 4 parameters are accepted for the <code>overwrite-sub()</code> mixin:</p>
 <ul>
 <li><code>$sub-components</code> - the name of the component(s) you wish to overwrite [required]</li>
 <li><code>$type</code> - as above, this can be either <code>flex</code> (default), <code>chain</code> or <code>static</code> [optional]</li>
@@ -458,7 +458,7 @@
         color: red;
     }
 
-    @includesub-component(icon) {
+    @include sub-component(icon) {
         @include overwrite-sub(title, $special: adjacent-sibling) {
             color: blue;
         }
@@ -527,19 +527,18 @@
 <ul>
 <li><code>$modifiers</code> - the name of your modifier(s) [required]</li>
 </ul>
-<p><em><code>print</code> used below isn&#39;t a real/valid property and is used for demonstrational purposes only</em></p>
 <pre><code class="lang-scss">@include component(button) {
 
-    print: &quot;null&quot;;
+    content: &quot;null&quot;;
 
     @include modifier(white) {
-        print: &quot;foo&quot;;
+        content: &quot;foo&quot;;
     }
 
     @include modifier(border) {
-        print: &quot;bar&quot;;
+        content: &quot;bar&quot;;
         @include nested-modifier(white) {
-            print: &quot;baz&quot;;
+            content: &quot;baz&quot;;
         }
     }
 
@@ -751,7 +750,7 @@
 <pre><code class="lang-scss">margin-top: 50px;
 </code></pre>
 <h4 id="hybrid-options">Hybrid Options</h4>
-<p>In some cases, you may require a hybrid of the above 2 options. You may have a set of styles you wish to use conditionally, and you may wish for these styles to vary depending on the value passed. Let&#39;s look at the following example - imagine we have a side header on our website, and we want to easily change whether it appears on the left or right hand side:</p>
+<p>In some cases, you may require a hybrid of the above 2 options. You may have a set of styles you wish to use conditionally, and you may wish for these styles to vary depending on the value passed. Let&#39;s look at the following example - imagine your website has a side header, and you want to easily change whether it appears on the left or right hand side:</p>
 <pre><code class="lang-scss">@mixin header($custom: ()) {
 
     $header: config((
@@ -787,7 +786,7 @@
 </code></pre>
 <pre><code class="lang-html">&lt;div class=&quot;header-right-side&quot;&gt;..&lt;/div&gt;
 </code></pre>
-<p>And just to reiterate, with the <code>side</code> option set to either left or right in our above example, we don&#39;t need to pass any modifiers to our HTML, we just use:</p>
+<p>And just to reiterate, with the <code>side</code> option set to either left or right in the above example, you don&#39;t need to pass any modifiers to the HTML, we just use:</p>
 <pre><code class="lang-html">&lt;div class=&quot;header&quot;&gt;...&lt;/div&gt;
 </code></pre>
 <h5 id="getting-creative">Getting Creative</h5>
@@ -825,8 +824,8 @@
 <p>To include your header with customised options, this is done like so:</p>
 <pre><code class="lang-scss">@include header((
     dark : true,
-    top  : 0,
-    side : left    
+    side : left,
+    top  : 0
 ));
 </code></pre>
 <p>And that&#39;s it, you now have a completely custoimzable header which can be modified with extreme ease.</p>
@@ -847,7 +846,7 @@
 
 } // @mixin grid
 </code></pre>
-<p>This is entirely possible using Modular, and requires the addition of the <code>!global</code> flag:</p>
+<p>This is entirely possible, and requires the addition of the <code>!global</code> flag:</p>
 <pre><code class="lang-scss">@mixin grid($custom: ()) {
 
     $grid: ((
@@ -868,12 +867,12 @@
     @return map-get(map-get($grid, breakpoints), $breakpoint);
 }
 </code></pre>
-<p>As long as our other modules are included after this one, we can now access the breakpoint values using:</p>
+<p>As long as your other modules are included after this one, we can now access the breakpoint values using:</p>
 <pre><code class="lang-scss">width: breakpoint(break-3);
 </code></pre>
 <h4 id="setting-up-a-project">Setting Up A Project</h4>
 <p>Let&#39;s create a simple example project with a typography file, some buttons and a header, taking a complete modular approach.</p>
-<p>First, we&#39;ll create our main project&#39;s Sass files:</p>
+<p>First, we&#39;ll create the main project&#39;s Sass files:</p>
 <pre><code class="lang-scss">app.scss
 _typography.scss
 _buttons.scss
@@ -1088,7 +1087,7 @@ _theme.scss
     top           : 0
 ));
 </code></pre>
-<p>Every configurable aspect of our project can now quickly and easily be changed from just one file, whilst retaining a completely modular architecture.</p>
+<p>Every configurable aspect of your project can now quickly and easily be changed from just one file, whilst retaining a completely modular architecture.</p>
 <h3 id="credits-notes">Credits &amp; Notes</h3>
 <ul>
 <li><a href="https://github.com/at-import/sassy-maps">Sassy Maps</a></li>
