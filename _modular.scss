@@ -17,8 +17,9 @@ http://github.com/esr360/Modular/
 //	5. modifier()
 //	6. nested-modifier()
 //	7. extend-modifiers()
-//	8. setting()
-// 	9. option()
+//	8. context()
+//	9. setting()
+// 	10. option()
 
 //-----------------------------------------------------------------
 
@@ -123,16 +124,30 @@ $type: flex;
 //		<div class="logo">...</div>
 //	</div>
 
-@mixin overwrite($components, $type: $type) {
+@mixin overwrite($components, $type: $type, $special: null) {
 	$selectors: ();
 	@each $component in $components {
+		$selector: #{$component};
 		@if $type == flex {
-			$selectors: join($selectors, '.#{$component}');
-			$selectors: join($selectors, '[class*="#{$component}-"]');
+			@if $special == adjacent-sibling {
+				$selectors: join($selectors, '+ .#{$selector}');
+				$selectors: join($selectors, '+ [class*="#{$selector}-"]');
+			} @else {
+				$selectors: join($selectors, '.#{$selector}');
+				$selectors: join($selectors, '[class*="#{$selector}-"]');
+			}
 		} @else if $type == chain {
-			$selectors: join($selectors, '[class*="#{$component}-"]');
+			@if $special == adjacent-sibling {
+				$selectors: join($selectors, '+ [class*="#{$selector}-"]');
+			} @else {
+				$selectors: join($selectors, '[class*="#{$selector}-"]');
+			}
 		} @else if $type == static {
-			$selectors: join($selectors, '.#{$component}');
+			@if $special == adjacent-sibling {
+				$selectors: join($selectors, '+ .#{$selector}');
+			} @else {
+				$selectors: join($selectors, '.#{$selector}');
+			}
 		}
 	}
 	$selectors: to-string($selectors, ", ");
@@ -165,17 +180,31 @@ $type: flex;
 //		<input class="form_input" type="text" />
 //	</div>
 
-@mixin overwrite-sub($sub-components, $type: $type, $parent: null) {
+@mixin overwrite-sub($sub-components, $type: $type, $parent: null, $special: null) {
 	$component: if($parent != null, $parent, $component);
 	$selectors: ();
 	@each $sub-component in $sub-components {
+		$selector: #{$component}_#{$sub-component};
 		@if $type == flex {
-			$selectors: join($selectors, '.#{$component}_#{$sub-component}');
-			$selectors: join($selectors, '[class*="#{$component}_#{$sub-component}-"]');
+			@if $special == adjacent-sibling {
+				$selectors: join($selectors, '+ .#{$selector}');
+				$selectors: join($selectors, '+ [class*="#{$selector}-"]');
+			} @else {
+				$selectors: join($selectors, '.#{$selector}');
+				$selectors: join($selectors, '[class*="#{$selector}-"]');
+			}
 		} @else if $type == chain {
-			$selectors: join($selectors, '[class*="#{$component}_#{$sub-component}-"]');
+			@if $special == adjacent-sibling {
+				$selectors: join($selectors, '+ [class*="#{$selector}-"]');
+			} @else {
+				$selectors: join($selectors, '[class*="#{$selector}-"]');
+			}
 		} @else if $type == static {
-			$selectors: join($selectors, '.#{$component}_#{$sub-component}');
+			@if $special == adjacent-sibling {
+				$selectors: join($selectors, '+ .#{$selector}');
+			} @else {
+				$selectors: join($selectors, '.#{$selector}');
+			}
 		}
 	}
 	$selectors: to-string($selectors, ", ");
@@ -301,7 +330,38 @@ $type: flex;
 	}
 }
 
-// 8. Setting
+// 8. Context
+// Apply styles when in special context
+//-----------------------------------------------------------------
+
+@mixin context($context) {
+	$child-selectors: &;
+	$selectors: ();
+	@each $item in $context {
+		@if map-get($config, selector-type) == flex {
+			$selectors: join($selectors, '.#{$component}');
+			$selectors: join($selectors, '[class*="#{$component}-"]');
+		} @else if map-get($config, selector-type) == chain {
+			$selectors: join($selectors, '[class*="#{$component}-"]');
+		} @else if map-get($config, selector-type) == static {
+			$selectors: join($selectors, '.#{$component}');
+		}
+	}
+	$selectors: to-string($selectors, ", ");
+	@if $context == parent-hovered {
+		@at-root {
+			#{$selectors} {
+				&:hover {
+					#{$child-selectors} {
+						@content;
+					}
+				}
+			}
+		}
+	}
+}
+
+// 9. Setting
 // Add a configurable setting to a component
 //-----------------------------------------------------------------
 
@@ -345,7 +405,7 @@ $extend-settings: true;
 	}
 }
 
-// 9. Option
+// 10. Option
 // Add an option to an existing setting
 //-----------------------------------------------------------------
 
@@ -499,5 +559,8 @@ $extend-settings: true;
 			$map-old: map-set($map-old, $key, $new-value);
 		}
 	}
+	// Store merged map in a variable
+	$config: $map-old !global;
+	// Return merged map
 	@return $map-old;
 }

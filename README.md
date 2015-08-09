@@ -31,7 +31,7 @@ What if you could just do this:
 
 The benefits of using this HTML over conventional BEM syntax are self-apparant. However, you may be looking at that thinking of several reasons why it wouldn't work; what if I want to only use the "button" class on its own? What if I only want a large button, or only want a success button? Well, with Modular, all this is possible.
 
-```js
+```scss
 @include component(button) {
 	// core button styles
 	...
@@ -74,7 +74,7 @@ Well, no. Perhaps this was true many years ago, but today, [any performance impa
 
 For starters, writing `[class*="component-"]` over and over again can become tedious. Secondly, for our core styles we also need them to be applied to the naked `.component` class, meaning we would now have to write:
 
-```css
+```scss
 .component,
 [class*="component-"] {
 	...
@@ -87,16 +87,16 @@ Which is exactly what the  `component()` mixin does. The reason `[class*="compon
 
 Modular allows you to create configurable components with customizable settings. To configure a new module, create a mixin named after your module (ensure the name is unique):
 
-```js
-@mixin header($config: ()) {
+```scss
+@mixin header($custom: ()) {
 	...	
 }
 ```
 
-The `$config` variable passed to the mixin is what will serve any custom options when the module is included. For the default options, a new variable named after your module is used, in our example this is `$header`. Underneath, we pass the options to a common global variable: `$config !global`. This is so every module has a common variable that can be accessed by the Modular mixins:
+The `$custom` variable passed to the mixin is what will serve any custom options when the module is included. For the default options, a new variable named after your module is used, in our example this is `$header`.
 
-```js
-@mixin header($config: ()) {
+```scss
+@mixin header($custom: ()) {
 
 	$header: config((
 		
@@ -104,9 +104,7 @@ The `$config` variable passed to the mixin is what will serve any custom options
 		top      : 50px,
 		bg-color : black
 		
-	), $config);
-	
-	$config: $header !global;
+	), $custom);
 	
 	...
 		
@@ -115,10 +113,10 @@ The `$config` variable passed to the mixin is what will serve any custom options
 
 > `config()` is a custom function which merges multi-dimensional maps - above it is being used to merge the default options with any custom options.
 
-To allow any subsequent modules to access the current module's options, set the config variable (eg: `$header`) to `!global`:
+To allow any subsequent modules to access the current module's options, set the module's config variable (eg: `$header`) to `!global`:
 
-```js
-@mixin header($config: ()) {
+```scss
+@mixin header($custom: ()) {
 
 	$header: config((
 		
@@ -126,9 +124,7 @@ To allow any subsequent modules to access the current module's options, set the 
 		top      : 50px,
 		bg-color : black
 		
-	), $config) !global;
-	
-	$config: $header !global;
+	), $custom) !global;
 	
 	...
 		
@@ -137,8 +133,8 @@ To allow any subsequent modules to access the current module's options, set the 
 
 We now have the basis for our example module. Next, the actual component itself:
 
-```js
-@mixin header($config: ()) {
+```scss
+@mixin header($custom: ()) {
 
 	$header: config((
 		
@@ -146,9 +142,7 @@ We now have the basis for our example module. Next, the actual component itself:
 		top  : 50px,
 		bg-color : black
 		
-	), $config);
-	
-	$config: $header !global;
+	), $custom);
 
 	@include component(header) {
 		
@@ -171,8 +165,8 @@ To call an option, the [**map-get**](http://sass-lang.com/documentation/Sass/Scr
 
 Read the [Advanced Documentation](#module-configuration-1) section to find out how to use bool options, for something like:
 
-```js
-@mixin header($config: ()) {
+```scss
+@mixin header($custom: ()) {
 
 	$header: config((
 		
@@ -180,7 +174,7 @@ Read the [Advanced Documentation](#module-configuration-1) section to find out h
 		dark : false,
 		side : false // left or right
 		
-	), $config);
+	), $custom);
 	
 	...
 		
@@ -203,6 +197,7 @@ Read the [Advanced Documentation](#module-configuration-1) section to find out h
 * [Modifier](#modifier)
 * [Nested Modifier](#nested-modifier)
 * [Extend Modifiers](#extended-modifiers)
+* [Context](#context)
 * [Setting](#module-configuration)
 * [Option](#hybrid-options)
 
@@ -222,7 +217,7 @@ The `component()` mixin is what generates the selectors for your component/modul
 * `$components` - the name of your component(s) [required]
 * `$type` - this defines how the mixin generates the selectors for your component(s) [optional]
 
-```css
+```scss
 @include component(header) {
 	...
 }
@@ -230,7 +225,7 @@ The `component()` mixin is what generates the selectors for your component/modul
 
 `$components` is usually a single value but can also be a list, eg. `(header, footer)`, should you wish to apply styles to more than one main component. For such instances, an *alias* mixin of `components()` is available:
 
-```css
+```scss
 @include components((header, footer)) {
 	...
 }
@@ -240,7 +235,7 @@ The `component()` mixin is what generates the selectors for your component/modul
 
 ##### Flex
 
-```css
+```scss
 @include component(header, flex) {
 	...
 }
@@ -250,7 +245,7 @@ This is the default value for a component; it creates wildcards for both `.compo
 
 Or if using the default `$type` value of `flex`, you do not need to pass a second parmeter here:
 
-```css
+```scss
 @include component(header) {
 	...
 }
@@ -258,7 +253,7 @@ Or if using the default `$type` value of `flex`, you do not need to pass a secon
 
 ##### Chain
 
-```css
+```scss
 @include component(header, chain) {
 	...
 }
@@ -268,7 +263,7 @@ The chain option should be used if you are looking to optimise your CSS output, 
 
 ##### Static
 
-```css
+```scss
 @include component(header, static) {
 	...
 }
@@ -278,17 +273,17 @@ The static option creates only the naked selector for your component; ie - `.sel
 
 ##### Advanced Example
 
-```css
+```scss
 @include components((header, footer), static) {
-	/* apply to both header and footer components */
+	// apply to both header and footer components
 }
 
 @include component(header, static) {
-	/* apply only to header */
+	// apply only to header
 }
 
 @include component(footer, static) {
-	/* apply only to footer */
+	// apply only to footer
 }
 ```
 
@@ -305,7 +300,7 @@ To keep as similar to BEM as possible, Modular provies an easy way to create rel
 * `$sub-components` - the name of your sub-component(s) [optional]
 * `$type` - as above, this can be either `flex` (default), `chain` or `static` [optional]
 
-```js
+```scss
 @include component(header) {
 	
 	@include sub-component(wrapper) {
@@ -321,7 +316,7 @@ To keep as similar to BEM as possible, Modular provies an easy way to create rel
 
 Sub-Components work like regular components, so you can add modifiers:
 
-```js
+```scss
 @include component(header) {
 	
 	@include sub-component(wrapper) {
@@ -339,7 +334,7 @@ Sub-Components work like regular components, so you can add modifiers:
 
 ##### Alias Mixin For Multiple Components
 
-```js
+```scss
 @include component(footer) {
 	
 	@include sub-components((nav, copyright)) {
@@ -353,7 +348,7 @@ Sub-Components work like regular components, so you can add modifiers:
 
 By not passing a parameter to the `sub-component()` mixin, you can apply styles to all sub-components of the parent component:
 
-```js
+```scss
 @include component(widget) {
 
 	@include sub-component {
@@ -382,7 +377,7 @@ By not passing a parameter to the `sub-component()` mixin, you can apply styles 
 
 ##### Advanced Example
 
-```js
+```scss
 @include component(footer) {
 	
 	...
@@ -417,8 +412,9 @@ This mixin allows you to overwrite the styles of existing components and modifie
 
 * `$components` - the name of the component(s) you wish to overwrite [required]
 * `$type` - as above, this can be either `flex` (default), `chain` or `static` [optional]
+* `$special` - set a special operator [optonal]
 
-```js
+```scss
 @include components((logo, nav)) {
 	color: black;	
 }
@@ -459,6 +455,35 @@ This mixin allows you to overwrite the styles of existing components and modifie
 </div>	
 ```
 
+##### Special Operators
+
+* `adjacent-sibling` - overwrite a component when it is also an adjacent sibling
+* _more comming soon..._
+
+###### Adjacent Sibling
+
+```scss
+@include component(logo) {
+	color: red;
+}
+	
+@include component(navigation) {
+
+	@include overwrite(logo, $special: adjacent-sibling) {
+		color: blue;
+	}
+	
+}
+```
+
+```html
+<div class="navigation">...</div>
+<div class="logo">I'm blue!</div>
+
+<div class="logo">I'm red!</div>
+<div class="navigation">...</div>
+```
+
 #### Overwrite-Sub
 
 As above, this mixin is used for overwriting styles for an existing sub-component in alternative context. 3 parameters are accepted for the `overwrite-sub()` mixin:
@@ -466,10 +491,11 @@ As above, this mixin is used for overwriting styles for an existing sub-componen
 * `$sub-components` - the name of the component(s) you wish to overwrite [required]
 * `$type` - as above, this can be either `flex` (default), `chain` or `static` [optional]
 * `$parent` - the parent of your sub-component [optional]
+* `$special` - set a special operator [optonal]
 
 > The `$parent` parameter is used if you are including this mixin inside a different component to your sub-component's parent.
 
-```js
+```scss
 @include component(form) {
 
 	@include sub-component(input) {
@@ -492,7 +518,7 @@ As above, this mixin is used for overwriting styles for an existing sub-componen
 
 ##### Alias Mixin For Multiple Components
 
-```js
+```scss
 @include component(form) {
 
 	@include sub-component(input) {
@@ -513,7 +539,7 @@ As above, this mixin is used for overwriting styles for an existing sub-componen
 
 ##### Using Inside a Different Component
 
-```js
+```scss
 @include component(heading) {
 	
 	@include sub-component(group) {
@@ -539,6 +565,41 @@ As above, this mixin is used for overwriting styles for an existing sub-componen
 </div>
 ```
 
+##### Special Operators
+
+* `adjacent-sibling` - overwrite a component when it is also an adjacent sibling
+* _more comming soon..._
+
+###### Adjacent Sibling
+
+```scss
+@include component(widget) {
+
+	@include sub-component(title) {
+		color: red;
+	}
+	
+	@includesub-component(icon) {
+		@include overwrite-sub(title, $special: adjacent-sibling) {
+			color: blue;
+		}
+	}
+	
+}
+```
+
+```html
+<div class="widget">
+	<div class="widget_icon">...</div>
+	<div class="widget_title">I'm blue!</div>
+</div>
+
+<div class="widget">
+	<div class="widget_title">I'm red!</div>
+	<div class="widget_icon">...</div>
+</div>
+```
+
 #### Modifier
 
 The `modifier()` mixin generates the selector for any modifier of your component, for example a **small** or **large** modifier. This mixin accepts only 1 paramter:
@@ -546,7 +607,7 @@ The `modifier()` mixin generates the selector for any modifier of your component
 * `$modifiers` - the name of your modifier(s) [required]
 
 
-```js
+```scss
 @include component(button) {
 	
 	...
@@ -577,7 +638,7 @@ You can use any number of modifiers on a single element in the HTML, and in any 
 
 ##### Alias Mixin For Multiple Modifiers
 
-```js
+```scss
 @include component(button) {
 	
 	...
@@ -605,7 +666,7 @@ The `nested-modifier()` mixin is used to nest modifiers within one another, mean
 
 _`print` used below isn't a real/valid property and is used for demonstrational purposes only_
 
-```js
+```scss
 @include component(button) {
 	
 	print: "null";
@@ -638,7 +699,7 @@ This means that in your HTML the element would require both the **border** and *
 
 ##### Alternate Use-Case
 
-```js
+```scss
 @include component(header) {
 
 	@include modifier(side) {
@@ -656,7 +717,7 @@ This means that in your HTML the element would require both the **border** and *
 
 ##### Alias Mixin For Multiple Modifiers
 
-```js
+```scss
 @include component(button) {
 
 	@include modifier(buy-now) {
@@ -680,7 +741,7 @@ This means that in your HTML the element would require both the **border** and *
 
 This mixin allows you to extend multiple modifiers into a new, seperate modifer, essentially combining several modifiers into one.
 
-```js
+```scss
 @include component(button) {
 
 	@include modifier(round)   {...}
@@ -698,12 +759,49 @@ This mixin allows you to extend multiple modifiers into a new, seperate modifer,
 <div class="button-primary">...</div>
 ```
 
+#### Context
+
+The `context()` mixin allows you to apply styles to your component when certain conditions are met. This mixin accepts 1 parameter:
+
+* `$context` - the name of the predefined condition you wish to be met
+
+The following conditions can be passed to the mixin:
+
+* `parent-hovered` - apply styles to a sub-component when the parent component is hovered
+
+##### Parent-Hovered
+
+```scss
+@include component(widget) {
+
+	@include sub-component(icon) {
+		color: blue;
+		@include context(parent-hovered) {
+			color: white;
+		}	
+	}
+	
+//	This is equivilent to:
+//
+//	@include sub-component(icon) {
+//		color: blue;
+//	}
+//
+//	&:hover {
+//		@include overwrite-sub(icon) {
+//			color: white;
+//		}
+//	}
+
+}
+```
+
 ### Module Configuration
 
 As outlined in the [overview](#overview) section, Modular allows you to configure your components with customizable options.
 
-```js
-@mixin header($config: ()) {
+```scss
+@mixin header($custom: ()) {
 
 	$header: config((
 		
@@ -711,9 +809,7 @@ As outlined in the [overview](#overview) section, Modular allows you to configur
 		bg-color : black,
 		top      : 50px
 		
-	), $config);
-	
-	$config: $header !global;
+	), $custom);
 
 	@include component(header) {
 		
@@ -728,8 +824,8 @@ As outlined in the [overview](#overview) section, Modular allows you to configur
 
 For all intents and purposes, there are 2 types of options; bools and non-bools. A bool option is one whose value determines whether or not some code should be applied. A non-bool option is one whose value is used as a value for a CSS property. In the below example there is one of each.
 
-```js
-@mixin header($config: ()) {
+```scss
+@mixin header($custom: ()) {
 
 	$header: config((
 		
@@ -737,9 +833,7 @@ For all intents and purposes, there are 2 types of options; bools and non-bools.
 		dark : false,
 		top  : 50px
 		
-	), $config);
-	
-	$config: $header !global;
+	), $custom);
 
 	@include component(header) {
 		
@@ -758,8 +852,8 @@ For all intents and purposes, there are 2 types of options; bools and non-bools.
 
 Your configuration can be infinitely nested, like so:
 
-```js
-@mixin global($config: ()) {
+```scss
+@mixin global($custom: ()) {
 
 	$global: config((
 		
@@ -776,7 +870,7 @@ Your configuration can be infinitely nested, like so:
 			)
 		)
 		
-	), $config) !global;
+	), $custom) !global;
 	
 	...
 		
@@ -785,21 +879,21 @@ Your configuration can be infinitely nested, like so:
 
 When your configuration is more than one level deep, to access the values using `map-get`, you will end up having to do something like:
 
-```js
-map-get(map-get(map-get($config, typography), colors), primary;
+```scss
+map-get(map-get(map-get($global, typography), colors), primary;
 ```
 
 Piece of cake, right? I'm sure you'd agree repeating this over and over in your other modules would quickly become tedious, so for something like this you could create a function underneath the main mixin for your module, similar to the following:
 
-```js
+```scss
 @function color($color) {
-	map-get(map-get(map-get($config, typography), colors), $color;
+	map-get(map-get(map-get($global, typography), colors), $color;
 }
 ```
 
 You can now access the **colors** map from your config using `color(primary)`, for example:
 
-```css
+```scss
 background-color: color(primary);
 ```
 
@@ -815,8 +909,8 @@ If your option is a bool, you can use the `setting` mixin. The styles added with
 
 If you are watching your CSS output, you may wish to remove these modifiers (and related wildcard selectors) from the generated styles and only use them conditionally. To do so, you can pass the `extend-settings` option to your module's config, and set it to **false**:
 
-```js
-@mixin header($config: ()) {
+```scss
+@mixin header($custom: ()) {
 
 	$header: config((
 		
@@ -825,7 +919,7 @@ If you are watching your CSS output, you may wish to remove these modifiers (and
 		dark : false,
 		top  : 50px
 		
-	), $config);
+	), $custom);
 	
 	...
 		
@@ -838,13 +932,13 @@ To disable the extension of settings globally by default, set the `$extend-setti
 
 If your option is a CSS property, to call the option in your component the **map-get** function is used, like so:
 
-```js
+```scss
 margin-top: map-get($header, top);
 ```
 
 which will generate:
 
-```js
+```scss
 margin-top: 50px;
 ```
 
@@ -852,17 +946,15 @@ margin-top: 50px;
 
 In some cases, you may require a hybrid of the above 2 options. You may have a set of styles you wish to use conditionally, and you may wish for these styles to vary depending on the value passed. Let's look at the following example - imagine we have a side header on our website, and we want to easily change whether it appears on the left or right hand side:
 
-```js
-@mixin header($config: ()) {
+```scss
+@mixin header($custom: ()) {
 
 	$header: config((
 		
 		// Options
 		side: false; // left or right
 		
-	), $config);
-	
-	$config: $header !global;
+	), $custom);
 	
 	@include component(header) {
 		
@@ -911,24 +1003,22 @@ And just to reiterate, with the `side` option set to either left or right in our
 
 In some circumstances, we can achieve the same thing without having to use the `option()` mixin. Consider the above example; "left" and "right" are both also CSS properties, so we can pass the setting's value as a CSS property:
 
-```js
-@mixin header($config: ()) {
+```scss
+@mixin header($custom: ()) {
 
 	$header: config((
 		
 		// Options
 		side: left;
 		
-	), $config);
-	
-	$config: $header !global;
+	), $custom);
 	
 	@include component(header) {
 		
 		@include setting(side) {
 			// Side-Header Styles
 			...
-			#{map-get($config, side)}: 0; // left: 0;
+			#{map-get($header, side)}: 0; // left: 0;
 		}
 		
 	} // component(header)
@@ -945,13 +1035,13 @@ The above example is assuming we have a setup where the header's position is con
 
 Our module is now ready to be included; to include the module with the default settings you have created, all that's required is:
 
-```js
+```scss
 @include header;
 ```
 
 To include your header with customised options, this is done like so:
 
-```js
+```scss
 @include header((
 	dark : true,
 	top  : 0,
@@ -965,8 +1055,8 @@ And that's it, you now have a completely custoimzable header which can be modifi
 
 What if you want to create a module whose options can be accessed by other modules? For example, say you have a module for your grid system and have configured some breakpoint values - you then may wish to access these values from throughout your project:
 
-```js
-@mixin grid($config: ()) {
+```scss
+@mixin grid($custom: ()) {
 	
 	$grid: ((
 		breakpoints: ((
@@ -975,7 +1065,7 @@ What if you want to create a module whose options can be accessed by other modul
 			break-3: 960px,
 			break-4: 1200px
 		));
-	), $config);
+	), $custom);
 	
 	...
 	
@@ -984,8 +1074,8 @@ What if you want to create a module whose options can be accessed by other modul
 
 This is entirely possible using Modular, and requires the addition of the `!global` flag:
 
-```js
-@mixin grid($config: ()) {
+```scss
+@mixin grid($custom: ()) {
 	
 	$grid: ((
 		breakpoints: ((
@@ -994,7 +1084,7 @@ This is entirely possible using Modular, and requires the addition of the `!glob
 			break-3: 960px,
 			break-4: 1200px
 		));
-	), $config) !global;
+	), $custom) !global;
 	
 	...
 	
@@ -1008,7 +1098,7 @@ This is entirely possible using Modular, and requires the addition of the `!glob
 
 As long as our other modules are included after this one, we can now access the breakpoint values using:
 
-```js
+```scss
 width: breakpoint(break-3);
 ```
 
@@ -1018,7 +1108,7 @@ Let's create a simple example project with a typography file, some buttons and a
 
 First, we'll create our main project's Sass files:
 
-```css
+```scss
 app.scss
 _typography.scss
 _buttons.scss
@@ -1028,7 +1118,7 @@ _theme.scss
 
 ##### app.scss
 
-```js
+```scss
 // Modular
 @import "modular";
 
@@ -1043,8 +1133,8 @@ _theme.scss
 
 ##### _typography.scss
 
-```js
-@mixin typography($config: ()) {
+```scss
+@mixin typography($custom: ()) {
 
     $typography: config((
         colors: (
@@ -1056,7 +1146,7 @@ _theme.scss
             regular   : 1em,
             large     : 1.4em           
         )
-    ), $config) !global;
+    ), $custom) !global;
 
 } // @mixin typography
 
@@ -1077,8 +1167,8 @@ _theme.scss
 
 ##### _buttons.scss
 
-```js
-@mixin buttons($config: ()) {
+```scss
+@mixin buttons($custom: ()) {
 
     //-------------------------------------------------------------
     // Config
@@ -1094,7 +1184,7 @@ _theme.scss
         // Modifiers
         radius       : 0.4em
 
-    ), $config);
+    ), $custom);
 
     //-------------------------------------------------------------
     // Component
@@ -1167,8 +1257,8 @@ _theme.scss
 
 ##### _header.scss
 
-```js
-@mixin header($config: ()) {
+```scss
+@mixin header($custom: ()) {
 
     //-------------------------------------------------------------
     // Config
@@ -1183,9 +1273,7 @@ _theme.scss
         side       : false,
         side-width : 100%
 
-    ), $config);
-	
-	$config: $header !global;
+    ), $custom);
 
     //-------------------------------------------------------------
     // Component
@@ -1234,7 +1322,7 @@ _theme.scss
 
 ##### _theme.scss
 
-```js
+```scss
 
 @include typography((
 	colors: (
@@ -1264,7 +1352,7 @@ Every configurable aspect of our project can now quickly and easily be changed f
 
 It's important to understand the CSS that is generated when using Modular in order to avoid potential conflicts. One common example might be if you have a **header** component which generates this CSS:
 
-```css
+```scss
 .header,
 [class*="header-"] {
 	...	
@@ -1274,6 +1362,17 @@ It's important to understand the CSS that is generated when using Modular in ord
 If you then try to add the class **header-wrapper**, the header component's core styles would also be applied to this class, as the component is looking for any class that begins with "header-".
 
 ### Changelog
+
+#### Version 2.6.0
+
+Released: 9th August 2015
+
+###### Release Notes
+
+* adding `context()` mixin (with 1 predefined contextual helper)
+* adding `$special` paremeter to `overwrite()` mixins (with 1 predefined parameter)
+* removing the need to define `$config` variable in each module
+* renaming `$config` parameter to `$custom`
 
 #### Version 2.5.0
 
