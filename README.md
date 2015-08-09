@@ -351,7 +351,7 @@ Sub-Components work like regular components, so you can add modifiers:
 
 ##### Global Sub-Component Styles
 
-By not passing a parameter to the `sub-component()` mixin, you can apply styles to all sub-components:
+By not passing a parameter to the `sub-component()` mixin, you can apply styles to all sub-components of the parent component:
 
 ```js
 @include component(widget) {
