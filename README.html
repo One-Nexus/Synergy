@@ -228,7 +228,7 @@
 </ul>
 <p>To keep as similar to BEM as possible, Modular provies an easy way to create relating components using underscores, eg - <code>header_wrapper</code>. The <code>sub-component</code> mixin accepts 2 parameters:</p>
 <ul>
-<li><code>$sub-components</code> - the name of your sub-component(s) [required]</li>
+<li><code>$sub-components</code> - the name of your sub-component(s) [optional]</li>
 <li><code>$type</code> - as above, this can be either <code>flex</code> (default), <code>chain</code> or <code>static</code> [optional]</li>
 </ul>
 <pre><code class="lang-js">@include component(header) {
@@ -262,6 +262,31 @@
     }    
 
 }
+</code></pre>
+<h5 id="global-sub-component-styles">Global Sub-Component Styles</h5>
+<p>By not passing a parameter to the <code>sub-component()</code> mixin, you can apply styles to all sub-components:</p>
+<pre><code class="lang-js">@include component(widget) {
+
+    @include sub-component {
+        @include modifier(inline) {
+            ...
+        }    
+    }
+
+    @include sub-component(icon) {
+        ...
+    }
+
+    @include sub-component(header) {
+        ...
+    }
+
+}
+</code></pre>
+<pre><code class="lang-html">&lt;div class=&quot;widget&quot;&gt;
+    &lt;div class=&quot;widget_icon-inline&quot;&gt;...&lt;/div&gt;
+    &lt;div class=&quot;widget_header-inline&quot;&gt;...&lt;/div&gt;
+&lt;/div&gt;
 </code></pre>
 <h5 id="advanced-example">Advanced Example</h5>
 <pre><code class="lang-js">@include component(footer) {
@@ -1005,6 +1030,12 @@ _theme.scss
 </code></pre>
 <p>If you then try to add the class <strong>header-wrapper</strong>, the header component&#39;s core styles would also be applied to this class, as the component is looking for any class that begins with &quot;header-&quot;.</p>
 <h3 id="changelog">Changelog</h3>
+<h4 id="version-2-5-0">Version 2.5.0</h4>
+<p>Released: 9th August 2015</p>
+<h6 id="release-notes">Release Notes</h6>
+<ul>
+<li>adding ability to apply global sub-component styles</li>
+</ul>
 <h4 id="version-2-4-0">Version 2.4.0</h4>
 <p>Released: 8th August 2015</p>
 <h6 id="release-notes">Release Notes</h6>

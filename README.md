@@ -302,7 +302,7 @@ Because of how the wildcard selectors are generated, it is not possible to creat
 
 To keep as similar to BEM as possible, Modular provies an easy way to create relating components using underscores, eg - `header_wrapper`. The `sub-component` mixin accepts 2 parameters:
 
-* `$sub-components` - the name of your sub-component(s) [required]
+* `$sub-components` - the name of your sub-component(s) [optional]
 * `$type` - as above, this can be either `flex` (default), `chain` or `static` [optional]
 
 ```js
@@ -347,6 +347,37 @@ Sub-Components work like regular components, so you can add modifiers:
 	}	
 	
 }
+```
+
+##### Global Sub-Component Styles
+
+By not passing a parameter to the `sub-component()` mixin, you can apply styles to all sub-components:
+
+```js
+@include component(widget) {
+
+	@include sub-component {
+		@include modifier(inline) {
+			...
+		}	
+	}
+	
+	@include sub-component(icon) {
+		...
+	}
+	
+	@include sub-component(header) {
+		...
+	}
+	
+}
+```
+
+```html
+<div class="widget">
+	<div class="widget_icon-inline">...</div>
+	<div class="widget_header-inline">...</div>
+</div>
 ```
 
 ##### Advanced Example
@@ -1243,6 +1274,14 @@ It's important to understand the CSS that is generated when using Modular in ord
 If you then try to add the class **header-wrapper**, the header component's core styles would also be applied to this class, as the component is looking for any class that begins with "header-".
 
 ### Changelog
+
+#### Version 2.5.0
+
+Released: 9th August 2015
+
+###### Release Notes
+
+* adding ability to apply global sub-component styles
 
 #### Version 2.4.0
 
