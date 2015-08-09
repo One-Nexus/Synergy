@@ -77,19 +77,22 @@ $type: flex;
 //
 //	<div class="header_wrapper">...</div>
 
-@mixin sub-component($sub-components, $type: $type) {
-	$selectors: ();
-	@each $sub-component in $sub-components {
-		@if $type == flex {
-			$selectors: join($selectors, '.#{$component}_#{$sub-component}');
-			$selectors: join($selectors, '[class*="#{$component}_#{$sub-component}-"]');
-		} @else if $type == chain {
-			$selectors: join($selectors, '[class*="#{$component}_#{$sub-component}-"]');
-		} @else if $type == static {
-			$selectors: join($selectors, '.#{$component}_#{$sub-component}');
+@mixin sub-component($sub-components: null, $type: $type) {
+	$selectors: '[class*="#{$component}_"]';
+	@if $sub-components != null {
+		$selectors: ();
+		@each $sub-component in $sub-components {
+			@if $type == flex {
+				$selectors: join($selectors, '.#{$component}_#{$sub-component}');
+				$selectors: join($selectors, '[class*="#{$component}_#{$sub-component}-"]');
+			} @else if $type == chain {
+				$selectors: join($selectors, '[class*="#{$component}_#{$sub-component}-"]');
+			} @else if $type == static {
+				$selectors: join($selectors, '.#{$component}_#{$sub-component}');
+			}
 		}
+		$selectors: to-string($selectors, ", ");
 	}
-	$selectors: to-string($selectors, ", ");
 	@at-root {
 		#{$selectors} {
 			@content;
@@ -204,20 +207,20 @@ $type: flex;
 
 @mixin modifier($modifiers) {
 	$selectors: &;
-	@if map-get($config, selector-type) == flex {
-		$selectors: ();
-		$i: 1;
-		@each $item in & {
-		    $i: $i + 1;
-		    @if $i == 2 {
-		        $i: 0;
-		    }@else{
-		        $selectors: append($selectors, $item);
-		    }
+	@if length(&) != 1 {
+		@if map-get($config, selector-type) == flex {
+			$selectors: ();
+			$i: 1;
+			@each $item in & {
+			    $i: $i + 1;
+			    @if $i == 2 {
+			        $i: 0;
+			    }@else{
+			        $selectors: append($selectors, $item);
+			    }
+			}
+			$selectors: to-string($selectors, ", ");
 		}
-		$selectors: to-string($selectors, ", ");
-	} @else {
-		$selectors: &;
 	}
 	@at-root #{$selectors} {
 		$modifier-selectors: ();
