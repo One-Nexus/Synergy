@@ -42,13 +42,11 @@ $type: flex;
 	$component: $components !global;
 	$selectors: ();
 	@each $component in $components {
-		@if $type == flex {
+		@if $type == flex or $type == static {
 			$selectors: join($selectors, '.#{$component}');
+		}
+		@if $type == flex or $type == chain {
 			$selectors: join($selectors, '[class*="#{$component}-"]');
-		} @else if $type == chain {
-			$selectors: join($selectors, '[class*="#{$component}-"]');
-		} @else if $type == static {
-			$selectors: join($selectors, '.#{$component}');
 		}
 	}
 	$selectors: to-string($selectors, ", ");
@@ -83,13 +81,11 @@ $type: flex;
 	@if $sub-components != null {
 		$selectors: ();
 		@each $sub-component in $sub-components {
-			@if $type == flex {
+			@if $type == flex or $type == static {
 				$selectors: join($selectors, '.#{$component}_#{$sub-component}');
+			}
+			@if $type == flex or $type == chain {
 				$selectors: join($selectors, '[class*="#{$component}_#{$sub-component}-"]');
-			} @else if $type == chain {
-				$selectors: join($selectors, '[class*="#{$component}_#{$sub-component}-"]');
-			} @else if $type == static {
-				$selectors: join($selectors, '.#{$component}_#{$sub-component}');
 			}
 		}
 		$selectors: to-string($selectors, ", ");
@@ -128,25 +124,18 @@ $type: flex;
 	$selectors: ();
 	@each $component in $components {
 		$selector: #{$component};
-		@if $type == flex {
-			@if $special == adjacent-sibling {
-				$selectors: join($selectors, '+ .#{$selector}');
-				$selectors: join($selectors, '+ [class*="#{$selector}-"]');
-			} @else {
-				$selectors: join($selectors, '.#{$selector}');
-				$selectors: join($selectors, '[class*="#{$selector}-"]');
-			}
-		} @else if $type == chain {
-			@if $special == adjacent-sibling {
-				$selectors: join($selectors, '+ [class*="#{$selector}-"]');
-			} @else {
-				$selectors: join($selectors, '[class*="#{$selector}-"]');
-			}
-		} @else if $type == static {
+		@if $type == flex or $type == static {
 			@if $special == adjacent-sibling {
 				$selectors: join($selectors, '+ .#{$selector}');
 			} @else {
 				$selectors: join($selectors, '.#{$selector}');
+			}
+		}
+		@if $type == flex or $type == chain {
+			@if $special == adjacent-sibling {
+				$selectors: join($selectors, '+ [class*="#{$selector}-"]');
+			} @else {
+				$selectors: join($selectors, '[class*="#{$selector}-"]');
 			}
 		}
 	}
@@ -185,25 +174,18 @@ $type: flex;
 	$selectors: ();
 	@each $sub-component in $sub-components {
 		$selector: #{$component}_#{$sub-component};
-		@if $type == flex {
-			@if $special == adjacent-sibling {
-				$selectors: join($selectors, '+ .#{$selector}');
-				$selectors: join($selectors, '+ [class*="#{$selector}-"]');
-			} @else {
-				$selectors: join($selectors, '.#{$selector}');
-				$selectors: join($selectors, '[class*="#{$selector}-"]');
-			}
-		} @else if $type == chain {
-			@if $special == adjacent-sibling {
-				$selectors: join($selectors, '+ [class*="#{$selector}-"]');
-			} @else {
-				$selectors: join($selectors, '[class*="#{$selector}-"]');
-			}
-		} @else if $type == static {
+		@if $type == flex or $type == static {
 			@if $special == adjacent-sibling {
 				$selectors: join($selectors, '+ .#{$selector}');
 			} @else {
 				$selectors: join($selectors, '.#{$selector}');
+			}
+		}
+		@if $type == flex or $type == chain {
+			@if $special == adjacent-sibling {
+				$selectors: join($selectors, '+ [class*="#{$selector}-"]');
+			} @else {
+				$selectors: join($selectors, '[class*="#{$selector}-"]');
 			}
 		}
 	}
@@ -338,13 +320,11 @@ $type: flex;
 	$child-selectors: &;
 	$selectors: ();
 	@each $item in $context {
-		@if map-get($config, selector-type) == flex {
+		@if map-get($config, selector-type) == flex or map-get($config, selector-type) == static {
 			$selectors: join($selectors, '.#{$component}');
+		}
+		@if map-get($config, selector-type) == flex or map-get($config, selector-type) == chain {
 			$selectors: join($selectors, '[class*="#{$component}-"]');
-		} @else if map-get($config, selector-type) == chain {
-			$selectors: join($selectors, '[class*="#{$component}-"]');
-		} @else if map-get($config, selector-type) == static {
-			$selectors: join($selectors, '.#{$component}');
 		}
 	}
 	$selectors: to-string($selectors, ", ");
@@ -357,6 +337,18 @@ $type: flex;
 					}
 				}
 			}
+		}
+	}
+	@if type-of($context) == map {
+		$selectors: ();
+		@each $query in $context {
+			$media-feature: nth($query, 1);
+			$value: nth($query, 2);
+			$selectors: join($selectors, "(#{$media-feature}: #{$value})");
+		}
+		$selectors: to-string($selectors, " and ");
+		@media #{$selectors} {
+			@content;
 		}
 	}
 }
@@ -372,8 +364,6 @@ $type: flex;
 //		$billboard: config((
 //			full-screen : false
 //		), $config);
-//		
-//		$config: $billboard !global;
 //
 //		@include component(billboard) {
 //			@include setting(full-screen) {
@@ -416,8 +406,6 @@ $extend-settings: true;
 //		$header: config((
 //			side : false
 //		), $config);
-//		
-//		$config: $header !global;
 //
 //		@include component(header) {
 //			@include setting(side) {
@@ -467,7 +455,10 @@ $extend-settings: true;
 			$result: $result#{to-string($e, $glue, true)};
 		}  
 		@else {
-			$result: if($i != length($list) or $is-nested, $result#{$e}#{$glue}, $result#{$e});
+			$result: if(
+				$i != length($list) or $is-nested, 
+				$result#{$e}#{$glue}, $result#{$e}
+			);
 		}
 	}
 	@return $result;

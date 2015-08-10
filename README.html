@@ -612,6 +612,7 @@
 <p>The following conditions can be passed to the mixin:</p>
 <ul>
 <li><code>parent-hovered</code> - apply styles to a sub-component when the parent component is hovered</li>
+<li><code>($media_feature: $value)</code> - basic media query parsing for responsive conditions </li>
 </ul>
 <h5 id="parent-hovered">Parent-Hovered</h5>
 <pre><code class="lang-scss">@include component(widget) {
@@ -634,6 +635,29 @@
 //            color: white;
 //        }
 //    }
+
+}
+</code></pre>
+<h5 id="media-query-conditions">Media Query Conditions</h5>
+<p>The <code>context()</code> mixin can be used for basic media query parsing in the following format:</p>
+<pre><code class="lang-scss">@media ({media_feature}: {value}) and (/*repeat...*/) {
+    ...
+}
+</code></pre>
+<p>Where <code>{media_feature}</code> is any value from the <strong>media_feature</strong> list <a href="https://goo.gl/HIa4nD">seen here</a>, and <code>{value}</code> is your custom value.</p>
+<pre><code class="lang-scss">@include component(header) {
+
+    @include context((min-width: 420px)) {
+        ...
+    }
+
+    @include context((min-width: 420px, max-width: 960px)) {
+        ...
+    }
+
+    @include context((orientation: portrait)) {
+        ...
+    }
 
 }
 </code></pre>
@@ -1103,6 +1127,12 @@ _theme.scss
 </code></pre>
 <p>If you then try to add the class <strong>header-wrapper</strong>, the header component&#39;s core styles would also be applied to this class, as the component is looking for any class that begins with &quot;header-&quot;.</p>
 <h3 id="changelog">Changelog</h3>
+<h4 id="version-2-7-0">Version 2.7.0</h4>
+<p>Released: 10th August 2015</p>
+<h6 id="release-notes">Release Notes</h6>
+<ul>
+<li>adding ability to add basic media queries via <code>context()</code> mixin</li>
+</ul>
 <h4 id="version-2-6-0">Version 2.6.0</h4>
 <p>Released: 9th August 2015</p>
 <h6 id="release-notes">Release Notes</h6>

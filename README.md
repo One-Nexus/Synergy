@@ -766,6 +766,7 @@ The `context()` mixin allows you to apply styles to your component when certain 
 The following conditions can be passed to the mixin:
 
 * `parent-hovered` - apply styles to a sub-component when the parent component is hovered
+* `($media_feature: $value)` - basic media query parsing for responsive conditions 
 
 ##### Parent-Hovered
 
@@ -791,6 +792,36 @@ The following conditions can be passed to the mixin:
 //		}
 //	}
 
+}
+```
+
+##### Media Query Conditions
+
+The `context()` mixin can be used for basic media query parsing in the following format:
+
+```scss
+@media ({media_feature}: {value}) and (/*repeat...*/) {
+	...
+}
+```
+
+Where `{media_feature}` is any value from the **media_feature** list [seen here](https://goo.gl/HIa4nD), and `{value}` is your custom value.
+
+```scss
+@include component(header) {
+
+	@include context((min-width: 420px)) {
+		...
+	}
+	
+	@include context((min-width: 420px, max-width: 960px)) {
+		...
+	}
+	
+	@include context((orientation: portrait)) {
+		...
+	}
+	
 }
 ```
 
@@ -1360,6 +1391,14 @@ It's important to understand the CSS that is generated when using Modular in ord
 If you then try to add the class **header-wrapper**, the header component's core styles would also be applied to this class, as the component is looking for any class that begins with "header-".
 
 ### Changelog
+
+#### Version 2.7.0
+
+Released: 10th August 2015
+
+###### Release Notes
+
+* adding ability to add basic media queries via `context()` mixin
 
 #### Version 2.6.0
 
