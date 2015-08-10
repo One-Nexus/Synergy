@@ -799,7 +799,7 @@ The following conditions can be passed to the mixin:
 
 The `context()` mixin can be used for basic media query parsing in the following format:
 
-```scss
+```css
 @media ({media_feature}: {value}) and (/*repeat...*/) {
 	...
 }
