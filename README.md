@@ -29,7 +29,7 @@ What if you could just do this:
 <div class="button-large-success">Large Success Button</div>
 ```
 
-The benefits of using this HTML over conventional BEM syntax are self-apparant. However, you may be looking at that thinking of several reasons why it wouldn't work; what if I want to only use the "button" class on its own? What if I only want a large button, or only want a success button? Well, with Modular, all this is possible.
+The benefits of using this HTML over conventional BEM syntax are self-apparent. However, you may be looking at that thinking of several reasons why it wouldn't work; what if I want to only use the "button" class on its own? What if I only want a large button, or only want a success button? Well, with Modular, all this is possible.
 
 ```scss
 @include component(button) {
