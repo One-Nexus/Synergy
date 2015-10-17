@@ -52,3 +52,34 @@ $.each(module, function(component) {
 	window[componentCC] = '.' + component + ', [class*="' + component + '-"]';
 	componentIndex++;
 });
+
+//-----------------------------------------------------------------
+// Functions
+//-----------------------------------------------------------------
+
+//	1. setting()
+
+//-----------------------------------------------------------------
+
+// 1. Setting
+//-----------------------------------------------------------------
+
+//	Usage
+//
+//	if(setting(navigation, 'sticky')) {
+//		...
+//	}
+
+function setting(component, setting) {
+	
+	var $setting  = module[component][setting],
+		$id = $('.' + component + ', [class*="' + component + '-"]'),
+		$selector = $id.is('[class*="-' + setting + '"]') == true;
+		
+	if (typeof($setting[Object.keys($setting)[0]]) == 'boolean') {
+		return $selector || $setting['default'] != false;
+	} else {
+		return $selector || $setting != false;
+	}
+	
+}
