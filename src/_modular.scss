@@ -10,16 +10,16 @@ http://github.com/esr360/Modular/
 // Mixins
 //-----------------------------------------------------------------
 
-//	1. component()
-//	2. sub-component()
-// 	3. overwrite()
-//	4. overwrite-sub()
-//	5. modifier()
-//	6. nested-modifier()
-//	7. extend-modifiers()
-//	8. context()
-//	9. setting()
-// 	10. option()
+//  1. component()
+//  2. sub-component()
+//  3. overwrite()
+//  4. overwrite-sub()
+//  5. modifier()
+//  6. nested-modifier()
+//  7. extend()
+//  8. context()
+//  9. setting()
+//  10. option()
 
 //-----------------------------------------------------------------
 
@@ -27,74 +27,74 @@ http://github.com/esr360/Modular/
 // Define the main component
 //-----------------------------------------------------------------
 
-// 	Usage
+//  Usage
 // 
-// 	@include component(header) {
-//		...
-// 	}
+//  @include component(header) {
+//      ...
+//  }
 //
-// 	<div class="header">...</div>
+//  <div class="header">...</div>
 
 // Set the default selector type (flex, chain, static)
 $type: flex;
 
 @mixin component($components, $type: map-get($config, selector-type)) {
-	$component: $components !global;
-	$selectors: ();
-	@each $component in $components {
-		@if $type == flex or $type == static {
-			$selectors: join($selectors, '.#{$component}');
-		}
-		@if $type == flex or $type == chain {
-			$selectors: join($selectors, '[class*="#{$component}-"]');
-		}
-	}
-	$selectors: to-string($selectors, ", ");
-	#{$selectors} {
-		@content;
-	}
+    $component: $components !global;
+    $selectors: ();
+    @each $component in $components {
+        @if $type == flex or $type == static {
+            $selectors: join($selectors, '.#{$component}');
+        }
+        @if $type == flex or $type == chain {
+            $selectors: join($selectors, '[class*="#{$component}-"]');
+        }
+    }
+    $selectors: to-string($selectors, ", ");
+    #{$selectors} {
+        @content;
+    }
 }
 
 // Alias for multiple components
 @mixin components($components, $type: $type) {
-	@include component($components, $type) {
-		@content;
-	}
+    @include component($components, $type) {
+        @content;
+    }
 }
 
 // 2. Sub-Component
 // Create a sub-component based off the main component
 //-----------------------------------------------------------------
 
-// 	Usage
+//  Usage
 //
-//	@include component(header) {
-//		@include sub-component(wrapper) {
-//			...
-//		}
-//	}
+//  @include component(header) {
+//      @include sub-component(wrapper) {
+//          ...
+//      }
+//  }
 //
-//	<div class="header_wrapper">...</div>
+//  <div class="header_wrapper">...</div>
 
 @mixin sub-component($sub-components: null, $type: $type) {
-	$selectors: '[class*="#{$component}_"]';
-	@if $sub-components != null {
-		$selectors: ();
-		@each $sub-component in $sub-components {
-			@if $type == flex or $type == static {
-				$selectors: join($selectors, '.#{$component}_#{$sub-component}');
-			}
-			@if $type == flex or $type == chain {
-				$selectors: join($selectors, '[class*="#{$component}_#{$sub-component}-"]');
-			}
-		}
-		$selectors: to-string($selectors, ", ");
-	}
-	@at-root {
-		#{$selectors} {
-			@content;
-		}
-	}	
+    $selectors: '[class*="#{$component}_"]';
+    @if $sub-components != null {
+        $selectors: ();
+        @each $sub-component in $sub-components {
+            @if $type == flex or $type == static {
+                $selectors: join($selectors, '.#{$component}_#{$sub-component}');
+            }
+            @if $type == flex or $type == chain {
+                $selectors: join($selectors, '[class*="#{$component}_#{$sub-component}-"]');
+            }
+        }
+        $selectors: to-string($selectors, ", ");
+    }
+    @at-root {
+        #{$selectors} {
+            @content;
+        }
+    }	
 }
 
 // Alias for multiple components
@@ -290,26 +290,41 @@ $type: flex;
 // Extend one or more modifiers of a component
 //-----------------------------------------------------------------
 
-//	Usage
+//  Usage
+//
+//  @include component(button) {
+//
+//      @include modifier(round)   {...}
+//      @include modifier(large)   {...}
+//      @include modifier(success) {...}
+//
+//      @include modifier(primary) {
+//          @include extend((round, large, success));
+//      }	
+//
+//  }
+//
+//  <div class="button-primary">...</div>
 
-//	@include component(button) {
-//
-//		@include modifier(round)   {...}
-//		@include modifier(large)  {...}
-//		@include modifier(success) {...}
-//
-//		@include modifier(primary) {
-//			@include extend(round, large, success);
-//		}	
-//
-//	}
-//
-//	<div class="button-primary">...</div>
-
-@mixin extend($modifiers...) {
-	@each $modifier in $modifiers {
-		@extend [class*="#{$component}-"][class*="-#{$modifier}"];
-	}
+@mixin extend($modifiers, $parent: null) {
+    @each $modifier in $modifiers {
+        @if type-of($modifier) == string {
+            $selector: if(
+                $parent, $parent, $component
+            );
+            @extend [class*="#{$selector}-"][class*="-#{$modifier}"];
+        } @else if type-of($modifier) == list {
+            $selectors: if(
+                $parent,
+                ('[class*="#{$parent}-"]'),
+                ('[class*="#{$component}-"]')
+            );
+            @each $item in $modifier {
+                $selectors: join($selectors, '[class*="-#{$item}"]', comma);
+            }
+            @extend #{$selectors};
+        }
+    }
 }
 
 // 8. Context
