@@ -12,3 +12,9 @@ http://github.com/esr360/Modular/
 
 // Get styles' configuration
 var stylesConfigJSON = document.getElementById("stylesConfigJSON");
+
+// Remove quotes from computed JSON
+function removeQuotes(json) {
+    json = json.replace(/^['"]+|\s+|\\|(;\s?})+|['"]$/g, '');
+    return json;
+}
