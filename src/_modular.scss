@@ -456,27 +456,39 @@ $extend-settings: true;
 // Advanced Functions
 //-----------------------------------------------------------------
 
-// To String
-// http://hugogiraudel.com/2013/08/08/advanced-sass-list-functions/
-// Customized for use with Modular
+// Module configuration
 //-----------------------------------------------------------------
 
-@function to-string($list, $glue: '', $is-nested: false, $recursive: false) {
-	$result: null;
-	@for $i from 1 through length($list) {
-		$e: nth($list, $i);
-		@if type-of($e) == list and $recursive {
-			$result: $result#{to-string($e, $glue, true)};
-		}  
-		@else {
-			$result: if(
-				$i != length($list) or $is-nested, 
-				$result#{$e}#{$glue}, $result#{$e}
-			);
-		}
+// output config to JSON by default?
+$output-JSON: false;
+
+$config-JSON: ();
+
+@function config($map-old, $map-new) {
+	
+	$map-old: map-merge((
+		selector-type   : $type,
+		extend-settings : $extend-settings,
+		output-JSON     : $output-JSON
+	), $map-old);
+	
+	$map-old: map-merge-deep($map-old, $map-new);
+	
+	// Store merged map in a variable
+	$config: $map-old !global;
+	
+	// Output options to JSON
+	@if option($map-old, output-JSON) {
+		$config-JSON: map-merge-deep(
+			(map-get($map-old, name): ($map-old)), 
+			$config-JSON
+		) !global;
 	}
-	@return $result;
-}
+	
+	// Return merged map
+	@return $map-old;
+	
+} // config()
 
 // Map-Set Function
 // http://git.io/vmBKD
@@ -532,17 +544,10 @@ $extend-settings: true;
 
 // Map Deep Merge
 // http://git.io/vmBVH
-// Customized for use with Modular
 //-----------------------------------------------------------------
 
-@function config($map-old, $map-new, $overwrite: true, $nested: false) {
-	// Custom code to set default keys for a component
-	@if not $nested {
-		$map-old: map-merge((
-			selector-type   : $type,
-			extend-settings : $extend-settings
-		), $map-old);
-	}
+@function map-merge-deep($map-old, $map-new, $overwrite: true) {
+
 	// Iterate through each value of the new map
 	@each $key, $new-value in $map-new {
 		// Check if that value already exists on the old map
@@ -551,7 +556,7 @@ $extend-settings: true;
 			$old-value: map-get($map-old, $key);
 			@if type-of($new-value) == map and type-of($old-value) == map {
 				// If both are maps, recurse regardless of $overwrite
-				$merged-value: config($old-value, $new-value, $nested: true);
+				$merged-value: map-merge-deep($old-value, $new-value);
 				$map-old: map-set($map-old, $key, $merged-value);	
 			} @else {
 				// Otherwise check $overwrite
@@ -564,8 +569,22 @@ $extend-settings: true;
 			$map-old: map-set($map-old, $key, $new-value);
 		}
 	}
-	// Store merged map in a variable
-	$config: $map-old !global;
-	// Return merged map
 	@return $map-old;
+	
+}
+
+// Map Deep Get
+// https://css-tricks.com/snippets/sass/deep-getset-maps/
+//-----------------------------------------------------------------
+
+@function option($map, $keys...) {
+    @each $key in $keys {
+        $map: map-get($map, $key);
+    }
+    @return $map;
+}
+
+// Alias for settings
+@function setting($map, $keys...) {
+    @return option($map, $keys...);
 }
