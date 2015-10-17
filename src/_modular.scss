@@ -270,34 +270,33 @@ $component: null;
 // Nest a modifier for appropriate specificity
 //-----------------------------------------------------------------
 
-//	Usage
+//  Usage
 //
-//	@include component(button) {
-//		@include modifier(white) {
-//			@include nested-modifier(border) {
-//				...
-//			}
-//		}
-//	}
+//  @include component(button) {
+//      @include modifier(white) {
+//          @include nested-modifier(border) {
+//              ...
+//          }
+//      }
+//  }
 //
-//	<div class="button-white-border">...</div>
+//  <div class="button-white-border">...</div>
 
 @mixin nested-modifier($modifiers) {
-	$selectors: ();
-	@each $modifier in $modifiers {
-		$selectors: join($selectors, '&[class*="-#{$modifier}"]');
-	}
-	$selectors: to-string($selectors, ", ");
-	#{$selectors} {
-		@content;
-	}
+    $selectors: ();
+    @each $modifier in $modifiers {
+        $selectors: join($selectors, '&[class*="-#{$modifier}"]', comma);
+    }
+    @at-root #{$selectors} {
+        @content;
+    }
 }
 
 // Alias for multiple modifiers
 @mixin nested-modifiers($modifiers) {
-	@include nested-modifier($modifiers) {
-		@content;
-	}
+    @include nested-modifier($modifiers) {
+        @content;
+    }
 }
 
 // 7. Extend Modifiers
