@@ -26,3 +26,15 @@ function camelCase(json) {
 	});
 	return json;
 }
+
+// Convert the config to JS
+function getStylesConfig(camelCase) {
+    var style = null;
+    style = window.getComputedStyle(stylesConfigJSON, '::before');
+    style = style.content;
+	style = removeQuotes(style);
+	if(camelCase) {
+		style = camelCase(style);
+	}
+    return JSON.parse(style);
+}
