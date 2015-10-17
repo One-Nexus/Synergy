@@ -397,16 +397,16 @@ $extend-settings: true;
 
 @mixin setting($setting) {
 	$setting: $setting !global;
-	@at-root %#{$component}-#{$setting} {	
+	$enabled: if(
+		(type-of(map-get($config, $setting)) == bool and map-get($config, $setting) != false) or
+		(type-of(map-get($config, $setting)) == map and map-get(map-get($config, $setting), default) != false),
+		true, false
+	);
+	@if $enabled {
+		@include extend($setting);
+	}
+	@include modifier($setting) {	
 		@content;
-	}
-	@if map-get($config, $setting) != false {
-		@extend %#{$component}-#{$setting};
-	}
-	@if map-get($config, extend-settings) {
-		@include nested-modifier($setting) {	
-			@extend %#{$component}-#{$setting};
-		}
 	}
 }
 
