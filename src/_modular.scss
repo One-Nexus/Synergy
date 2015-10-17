@@ -345,40 +345,27 @@ $component: null;
 //-----------------------------------------------------------------
 
 @mixin context($context) {
-	$child-selectors: &;
-	$selectors: ();
-	@each $item in $context {
-		@if map-get($config, selector-type) == flex or map-get($config, selector-type) == static {
-			$selectors: join($selectors, '.#{$component}');
-		}
-		@if map-get($config, selector-type) == flex or map-get($config, selector-type) == chain {
-			$selectors: join($selectors, '[class*="#{$component}-"]');
-		}
-	}
-	$selectors: to-string($selectors, ", ");
-	@if $context == parent-hovered {
-		@at-root {
-			#{$selectors} {
-				&:hover {
-					#{$child-selectors} {
-						@content;
-					}
-				}
-			}
-		}
-	}
-	@if type-of($context) == map {
-		$selectors: ();
-		@each $query in $context {
-			$media-feature: nth($query, 1);
-			$value: nth($query, 2);
-			$selectors: join($selectors, "(#{$media-feature}: #{$value})");
-		}
-		$selectors: to-string($selectors, " and ");
-		@media #{$selectors} {
-			@content;
-		}
-	}
+    $child-selectors: &;
+    $selectors: ();
+    @each $item in $context {
+        @if map-get($config, selector-type) == flex or map-get($config, selector-type) == static {
+            $selectors: join($selectors, '.#{$component}', comma);
+        }
+        @if map-get($config, selector-type) == flex or map-get($config, selector-type) == chain {
+            $selectors: join($selectors, '[class*="#{$component}-"]', comma);
+        }
+    }
+    @if $context == parent-hovered {
+        @at-root {
+            #{$selectors} {
+                &:hover {
+                    #{$child-selectors} {
+                        @content;
+                    }
+                }
+            }
+        }
+    }
 }
 
 // 9. Setting
