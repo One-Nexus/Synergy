@@ -14,11 +14,12 @@ $RECYCLE.BIN/
 *.msm
 *.msp
 
-# Prepros
+# Custom Options
 *.cfg
-
-#TODO list
 tod.txt
+.settings
+/node_modules
+.sass-cache
 
 # =========================
 # Operating System Files
@@ -33,6 +34,7 @@ tod.txt
 
 # Icon must ends with two \r.
 Icon
+
 
 # Thumbnails
 ._*
