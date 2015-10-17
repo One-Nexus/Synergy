@@ -38,3 +38,6 @@ function getStylesConfig(camelCase) {
 	}
     return JSON.parse(style);
 }
+
+// Store configuartion data in a variable
+var module = getStylesConfig();
