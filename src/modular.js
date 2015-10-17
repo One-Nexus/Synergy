@@ -44,3 +44,11 @@ var module = getStylesConfig();
 
 // CamelCase the config
 var moduleCC = getStylesConfig(camelCase);
+
+// Create a global variable to select each main component in the DOM
+var componentIndex = 0;
+$.each(module, function(component) {
+	var componentCC = moduleCC[Object.keys(moduleCC)[componentIndex]]['name'];
+	window[componentCC] = '.' + component + ', [class*="' + component + '-"]';
+	componentIndex++;
+});
