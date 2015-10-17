@@ -102,41 +102,65 @@ $component: null;
 // Overwrite a component in alternate context
 //-----------------------------------------------------------------
 
-// 	Usage
-// 
-// 	@include component(header) {
-//		@include overwrite(logo) {
-//			...
-//		}
-// 	}
+//  Usage
 //
-// 	<div class="header">
-//		<div class="logo">...</div>
-//	</div>
+//  @include component(header) {
+//      @include overwrite(logo) {
+//          ...
+//      }
+//  }
+//
+//  <div class="header">
+//      <div class="logo">...</div>
+//  </div>
 
-@mixin overwrite($components, $type: $type, $special: null) {
-	$selectors: ();
-	@each $component in $components {
-		$selector: #{$component};
-		@if $type == flex or $type == static {
-			@if $special == adjacent-sibling {
-				$selectors: join($selectors, '+ .#{$selector}');
-			} @else {
-				$selectors: join($selectors, '.#{$selector}');
-			}
-		}
-		@if $type == flex or $type == chain {
-			@if $special == adjacent-sibling {
-				$selectors: join($selectors, '+ [class*="#{$selector}-"]');
-			} @else {
-				$selectors: join($selectors, '[class*="#{$selector}-"]');
-			}
-		}
-	}
-	$selectors: to-string($selectors, ", ");
-	#{$selectors} {
-		@content;
-	}
+@mixin overwrite($components: map-get($config, name), $type: $type, $is: null, $not: null, $special: null) {
+    $selectors: ();
+    @if $is {
+        $type: 'chain';
+    }
+    @each $component in $components {
+        $selector: #{$component};
+        @if $type == flex or $type == static {
+            @if $special == 'adjacent-sibling' {
+                $selectors: join($selectors, '+ .#{$selector}', comma);
+            } @else if $special == 'general-sibling' {
+                $selectors: join($selectors, '~ .#{$selector}', comma);
+            } @else {
+                $selectors: join($selectors, '.#{$selector}', comma);
+            }
+        }
+        @if $type == flex or $type == chain {
+            @if $special == adjacent-sibling {
+                $selectors: join($selectors, '+ [class*="#{$selector}-"]', comma);
+            } @else if $special == 'general-sibling' {
+                $selectors: join($selectors, '~ [class*="#{$selector}-"]', comma);
+            }  @else {
+                $selectors: join($selectors, '[class*="#{$selector}-"]', comma);
+            }
+        }
+        @if $is {
+            $modifiers-list: ();
+            @each $modifier in $is {
+                $selectors: join(
+                    $modifiers-list, 
+                    selector-append($selectors,'[class*="-#{$modifier}"]'), 
+                comma);
+            }
+        }
+        @if $not {
+            $modifiers-list: ();
+            @each $modifier in $not {
+                $selectors: join(
+                    $modifiers-list, 
+                    selector-append($selectors,':not([class*="-#{$modifier}"])'), 
+                comma);
+            }
+        }
+    }
+    #{$selectors} {
+        @content;
+    }
 }
 
 // 4. Overwrite-Sub
