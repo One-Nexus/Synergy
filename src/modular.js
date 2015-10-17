@@ -41,3 +41,6 @@ function getStylesConfig(camelCase) {
 
 // Store configuartion data in a variable
 var module = getStylesConfig();
+
+// CamelCase the config
+var moduleCC = getStylesConfig(camelCase);
