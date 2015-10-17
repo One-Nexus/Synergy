@@ -372,85 +372,84 @@ $component: null;
 // Add a configurable setting to a component
 //-----------------------------------------------------------------
 
-//	Usage
+//  Usage
 //
-//	@mixin billboard($config: ()) {
+//  @mixin billboard($config: ()) {
 //
-//		$billboard: config((
-//			full-screen : false
-//		), $config);
+//      $billboard: config((
+//          full-screen : false
+//      ), $config);
 //
-//		@include component(billboard) {
-//			@include setting(full-screen) {
-//				...
-//			}
-//		}
+//      @include component(billboard) {
+//          @include setting(full-screen) {
+//              ...
+//          }
+//      }
 //
-//	}
+//  }
 //
-//	@include billboard: ((
-//		full-screen : true
-//	));
+//  @include billboard: ((
+//      full-screen : true
+//  ));
 
 // Extend each setting as a modifier by default?
 $extend-settings: true;
 
 @mixin setting($setting) {
-	$setting: $setting !global;
-	$enabled: if(
-		(type-of(map-get($config, $setting)) == bool and map-get($config, $setting) != false) or
-		(type-of(map-get($config, $setting)) == map and map-get(map-get($config, $setting), default) != false),
-		true, false
-	);
-	@if $enabled {
-		@include extend($setting);
-	}
-	@include modifier($setting) {	
-		@content;
-	}
+    $setting: $setting !global;
+    $enabled: if(
+        (type-of(map-get($config, $setting)) == bool and map-get($config, $setting) != false) or
+        (type-of(map-get($config, $setting)) == map and map-get(map-get($config, $setting), default) != false),
+        true, false
+    );
+    @if $enabled {
+        @include extend($setting);
+    }
+    @include modifier($setting) {	
+        @content;
+    }
 }
 
 // 10. Option
 // Add an option to an existing setting
 //-----------------------------------------------------------------
 
-//	Usage
+//  Usage
 //
-//	@mixin header($config: ()) {
+//  @mixin header($config: ()) {
 //
-//		$header: config((
-//			side : false
-//		), $config);
+//      $header: config((
+//          side : (
+//              default        : false,
+//              show-scrollbar : false
+//      ), $config);
 //
-//		@include component(header) {
-//			@include setting(side) {
-//				@include option(left) {
-//					...
-//				}
-//				@include option(right) {
-//					...
-//				}
-//			}
-//		}
+//      @include component {
+//          @include setting(side) {
+//              ...
+//          }
+//      }
 //
-//	}
+//  }
 //
-//	@include header: ((
-//		side : left
-//	));
+//  @include billboard: ((
+//      full-screen : true
+//  ));
 
-@mixin option($option) {
-	@at-root %#{$component}-#{$option} {	
-		@content;
-	}
-	@if map-get($config, $setting) == $option {
-		@extend %#{$component}-#{$option};
-	}
-	@if map-get($config, extend-settings) {
-		@include modifier($option) {
-			@extend %#{$component}-#{$option};
-		}
-	}
+@mixin option($option: default, $value: true) {
+    $nested-modifier: if(
+        $option == default,	$value, $option
+    );
+    @if (option($config, $setting, $option) == $value) {	
+        @if $option == default {
+            @include extend($value);
+        } @else {
+            @include extend($option);
+        }
+    }
+    @include nested-modifier($nested-modifier) {	
+        @content;
+    }
 }
 
 //-----------------------------------------------------------------
