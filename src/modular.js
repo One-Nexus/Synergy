@@ -18,3 +18,11 @@ function removeQuotes(json) {
     json = json.replace(/^['"]+|\s+|\\|(;\s?})+|['"]$/g, '');
     return json;
 }
+
+// Convert computed JSON to camelCase
+function camelCase(json) {
+	json = json.replace(/-([a-z])/g, function (g) { 
+		return g[1].toUpperCase(); 
+	});
+	return json;
+}
