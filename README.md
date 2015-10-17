@@ -1392,6 +1392,20 @@ If you then try to add the class **header-wrapper**, the header component's core
 
 ### Changelog
 
+#### Version 3.0.0
+
+Released: 17th October 2015
+
+###### Release Notes
+
+* new **modular.js** extension - talk betwen CSS and JS
+* renaming `extend-modifiers()` mixin to `modifiers()`
+* removing the need to define component name when including `component()`
+* more intelligent `overwrite()` mixin with more options
+* more intelligent `modifier()` mixin with more options
+* adding `$parent` option to `extend()` mixin
+* general improvements to code and performance
+
 #### Version 2.7.0
 
 Released: 10th August 2015
