@@ -27,39 +27,39 @@ http://github.com/esr360/Modular/
 // Define the main component
 //-----------------------------------------------------------------
 
-//  Usage
+// 	Usage
 // 
-//  @include component(header) {
-//      ...
-//  }
+// 	@include component(header) {
+//		...
+// 	}
 //
-//  <div class="header">...</div>
+// 	<div class="header">...</div>
 
 // Set the default selector type (flex, chain, static)
 $type: flex;
 
-@mixin component($components, $type: map-get($config, selector-type)) {
-    $component: $components !global;
-    $selectors: ();
-    @each $component in $components {
-        @if $type == flex or $type == static {
-            $selectors: join($selectors, '.#{$component}');
-        }
-        @if $type == flex or $type == chain {
-            $selectors: join($selectors, '[class*="#{$component}-"]');
-        }
-    }
-    $selectors: to-string($selectors, ", ");
-    #{$selectors} {
-        @content;
-    }
+$component: null;
+@mixin component($components: map-get($config, name), $type: map-get($config, selector-type)) {
+	$component: $components !global;
+	$selectors: ();
+	@each $component in $components {
+		@if $type == flex or $type == static {
+			$selectors: join($selectors, '.#{$component}', comma);
+		}
+		@if $type == flex or $type == chain {
+			$selectors: join($selectors, '[class*="#{$component}-"]', comma);
+		}
+	}
+	#{$selectors} {
+		@content;
+	}
 }
 
 // Alias for multiple components
 @mixin components($components, $type: $type) {
-    @include component($components, $type) {
-        @content;
-    }
+	@include component($components, $type) {
+		@content;
+	}
 }
 
 // 2. Sub-Component
