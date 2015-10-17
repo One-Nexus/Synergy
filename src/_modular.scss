@@ -214,50 +214,56 @@ $component: null;
 // Add a modifier to an existing component
 //-----------------------------------------------------------------
 
-//	Usage
+//  Usage
 //
-//	@include component(button) {
-//		@include modifier(large) {
-//			...
-//		}
-//	}
+//  @include component(button) {
+//      @include modifier(large) {
+//          ...
+//      }
+//  }
 //
-//	<div class="button-large">...</div>
+//  <div class="button-large">...</div>
 
-@mixin modifier($modifiers) {
-	$selectors: &;
-	@if length(&) != 1 {
-		@if map-get($config, selector-type) == flex {
-			$selectors: ();
-			$i: 1;
-			@each $item in & {
-			    $i: $i + 1;
-			    @if $i == 2 {
-			        $i: 0;
-			    }@else{
-			        $selectors: append($selectors, $item);
-			    }
-			}
-			$selectors: to-string($selectors, ", ");
-		}
-	}
-	@at-root #{$selectors} {
-		$modifier-selectors: ();
-		@each $modifier in $modifiers {
-			$modifier-selectors: join($modifier-selectors, '&[class*="-#{$modifier}"]')
-		}
-		$modifier-selectors: to-string($modifier-selectors, ", ");
-		#{$modifier-selectors} {
-			@content;
-		}
-	}
-}
+@mixin modifier($modifiers, $special: null) {
+    
+    $selectors: &;
+    
+    @if length(&) != 1 {
+        @if map-get($config, selector-type) == flex {
+            $selectors: ();
+            $i: 1;
+            @each $item in & {
+                $i: $i + 1;
+                @if $i == 2 {
+                    $i: 0;
+                }@else{
+                    $selectors: append($selectors, $item, comma);
+                }
+            }
+        }
+    }
+    
+    @at-root #{$selectors} {
+        $modifier-selectors: ();
+        @each $modifier in $modifiers {
+            @if $special == "not" {
+                $modifier-selectors: join($modifier-selectors, '&:not([class*="-#{$modifier}"])', comma);
+            } @else {
+                $modifier-selectors: join($modifier-selectors, '&[class*="-#{$modifier}"]', comma);
+            }
+        }
+        #{$modifier-selectors} {
+            @content;
+        }
+    }
+
+} // modifier()
 
 // Alias for multiple modifiers
 @mixin modifiers($modifiers) {
-	@include modifier($modifiers) {
-		@content;
-	}
+    @include modifier($modifiers) {
+        @content;
+    }
 }
 
 // 6. Nested Modifier
