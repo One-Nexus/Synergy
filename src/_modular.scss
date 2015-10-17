@@ -30,7 +30,7 @@ http://github.com/esr360/Modular/
 // 	Usage
 // 
 // 	@include component(header) {
-//		...
+//      ...
 // 	}
 //
 // 	<div class="header">...</div>
@@ -40,26 +40,26 @@ $type: flex;
 
 $component: null;
 @mixin component($components: map-get($config, name), $type: map-get($config, selector-type)) {
-	$component: $components !global;
-	$selectors: ();
-	@each $component in $components {
-		@if $type == flex or $type == static {
-			$selectors: join($selectors, '.#{$component}', comma);
-		}
-		@if $type == flex or $type == chain {
-			$selectors: join($selectors, '[class*="#{$component}-"]', comma);
-		}
-	}
-	#{$selectors} {
-		@content;
-	}
+    $component: $components !global;
+    $selectors: ();
+    @each $component in $components {
+        @if $type == flex or $type == static {
+            $selectors: join($selectors, '.#{$component}', comma);
+        }
+        @if $type == flex or $type == chain {
+            $selectors: join($selectors, '[class*="#{$component}-"]', comma);
+        }
+    }
+    #{$selectors} {
+        @content;
+    }
 }
 
 // Alias for multiple components
 @mixin components($components, $type: $type) {
-	@include component($components, $type) {
-		@content;
-	}
+    @include component($components, $type) {
+        @content;
+    }
 }
 
 // 2. Sub-Component
@@ -76,19 +76,13 @@ $component: null;
 //
 //  <div class="header_wrapper">...</div>
 
-@mixin sub-component($sub-components: null, $type: $type) {
+@mixin sub-component($sub-components: null) {
     $selectors: '[class*="#{$component}_"]';
     @if $sub-components != null {
         $selectors: ();
         @each $sub-component in $sub-components {
-            @if $type == flex or $type == static {
-                $selectors: join($selectors, '.#{$component}_#{$sub-component}');
-            }
-            @if $type == flex or $type == chain {
-                $selectors: join($selectors, '[class*="#{$component}_#{$sub-component}-"]');
-            }
+            $selectors: join($selectors, '[class*="#{$component}_#{$sub-component}"]', comma);
         }
-        $selectors: to-string($selectors, ", ");
     }
     @at-root {
         #{$selectors} {
@@ -98,10 +92,10 @@ $component: null;
 }
 
 // Alias for multiple components
-@mixin sub-components($sub-components, $type: $type) {
-	@include sub-component($sub-components, $type) {
-		@content;
-	}
+@mixin sub-components($sub-components) {
+    @include sub-component($sub-components) {
+        @content;
+    }
 }
 
 // 3. Overwrite
