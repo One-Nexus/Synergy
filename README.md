@@ -15,6 +15,8 @@ bower install Modular
 
 ## Overview
 
+> This documentation is out of date and is currently being updated to reflect master branch
+
 Modular aims to take modular CSS architecting to the next level. Similar in principle to the popular [BEM](http://csswizardry.com/2013/01/mindbemding-getting-your-head-round-bem-syntax/) convention, Modular is based off the idea of having **modules**, **components** and **modifiers**. 
 
 Have you ever found yourself using BEM and ending up with HTML like this?
@@ -1399,11 +1401,11 @@ Released: 17th October 2015
 ###### Release Notes
 
 * new **modular.js** extension - talk betwen CSS and JS
-* renaming `extend-modifiers()` mixin to `modifiers()`
 * removing the need to define component name when including `component()`
 * more intelligent `overwrite()` mixin with more options
 * more intelligent `modifier()` mixin with more options
 * adding `$parent` option to `extend()` mixin
+* removing media query option from `context()` mixin
 * general improvements to code and performance
 
 #### Version 2.7.0
