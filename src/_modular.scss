@@ -167,57 +167,47 @@ $component: null;
 // Overwrite a sub-component in alternate context
 //-----------------------------------------------------------------
 
-// 	Usage
+//  Usage
 // 
-// 	@include component(form) {
+//  @include component(form) {
 //
-//		@include sub-component(input) {
-//			...
-//		}
+//      @include sub-component(input) {
+//          ...
+//      }
 //
-//		@include modifier(html5) {
-//			@include overwrite-sub(input) {
-//				...
-//			}
-//		}
+//      @include modifier(html5) {
+//          @include overwrite-sub(input) {
+//              ...
+//          }
+//      }
 //
-// 	}
+//  }
 //
-// 	<div class="form-html5">
-//		<input class="form_input" type="text" />
-//	</div>
+//  <div class="form-html5">
+//      <input class="form_input" type="text" />
+//  </div>
 
-@mixin overwrite-sub($sub-components, $type: $type, $parent: null, $special: null) {
-	$component: if($parent != null, $parent, $component);
-	$selectors: ();
-	@each $sub-component in $sub-components {
-		$selector: #{$component}_#{$sub-component};
-		@if $type == flex or $type == static {
-			@if $special == adjacent-sibling {
-				$selectors: join($selectors, '+ .#{$selector}');
-			} @else {
-				$selectors: join($selectors, '.#{$selector}');
-			}
-		}
-		@if $type == flex or $type == chain {
-			@if $special == adjacent-sibling {
-				$selectors: join($selectors, '+ [class*="#{$selector}-"]');
-			} @else {
-				$selectors: join($selectors, '[class*="#{$selector}-"]');
-			}
-		}
-	}
-	$selectors: to-string($selectors, ", ");
-	#{$selectors} {
-		@content;
-	}
+@mixin overwrite-sub($sub-components, $parent: null, $special: null) {
+    $component: if($parent != null, $parent, $component);
+    $selectors: ();
+    @each $sub-component in $sub-components {
+        $selector: #{$component}_#{$sub-component};
+        @if $special == adjacent-sibling {
+            $selectors: join($selectors, '+ [class*="#{$selector}"]', comma);
+        } @else {
+            $selectors: join($selectors, '[class*="#{$selector}"]', comma);
+        }
+    }
+    #{$selectors} {
+        @content;
+    }
 }
 
 // Alias for multiple components
 @mixin overwrite-subs($sub-components, $type: $type) {
-	@include overwrite-sub($sub-components, $type) {
-		@content;
-	}
+    @include overwrite-sub($sub-components, $type) {
+        @content;
+    }
 }
 
 // 5. Modifiers 
