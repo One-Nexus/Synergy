@@ -564,10 +564,10 @@ This mixin allows you to overwrite the styles of existing components and modifie
         
 		// If website has "top-bar" and top-bar is "fixed" and header is "absolute"
 		@at-root {
-			@include overwrite(top-bar, $is: fixed) {
-				@include overwrite(header, $is: absolute, $special: adjacent-sibling) {
-					@include overwrite($is: full-screen, $special: adjacent-sibling) {
-						margin-top: option($top-bar, height);
+			@include overwrite('top-bar', $is: fixed) {
+				@include overwrite('header', $is: 'absolute', $special: 'adjacent-sibling') {
+					@include overwrite($is: 'full-screen', $special: 'adjacent-sibling') {
+						margin-top: option($top-bar, 'height');
 					}
 				}
 			}
