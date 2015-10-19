@@ -594,10 +594,9 @@ Hopefully by looking between the 2 you get a good idea of how the advanced featu
 
 #### Overwrite-Sub
 
-As above, this mixin is used for overwriting styles for an existing sub-component in alternative context. 4 parameters are accepted for the `overwrite-sub()` mixin:
+As above, this mixin is used for overwriting styles for an existing sub-component in alternative context. 3 parameters are accepted for the `overwrite-sub()` mixin:
 
 * `$sub-components` - the name of the component(s) you wish to overwrite [required]
-* `$type` - as above, this can be either `flex` (default), `chain` or `static` [optional]
 * `$parent` - the parent of your sub-component [optional]
 * `$special` - set a special operator [optonal]
 
