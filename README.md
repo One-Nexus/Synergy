@@ -197,10 +197,10 @@ console.log(_module['header']['dark']); // returns true or false
 $(_header).doSomething();
 ```
 
-Using Modular's custom function, you can do something like:
+Using Modular's custom function, you can also do:
 
 ```js
-if (setting('header', 'dark')) {
+if (_setting('header', 'dark')) {
     
     $(_header).doSomething();
     

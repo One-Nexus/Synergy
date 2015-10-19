@@ -57,7 +57,7 @@ $.each(_module, function(component) {
 // Functions
 //-----------------------------------------------------------------
 
-//	1. setting()
+//	1. _setting()
 
 //-----------------------------------------------------------------
 
@@ -66,11 +66,11 @@ $.each(_module, function(component) {
 
 //	Usage
 //
-//	if(setting(navigation, 'sticky')) {
+//	if(_setting(navigation, 'sticky')) {
 //		...
 //	}
 
-function setting(component, setting) {
+function _setting(component, setting) {
 	
 	var $setting  = _module[component][setting],
 		$id = $('.' + component + ', [class*="' + component + '-"]'),
