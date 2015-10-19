@@ -40,14 +40,14 @@ function getStylesConfig(camelCase) {
 }
 
 // Store configuartion data in a variable
-var module = getStylesConfig();
+var _module = getStylesConfig();
 
 // CamelCase the config
 var moduleCC = getStylesConfig(camelCase);
 
 // Create a global variable to select each main component in the DOM
 var componentIndex = 0;
-$.each(module, function(component) {
+$.each(_module, function(component) {
 	var componentCC = moduleCC[Object.keys(moduleCC)[componentIndex]]['name'];
 	window['_' + componentCC] = '.' + component + ', [class*="' + component + '-"]';
 	componentIndex++;
@@ -72,7 +72,7 @@ $.each(module, function(component) {
 
 function setting(component, setting) {
 	
-	var $setting  = module[component][setting],
+	var $setting  = _module[component][setting],
 		$id = $('.' + component + ', [class*="' + component + '-"]'),
 		$selector = $id.is('[class*="-' + setting + '"]') == true;
 		
