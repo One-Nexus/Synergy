@@ -86,7 +86,7 @@ Modular allows you to create configurable components with customizable settings.
 
 ```scss
 @mixin header($custom: ()) {
-	...	
+    ...	
 }
 ```
 
@@ -95,16 +95,16 @@ The `$custom` variable passed to the mixin is what will serve any custom options
 ```scss
 @mixin header($custom: ()) {
 
-	$header: config((
-		
-		// Options
-		top      : 50px,
-		bg-color : black
-		
-	), $custom);
-	
-	...
-		
+    $header: config((
+        
+        // Options
+        top      : 50px,
+        bg-color : black
+        
+    ), $custom);
+    
+    ...
+
 }
 ```
 
@@ -114,17 +114,17 @@ To allow any subsequent modules to access the current module's options, set the 
 
 ```scss
 @mixin header($custom: ()) {
-
-	$header: config((
-		
-		// Options
-		top      : 50px,
-		bg-color : black
-		
-	), $custom) !global;
-	
-	...
-		
+    
+    $header: config((
+        
+        // Options
+        top      : 50px,
+        bg-color : black
+        
+    ), $custom) !global;
+    
+    ...
+        
 }
 ```
 
@@ -133,22 +133,22 @@ The basis for your module is now ready. Next, the actual component itself:
 ```scss
 @mixin header($custom: ()) {
 
-	$header: config((
-		
-		// Options
-		top  : 50px,
-		bg-color : black
-		
-	), $custom);
-
-	@include component(header) {
-		
-		// Core Styles
-		margin-top: option($header, top);
-		background-color: option($header, bg-color);
-		
-	} // component(header)
-		
+    $header: config((
+        
+        // Options
+        top  : 50px,
+        bg-color : black
+        
+    ), $custom);
+    
+    @include component(header) {
+        
+        // Core Styles
+        margin-top: option($header, top);
+        background-color: option($header, bg-color);
+        
+    } // component(header)
+        
 } // @mixin header
 ```
 
@@ -164,32 +164,34 @@ Read the [Advanced Documentation](#module-configuration-1) section to find out h
 
 ```scss
 @mixin header($custom: ()) {
-
-	$header: config((
-		
-		// Options
-		dark : false,
-		side : false // left or right
-		
-	), $custom);
-	
-	...
-		
+    
+    $header: config((
+        
+        // Options
+        dark : false,
+        side : false // left or right
+        
+    ), $custom);
+    
+    ...
+        
 }
 
 @include header((
-	dark : true,
-	side : left	
+    dark : true,
+    side : left	
 ))
 ```
 
 ### Accessing in JS
 
-If you are using `modular.js`, you are now free to do something like the following, if some far away JavaScript file:
+> Make sure to read the [complete section](#) on `modular.js` if you intend on using it - this is just an overview of what is possible.
+
+you are now free to do something like the following, in some far away JavaScript file:
 
 ```js
 // get a module's option value
-console.log(module['header']['dark']); // true
+console.log(module['header']['dark']); // returns true or false
 
 // target your module in the DOM
 $(_header).doSomething();
@@ -237,6 +239,10 @@ git submodule add https://github.com/esr360/Modular.git
 git submodule update --init --recursive
 ```
 
+Now import the respective `_modular.scss` and optional `modular.js` files into your project as desired. 
+
+> Ensure to import the files *before* you attempt to run any Modular code.
+
 ## Advanced Documentation
 
 ### Mixins
@@ -260,6 +266,10 @@ git submodule update --init --recursive
 * [Including Your Module](#including-your-module)
 * [Global Configuration](#global-configuration)
 * [Setting Up A Project](#setting-up-a-project)
+
+### modular.js
+
+* [Getting Started](#bool-options)
 
 #### Component
 
