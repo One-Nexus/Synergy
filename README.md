@@ -275,12 +275,28 @@ Now import the respective `_modular.scss` and optional `modular.js` files into y
 
 The `component()` mixin is what generates the selectors for your component/module. The mixin accepts 2 parameters:
 
-* `$components` - the name of your component(s) [required]
+* `$components` - the name of your component(s) [optional]
 * `$type` - this defines how the mixin generates the selectors for your component(s) [optional]
 
 ```scss
 @include component(header) {
 	...
+}
+```
+
+If `$components` is not defined, it will look for a `name` value in your module's config. This is an alternative way of using the `component()` mixin:
+
+```scss
+@mixin header($custom: ()) {
+    
+    $header: config((
+        name: header        
+    ), $custom);
+    
+    @include component {
+        ...   
+    }
+        
 }
 ```
 
@@ -356,10 +372,9 @@ Because of how the wildcard selectors are generated, it is not possible to creat
 * reversed wording (wrap-header)
 * underscore (header_wrapper)
 
-To keep as similar to BEM as possible, Modular provies an easy way to create relating components using underscores, eg - `header_wrapper`. The `sub-component` mixin accepts 2 parameters:
+To keep as similar to BEM as possible, Modular provies an easy way to create relating components using underscores, eg - `header_wrapper`. The `sub-component` mixin accepts a single parameter:
 
 * `$sub-components` - the name of your sub-component(s) [optional]
-* `$type` - as above, this can be either `flex` (default), `chain` or `static` [optional]
 
 ```scss
 @include component(header) {
@@ -375,7 +390,7 @@ To keep as similar to BEM as possible, Modular provies an easy way to create rel
 <div class="header_wrapper">...</div>
 ```
 
-Sub-Components work like regular components, so you can add modifiers:
+Sub-Components work like regular components, in the sense that you can add modifiers:
 
 ```scss
 @include component(header) {
@@ -403,6 +418,13 @@ Sub-Components work like regular components, so you can add modifiers:
 	}	
 	
 }
+```
+
+```html
+<div class="footer">
+    <div class="footer_nav">...</div>
+    <div class="footer_copyright">...</div>
+</div>
 ```
 
 ##### Global Sub-Component Styles
@@ -473,6 +495,8 @@ This mixin allows you to overwrite the styles of existing components and modifie
 
 * `$components` - the name of the component(s) you wish to overwrite [required]
 * `$type` - as above, this can be either `flex` (default), `chain` or `static` [optional]
+* `$is` - overwrite the component only if it has certain modifiers [optional]
+* `$not` - overwrite the component only if it does not have certain modifiers [optional]
 * `$special` - set a special operator [optonal]
 
 ```scss
@@ -519,31 +543,52 @@ This mixin allows you to overwrite the styles of existing components and modifie
 ##### Special Operators
 
 * `adjacent-sibling` - overwrite a component when it is also an adjacent sibling
-* _more comming soon..._
+* `general-sibling` - overwrite a component when it is also a general sibling
 
-###### Adjacent Sibling
+##### Advanced Example
+
+> This is from a real life profect. We're into some pretty next level shit here already, so for brevetiy I won't explain what `@at-root` is doing in the below example.
 
 ```scss
-@include component(logo) {
-	color: red;
-}
-	
-@include component(navigation) {
+@mixin billboard($custom: ()) {
 
-	@include overwrite(logo, $special: adjacent-sibling) {
-		color: blue;
-	}
+	$billboard: config((
+		name            : billboard,
+        selector-type   : chain,
+		full-screen     : false
+	), $custom) !global;
+
+	@include component {
+        
+        ...
+        
+		// If website has "top-bar" and top-bar is "fixed" and header is "absolute"
+		@at-root {
+			@include overwrite(top-bar, $is: fixed) {
+				@include overwrite(header, $is: absolute, $special: adjacent-sibling) {
+					@include overwrite($is: full-screen, $special: adjacent-sibling) {
+						margin-top: option($top-bar, height);
+					}
+				}
+			}
+		}
+        
+        ...
 	
+	} // component
+	
+} // @mixin billboard
+```
+
+You're probably curious as to what the hell is going on here. Let's take a look at the computed selector:
+
+```css
+[class*="top-bar-"][class*="-fixed"] + [class*="header-"][class*="-absolute"] + [class*="billboard-"][class*="-full-screen"] {
+    ...
 }
 ```
 
-```html
-<div class="navigation">...</div>
-<div class="logo">I'm blue!</div>
-
-<div class="logo">I'm red!</div>
-<div class="navigation">...</div>
-```
+Hopefully by looking between the 2 you get a good idea of how the advanced features of this mixin work.
 
 #### Overwrite-Sub
 
