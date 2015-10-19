@@ -168,8 +168,8 @@ Read the [Advanced Documentation](#module-configuration-1) section to find out h
     $header: config((
         
         // Options
-        dark : false,
-        side : false // left or right
+        'dark' : false,
+        'side' : false // left or right
         
     ), $custom);
     
@@ -178,8 +178,8 @@ Read the [Advanced Documentation](#module-configuration-1) section to find out h
 }
 
 @include header((
-    dark : true,
-    side : left	
+    'dark' : true,
+    'side' : left	
 ))
 ```
 
