@@ -3,6 +3,10 @@
 
 > A library of Sass mixins for architecting modular, configurable and scalable CSS.
 
+##### NEW IN VERSION 3:
+
+Optional `modular.js` file - pass your Sass config to your JS
+
 * [Overview](#overview)
 * [Advanced Documentation](#advanced-documentation)
 * [Changelog](#changelog)
