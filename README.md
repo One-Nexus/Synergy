@@ -493,11 +493,13 @@ By not passing a parameter to the `sub-component()` mixin, you can apply styles 
 
 This mixin allows you to overwrite the styles of existing components and modifiers when in context of another component. The `overwrite()` mixin accepts 2 parameters:
 
-* `$components` - the name of the component(s) you wish to overwrite [required]
+* `$components` - the name of the component(s) you wish to overwrite [optional]
 * `$type` - as above, this can be either `flex` (default), `chain` or `static` [optional]
 * `$is` - overwrite the component only if it has certain modifiers [optional]
 * `$not` - overwrite the component only if it does not have certain modifiers [optional]
 * `$special` - set a special operator [optonal]
+
+> Leaving `$components` undefined will instead look for a `name` value of your module's config (see [Advanced Example](#advanced-example-2).
 
 ```scss
 @include components((logo, nav)) {
