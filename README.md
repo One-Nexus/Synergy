@@ -99,7 +99,7 @@ The `$custom` variable passed to the mixin is what will serve any custom options
         
         // Options
         'top'      : 50px,
-        'bg-color' : 'black'
+        'bg-color' : black
         
     ), $custom);
     
@@ -118,8 +118,8 @@ To allow any subsequent modules to access the current module's options, set the 
     $header: config((
         
         // Options
-        top      : 50px,
-        bg-color : black
+        'top'      : 50px,
+        'bg-color' : black
         
     ), $custom) !global;
     
@@ -136,16 +136,16 @@ The basis for your module is now ready. Next, the actual component itself:
     $header: config((
         
         // Options
-        top  : 50px,
-        bg-color : black
+        'top'      : 50px,
+        'bg-color' : black
         
     ), $custom);
     
-    @include component(header) {
+    @include component('header') {
         
         // Core Styles
-        margin-top: option($header, top);
-        background-color: option($header, bg-color);
+        margin-top: option($header, 'top');
+        background-color: option($header, 'bg-color');
         
     } // component(header)
         
