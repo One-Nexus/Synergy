@@ -12,8 +12,6 @@
 
 ## Overview
 
-> This documentation is out of date and is currently being updated to reflect master branch
-
 Modular aims to take modular CSS architecting to the next level. Similar in principle to the popular [BEM](http://csswizardry.com/2013/01/mindbemding-getting-your-head-round-bem-syntax/) convention, Modular is based off the idea of having **modules**, **components** and **modifiers**. 
 
 Have you ever found yourself using BEM and ending up with HTML like this?
@@ -32,16 +30,16 @@ The benefits of using this HTML over conventional BEM syntax are self-apparent. 
 
 ```scss
 @include component(button) {
-	// core button styles
-	...
-	@include modifier(large) {
-		// large button styles
-		...
-	}
-	@include modifier(success) {
-		// success button styles
-		...
-	}
+    // core button styles
+    ...
+    @include modifier(large) {
+        // large button styles
+        ...
+    }
+    @include modifier(success) {
+        // success button styles
+        ...
+    }
 }
 ```
 
@@ -146,19 +144,19 @@ The basis for your module is now ready. Next, the actual component itself:
 	@include component(header) {
 		
 		// Core Styles
-		margin-top: map-get($header, top);
-		background-color: map-get($header, bg-color);
+		margin-top: option($header, top);
+		background-color: option($header, bg-color);
 		
 	} // component(header)
 		
 } // @mixin header
 ```
 
-To call an option, the [**map-get**](http://sass-lang.com/documentation/Sass/Script/Functions.html#map_get-instance_method) feature of Sass is used. The basic header can now be created with the following HTML:
+To call an option, a custom function of `option` is used. The basic header can now be created with the following, familiar HTML:
 
 ```html
 <div class="header">
-	...
+    ...
 </div>
 ```
 
@@ -184,6 +182,38 @@ Read the [Advanced Documentation](#module-configuration-1) section to find out h
 	side : left	
 ))
 ```
+
+### Accessing in JS
+
+If you are using `modular.js`, you are now free to do something like the following, if some far away JavaScript file:
+
+```js
+// get a module's option value
+console.log(module['header']['dark']); // true
+
+// target your module in the DOM
+$(_header).doSomething();
+```
+
+Using Modular's custom function, you can do something like:
+
+```js
+if (setting('header', 'dark')) {
+    
+    $(_header).addClass('is-dark');
+    
+}
+```
+
+Using this function, you can also apply scripts to your element like so:
+
+```html
+<div class="header-dark">
+    ...
+</div>
+```
+
+[Read more](#) about `modular.js`.
 
 ## Installation
 
