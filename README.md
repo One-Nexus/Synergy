@@ -187,7 +187,7 @@ Read the [Advanced Documentation](#module-configuration-1) section to find out h
 
 > Make sure to read the [complete section](#) on `modular.js` if you intend on using it - this is just an overview of what is possible.
 
-you are now free to do something like the following, in some far away JavaScript file:
+If you are using `modular.js`, you are now free to do something like the following, in some far away JavaScript file:
 
 ```js
 // get a module's option value
