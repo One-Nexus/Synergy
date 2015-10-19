@@ -3,19 +3,14 @@
 
 > A library of Sass mixins for architecting modular, configurable and scalable CSS.
 
-##### NEW IN VERSION 3:
+#### New in Version 3
 
-Optional `modular.js` file - pass your Sass config to your JS
+Optional `modular.js` file - pass your Sass config to your JS - [learn more](#)
 
 * [Overview](#overview)
+* [Installation](#installation)
 * [Advanced Documentation](#advanced-documentation)
 * [Changelog](#changelog)
-
-##### Bower Installation:
-
-```html
-bower install Modular
-```
 
 ## Overview
 
@@ -190,6 +185,28 @@ Read the [Advanced Documentation](#module-configuration-1) section to find out h
 	dark : true,
 	side : left	
 ))
+```
+
+## Installation
+
+##### With Bower
+
+```html
+bower install Modular
+```
+
+Or...
+
+##### As Git Sub-Module
+
+```html
+git submodule add https://github.com/esr360/Modular.git
+```
+
+###### If using modular.js
+
+```html
+git submodule update --init --recursive
 ```
 
 ## Advanced Documentation
