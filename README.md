@@ -32,11 +32,11 @@ The benefits of using this HTML over conventional BEM syntax are self-apparent. 
 @include component('button') {
     // core button styles
     ...
-    @include modifier(large) {
+    @include modifier('large') {
         // large button styles
         ...
     }
-    @include modifier(success) {
+    @include modifier('success') {
         // success button styles
         ...
     }
@@ -98,8 +98,8 @@ The `$custom` variable passed to the mixin is what will serve any custom options
     $header: config((
         
         // Options
-        top      : 50px,
-        bg-color : black
+        'top'      : 50px,
+        'bg-color' : 'black'
         
     ), $custom);
     
