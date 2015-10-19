@@ -547,6 +547,30 @@ This mixin allows you to overwrite the styles of existing components and modifie
 * `adjacent-sibling` - overwrite a component when it is also an adjacent sibling
 * `general-sibling` - overwrite a component when it is also a general sibling
 
+##### Basic Example
+
+```scss
+@include component(logo) {
+	color: red;
+}
+	
+@include component(navigation) {
+
+	@include overwrite(logo, $special: adjacent-sibling) {
+		color: blue;
+	}
+	
+}
+```
+
+```html
+<div class="navigation">...</div>
+<div class="logo">I'm blue!</div>
+
+<div class="logo">I'm red!</div>
+<div class="navigation">...</div>
+```
+
 ##### Advanced Example
 
 > This is from a real life profect. We're into some pretty next level shit here already, so for brevetiy I won't explain what `@at-root` is doing in the below example.
