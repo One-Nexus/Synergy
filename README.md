@@ -227,7 +227,7 @@ bower install Modular
 
 Or...
 
-##### As Git Sub-Module
+##### As Git Submodule
 
 ```html
 git submodule add https://github.com/esr360/Modular.git
@@ -279,7 +279,7 @@ The `component()` mixin is what generates the selectors for your component/modul
 * `$type` - this defines how the mixin generates the selectors for your component(s) [optional]
 
 ```scss
-@include component(header) {
+@include component('header') {
 	...
 }
 ```
@@ -290,7 +290,7 @@ If `$components` is not defined, it will look for a `name` value in your module'
 @mixin header($custom: ()) {
     
     $header: config((
-        name: header        
+        'name' : 'header'        
     ), $custom);
     
     @include component {
@@ -303,7 +303,7 @@ If `$components` is not defined, it will look for a `name` value in your module'
 `$components` is usually a single value but can also be a list, eg. `(header, footer)`, should you wish to apply styles to more than one main component. For such instances, an *alias* mixin of `components()` is available:
 
 ```scss
-@include components((header, footer)) {
+@include components(('header', 'footer')) {
 	...
 }
 ```
@@ -313,7 +313,7 @@ If `$components` is not defined, it will look for a `name` value in your module'
 ##### Flex
 
 ```scss
-@include component(header, flex) {
+@include component('header', 'flex') {
 	...
 }
 ```
@@ -323,7 +323,7 @@ This is the default value for a component; it creates wildcards for both `.compo
 Or if using the default `$type` value of `flex`, you do not need to pass a second parmeter here:
 
 ```scss
-@include component(header) {
+@include component('header') {
 	...
 }
 ```
@@ -331,7 +331,7 @@ Or if using the default `$type` value of `flex`, you do not need to pass a secon
 ##### Chain
 
 ```scss
-@include component(header, chain) {
+@include component('header', 'chain') {
 	...
 }
 ```
@@ -341,7 +341,7 @@ The chain option should be used if you are looking to optimise your CSS output, 
 ##### Static
 
 ```scss
-@include component(header, static) {
+@include component('header', 'static') {
 	...
 }
 ```
@@ -351,15 +351,15 @@ The static option creates only the naked selector for your component; ie - `.sel
 ##### Advanced Example
 
 ```scss
-@include components((header, footer), static) {
+@include components(('header', 'footer'), 'static') {
 	// apply to both header and footer components
 }
 
-@include component(header, static) {
+@include component('header', 'static') {
 	// apply only to header
 }
 
-@include component(footer, static) {
+@include component('footer', 'static') {
 	// apply only to footer
 }
 ```
