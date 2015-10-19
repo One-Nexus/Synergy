@@ -95,14 +95,13 @@ The `$custom` variable passed to the mixin is what will serve any custom options
 ```scss
 @mixin header($custom: ()) {
 
-    $header: config(
-        (        
-            // Options
-            'top'      : 50px,
-            'bg-color' : 'black'
-            
-        ), 
-    $custom);
+    $header: config((
+        
+        // Options
+        'top'      : 50px,
+        'bg-color' : 'black'
+        
+    ), $custom);
     
     ...
 
