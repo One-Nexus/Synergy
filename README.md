@@ -191,7 +191,7 @@ If you are using `modular.js`, you are now free to do something like the followi
 
 ```js
 // get a module's option value
-console.log(module['header']['dark']); // returns true or false
+console.log(_module['header']['dark']); // returns true or false
 
 // target your module in the DOM
 $(_header).doSomething();
@@ -202,7 +202,7 @@ Using Modular's custom function, you can do something like:
 ```js
 if (setting('header', 'dark')) {
     
-    $(_header).addClass('is-dark');
+    $(_header).doSomething();
     
 }
 ```
