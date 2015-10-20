@@ -673,17 +673,17 @@ As above, this mixin is used for overwriting styles for an existing sub-componen
 ##### Using Inside a Different Component
 
 ```scss
-@include component(heading) {
+@include component('heading') {
 	
-	@include sub-component(group) {
+	@include sub-component('group') {
 		...	
 	}	
 	
 }
 
-@include component(widget) {
+@include component('widget') {
 
-	@include overwrite-sub(group, $parent: heading) {
+	@include overwrite-sub('group', $parent: 'heading') {
 		...
 	}
 	
@@ -706,14 +706,14 @@ As above, this mixin is used for overwriting styles for an existing sub-componen
 ###### Adjacent Sibling
 
 ```scss
-@include component(widget) {
+@include component('widget') {
 
-	@include sub-component(title) {
+	@include sub-component('title') {
 		color: red;
 	}
 	
-	@include sub-component(icon) {
-		@include overwrite-sub(title, $special: adjacent-sibling) {
+	@include sub-component('icon') {
+		@include overwrite-sub('title', $special: 'adjacent-sibling') {
 			color: blue;
 		}
 	}
@@ -741,15 +741,15 @@ The `modifier()` mixin generates the selector for any modifier of your component
 
 
 ```scss
-@include component(button) {
+@include component('button') {
 	
 	...
 	
-	@include modifier(small) {
+	@include modifier('small') {
 		font-size: 0.75em;
 	}
 	
-	@include modifier(large) {
+	@include modifier('large') {
 		font-size: 1.5em;
 	}
 	
@@ -772,19 +772,19 @@ You can use any number of modifiers on a single element in the HTML, and in any 
 ##### Alias Mixin For Multiple Modifiers
 
 ```scss
-@include component(button) {
+@include component('button') {
 	
 	...
 	
-	@include modifiers((buy-now, add-to-basket)) {
+	@include modifiers(('buy-now', 'add-to-basket')) {
 		text-transform: uppercase;
 	}
 	
-	@include modifier(buy-now) {
+	@include modifier('buy-now') {
 		...
 	}
 	
-	@include modifier(add-to-basket) {
+	@include modifier('add-to-basket') {
 		...
 	}
 	
@@ -798,17 +798,17 @@ The `nested-modifier()` mixin is used to nest modifiers within one another, mean
 * `$modifiers` - the name of your modifier(s) [required]
 
 ```scss
-@include component(button) {
+@include component('button') {
 	
 	content: "null";
 
-	@include modifier(white) {
+	@include modifier('white') {
 		content: "foo";
 	}
 	
-	@include modifier(border) {
+	@include modifier('border') {
 		content: "bar";
-		@include nested-modifier(white) {
+		@include nested-modifier('white') {
 			content: "baz";
 		}
 	}
