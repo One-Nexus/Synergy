@@ -1483,7 +1483,7 @@ Every configurable aspect of your project can now quickly and easily be changed 
 
 ### modular.js
 
-### Credits & Notes
+## Credits & Notes
 
 * [Sassy Maps](https://github.com/at-import/sassy-maps)
 * [Advanced Sass List Functions](http://hugogiraudel.com/2013/08/08/advanced-sass-list-functions/)
