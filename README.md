@@ -831,14 +831,14 @@ This means that in your HTML the element would require both the **border** and *
 ##### Alternate Use-Case
 
 ```scss
-@include component(header) {
+@include component('header') {
 
-	@include modifier(side) {
+	@include modifier('side') {
 		...
-		@include nested-modifier(left) {
+		@include nested-modifier('left') {
 			...
 		}
-		@include nested-modifier(right) {
+		@include nested-modifier('right') {
 			...
 		}
 	}
@@ -849,18 +849,18 @@ This means that in your HTML the element would require both the **border** and *
 ##### Alias Mixin For Multiple Modifiers
 
 ```scss
-@include component(button) {
+@include component('button') {
 
-	@include modifier(buy-now) {
+	@include modifier('buy-now') {
 		...
 	}
 	
-	@include modifier(add-to-basket) {
+	@include modifier('add-to-basket') {
 		...
 	}
 	
-	@include modifier(clearance) {
-		@include nested-modifiers((buy-now, add-to-basket)) {
+	@include modifier('clearance') {
+		@include nested-modifiers(('buy-now', 'add-to-basket')) {
 			...
 		}
 	}
@@ -873,14 +873,14 @@ This means that in your HTML the element would require both the **border** and *
 This mixin allows you to extend multiple modifiers into a new, seperate modifer, essentially combining several modifiers into one.
 
 ```scss
-@include component(button) {
+@include component('button') {
 
-	@include modifier(round)   {...}
-	@include modifier(large)   {...}
-	@include modifier(success) {...}
+	@include modifier('round')   {...}
+	@include modifier('large')   {...}
+	@include modifier('success') {...}
 
-	@include modifier(primary) {
-		@include extend(round, large, success);
+	@include modifier('primary') {
+		@include extend('round', 'large', 'success');
 	}	
 
 }
