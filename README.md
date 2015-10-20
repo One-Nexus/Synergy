@@ -1522,6 +1522,33 @@ And that's it, you're now ready to start using `modular.js`!
 
 #### Configuration
 
+To enable JSON output of your modules' configuration, you need to set the `$to-JSON` variable to `true`. This can be found in the `_modular.scss` file, and is set to `false` by default:
+
+```scss
+// Enable JSON output?
+$to-JSON    : false !default;
+```
+
+Alternatively, you can pass this variable at the top of your main project's Sass file, above all Modular related Sass.
+
+By default, output to JSON is enabled on a per-module basis by passing `name` and `output-JSON` options to your module's config:
+
+```scss
+@mixin header($custom: ()) {
+
+	$header: config((
+		
+		// Options
+		'name'        : header,
+		'output-JSON' : true
+		
+	), $custom);
+
+	...
+		
+} // @mixin header
+```
+
 ## Credits & Notes
 
 * [Sassy Maps](https://github.com/at-import/sassy-maps)
