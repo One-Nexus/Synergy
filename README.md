@@ -945,7 +945,7 @@ As outlined in the [overview](#overview) section, Modular allows you to configur
 		
 	), $custom);
 
-	@include component(header) {
+	@include component('header') {
 		
 		// Core Styles
 		background-color: map-get($header, bg-color);
@@ -964,8 +964,8 @@ For all intents and purposes, there are 2 types of options; bools and non-bools.
 	$header: config((
 		
 		// Options
-		dark : false,
-		top  : 50px
+		'dark' : false,
+		'top'  : 50px
 		
 	), $custom);
 
