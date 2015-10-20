@@ -85,11 +85,12 @@ Which is exactly what the  `component()` mixin does. The reason `[class*="compon
 Modular allows you to create configurable components with customizable settings, such as the below, awesome example:
 
 ```scss
+// perhaps in a file called _header.scss
 @mixin header($custom: ()) {
     
     $header: config((
         
-        // Options
+        // Default Options
         'dark' : false,
         'top'  : 50px
         
@@ -99,6 +100,7 @@ Modular allows you to create configurable components with customizable settings,
         
 } // header()
 
+// perhaps in a seperate file named _theme.scss
 @include header((
     'dark' : true,
     'top'  : 65px	
