@@ -499,9 +499,9 @@ This mixin allows you to overwrite the styles of existing components and modifie
 * `$type` - as above, this can be either `flex` (default), `chain` or `static` [optional]
 * `$is` - overwrite the component only if it has certain modifiers [optional]
 * `$not` - overwrite the component only if it does not have certain modifiers [optional]
-* `$special` - set a special operator [optonal]
+* `$special` - set a special operator [optional]
 
-> Leaving `$components` undefined will instead look for a `name` value of your module's config (see [Advanced Example](#advanced-example-2).
+> Leaving `$components` undefined will instead look for a `name` value of your module's config (see [Advanced Example](#advanced-example-2)).
 
 ```scss
 @include components(('logo', 'nav')) {
@@ -626,7 +626,7 @@ As above, this mixin is used for overwriting styles for an existing sub-componen
 
 * `$sub-components` - the name of the component(s) you wish to overwrite [required]
 * `$parent` - the parent of your sub-component [optional]
-* `$special` - set a special operator [optonal]
+* `$special` - set a special operator [optional]
 
 > The `$parent` parameter is used if you are including this mixin inside a different component to your sub-component's parent.
 
