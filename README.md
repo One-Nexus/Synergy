@@ -1650,7 +1650,7 @@ Let's create a function which allows us to do this in our JavaScript:
 
 ```js
 if(breakpoint('min-width', 'break-3')) {
-  // do something   
+    // do something   
 }
 ```
 
