@@ -1481,6 +1481,8 @@ _theme.scss
 
 Every configurable aspect of your project can now quickly and easily be changed from just one file, whilst retaining a completely modular architecture.
 
+### modular.js
+
 ### Credits & Notes
 
 * [Sassy Maps](https://github.com/at-import/sassy-maps)
@@ -1488,8 +1490,6 @@ Every configurable aspect of your project can now quickly and easily be changed 
 * [Bringing Configuration Objects To Sass](http://hugogiraudel.com/2014/05/05/bringing-configuration-objects-to-sass/)
 
 #### Caveats
-
-> WARNING: Modular is an extremly powerful tool. Use responsibly.
 
 It's important to understand the CSS that is generated when using Modular in order to avoid potential conflicts. One common example might be if you have a **header** component which generates this CSS:
 
