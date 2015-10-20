@@ -519,7 +519,7 @@ This mixin allows you to overwrite the styles of existing components and modifie
 	}
 
 	@include overwrite('logo') {
-		font-sie: 1.5em;
+		font-size: 1.5em;
 	}
 	
 }
