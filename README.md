@@ -906,11 +906,11 @@ The following conditions can be passed to the mixin:
 ##### Parent-Hovered
 
 ```scss
-@include component(widget) {
+@include component('widget') {
 
-	@include sub-component(icon) {
+	@include sub-component('icon') {
 		color: blue;
-		@include context(parent-hovered) {
+		@include context('parent-hovered') {
 			color: white;
 		}	
 	}
@@ -930,36 +930,6 @@ The following conditions can be passed to the mixin:
 }
 ```
 
-##### Media Query Conditions
-
-The `context()` mixin can be used for basic media query parsing in the following format:
-
-```css
-@media ({media_feature}: {value}) and (/*repeat...*/) {
-	...
-}
-```
-
-Where `{media_feature}` is any value from the **media_feature** list [seen here](https://goo.gl/HIa4nD), and `{value}` is your custom value.
-
-```scss
-@include component(header) {
-
-	@include context((min-width: 420px)) {
-		...
-	}
-	
-	@include context((min-width: 420px, max-width: 960px)) {
-		...
-	}
-	
-	@include context((orientation: portrait)) {
-		...
-	}
-	
-}
-```
-
 ### Module Configuration
 
 As outlined in the [overview](#overview) section, Modular allows you to configure your components with customizable options.
@@ -970,8 +940,8 @@ As outlined in the [overview](#overview) section, Modular allows you to configur
 	$header: config((
 		
 		// Options
-		bg-color : black,
-		top      : 50px
+		'bg-color' : black,
+		'top'      : 50px
 		
 	), $custom);
 
@@ -999,13 +969,13 @@ For all intents and purposes, there are 2 types of options; bools and non-bools.
 		
 	), $custom);
 
-	@include component(header) {
+	@include component('header') {
 		
 		// Core Styles
 		margin-top: map-get($header, top);
 		
 		// Settings
-		@include setting(dark) {
+		@include setting('dark') {
 			background-color: black;
 		}
 		
@@ -1022,15 +992,15 @@ Your configuration can be infinitely nested, like so:
 	$global: config((
 		
 		// Options
-		typography: (
-			sizes: (
-				size-1    : 1em,
-				size-2    : 1.2em,
-				size-3    : 1.6em
+		'typography': (
+			'sizes': (
+				'size-1'    : 1em,
+				'size-2'    : 1.2em,
+				'size-3'    : 1.6em
 			),
-			colors: (
-				primary   : red,
-				secondary : blue
+			'colors': (
+				'primary'   : red,
+				'secondary' : blue
 			)
 		)
 		
@@ -1039,26 +1009,6 @@ Your configuration can be infinitely nested, like so:
 	...
 		
 } // @mixin global
-```
-
-When your configuration is more than one level deep, to access the values using `map-get`, you will end up having to do something like:
-
-```scss
-map-get(map-get(map-get($global, typography), colors), primary;
-```
-
-Piece of cake, right? I'm sure you'd agree repeating this over and over in your other modules would quickly become tedious, so for something like this you could create a function underneath the main mixin for your module, similar to the following:
-
-```scss
-@function color($color) {
-	map-get(map-get(map-get($global, typography), colors), $color;
-}
-```
-
-You can now access the **colors** map from your config using `color(primary)`, for example:
-
-```scss
-background-color: color(primary);
 ```
 
 #### Bool Options
@@ -1079,9 +1029,9 @@ If you are watching your CSS output, you may wish to remove these modifiers (and
 	$header: config((
 		
 		// Options
-		extend-settings: false,
-		dark : false,
-		top  : 50px
+		'extend-settings': false,
+		'dark' : false,
+		'top'  : 50px
 		
 	), $custom);
 	
@@ -1116,18 +1066,18 @@ In some cases, you may require a hybrid of the above 2 options. You may have a s
 	$header: config((
 		
 		// Options
-		side: false; // left or right
+		'side' : false; // left or right
 		
 	), $custom);
 	
-	@include component(header) {
+	@include component('header') {
 		
-		@include setting(side) {
+		@include setting('side') {
 			// core side header styles
-			@include option(left) {
+			@include option('left') {
 				// left side styles
 			}
-			@include option(right)
+			@include option('right') {
 				// right side styles
 			}
 		}
@@ -1173,13 +1123,13 @@ In some circumstances, we can achieve the same thing without having to use the `
 	$header: config((
 		
 		// Options
-		side: left;
+		'side' : left;
 		
 	), $custom);
 	
-	@include component(header) {
+	@include component('header') {
 		
-		@include setting(side) {
+		@include setting('side') {
 			// Side-Header Styles
 			...
 			#{map-get($header, side)}: 0; // left: 0;
@@ -1207,9 +1157,9 @@ To include your header with customised options, this is done like so:
 
 ```scss
 @include header((
-	dark : true,
-	side : left,
-	top  : 0
+	'dark' : true,
+	'side' : left,
+	'top'  : 0
 ));
 ```
 
@@ -1223,11 +1173,11 @@ What if you want to create a module whose options can be accessed by other modul
 @mixin grid($custom: ()) {
 	
 	$grid: ((
-		breakpoints: ((
-			break-1: 420px,
-			break-2: 740px,
-			break-3: 960px,
-			break-4: 1200px
+		'breakpoints': ((
+			'break-1': 420px,
+			'break-2': 740px,
+			'break-3': 960px,
+			'break-4': 1200px
 		));
 	), $custom);
 	
@@ -1242,11 +1192,11 @@ This is entirely possible, and requires the addition of the `!global` flag:
 @mixin grid($custom: ()) {
 	
 	$grid: ((
-		breakpoints: ((
-			break-1: 420px,
-			break-2: 740px,
-			break-3: 960px,
-			break-4: 1200px
+		'breakpoints': ((
+			'break-1': 420px,
+			'break-2': 740px,
+			'break-3': 960px,
+			'break-4': 1200px
 		));
 	), $custom) !global;
 	
@@ -1301,14 +1251,14 @@ _theme.scss
 @mixin typography($custom: ()) {
 
     $typography: config((
-        colors: (
-            primary   : blue,
-            secondary : green
+        'colors': (
+            'primary'   : blue,
+            'secondary' : green
         ),
-        sizes: (
-            small     : 0.8em,
-            regular   : 1em,
-            large     : 1.4em           
+        'sizes': (
+            'small'     : 0.8em,
+            'regular'   : 1em,
+            'large'     : 1.4em           
         )
     ), $custom) !global;
 
@@ -1341,12 +1291,12 @@ _theme.scss
     $buttons: config((
 
         // Core Styles
-        line-height  : 1.4,
-        side-spacing : 0.5em,
-        background   : grey,
-        color        : white,
+        'line-height'  : 1.4,
+        'side-spacing' : 0.5em,
+        'background'   : grey,
+        'color'        : white,
         // Modifiers
-        radius       : 0.4em
+        'radius'       : 0.4em
 
     ), $custom);
 
@@ -1354,7 +1304,7 @@ _theme.scss
     // Component
     //-------------------------------------------------------------
 
-    @include component(button) {
+    @include component('button') {
 
     // Core Styles
     //-------------------------------------------------------------
@@ -1370,38 +1320,38 @@ _theme.scss
 
         // Patterns
 		
-        @include modifier(round) {
+        @include modifier('round') {
             border-radius: map-get($buttons, radius);
         }
 
-        @include modifier(block) {
+        @include modifier('block') {
             display: block;
         }
 
         // Colors
 
-        @include modifier(primary) {
-            background: color(primary);
+        @include modifier('primary') {
+            background: color('primary');
         }
 
-        @include modifier(secondary) {
-            background: color(secondary);
+        @include modifier('secondary') {
+            background: color('secondary');
         }
 
         // Sizes
 
-        @include modifier(small) {
-            font-size: size(small); 
+        @include modifier('small') {
+            font-size: size('small'); 
         }
 
-        @include modifier(large) {
-            font-size: size(large); 
+        @include modifier('large') {
+            font-size: size('large'); 
         }
 
         // Semantic Styles
 
-        @include modifier(purchase) {
-            @include extend(round, primary, large);
+        @include modifier('purchase') {
+            @include extend('round', 'primary', 'large');
         }
 
     } // component(button)
@@ -1430,12 +1380,12 @@ _theme.scss
 
     $header: config((
 
-        background : color(primary),
-        top        : 50px,
-        dark       : false,
-        dark-color : rgba(black, 0.8),
-        side       : false,
-        side-width : 100%
+        'background' : color('primary'),
+        'top'        : 50px,
+        'dark'       : false,
+        'dark-color' : rgba(black, 0.8),
+        'side'       : false,
+        'side-width' : 100%
 
     ), $custom);
 
@@ -1443,7 +1393,7 @@ _theme.scss
     // Component
     //-------------------------------------------------------------
 
-    @include component(header) {
+    @include component('header') {
 
     // Core Styles
     //-------------------------------------------------------------
@@ -1454,20 +1404,20 @@ _theme.scss
     // Settings
     //-------------------------------------------------------------
 
-        @include setting(dark) {
+        @include setting('dark') {
             background: map-get($header, dark-color);   
         }
 
-        @include setting(side) {
+        @include setting('side') {
             // Core Side-Header Styles
             position: fixed;
             top: 0;
             width: map-get($header, side-width);
             z-index: 99;
-            @include option(left) {
+            @include option('left') {
                 left: 0;
             }
-            @include option(right) {
+            @include option('right') {
                 right: 0;
             }
         }
@@ -1489,17 +1439,17 @@ _theme.scss
 ```scss
 
 @include typography((
-	colors: (
-		primary   : purple,
-		secondary :	blue
+	'colors': (
+		'primary'   : purple,
+		'secondary' : blue
 	)
 ));
 
 @include buttons;
 
 @include header((
-	dark          : true,
-	top           : 0
+	'dark' : true,
+	'top'  : 0
 ));
 
 ```
