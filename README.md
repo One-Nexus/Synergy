@@ -546,8 +546,8 @@ This mixin allows you to overwrite the styles of existing components and modifie
 
 ##### Special Operators
 
-* `adjacent-sibling` - overwrite a component when it is also an adjacent sibling
-* `general-sibling` - overwrite a component when it is also a general sibling
+* `adjacent-sibling` - overwrite a component when it is also an adjacent sibling to the parent component
+* `general-sibling` - overwrite a component when it is also a general sibling to the parent component
 
 ###### Example
 
