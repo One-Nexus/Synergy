@@ -240,7 +240,7 @@ Using this function, you can also apply scripts to your element like so:
 </div>
 ```
 
-[Read more](#) about `modular.js`.
+[Read more](#modularjs-1) about `modular.js`.
 
 ## Installation
 
