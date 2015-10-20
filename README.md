@@ -294,7 +294,9 @@ Now import the respective `_modular.scss` and optional `modular.js` files into y
 
 ### modular.js
 
-* [Getting Started](#bool-options)
+* [Getting Started](#getting-started)
+* [Configuration](#configuration)
+* [Usage](#usage)
 
 #### Component
 
@@ -1616,7 +1618,7 @@ if(_setting('header', 'dark')) {
 }
 ```
 
-#### Media Query Based Example
+##### Media Query Based Example
 
 A popular, practical example of how to use this might be to access your style's breakpoint values to conditionally apply scripts.
 
