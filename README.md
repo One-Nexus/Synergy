@@ -493,7 +493,7 @@ By not passing a parameter to the `sub-component()` mixin, you can apply styles 
 
 #### Overwrite
 
-This mixin allows you to overwrite the styles of existing components and modifiers when in context of another component. The `overwrite()` mixin accepts 2 parameters:
+This mixin allows you to overwrite the styles of existing components and modifiers when in context of another component. The `overwrite()` mixin accepts 5 parameters:
 
 * `$components` - the name of the component(s) you wish to overwrite [optional]
 * `$type` - as above, this can be either `flex` (default), `chain` or `static` [optional]
