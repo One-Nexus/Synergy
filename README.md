@@ -1464,6 +1464,8 @@ Every configurable aspect of your project can now quickly and easily be changed 
 
 #### Caveats
 
+> WARNING: Modular is an extremly powerful tool. Use responsibly.
+
 It's important to understand the CSS that is generated when using Modular in order to avoid potential conflicts. One common example might be if you have a **header** component which generates this CSS:
 
 ```scss
@@ -1474,8 +1476,6 @@ It's important to understand the CSS that is generated when using Modular in ord
 ```
 
 If you then try to add the class **header-wrapper**, the header component's core styles would also be applied to this class, as the component is looking for any class that begins with "header-".
-
-> WARNING: Modular is an extremly powerful tool. Use responsibly.
 
 ### Changelog
 
