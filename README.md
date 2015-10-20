@@ -921,12 +921,12 @@ This mixin allows you to extend multiple modifiers into a new, seperate modifer,
 
 The `context()` mixin allows you to apply styles to your component when certain conditions are met. This mixin accepts 1 parameter:
 
-* `$context` - the name of the predefined condition you wish to be met
+* `$context` - the name of the predefined condition you wish to be met [required]
 
 The following conditions can be passed to the mixin:
 
 * `parent-hovered` - apply styles to a sub-component when the parent component is hovered
-* `($media_feature: $value)` - basic media query parsing for responsive conditions 
+* *more coming soon*
 
 ##### Parent-Hovered
 
