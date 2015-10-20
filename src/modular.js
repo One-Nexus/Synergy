@@ -66,7 +66,7 @@ $.each(_module, function(component) {
 
 //	Usage
 //
-//	if(_setting(navigation, 'sticky')) {
+//	if(_setting('navigation', 'sticky')) {
 //		...
 //	}
 

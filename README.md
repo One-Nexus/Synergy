@@ -1485,6 +1485,8 @@ Every configurable aspect of your project can now quickly and easily be changed 
 
 #### Getting Started
 
+> modular.js requires a recent version of jQuery
+
 So you've decided to see what this whole modular.js thing is about, great! The first thing you should know is that the man behind the magic here is [@HugoGiraudel](https://github.com/HugoGiraudel) for his project [SassyJSON](https://github.com/HugoGiraudel/SassyJSON). This is what actually outputs your Sass config to JSON format. which is how you interact with your modules in JS. Modular uses a slightly customized version of SassyJSON [available here](https://github.com/esr360/SassyJSON). SassyJSON comes included with Modular as a Git submodule. 
 
 Ensure you have a copy of the forked SassyJSON in your project. If you have installed Modular as a Git submodule, you can run:
@@ -1540,13 +1542,124 @@ By default, output to JSON is enabled on a per-module basis by passing `name` an
 		
 		// Options
 		'name'        : header,
-		'output-JSON' : true
+		'output-JSON' : true,
+        'dark'        : false
 		
 	), $custom);
 
 	...
 		
 } // @mixin header
+```
+
+If you want all your modules to output their configuation to JSON by default, you can set the `$output-JSON` variable in `_modular.scss` to `true`. Alternatively, you can add this variable at the top of your project's main Sass file, above all Modular related Sass.
+
+If everything is running as expected, once your Sass has been compiled your CSS should now contain the configuration for your modules as JSON. It should look something like this:
+
+```css
+#stylesConfigJSON::before {
+    content: '{"header": {"selector-type": "flex", "extend-settings": true, "output-JSON": true, "name": "header", "dark": false}}';
+    display: block;
+    height: 0;
+    overflow: hidden;
+    width: 0;
+}
+```
+
+You may not recognize all the values that are generarted; don't worry, they're just default values for a module. Give the documentation another read if you want to know what they are.
+
+#### Usage
+
+It is now possible to access your module like so:
+
+```js
+$(_header).doSomething();
+```
+
+Which is just a shorthand for:
+
+```js
+$('.header, [class*="header-"]').doSomething();
+```
+
+> If your module is named something like `app-header`, this would be camelCased and you would need to use `$(_appHeader)`
+
+To access a specific option, you can do:
+
+```js
+module['app-header']['dark']; // returns true or false
+```
+
+##### Custom '_setting()' Function
+
+Modular.js comes with a custom `_setting` function for usage on boolean options. The function will return `true` if either the option itself is set to `true`, or if your element has a `modifier` of the option name:
+
+```scss
+@include header((
+	'dark' : true
+));
+```
+
+Or ...
+
+```html
+<div class="header-dark">
+    ...
+</div>
+```
+
+Using a simple `if` statement you can now conditionally run JavaScript based off your module's Sass option:
+
+```js
+if(_setting('header', 'dark')) {
+    ...
+}
+```
+
+#### Media Query Based Example
+
+A popular, practical example of how to use this might be to access your style's breakpoint values to conditionally apply scripts.
+
+Consider the following `grid` module:
+
+```scss
+
+@mixin grid($custom: ()) {
+	
+	$grid: config((
+        // Options
+		name                : grid,
+		output-JSON         : true,
+        // Breakpoints
+		breakpoints: (
+			break-0         : 0px,
+			break-1         : 460px,
+			break-2         : 720px,
+			break-3         : 940px,
+			break-4         : 1200px,
+			break-5         : 1400px
+		)
+	), $custom) !global;
+    
+    ...
+	
+} // @mixin grid
+```
+
+Let's create a function which allows us to do this in our JavaScript:
+
+```js
+if(breakpoint('min-width', 'break-3')) {
+  // do something   
+}
+```
+
+This can be achieved with the following code:
+
+```js
+function breakpoint(media, value) {
+	return window.matchMedia('(' + media + ':' + module['grid']['breakpoints'][value] + ')').matches;
+}
 ```
 
 ## Credits & Notes
