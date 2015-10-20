@@ -1483,7 +1483,9 @@ Every configurable aspect of your project can now quickly and easily be changed 
 
 ### modular.js
 
-So you've decided to see what this whole modular.js thing is about, great! The first thing you should know is that the man behind the magic here is [@HugoGiraudel](https://github.com/HugoGiraudel) for his project [SassyJSON](https://github.com/HugoGiraudel/SassyJSON). This is what actually outputs your Sass config to JSON format. Modular uses a slightly customized version of SassyJSON [available here](https://github.com/esr360/SassyJSON). SassyJSON comes included with Modular as a Git submodule. 
+#### Getting Started
+
+So you've decided to see what this whole modular.js thing is about, great! The first thing you should know is that the man behind the magic here is [@HugoGiraudel](https://github.com/HugoGiraudel) for his project [SassyJSON](https://github.com/HugoGiraudel/SassyJSON). This is what actually outputs your Sass config to JSON format. which is how you interact with your modules in JS. Modular uses a slightly customized version of SassyJSON [available here](https://github.com/esr360/SassyJSON). SassyJSON comes included with Modular as a Git submodule. 
 
 Ensure you have a copy of the forked SassyJSON in your project. If you have installed Modular as a Git submodule, you can run:
 
@@ -1495,7 +1497,7 @@ The first thing you need to do is import SassyJSON into your project, *before* M
 
 ```scss
 @import "vendor/SassyJSON/stylesheets/SassyJSON";
-@import "src/_modular.scss"
+@import "src/modular"
 ```
 
 Then include `modular.js` in your project, *before* any scripts which use Modular.
@@ -1505,6 +1507,20 @@ Next, you need to create an element in your HTML which corresponds to the select
 ```html
 <div id="stylesConfigJSON"></div>
 ```
+
+Finally, in your project's main sass file at the end of everything (or rather, at the end of all Modular related files), add the following code:
+
+```scss
+@if variable-exists(to-JSON) and $to-JSON {
+	@include json-encode($config-JSON);
+}
+```
+
+This function will output your JSON in your project's CSS file, which is how the JS will interact with it.
+
+And that's it, you're now ready to start using `modular.js`!
+
+#### Configuration
 
 ## Credits & Notes
 
