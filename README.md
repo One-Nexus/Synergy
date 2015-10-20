@@ -581,9 +581,11 @@ This mixin allows you to overwrite the styles of existing components and modifie
 @mixin billboard($custom: ()) {
 
 	$billboard: config((
+        
 		'name'            : 'billboard',
         'selector-type'   : 'chain',
 		'full-screen'     : false
+        
 	), $custom) !global;
 
 	@include component {
