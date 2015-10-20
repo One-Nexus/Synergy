@@ -3,7 +3,7 @@
 
 > A library of Sass mixins for architecting modular, configurable and scalable CSS.
 
-**New in Version 3:** Optional `modular.js` file - pass your Sass config to your JS - [learn more](#)
+**New in Version 3:** Optional `modular.js` file - pass your Sass config to your JS - [learn more](#accessing-in-js)
 
 * [Overview](#overview)
 * [Installation](#installation)
@@ -82,7 +82,30 @@ Which is exactly what the  `component()` mixin does. The reason `[class*="compon
 
 ### Configuring a Module
 
-Modular allows you to create configurable components with customizable settings. To configure a new module, create a mixin named after your module (ensure the name is unique) and pass an empty `$custom: ()` variable to it:
+Modular allows you to create configurable components with customizable settings, such as the below, awesome example:
+
+```scss
+@mixin header($custom: ()) {
+    
+    $header: config((
+        
+        // Options
+        'dark' : false,
+        'top'  : 50px
+        
+    ), $custom);
+    
+    ...
+        
+} // header()
+
+@include header((
+    'dark' : true,
+    'top'  : 65px	
+))
+```
+
+To configure a new module, create a mixin named after your module (ensure the name is unique) and pass an empty `$custom: ()` variable to it:
 
 ```scss
 @mixin header($custom: ()) {
