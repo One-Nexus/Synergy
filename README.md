@@ -254,13 +254,13 @@ Or...
 
 ##### As Git Submodule
 
-```html
+```
 git submodule add https://github.com/esr360/Modular.git
 ```
 
 ###### If using modular.js
 
-```html
+```
 git submodule update --init --recursive
 ```
 
@@ -1483,6 +1483,29 @@ Every configurable aspect of your project can now quickly and easily be changed 
 
 ### modular.js
 
+So you've decided to see what this whole modular.js thing is about, great! The first thing you should know is that the man behind the magic here is [@HugoGiraudel](https://github.com/HugoGiraudel) for his project [SassyJSON](https://github.com/HugoGiraudel/SassyJSON). This is what actually outputs your Sass config to JSON format. Modular uses a slightly customized version of SassyJSON [available here](https://github.com/esr360/SassyJSON). SassyJSON comes included with Modular as a Git submodule. 
+
+Ensure you have a copy of the forked SassyJSON in your project. If you have installed Modular as a Git submodule, you can run:
+
+```
+git submodule update --init --recursive
+```
+
+The first thing you need to do is import SassyJSON into your project, *before* Modular and any Modular related files:
+
+```scss
+@import "vendor/SassyJSON/stylesheets/SassyJSON";
+@import "src/_modular.scss"
+```
+
+Then include `modular.js` in your project, *before* any scripts which use Modular.
+
+Next, you need to create an element in your HTML which corresponds to the selector SassyJSON attaches to, which is `#stylesConfigJSON`, so create the following element somewhere in your markup:
+
+```html
+<div id="stylesConfigJSON"></div>
+```
+
 ## Credits & Notes
 
 * [Sassy Maps](https://github.com/at-import/sassy-maps)
@@ -1500,7 +1523,7 @@ It's important to understand the CSS that is generated when using Modular in ord
 }
 ```
 
-If you then try to add the class **header-wrapper**, the header component's core styles would also be applied to this class, as the component is looking for any class that begins with "header-".
+If you then try to add the class **header-wrapper** anywhere, the header component's core styles would also be applied to this class, as the component is looking for any class that contains "header-".
 
 ## Changelog
 
