@@ -1487,7 +1487,7 @@ Every configurable aspect of your project can now quickly and easily be changed 
 
 > modular.js requires a recent version of jQuery
 
-So you've decided to see what this whole modular.js thing is about, great! The first thing you should know is that the man behind the magic here is [@HugoGiraudel](https://github.com/HugoGiraudel) for his project [SassyJSON](https://github.com/HugoGiraudel/SassyJSON). This is what actually outputs your Sass config to JSON format. which is how you interact with your modules in JS. Modular uses a slightly customized version of SassyJSON [available here](https://github.com/esr360/SassyJSON). SassyJSON comes included with Modular as a Git submodule. 
+So you've decided to see what this whole modular.js thing is about, great! The first thing you should know is that the man behind the magic here is [@HugoGiraudel](https://github.com/HugoGiraudel) for his project [SassyJSON](https://github.com/HugoGiraudel/SassyJSON). This is what actually outputs your Sass config to JSON format, which is how you interact with your modules in JS. Modular uses a slightly customized version of SassyJSON [available here](https://github.com/esr360/SassyJSON). SassyJSON comes included with Modular as a Git submodule. 
 
 Ensure you have a copy of the forked SassyJSON in your project. If you have installed Modular as a Git submodule, you can run:
 
@@ -1510,7 +1510,7 @@ Next, you need to create an element in your HTML which corresponds to the select
 <div id="stylesConfigJSON"></div>
 ```
 
-Finally, in your project's main sass file at the end of everything (or rather, at the end of all Modular related files), add the following code:
+Finally, in your project's main Sass file at the end of everything (or rather, at the end of all Modular related files), add the following code:
 
 ```scss
 @if variable-exists(to-JSON) and $to-JSON {
@@ -1541,7 +1541,7 @@ By default, output to JSON is enabled on a per-module basis by passing `name` an
 	$header: config((
 		
 		// Options
-		'name'        : header,
+		'name'        : 'header',
 		'output-JSON' : true,
         'dark'        : false
 		
@@ -1628,16 +1628,16 @@ Consider the following `grid` module:
 	
 	$grid: config((
         // Options
-		name                : grid,
-		output-JSON         : true,
+		'name'              : 'grid',
+		'output-JSON'       : true,
         // Breakpoints
-		breakpoints: (
-			break-0         : 0px,
-			break-1         : 460px,
-			break-2         : 720px,
-			break-3         : 940px,
-			break-4         : 1200px,
-			break-5         : 1400px
+		'breakpoints': (
+			'break-0'       : 0px,
+			'break-1'       : 460px,
+			'break-2'       : 720px,
+			'break-3'       : 940px,
+			'break-4'       : 1200px,
+			'break-5'       : 1400px
 		)
 	), $custom) !global;
     
