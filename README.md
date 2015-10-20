@@ -1516,7 +1516,7 @@ Finally, in your project's main sass file at the end of everything (or rather, a
 }
 ```
 
-This function will output your JSON in your project's CSS file, which is how the JS will interact with it.
+This function will output your configuration as JSON in your project's CSS file, which is how the JS will interact with it.
 
 And that's it, you're now ready to start using `modular.js`!
 

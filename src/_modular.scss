@@ -459,7 +459,10 @@ $extend-settings: true;
 // Module configuration
 //-----------------------------------------------------------------
 
-// output config to JSON by default?
+// Enable JSON output?
+$to-JSON    : false;
+
+// Output config for each module by default?
 $output-JSON: false;
 
 $config-JSON: ();
