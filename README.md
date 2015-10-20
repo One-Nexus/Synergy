@@ -463,15 +463,15 @@ By not passing a parameter to the `sub-component()` mixin, you can apply styles 
 ##### Advanced Example
 
 ```scss
-@include component(footer) {
+@include component('footer') {
 	
 	...
 	
-	@include sub-component(wrapper, static) {
+	@include sub-component('wrapper', 'static') {
 		...	
 	}
 	
-	@include sub-components((nav, copyright), static) {
+	@include sub-components(('nav', 'copyright'), 'static') {
 		display: inline-block;
 	}
 	
