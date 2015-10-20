@@ -1610,7 +1610,7 @@ Or ...
 </div>
 ```
 
-Using a simple `if` statement you can now conditionally run JavaScript based off your module's Sass option:
+Using a simple `if` statement you can now conditionally run JavaScript based off your module's option:
 
 ```js
 if(_setting('header', 'dark')) {
