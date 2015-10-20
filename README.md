@@ -504,21 +504,21 @@ This mixin allows you to overwrite the styles of existing components and modifie
 > Leaving `$components` undefined will instead look for a `name` value of your module's config (see [Advanced Example](#advanced-example-2).
 
 ```scss
-@include components((logo, nav)) {
+@include components(('logo', 'nav')) {
 	color: black;	
 }
 
-@include component(logo) {
+@include component('logo') {
 	font-size: 1em;	
 }
 
-@include component(header) {
+@include component('header') {
 	
-	@include overwrite((logo, nav)) {
+	@include overwrite(('logo', 'nav')) {
 		color: white;
 	}
 
-	@include overwrite(logo) {
+	@include overwrite('logo') {
 		font-sie: 1.5em;
 	}
 	
@@ -552,13 +552,13 @@ This mixin allows you to overwrite the styles of existing components and modifie
 ###### Example
 
 ```scss
-@include component(logo) {
+@include component('logo') {
 	color: red;
 }
 	
-@include component(navigation) {
+@include component('navigation') {
 
-	@include overwrite(logo, $special: adjacent-sibling) {
+	@include overwrite('logo', $special: 'adjacent-sibling') {
 		color: blue;
 	}
 	
@@ -581,9 +581,9 @@ This mixin allows you to overwrite the styles of existing components and modifie
 @mixin billboard($custom: ()) {
 
 	$billboard: config((
-		name            : 'billboard',
-        selector-type   : 'chain',
-		full-screen     : false
+		'name'            : 'billboard',
+        'selector-type'   : 'chain',
+		'full-screen'     : false
 	), $custom) !global;
 
 	@include component {
@@ -592,7 +592,7 @@ This mixin allows you to overwrite the styles of existing components and modifie
         
 		// If website has "top-bar" and top-bar is "fixed" and header is "absolute"
 		@at-root {
-			@include overwrite('top-bar', $is: fixed) {
+			@include overwrite('top-bar', $is: 'fixed') {
 				@include overwrite('header', $is: 'absolute', $special: 'adjacent-sibling') {
 					@include overwrite($is: 'full-screen', $special: 'adjacent-sibling') {
 						margin-top: option($top-bar, 'height');
@@ -629,14 +629,14 @@ As above, this mixin is used for overwriting styles for an existing sub-componen
 > The `$parent` parameter is used if you are including this mixin inside a different component to your sub-component's parent.
 
 ```scss
-@include component(form) {
+@include component('form') {
 
-	@include sub-component(input) {
+	@include sub-component('input') {
 		...
 	}
 
-	@include modifier(html5) {
-		@include overwrite-sub(input) {
+	@include modifier('html5') {
+		@include overwrite-sub('input') {
 			...
 		}
 	}
@@ -652,18 +652,18 @@ As above, this mixin is used for overwriting styles for an existing sub-componen
 ##### Alias Mixin For Multiple Components
 
 ```scss
-@include component(form) {
+@include component('form') {
 
-	@include sub-component(input) {
+	@include sub-component('input') {
 		...
 	}
 	
-	@include sub-component(group) {
+	@include sub-component('group') {
 		...
 	}
 
-	@include modifier(html5) {
-		@include overwrite-subs((input, group)) {
+	@include modifier('html5') {
+		@include overwrite-subs(('input', 'group')) {
 			...
 		}
 	}
