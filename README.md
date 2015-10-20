@@ -177,7 +177,7 @@ The basis for your module is now ready. Next, the actual component itself:
 } // @mixin header
 ```
 
-To call an option, a custom function of `option` is used. The basic header can now be created with the following, familiar HTML:
+To print an option's value, the `option` function is used. The basic header can now be created with the following HTML:
 
 ```html
 <div class="header">
