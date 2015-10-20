@@ -1589,7 +1589,7 @@ $('.header, [class*="header-"]').doSomething();
 To access a specific option, you can do:
 
 ```js
-module['app-header']['dark']; // returns true or false
+_module['app-header']['dark']; // returns true or false
 ```
 
 ##### Custom '_setting()' Function
@@ -1660,11 +1660,11 @@ This can be achieved with the following code:
 
 ```js
 function breakpoint(media, value) {
-	return window.matchMedia('(' + media + ':' + module['grid']['breakpoints'][value] + ')').matches;
+	return window.matchMedia('(' + media + ':' + _module['grid']['breakpoints'][value] + ')').matches;
 }
 ```
 
-They key part of the above code is `module['grid']['breakpoints'][value]`, which fetches the value from the JSON.
+They key part of the above code is `_module['grid']['breakpoints'][value]`, which fetches the value from the JSON.
 
 ## Credits & Notes
 
