@@ -1662,7 +1662,7 @@ function breakpoint(media, value) {
 }
 ```
 
-They key part of the above code is `module['grid']['breakpoints'][value]`, which fetched the value from the JSON.
+They key part of the above code is `module['grid']['breakpoints'][value]`, which fetches the value from the JSON.
 
 ## Credits & Notes
 
