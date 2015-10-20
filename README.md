@@ -1475,6 +1475,8 @@ It's important to understand the CSS that is generated when using Modular in ord
 
 If you then try to add the class **header-wrapper**, the header component's core styles would also be applied to this class, as the component is looking for any class that begins with "header-".
 
+> WARNING: Modular is an extremly powerful tool. Use responsibly.
+
 ### Changelog
 
 #### Version 3.0.0
