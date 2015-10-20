@@ -290,7 +290,9 @@ If `$components` is not defined, it will look for a `name` value in your module'
 @mixin header($custom: ()) {
     
     $header: config((
-        'name' : 'header'        
+        
+        'name' : 'header'
+            
     ), $custom);
     
     @include component {
@@ -377,9 +379,9 @@ To keep as similar to BEM as possible, Modular provies an easy way to create rel
 * `$sub-components` - the name of your sub-component(s) [optional]
 
 ```scss
-@include component(header) {
+@include component('header') {
 	
-	@include sub-component(wrapper) {
+	@include sub-component('wrapper') {
 		...	
 	}	
 	
@@ -393,10 +395,10 @@ To keep as similar to BEM as possible, Modular provies an easy way to create rel
 Sub-Components work like regular components, in the sense that you can add modifiers:
 
 ```scss
-@include component(header) {
+@include component('header') {
 	
-	@include sub-component(wrapper) {
-		@include modifier(full-screen) {
+	@include sub-component('wrapper') {
+		@include modifier('full-screen') {
 			...
 		}
 	}
@@ -411,9 +413,9 @@ Sub-Components work like regular components, in the sense that you can add modif
 ##### Alias Mixin For Multiple Components
 
 ```scss
-@include component(footer) {
+@include component('footer') {
 	
-	@include sub-components((nav, copyright)) {
+	@include sub-components(('nav', 'copyright')) {
 		...	
 	}	
 	
@@ -432,19 +434,19 @@ Sub-Components work like regular components, in the sense that you can add modif
 By not passing a parameter to the `sub-component()` mixin, you can apply styles to all sub-components of the parent component:
 
 ```scss
-@include component(widget) {
+@include component('widget') {
 
 	@include sub-component {
-		@include modifier(inline) {
+		@include modifier('inline') {
 			...
 		}	
 	}
 	
-	@include sub-component(icon) {
+	@include sub-component('icon') {
 		...
 	}
 	
-	@include sub-component(header) {
+	@include sub-component('header') {
 		...
 	}
 	
