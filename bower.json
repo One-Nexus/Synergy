@@ -3,7 +3,8 @@
 	"description":"A library of Sass mixins for architecting modular, configurable and scalable CSS.",
 	"version":"3.0.0",
 	"main":[
-		"_modular.scss"	
+		"src/_modular.scss",
+		"src/modular.js"
 	],
 	"keywords":[
 		"css",
@@ -11,6 +12,7 @@
 		"scss",
 		"module",
 		"modular",
+        "components",
 		"scalable"
 	],
 	"homepage":"http://esr360.github.io/Modular/",
