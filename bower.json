@@ -1,28 +1,25 @@
 {
-	"name":"Modular",
-	"description":"A library of Sass mixins for architecting modular, configurable and scalable CSS.",
-	"version":"3.0.0",
-	"main":[
-		"src/_modular.scss",
-		"src/modular.js"
-	],
-	"keywords":[
-		"css",
-		"sass",
-		"scss",
-		"module",
-		"modular",
+    "name":"Modular",
+    "description":"A library of Sass mixins for architecting modular, configurable and scalable CSS.",
+    "version":"3.0.0",
+    "main":[
+        "src/_modular.scss",
+        "src/modular.js"
+    ],
+    "keywords":[
+        "css",
+        "sass",
+        "scss",
+        "module",
+        "modular",
         "components",
-		"scalable"
-	],
-	"homepage":"http://esr360.github.io/Modular/",
-	"ignore":[
-		".gitattributes",
-		".gitignore",
-		"bower.json",
-		"README.html",
-		"README.md",
-		"LICENSE",
-		"prepros.cfg"
-	]
+        "scalable"
+    ],
+    "homepage":"http://esr360.github.io/Modular/",
+    "ignore":[
+        ".gitattributes",
+        ".gitignore",
+        "bower.json",
+        "prepros.cfg"
+    ]
 }
