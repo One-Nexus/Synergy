@@ -1425,21 +1425,21 @@ _theme.scss
     // Core Styles
     //-------------------------------------------------------------
 
-        background: option($header, background);   
-        margin-top: option($header, top);
+        background: option($header, 'background');   
+        margin-top: option($header, 'top');
 
     // Settings
     //-------------------------------------------------------------
 
         @include setting('dark') {
-            background: option($header, dark-color);   
+            background: option($header, 'dark-color');   
         }
 
         @include setting('side') {
             // Core Side-Header Styles
             position: fixed;
             top: 0;
-            width: option($header, side-width);
+            width: option($header, 'side-width');
             z-index: 99;
             @include option('left') {
                 left: 0;
