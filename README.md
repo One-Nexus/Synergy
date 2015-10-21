@@ -1332,7 +1332,7 @@ _theme.scss
 
 ```scss
 // Modular
-@import "modular";
+@import "src/modular";
 
 // Project Partials
 @import "typography";
