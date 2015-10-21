@@ -18,8 +18,8 @@ http://github.com/esr360/Modular/
 //  6. nested-modifier()
 //  7. extend()
 //  8. context()
-//  9. setting()
-//  10. option()
+//  9. option()
+//  10. value()
 
 //-----------------------------------------------------------------
 
@@ -368,20 +368,20 @@ $component: null;
     }
 }
 
-// 9. Setting
-// Add a configurable setting to a component
+// 9. Option
+// Add a configurable option to a component
 //-----------------------------------------------------------------
 
 //  Usage
 //
-//  @mixin billboard($config: ()) {
+//  @mixin billboard($custom: ()) {
 //
 //      $billboard: config((
 //          full-screen : false
-//      ), $config);
+//      ), $custom);
 //
 //      @include component(billboard) {
-//          @include setting(full-screen) {
+//          @include option(full-screen) {
 //              ...
 //          }
 //      }
@@ -392,59 +392,59 @@ $component: null;
 //      full-screen : true
 //  ));
 
-// Extend each setting as a modifier by default?
-$extend-settings: true;
+// Extend each option as a modifier by default?
+$extend-options: true;
 
-@mixin setting($setting) {
-    $setting: $setting !global;
+@mixin option($option) {
+    $option: $option !global;
     $enabled: if(
-        (type-of(map-get($config, $setting)) == bool and map-get($config, $setting) != false) or
-        (type-of(map-get($config, $setting)) == map and map-get(map-get($config, $setting), default) != false),
+        (type-of(map-get($config, $option)) == bool and map-get($config, $option) != false) or
+        (type-of(map-get($config, $option)) == map and map-get(map-get($config, $option), default) != false),
         true, false
     );
     @if $enabled {
-        @include extend($setting);
+        @include extend($option);
     }
-    @include modifier($setting) {	
+    @include modifier($option) {	
         @content;
     }
 }
 
-// 10. Option
-// Add an option to an existing setting
+// 10. Value
+// Style when option is a certain value
 //-----------------------------------------------------------------
 
 //  Usage
 //
-//  @mixin header($config: ()) {
+//  @mixin header($custom: ()) {
 //
 //      $header: config((
-//          side : (
-//              default        : false,
-//              show-scrollbar : false
-//      ), $config);
+//          side : false
+//      ), $custom);
 //
-//      @include component {
-//          @include setting(side) {
-//              ...
+//      @include component(header) {
+//          @include option(side) {
+//              @include value(left) {
+//                  ...
+//              }
 //          }
 //      }
 //
 //  }
 //
-//  @include billboard: ((
-//      full-screen : true
+//  @include header: ((
+//      side : left
 //  ));
 
-@mixin option($option: default, $value: true) {
+@mixin value($setting: default, $value: true) {
     $nested-modifier: if(
-        $option == default,	$value, $option
+        $setting == default, $value, $setting
     );
-    @if (option($config, $setting, $option) == $value) {	
-        @if $option == default {
+    @if (option($config, $setting, $setting) == $value) {	
+        @if $setting == default {
             @include extend($value);
         } @else {
-            @include extend($option);
+            @include extend($setting);
         }
     }
     @include nested-modifier($nested-modifier) {	
