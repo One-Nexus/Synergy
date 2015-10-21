@@ -280,7 +280,7 @@ Now import the respective `_modular.scss` and optional `modular.js` files into y
 * [Nested Modifier](#nested-modifier)
 * [Extend Modifiers](#extended-modifiers)
 * [Context](#context)
-* [Option](#module-configuration)
+* [Option](#bool-options)
 * [Value](#hybrid-options)
 
 ### Module Configuration
@@ -1162,7 +1162,7 @@ And just to reiterate, with the `side` option set to either left or right in the
 <div class="header">...</div>
 ```
 
-##### Nested Options
+#### Nested Options
 
 Taking the above example a step further, let's say we want to pass some child options to the parent option:
 
