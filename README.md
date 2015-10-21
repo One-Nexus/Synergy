@@ -244,6 +244,8 @@ Using this function, you can also apply scripts to your element like so:
 
 ## Installation
 
+In addition to the classic way of downloading and extracting the files into your project, you can also do one of the following:
+
 ##### With Bower
 
 ```html
