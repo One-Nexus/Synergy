@@ -975,8 +975,8 @@ As outlined in the [overview](#overview) section, Modular allows you to configur
 	@include component('header') {
 		
 		// Core Styles
-		background-color: map-get($header, bg-color);
-		margin-top: map-get($header, top);
+		background-color: option($header, bg-color);
+		margin-top: option($header, top);
 		
 	} // component(header)
 		
@@ -999,7 +999,7 @@ For all intents and purposes, there are 2 types of options; bools and non-bools.
 	@include component('header') {
 		
 		// Core Styles
-		margin-top: map-get($header, top);
+		margin-top: option($header, top);
 		
 		// Settings
 		@include setting('dark') {
@@ -1071,10 +1071,10 @@ To disable the extension of settings globally by default, set the `$extend-setti
 
 #### Non-Bool Options
 
-If your option is a CSS property, to call the option in your component the **map-get** function is used, like so:
+If your option is a CSS property, to call the option in your component the `option()` function is used, like so:
 
 ```scss
-margin-top: map-get($header, top);
+margin-top: option($header, top);
 ```
 
 which will generate:
@@ -1159,7 +1159,7 @@ In some circumstances, we can achieve the same thing without having to use the `
 		@include setting('side') {
 			// Side-Header Styles
 			...
-			#{map-get($header, side)}: 0; // left: 0;
+			#{option($header, side)}: 0; // left: 0;
 		}
 		
 	} // component(header)
@@ -1233,7 +1233,7 @@ This is entirely possible, and requires the addition of the `!global` flag:
 
 // Mixin to easily access breakpoints map
 @function breakpoint($breakpoint) {
-	@return map-get(map-get($grid, breakpoints), $breakpoint);
+	@return option($grid, 'breakpoints', $breakpoint);
 }
 ```
 
@@ -1292,11 +1292,11 @@ _theme.scss
 } // @mixin typography
 
 @function color($color) {
-    @return map-get(map-get($typography, colors), $color);
+    @return option($typography, 'colors', $color);
 }
 
 @function size($size) {
-    @return map-get(map-get($typography, sizes), $size);
+    @return option($typography, 'sizes', $size);
 }
 
 //	color: color(primary);
@@ -1337,10 +1337,10 @@ _theme.scss
     //-------------------------------------------------------------
 
         display: inline-block;
-        line-height: map-get($buttons, line-height);
-        padding: 0 map-get($buttons, side-spacing);
-        background: map-get($buttons, background);
-        color: map-get($buttons, color);
+        line-height: option($buttons, line-height);
+        padding: 0 option($buttons, side-spacing);
+        background: option($buttons, background);
+        color: option($buttons, color);
 
     // Modifiers
     //-------------------------------------------------------------
@@ -1348,7 +1348,7 @@ _theme.scss
         // Patterns
 		
         @include modifier('round') {
-            border-radius: map-get($buttons, radius);
+            border-radius: option($buttons, radius);
         }
 
         @include modifier('block') {
@@ -1425,21 +1425,21 @@ _theme.scss
     // Core Styles
     //-------------------------------------------------------------
 
-        background: map-get($header, background);   
-        margin-top: map-get($header, top);
+        background: option($header, background);   
+        margin-top: option($header, top);
 
     // Settings
     //-------------------------------------------------------------
 
         @include setting('dark') {
-            background: map-get($header, dark-color);   
+            background: option($header, dark-color);   
         }
 
         @include setting('side') {
             // Core Side-Header Styles
             position: fixed;
             top: 0;
-            width: map-get($header, side-width);
+            width: option($header, side-width);
             z-index: 99;
             @include option('left') {
                 left: 0;
