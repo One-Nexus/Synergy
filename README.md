@@ -1163,6 +1163,38 @@ And just to reiterate, with the `side` option set to either left or right in the
 <div class="header">...</div>
 ```
 
+##### Getting Creative
+
+In some circumstances, we can achieve the same thing without having to use the `option()` mixin. Consider the above example; "left" and "right" are both also CSS properties, so we can pass the setting's value as a CSS property:
+
+```scss
+@mixin header($custom: ()) {
+
+	$header: config((
+		
+		// Options
+		'side' : left;
+		
+	), $custom);
+	
+	@include component('header') {
+		
+		@include setting('side') {
+			// Side-Header Styles
+			...
+			#{option($header, side)}: 0; // left: 0;
+		}
+		
+	} // component('header')
+	
+} // @mixin header
+```
+
+The above example is assuming we have a setup where the header's position is controlled via:
+
+* `left: 0;` for a left header
+* `right: 0;` for a right header
+
 #### Nested Options
 
 Taking the above example a step further, let's say we want to pass some child options to the parent option:
@@ -1210,38 +1242,6 @@ To use non-bool options, the `option()` function is used as normal:
 ```scss
 width: option($header, 'side', 'width');
 ```
-
-##### Getting Creative
-
-In some circumstances, we can achieve the same thing without having to use the `option()` mixin. Consider the above example; "left" and "right" are both also CSS properties, so we can pass the setting's value as a CSS property:
-
-```scss
-@mixin header($custom: ()) {
-
-	$header: config((
-		
-		// Options
-		'side' : left;
-		
-	), $custom);
-	
-	@include component('header') {
-		
-		@include setting('side') {
-			// Side-Header Styles
-			...
-			#{option($header, side)}: 0; // left: 0;
-		}
-		
-	} // component('header')
-	
-} // @mixin header
-```
-
-The above example is assuming we have a setup where the header's position is controlled via:
-
-* `left: 0;` for a left header
-* `right: 0;` for a right header
 
 #### Including Your Module
 
