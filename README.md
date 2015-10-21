@@ -172,7 +172,7 @@ The basis for your module is now ready. Next, the actual component itself:
         margin-top: option($header, 'top');
         background-color: option($header, 'bg-color');
         
-    } // component(header)
+    } // component('header')
         
 } // @mixin header
 ```
@@ -978,7 +978,7 @@ As outlined in the [overview](#overview) section, Modular allows you to configur
 		background-color: option($header, bg-color);
 		margin-top: option($header, top);
 		
-	} // component(header)
+	} // component('header')
 		
 } // @mixin header
 ```
@@ -1002,11 +1002,11 @@ For all intents and purposes, there are 2 types of options; bools and non-bools.
 		margin-top: option($header, top);
 		
 		// Settings
-		@include setting('dark') {
+		@include option('dark') {
 			background-color: black;
 		}
 		
-	} // component(header)
+	} // component('header')
 		
 } // @mixin header
 ```
@@ -1040,7 +1040,29 @@ Your configuration can be infinitely nested, like so:
 
 #### Bool Options
 
-If your option is a bool, you can use the `setting` mixin. The styles added within this mixin will automatically be applied to the component if the option is set to **true**. Alternatively, since by default adding a setting will also create a modifier for the setting, you can apply the styles by adding the modifier to your HTML tag, regardless of the settings value:
+If your option is a bool, you can use the `option()` mixin. The styles added within this mixin will automatically be applied to the component if the option is set to **true**. 
+
+```scss
+@mixin header($custom: ()) {
+
+	$header: config((
+		
+		// Options
+		'extend-settings': false,
+		'dark' : false,
+		'top'  : 50px
+		
+	), $custom);
+	
+    // styles will be applied if 'dark' is set to 'true'
+	@include option('dark') {
+        ...   
+    }
+		
+}
+```
+
+Alternatively, since by default adding a setting will also create a modifier for the setting, you can apply the styles by adding the modifier to your HTML tag, regardless of the settings value:
 
 ```html
 <div class="header-dark">
@@ -1071,7 +1093,7 @@ To disable the extension of settings globally by default, set the `$extend-setti
 
 #### Non-Bool Options
 
-If your option is a CSS property, to call the option in your component the `option()` function is used, like so:
+If your option is a CSS property, to call the option in your component the `option()` *function* is (note: not mixin, as used for bool options) used, like so:
 
 ```scss
 margin-top: option($header, top);
@@ -1099,22 +1121,22 @@ In some cases, you may require a hybrid of the above 2 options. You may have a s
 	
 	@include component('header') {
 		
-		@include setting('side') {
+		@include option('side') {
 			// core side header styles
-			@include option('left') {
+			@include value('left') {
 				// left side styles
 			}
-			@include option('right') {
+			@include value('right') {
 				// right side styles
 			}
 		}
 		
-	} // component(header)
+	} // component('header')
 		
 } // @mixin header
 ```
 
-The above example inserts an optional set of styles if `side` is set to anything other than **false**. Depending on the value of your setting, we can choose to include additional styles by using the `option()` mixin. Again, by default these options are extended as modifiers so you can use them regardless of the setting's value:
+The above example inserts an optional set of styles if `side` is set to anything other than **false**. Depending on the value of your option, we can choose to include additional styles by using the `value()` mixin. Again, by default these options are extended as modifiers so you can use them regardless of the setting's value:
 
 ```html
 <div class="header-side-left">..</div>
@@ -1140,6 +1162,54 @@ And just to reiterate, with the `side` option set to either left or right in the
 <div class="header">...</div>
 ```
 
+##### Nested Options
+
+Taking the above example a step further, let's say we want to pass some child options to the parent option:
+
+```scss
+@mixin header($custom: ()) {
+
+	$header: config((
+		
+		// Options
+		'side'                 : (
+			'default'          : false, // left or right
+			'width'            : 350px,
+			'show-y-scrollbar' : false
+		)
+		
+	), $custom);
+	
+	@include component('header') {
+		
+		@include option('side') {
+            ...
+			width: option($header, 'side', 'width');
+            @include value(left) {
+                ...
+            }	
+            @include value(right) {
+                ...
+            }		
+            // apply styles when 'show-y-scrollbar' is 'true'
+			@include value($value: show-y-scrollbar) {
+				...
+			}
+		}
+		
+	} // component('header')
+	
+} // @mixin header
+```
+
+Above, the `default` value in `side` allows you to use the `value()` just as in the previous example. By passing the `$value` variable to the `value()` mixin, you can specify an alternate child boolean option.
+
+To use non-bool options, the `option()` function is used as normal:
+
+```scss
+width: option($header, 'side', 'width');
+```
+
 ##### Getting Creative
 
 In some circumstances, we can achieve the same thing without having to use the `option()` mixin. Consider the above example; "left" and "right" are both also CSS properties, so we can pass the setting's value as a CSS property:
@@ -1162,7 +1232,7 @@ In some circumstances, we can achieve the same thing without having to use the `
 			#{option($header, side)}: 0; // left: 0;
 		}
 		
-	} // component(header)
+	} // component('header')
 	
 } // @mixin header
 ```
@@ -1449,7 +1519,7 @@ _theme.scss
             }
         }
 
-    } // component(header)
+    } // component('header')
 
 } // @mixin header
 
