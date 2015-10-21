@@ -225,7 +225,7 @@ $(_header).doSomething();
 Using Modular's custom function, you can also do:
 
 ```js
-if (_setting('header', 'dark')) {
+if (_option('header', 'dark')) {
     
     $(_header).doSomething();
     
@@ -1663,9 +1663,9 @@ To access a specific option, you can do:
 _module['app-header']['dark']; // returns true or false
 ```
 
-##### Custom '_setting()' Function
+##### Custom '_option()' Function
 
-Modular.js comes with a custom `_setting` function for usage on boolean options. The function will return `true` if either the option itself is set to `true`, or if your element has a `modifier` of the option name:
+Modular.js comes with a custom `_option()` function for usage on boolean options. The function will return `true` if either the option itself is set to `true`, or if your element has a `modifier` of the option name:
 
 ```scss
 @include header((
@@ -1684,7 +1684,7 @@ Or ...
 Using a simple `if` statement you can now conditionally run JavaScript based off your module's option:
 
 ```js
-if(_setting('header', 'dark')) {
+if(_option('header', 'dark')) {
     ...
 }
 ```
