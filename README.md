@@ -1097,7 +1097,7 @@ To disable the extension of settings globally by default, set the `$extend-setti
 If your option is a CSS property, to call the option in your component the `option()` *function* is (note: not mixin, as used for bool options) used, like so:
 
 ```scss
-margin-top: option($header, top);
+margin-top: option($header, 'top');
 ```
 
 which will generate:
