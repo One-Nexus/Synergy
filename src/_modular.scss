@@ -440,7 +440,7 @@ $extend-options: true;
     $nested-modifier: if(
         $setting == default, $value, $setting
     );
-    @if (option($config, $setting, $setting) == $value) {	
+    @if (option($config, $option, $setting) == $value) {	
         @if $setting == default {
             @include extend($value);
         } @else {
