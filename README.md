@@ -280,8 +280,8 @@ Now import the respective `_modular.scss` and optional `modular.js` files into y
 * [Nested Modifier](#nested-modifier)
 * [Extend Modifiers](#extended-modifiers)
 * [Context](#context)
-* [Setting](#module-configuration)
-* [Option](#hybrid-options)
+* [Option](#module-configuration)
+* [Value](#hybrid-options)
 
 ### Module Configuration
 
