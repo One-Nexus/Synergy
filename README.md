@@ -1762,7 +1762,7 @@ If you then try to add the class **header-wrapper** anywhere, the header compone
 
 #### Version 3.0.0
 
-Released: 17th October 2015
+Released: 22nd October 2015
 
 ###### Release Notes
 
