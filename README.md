@@ -252,6 +252,12 @@ In addition to the classic way of downloading and extracting the files into your
 bower install Modular
 ```
 
+###### If using modular.js:
+
+```html
+bower install Modular-SassyJSON
+```
+
 Or...
 
 ##### As Git Submodule
@@ -260,7 +266,7 @@ Or...
 git submodule add https://github.com/esr360/Modular.git
 ```
 
-###### If using modular.js
+###### If using modular.js:
 
 ```
 git submodule update --init --recursive
