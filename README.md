@@ -288,6 +288,7 @@ Now import the respective `_modular.scss` and optional `modular.js` files into y
 * [Bool Options](#bool-options)
 * [Non-Bool Options](#non-bool-options)
 * [Hybrid Options](#hybrid-options)
+* [Nested Options](#nested-options)
 * [Including Your Module](#including-your-module)
 * [Global Configuration](#global-configuration)
 * [Setting Up A Project](#setting-up-a-project)
