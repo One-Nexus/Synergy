@@ -471,7 +471,7 @@ $config-JSON: ();
 	
 	$map-old: map-merge((
 		selector-type   : $type,
-		extend-settings : $extend-settings,
+		extend-settings : $extend-options,
 		output-JSON     : $output-JSON
 	), $map-old);
 	
