@@ -57,29 +57,29 @@ $.each(_module, function(component) {
 // Functions
 //-----------------------------------------------------------------
 
-//	1. _setting()
+//	1. _option()
 
 //-----------------------------------------------------------------
 
-// 1. Setting
+// 1. Option
 //-----------------------------------------------------------------
 
 //	Usage
 //
-//	if(_setting('navigation', 'sticky')) {
+//	if(_option('navigation', 'sticky')) {
 //		...
 //	}
 
-function _setting(component, setting) {
+function _option(component, option) {
 	
-	var $setting  = _module[component][setting],
+	var $option  = _module[component][option],
 		$id = $('.' + component + ', [class*="' + component + '-"]'),
-		$selector = $id.is('[class*="-' + setting + '"]') == true;
+		$selector = $id.is('[class*="-' + option + '"]') == true;
 		
-	if (typeof($setting[Object.keys($setting)[0]]) == 'boolean') {
-		return $selector || $setting['default'] != false;
+	if (typeof($option[Object.keys($option)[0]]) == 'boolean') {
+		return $selector || $option['default'] != false;
 	} else {
-		return $selector || $setting != false;
+		return $selector || $option != false;
 	}
 	
 }
