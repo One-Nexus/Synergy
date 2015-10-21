@@ -1699,6 +1699,7 @@ Released: 17th October 2015
 * more intelligent `modifier()` mixin with more options
 * adding `$parent` option to `extend()` mixin
 * removing media query option from `context()` mixin
+* renaming 'setting' & 'option' mixins to 'option' and 'value' 
 * general improvements to code and performance
 
 #### Version 2.7.0
