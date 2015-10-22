@@ -286,7 +286,7 @@ Now import the respective `_modular.scss` and optional `modular.js` files into y
 * [Overwrite-Sub](#overwrite-sub)
 * [Modifier](#modifier)
 * [Nested Modifier](#nested-modifier)
-* [Extend Modifiers](#extended-modifiers)
+* [Extend Modifiers](#extend-modifiers)
 * [Context](#context)
 * [Option](#bool-options)
 * [Value](#hybrid-options)
@@ -1071,7 +1071,7 @@ If your option is a bool, you can use the `option()` mixin. The styles added wit
 }
 ```
 
-Alternatively, since by default adding a setting will also create a modifier for the setting, you can apply the styles by adding the modifier to your HTML tag, regardless of the settings value:
+Alternatively, since by default adding a setting will also create a modifier for the setting, you can apply the styles by adding the modifier to your HTML tag, regardless of the setting's value:
 
 ```html
 <div class="header-dark">
