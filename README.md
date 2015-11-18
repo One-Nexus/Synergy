@@ -61,7 +61,7 @@ And, crazily enough, you could also use the original BEM syntax of:
 
 ### But how?
 
-I'm glad you asked. The answer is simple - [wildcard selectors](http://www.surfingsuccess.com/css/css-wildcard-css-attribute-selector.html). Under the hood, Modular has created a wildcard selector for the component and each modifier
+I'm glad you asked. The answer is simple - [wildcard selectors](http://www.surfingsuccess.com/css/css-wildcard-css-attribute-selector.html). Under the hood, Modular has created a wildcard selector for the module and each modifier
 
 *But aren't wildcard selectors bad for performance?*
 
@@ -69,20 +69,20 @@ Well, no. Perhaps this was true many years ago, but today, [any performance impa
 
 *Why bother using a mixin for this? Why not just write the wildcard selector?*
 
-For starters, writing `[class*="component-"]` over and over again can become tedious. Secondly, for the core styles we also need them to be applied to the naked `.component` class, meaning we would now have to write:
+For starters, writing `[class*="module-"]` over and over again can become tedious. Secondly, for the core styles we also need them to be applied to the naked `.module` class, meaning we would now have to write:
 
 ```scss
-.component,
-[class*="component-"] {
+.module,
+[class*="module-"] {
 	...
 }
 ```
 
-Which is exactly what the  `component()` mixin does. The reason `[class*="component"]` on its own isn't used is because this can cause undesired effects elsewhere in your styles. A very simple example would be if you wanted to use a `.buttons` class in the presence on a **button** component - `[class*="button"]` would target this class and apply the core button styles to it. Using `[class*="button-"]` is a fairly safe selector in a project we have control over, in terms of potential conflicts.
+Which is exactly what the  `module()` mixin does. The reason `[class*="module"]` on its own isn't used is because this can cause undesired effects elsewhere in your styles due to how fragile it is. A very simple example would be if you wanted to use a `.buttons` class in the presence on a **button** module - `[class*="button"]` would target this class and apply the core button styles to it. Using `[class*="button-"]` is a fairly safe selector in a project we have control over, in terms of potential conflicts.
 
 ### Configuring a Module
 
-Modular allows you to create configurable components with customizable settings, such as the below, awesome example:
+Modular allows you to create configurable modules with customizable settings, such as the below, awesome example:
 
 ```scss
 // perhaps in a file called _header.scss
@@ -153,7 +153,7 @@ To allow any subsequent modules to access the current module's options, set the 
 }
 ```
 
-The basis for your module is now ready. Next, the actual component itself:
+The basis for your module is now ready. Next, the actual module mixin itself:
 
 ```scss
 @mixin header($custom: ()) {
@@ -172,7 +172,7 @@ The basis for your module is now ready. Next, the actual component itself:
         margin-top: option($header, 'top');
         background-color: option($header, 'bg-color');
         
-    } // component('header')
+    } // module('header')
         
 } // @mixin header
 ```
@@ -280,10 +280,10 @@ Now import the respective `_modular.scss` and optional `modular.js` files into y
 
 ### Mixins
 
+* [Module](#module)
 * [Component](#component)
-* [Sub-Component](#sub-component)
 * [Overwrite](#overwrite)
-* [Overwrite-Sub](#overwrite-sub)
+* [Overwrite-Component](#overwrite-component)
 * [Modifier](#modifier)
 * [Nested Modifier](#nested-modifier)
 * [Extend Modifiers](#extend-modifiers)
@@ -307,11 +307,11 @@ Now import the respective `_modular.scss` and optional `modular.js` files into y
 * [Configuration](#configuration)
 * [Usage](#usage)
 
-#### Component
+#### Module
 
-The `component()` mixin is what generates the selectors for your component/module. The mixin accepts 2 parameters:
+The `module()` mixin is what generates the selectors for your module. The mixin accepts 2 parameters:
 
-* `$components` - the name of your component(s) [optional]
+* `$modules` - the name of your module(s) [optional]
 * `$type` - this defines how the mixin generates the selectors for your component(s) [optional]
 
 ```scss
@@ -320,7 +320,7 @@ The `component()` mixin is what generates the selectors for your component/modul
 }
 ```
 
-If `$components` is not defined, it will look for a `name` value in your module's config. This is an alternative way of using the `component()` mixin:
+If `$modules` is not defined, it will look for a `name` value in your module's config. This is an alternative way of using the `module()` mixin:
 
 ```scss
 @mixin header($custom: ()) {
@@ -338,7 +338,7 @@ If `$components` is not defined, it will look for a `name` value in your module'
 }
 ```
 
-`$components` is usually a single value but can also be a list, eg. `(header, footer)`, should you wish to apply styles to more than one main component. For such instances, an *alias* mixin of `components()` is available:
+`$modules` is usually a single value but can also be a list, eg. `(header, footer)`, should you wish to apply styles to more than one module. For such instances, an *alias* mixin of `modules()` is available:
 
 ```scss
 @include modules(('header', 'footer')) {
@@ -356,7 +356,7 @@ If `$components` is not defined, it will look for a `name` value in your module'
 }
 ```
 
-This is the default value for a component; it creates wildcards for both `.component` and `[class*="component-"]`, allowing you to use both the naked component as well as modifiers. Whilst this is the most flexible option, it does mean the generated CSS is slightly greater, which is what the other 2 options are for.
+This is the default value for a module; it creates wildcards for both `.module` and `[class*="module-"]`, allowing you to use both the naked module as well as modifiers. Whilst this is the most flexible option, it does mean the generated CSS is slightly greater, which is what the other 2 options are for.
 
 Or if using the default `$type` value of `flex`, you do not need to pass a second parmeter here:
 
@@ -374,7 +374,7 @@ Or if using the default `$type` value of `flex`, you do not need to pass a secon
 }
 ```
 
-The chain option should be used if you are looking to optimise your CSS output, and you know your component will not exist as a naked selector without modifiers. Ie - this option outputs only `[class*="component-"]`, thefore you cannot use `.component` to achieve any styles.
+The chain option should be used if you are looking to optimise your CSS output, and you know your module will not exist as a naked selector without modifiers. Ie - this option outputs only `[class*="module-"]`, thefore you cannot use `.module` to achieve any styles.
 
 ##### Static
 
@@ -384,13 +384,13 @@ The chain option should be used if you are looking to optimise your CSS output, 
 }
 ```
 
-The static option creates only the naked selector for your component; ie - `.selector`, meaning no modifiers can be used. This option is only available for consistency; it probably makes more sense to just write `.component` instead of using the mixin in this case - I'll let you think about that one.
+The static option creates only the naked selector for your module; ie - `.selector`, meaning no modifiers can be used. This option is only available for consistency; it probably makes more sense to just write `.module` instead of using the mixin in this case - I'll let you think about that one.
 
 ##### Advanced Example
 
 ```scss
 @include modules(('header', 'footer'), 'static') {
-	// apply to both header and footer components
+	// apply to both header and footer modules
 }
 
 @include module('header', 'static') {
@@ -402,17 +402,17 @@ The static option creates only the naked selector for your component; ie - `.sel
 }
 ```
 
-#### Sub-Component
+#### Component
 
-Because of how the wildcard selectors are generated, it is not possible to create relating components which begin with the same namespace. For example, if you have a `header` component with the default `$type` of `flex`, it would not be possible to create a `header-wrapper` class, as the *hyphen* is reserved for component modifiers. There are several options to get around this, including:
+Because of how the wildcard selectors are generated, it is not possible to create relating modules which begin with the same namespace. For example, if you have a `header` component with the default `$type` of `flex`, it would not be possible to create a `header-wrapper` class, as the *hyphen* is reserved for modifiers. There are several options to get around this, including:
 
 * camelCase (headerWrapper)
 * reversed wording (wrap-header)
 * underscore (header_wrapper)
 
-To keep as similar to BEM as possible, Modular provies an easy way to create relating components using underscores, eg - `header_wrapper`. The `sub-component` mixin accepts a single parameter:
+To keep things as similar to BEM as possible, Modular provies an easy way to create relating components using underscores, eg - `header_wrapper`. The `component` mixin accepts a single parameter:
 
-* `$sub-components` - the name of your sub-component(s) [optional]
+* `$components` - the name of your component(s) [optional]
 
 ```scss
 @include module('header') {
@@ -428,7 +428,7 @@ To keep as similar to BEM as possible, Modular provies an easy way to create rel
 <div class="header_wrapper">...</div>
 ```
 
-Sub-Components work like regular components, in the sense that you can add modifiers:
+Components work like regular modules, in the sense that you can add modifiers:
 
 ```scss
 @include module('header') {
@@ -465,9 +465,9 @@ Sub-Components work like regular components, in the sense that you can add modif
 </div>
 ```
 
-##### Global Sub-Component Styles
+##### Global Component Styles
 
-By not passing a parameter to the `sub-component()` mixin, you can apply styles to all sub-components of the parent component:
+By not passing a parameter to the `component()` mixin, you can apply styles to all components of the parent module:
 
 ```scss
 @include module('widget') {
@@ -529,15 +529,15 @@ By not passing a parameter to the `sub-component()` mixin, you can apply styles 
 
 #### Overwrite
 
-This mixin allows you to overwrite the styles of existing components and modifiers when in context of another component. The `overwrite()` mixin accepts 5 parameters:
+This mixin allows you to overwrite the styles of existing modules, components and modifiers when in context of another module. The `overwrite()` mixin accepts 5 parameters:
 
-* `$components` - the name of the component(s) you wish to overwrite [optional]
+* `$modules` - the name of the modules(s) you wish to overwrite [optional]
 * `$type` - as above, this can be either `flex` (default), `chain` or `static` [optional]
-* `$is` - overwrite the component only if it has certain modifiers [optional]
-* `$not` - overwrite the component only if it does not have certain modifiers [optional]
+* `$is` - overwrite the module only if it has certain modifiers [optional]
+* `$not` - overwrite the module only if it does not have certain modifiers [optional]
 * `$special` - set a special operator [optional]
 
-> Leaving `$components` undefined will instead look for a `name` value of your module's config (see [Advanced Example](#advanced-example-2)).
+> Leaving `$modules` undefined will instead look for a `name` value of your module's config (see [Advanced Example](#advanced-example-2)).
 
 ```scss
 @include modules(('logo', 'nav')) {
@@ -582,8 +582,8 @@ This mixin allows you to overwrite the styles of existing components and modifie
 
 ##### Special Operators
 
-* `adjacent-sibling` - overwrite a component when it is also an adjacent sibling to the parent component
-* `general-sibling` - overwrite a component when it is also a general sibling to the parent component
+* `adjacent-sibling` - overwrite a module when it is also an adjacent sibling to the parent module
+* `general-sibling` - overwrite a module when it is also a general sibling to the parent module
 
 ###### Example
 
@@ -641,7 +641,7 @@ This mixin allows you to overwrite the styles of existing components and modifie
         
         ...
 	
-	} // component
+	} // module
 	
 } // @mixin billboard
 ```
@@ -656,15 +656,17 @@ You're probably curious as to what the hell is going on here. Let's take a look 
 
 Hopefully by looking between the 2 you get a good idea of how the advanced features of this mixin work.
 
-#### Overwrite-Sub
+#### Overwrite-Component
 
-As above, this mixin is used for overwriting styles for an existing sub-component in alternative context. 3 parameters are accepted for the `overwrite-sub()` mixin:
+As above, this mixin is used for overwriting styles for an existing component in alternative context. 3 parameters are accepted for the `overwrite-component()` mixin:
 
-* `$sub-components` - the name of the component(s) you wish to overwrite [required]
-* `$parent` - the parent of your sub-component [optional]
+* `$components` - the name of the component(s) you wish to overwrite [required]
+* `$parent` - the parent of your component [optional]
+* `$is` - overwrite the component only if it has certain modifiers [optional]
+* `$not` - overwrite the component only if it does not have certain modifiers [optional]
 * `$special` - set a special operator [optional]
 
-> The `$parent` parameter is used if you are including this mixin inside a different component to your sub-component's parent.
+> The `$parent` parameter is used if you are including this mixin inside a different module to your component's original parent.
 
 ```scss
 @include module('form') {
@@ -674,7 +676,7 @@ As above, this mixin is used for overwriting styles for an existing sub-componen
 	}
 
 	@include modifier('html5') {
-		@include overwrite-sub('input') {
+		@include overwrite-component('input') {
 			...
 		}
 	}
@@ -701,7 +703,7 @@ As above, this mixin is used for overwriting styles for an existing sub-componen
 	}
 
 	@include modifier('html5') {
-		@include overwrite-subs(('input', 'group')) {
+		@include overwrite-components(('input', 'group')) {
 			...
 		}
 	}
@@ -721,7 +723,7 @@ As above, this mixin is used for overwriting styles for an existing sub-componen
 
 @include module('widget') {
 
-	@include overwrite-sub('group', $parent: 'heading') {
+	@include overwrite-component('group', $parent: 'heading') {
 		...
 	}
 	
@@ -751,7 +753,7 @@ As above, this mixin is used for overwriting styles for an existing sub-componen
 	}
 	
 	@include component('icon') {
-		@include overwrite-sub('title', $special: 'adjacent-sibling') {
+		@include overwrite-component('title', $special: 'adjacent-sibling') {
 			color: blue;
 		}
 	}
@@ -773,7 +775,7 @@ As above, this mixin is used for overwriting styles for an existing sub-componen
 
 #### Modifier
 
-The `modifier()` mixin generates the selector for any modifier of your component, for example a **small** or **large** modifier. This mixin accepts only 1 paramter:
+The `modifier()` mixin generates the selector for any modifier of your module, for example a **small** or **large** modifier. This mixin accepts only 1 paramter:
 
 * `$modifiers` - the name of your modifier(s) [required]
 
@@ -930,13 +932,13 @@ This mixin allows you to extend multiple modifiers into a new, seperate modifer,
 
 #### Context
 
-The `context()` mixin allows you to apply styles to your component when certain conditions are met. This mixin accepts 1 parameter:
+The `context()` mixin allows you to apply styles to your module when certain conditions are met. This mixin accepts 1 parameter:
 
 * `$context` - the name of the predefined condition you wish to be met [required]
 
 The following conditions can be passed to the mixin:
 
-* `parent-hovered` - apply styles to a sub-component when the parent component is hovered
+* `parent-hovered` - apply styles to a component when the parent module is hovered
 * *more coming soon*
 
 ##### Parent-Hovered
@@ -958,7 +960,7 @@ The following conditions can be passed to the mixin:
 //	}
 //
 //	&:hover {
-//		@include overwrite-sub(icon) {
+//		@include overwrite-component(icon) {
 //			color: white;
 //		}
 //	}
@@ -968,7 +970,7 @@ The following conditions can be passed to the mixin:
 
 ### Module Configuration
 
-As outlined in the [overview](#overview) section, Modular allows you to configure your components with customizable options.
+As outlined in the [overview](#overview) section, Modular allows you to configure your modules with customizable options.
 
 ```scss
 @mixin header($custom: ()) {
@@ -987,7 +989,7 @@ As outlined in the [overview](#overview) section, Modular allows you to configur
 		background-color: option($header, bg-color);
 		margin-top: option($header, top);
 		
-	} // component('header')
+	} // module('header')
 		
 } // @mixin header
 ```
@@ -1015,7 +1017,7 @@ For all intents and purposes, there are 2 types of options; bools and non-bools.
 			background-color: black;
 		}
 		
-	} // component('header')
+	} // module('header')
 		
 } // @mixin header
 ```
@@ -1049,7 +1051,7 @@ Your configuration can be infinitely nested, like so:
 
 #### Bool Options
 
-If your option is a bool, you can use the `option()` mixin. The styles added within this mixin will automatically be applied to the component if the option is set to **true**. 
+If your option is a bool, you can use the `option()` mixin. The styles added within this mixin will automatically be applied to the module if the option is set to **true**. 
 
 ```scss
 @mixin header($custom: ()) {
@@ -1102,7 +1104,7 @@ To disable the extension of settings globally by default, set the `$extend-setti
 
 #### Non-Bool Options
 
-If your option is a CSS property, to call the option in your component the `option()` *function* is (note: not mixin, as used for bool options) used, like so:
+If your option is a CSS property, to call the option in your module the `option()` *function* is (note: not mixin, as used for bool options) used, like so:
 
 ```scss
 margin-top: option($header, 'top');
@@ -1140,7 +1142,7 @@ In some cases, you may require a hybrid of the above 2 options. You may have a s
 			}
 		}
 		
-	} // component('header')
+	} // module('header')
 		
 } // @mixin header
 ```
@@ -1193,7 +1195,7 @@ In some circumstances, we can achieve the same thing without having to use the `
 			#{option($header, side)}: 0; // left: 0;
 		}
 		
-	} // component('header')
+	} // module('header')
 	
 } // @mixin header
 ```
@@ -1238,7 +1240,7 @@ Taking the above example a step further, let's say we want to pass some child op
 			}
 		}
 		
-	} // component('header')
+	} // module('header')
 	
 } // @mixin header
 ```
@@ -1407,7 +1409,7 @@ _theme.scss
     ), $custom);
 
     //-------------------------------------------------------------
-    // Component
+    // Module
     //-------------------------------------------------------------
 
     @include module('button') {
@@ -1460,7 +1462,7 @@ _theme.scss
             @include extend('round', 'primary', 'large');
         }
 
-    } // component(button)
+    } // module(button)
 
 } // @mixin buttons
 
@@ -1496,7 +1498,7 @@ _theme.scss
     ), $custom);
 
     //-------------------------------------------------------------
-    // Component
+    // Module
     //-------------------------------------------------------------
 
     @include module('header') {
@@ -1528,7 +1530,7 @@ _theme.scss
             }
         }
 
-    } // component('header')
+    } // module('header')
 
 } // @mixin header
 
@@ -1753,7 +1755,7 @@ They key part of the above code is `_module['grid']['breakpoints'][value]`, whic
 
 #### Caveats
 
-It's important to understand the CSS that is generated when using Modular in order to avoid potential conflicts. One common example might be if you have a **header** component which generates this CSS:
+It's important to understand the CSS that is generated when using Modular in order to avoid potential conflicts. One common example might be if you have a **header** module which generates this CSS:
 
 ```scss
 .header,
@@ -1762,9 +1764,20 @@ It's important to understand the CSS that is generated when using Modular in ord
 }
 ```
 
-If you then try to add the class **header-wrapper** anywhere, the header component's core styles would also be applied to this class, as the component is looking for any class that contains "header-".
+If you then try to add the class **header-wrapper** anywhere, the header module's core styles would also be applied to this class, as the module is looking for any class that contains "header-".
 
 ## Changelog
+
+#### Version 3.1.0
+
+Released: 18th November 2015
+
+###### Release Notes
+
+* adding `$is` and `$not` options to `overwrite-component` mixin (previously `overwrite-sub`)
+* renaming `component()` mixin to `module()`
+* renaming `sub-component()` mixin to `component()`
+* renaming `overwrite-sub()` mixin to `overwrite-component()`
 
 #### Version 3.0.0
 
@@ -1814,7 +1827,7 @@ Released: 8th August 2015
 
 ###### Release Notes
 
-* adding ability to overwrite sub-components from any main component
+* adding ability to overwrite components from any main component
 
 #### Version 2.3.0
 
@@ -1838,7 +1851,7 @@ Released: 7th August 2015
 
 ###### Release Notes
 
-* adding `overwrite-sub()` mixin
+* adding `overwrite-component()` mixin
 
 #### Version 2.0.0
 
