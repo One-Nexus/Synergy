@@ -10,10 +10,10 @@ http://github.com/esr360/Modular/
 // Mixins
 //-----------------------------------------------------------------
 
-//  1. component()
-//  2. sub-component()
+//  1. module()
+//  2. component()
 //  3. overwrite()
-//  4. overwrite-sub()
+//  4. overwrite-component()
 //  5. modifier()
 //  6. nested-modifier()
 //  7. extend()
@@ -23,13 +23,13 @@ http://github.com/esr360/Modular/
 
 //-----------------------------------------------------------------
 
-// 1. Component
-// Define the main component
+// 1. Module
+// Define the main module
 //-----------------------------------------------------------------
 
 // 	Usage
 // 
-// 	@include component(header) {
+// 	@include module(header) {
 //      ...
 // 	}
 //
@@ -38,16 +38,16 @@ http://github.com/esr360/Modular/
 // Set the default selector type (flex, chain, static)
 $type: flex;
 
-$component: null;
-@mixin component($components: map-get($config, name), $type: map-get($config, selector-type)) {
-    $component: $components !global;
+$module: null;
+@mixin component($modules: map-get($config, name), $type: map-get($config, selector-type)) {
+    $module: $modules !global;
     $selectors: ();
-    @each $component in $components {
+    @each $module in $modules {
         @if $type == flex or $type == static {
-            $selectors: join($selectors, '.#{$component}', comma);
+            $selectors: join($selectors, '.#{$module}', comma);
         }
         @if $type == flex or $type == chain {
-            $selectors: join($selectors, '[class*="#{$component}-"]', comma);
+            $selectors: join($selectors, '[class*="#{$module}-"]', comma);
         }
     }
     #{$selectors} {
@@ -56,32 +56,32 @@ $component: null;
 }
 
 // Alias for multiple components
-@mixin components($components, $type: $type) {
-    @include component($components, $type) {
+@mixin components($modules, $type: $type) {
+    @include component($modules, $type) {
         @content;
     }
 }
 
-// 2. Sub-Component
-// Create a sub-component based off the main component
+// 2. Component
+// Create a component based off the main module
 //-----------------------------------------------------------------
 
 //  Usage
 //
-//  @include component(header) {
-//      @include sub-component(wrapper) {
+//  @include module(header) {
+//      @include component(wrapper) {
 //          ...
 //      }
 //  }
 //
 //  <div class="header_wrapper">...</div>
 
-@mixin sub-component($sub-components: null) {
-    $selectors: '[class*="#{$component}_"]';
-    @if $sub-components != null {
+@mixin component($components: null) {
+    $selectors: '[class*="#{$module}_"]';
+    @if $components != null {
         $selectors: ();
-        @each $sub-component in $sub-components {
-            $selectors: join($selectors, '[class*="#{$component}_#{$sub-component}"]', comma);
+        @each $component in $components {
+            $selectors: join($selectors, '[class*="#{$module}_#{$component}"]', comma);
         }
     }
     @at-root {
@@ -92,19 +92,19 @@ $component: null;
 }
 
 // Alias for multiple components
-@mixin sub-components($sub-components) {
-    @include sub-component($sub-components) {
+@mixin components($sub-components) {
+    @include component($sub-components) {
         @content;
     }
 }
 
 // 3. Overwrite
-// Overwrite a component in alternate context
+// Overwrite a module in alternate context
 //-----------------------------------------------------------------
 
 //  Usage
 //
-//  @include component(header) {
+//  @include module(header) {
 //      @include overwrite(logo) {
 //          ...
 //      }
@@ -114,13 +114,13 @@ $component: null;
 //      <div class="logo">...</div>
 //  </div>
 
-@mixin overwrite($components: map-get($config, name), $type: $type, $is: null, $not: null, $special: null) {
+@mixin overwrite($modules: map-get($config, name), $type: $type, $is: null, $not: null, $special: null) {
     $selectors: ();
     @if $is {
         $type: 'chain';
     }
-    @each $component in $components {
-        $selector: #{$component};
+    @each $module in $modules {
+        $selector: #{$module};
         @if $type == flex or $type == static {
             @if $special == 'adjacent-sibling' {
                 $selectors: join($selectors, '+ .#{$selector}', comma);
@@ -163,20 +163,20 @@ $component: null;
     }
 }
 
-// 4. Overwrite-Sub
-// Overwrite a sub-component in alternate context
+// 4. Overwrite-Component
+// Overwrite a module component in alternate context
 //-----------------------------------------------------------------
 
 //  Usage
 // 
-//  @include component(form) {
+//  @include module(form) {
 //
-//      @include sub-component(input) {
+//      @include component(input) {
 //          ...
 //      }
 //
 //      @include modifier(html5) {
-//          @include overwrite-sub(input) {
+//          @include overwrite-component(input) {
 //              ...
 //          }
 //      }
@@ -187,11 +187,11 @@ $component: null;
 //      <input class="form_input" type="text" />
 //  </div>
 
-@mixin overwrite-sub($sub-components, $parent: null, $special: null) {
-    $component: if($parent != null, $parent, $component);
+@mixin overwrite-component($components, $parent: null, $special: null) {
+    $module: if($parent != null, $parent, $module);
     $selectors: ();
-    @each $sub-component in $sub-components {
-        $selector: #{$component}_#{$sub-component};
+    @each $component in $components {
+        $selector: #{$module}_#{$component};
         @if $special == adjacent-sibling {
             $selectors: join($selectors, '+ [class*="#{$selector}"]', comma);
         } @else {
@@ -204,8 +204,8 @@ $component: null;
 }
 
 // Alias for multiple components
-@mixin overwrite-subs($sub-components, $type: $type) {
-    @include overwrite-sub($sub-components, $type) {
+@mixin overwrite-components($components, $type: $type) {
+    @include overwrite-component($components, $type) {
         @content;
     }
 }
