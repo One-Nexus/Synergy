@@ -39,7 +39,7 @@ http://github.com/esr360/Modular/
 $type: flex;
 
 $module: null;
-@mixin component($modules: map-get($config, name), $type: map-get($config, selector-type)) {
+@mixin module($modules: map-get($config, name), $type: map-get($config, selector-type)) {
     $module: $modules !global;
     $selectors: ();
     @each $module in $modules {
@@ -55,9 +55,9 @@ $module: null;
     }
 }
 
-// Alias for multiple components
-@mixin components($modules, $type: $type) {
-    @include component($modules, $type) {
+// Alias for multiple modules
+@mixin modules($modules, $type: $type) {
+    @include module($modules, $type) {
         @content;
     }
 }
@@ -229,12 +229,12 @@ $module: null;
 }
 
 // 5. Modifiers 
-// Add a modifier to an existing component
+// Add a modifier to an existing module/component
 //-----------------------------------------------------------------
 
 //  Usage
 //
-//  @include component(button) {
+//  @include module(button) {
 //      @include modifier(large) {
 //          ...
 //      }
@@ -290,7 +290,7 @@ $module: null;
 
 //  Usage
 //
-//  @include component(button) {
+//  @include module(button) {
 //      @include modifier(white) {
 //          @include nested-modifier(border) {
 //              ...
@@ -318,12 +318,12 @@ $module: null;
 }
 
 // 7. Extend Modifiers
-// Extend one or more modifiers of a component
+// Extend one or more modifiers of a module
 //-----------------------------------------------------------------
 
 //  Usage
 //
-//  @include component(button) {
+//  @include module(button) {
 //
 //      @include modifier(round)   {...}
 //      @include modifier(large)   {...}
@@ -341,14 +341,14 @@ $module: null;
     @each $modifier in $modifiers {
         @if type-of($modifier) == string {
             $selector: if(
-                $parent, $parent, $component
+                $parent, $parent, $module
             );
             @extend [class*="#{$selector}-"][class*="-#{$modifier}"];
         } @else if type-of($modifier) == list {
             $selectors: if(
                 $parent,
                 ('[class*="#{$parent}-"]'),
-                ('[class*="#{$component}-"]')
+                ('[class*="#{$module}-"]')
             );
             @each $item in $modifier {
                 $selectors: join($selectors, '[class*="-#{$item}"]', comma);
@@ -367,13 +367,13 @@ $module: null;
     $selectors: ();
     @each $item in $context {
         @if map-get($config, selector-type) == flex or map-get($config, selector-type) == static {
-            $selectors: join($selectors, '.#{$component}', comma);
+            $selectors: join($selectors, '.#{$module}', comma);
         }
         @if map-get($config, selector-type) == flex or map-get($config, selector-type) == chain {
-            $selectors: join($selectors, '[class*="#{$component}-"]', comma);
+            $selectors: join($selectors, '[class*="#{$module}-"]', comma);
         }
     }
-    @if $context == parent-hovered {
+    @if $context == 'parent-hovered' {
         @at-root {
             #{$selectors} {
                 &:hover {
@@ -387,7 +387,7 @@ $module: null;
 }
 
 // 9. Option
-// Add a configurable option to a component
+// Add a configurable option to a module
 //-----------------------------------------------------------------
 
 //  Usage
@@ -398,7 +398,7 @@ $module: null;
 //          full-screen : false
 //      ), $custom);
 //
-//      @include component(billboard) {
+//      @include module(billboard) {
 //          @include option(full-screen) {
 //              ...
 //          }
@@ -440,7 +440,7 @@ $extend-options: true;
 //          side : false
 //      ), $custom);
 //
-//      @include component(header) {
+//      @include module(header) {
 //          @include option(side) {
 //              @include value(left) {
 //                  ...
