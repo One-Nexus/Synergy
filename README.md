@@ -29,7 +29,7 @@ What if you could just do this:
 The benefits of using this HTML over conventional BEM syntax are self-apparent. However, you may be looking at that thinking of several reasons why it wouldn't work; what if I want to only use the "button" class on its own? What if I only want a large button, or only want a success button? Well, with Modular, all this is possible.
 
 ```scss
-@include component('button') {
+@include module('button') {
     // core button styles
     ...
     @include modifier('large') {
@@ -166,7 +166,7 @@ The basis for your module is now ready. Next, the actual component itself:
         
     ), $custom);
     
-    @include component('header') {
+    @include module('header') {
         
         // Core Styles
         margin-top: option($header, 'top');
@@ -315,7 +315,7 @@ The `component()` mixin is what generates the selectors for your component/modul
 * `$type` - this defines how the mixin generates the selectors for your component(s) [optional]
 
 ```scss
-@include component('header') {
+@include module('header') {
 	...
 }
 ```
@@ -331,7 +331,7 @@ If `$components` is not defined, it will look for a `name` value in your module'
             
     ), $custom);
     
-    @include component {
+    @include module {
         ...   
     }
         
@@ -341,7 +341,7 @@ If `$components` is not defined, it will look for a `name` value in your module'
 `$components` is usually a single value but can also be a list, eg. `(header, footer)`, should you wish to apply styles to more than one main component. For such instances, an *alias* mixin of `components()` is available:
 
 ```scss
-@include components(('header', 'footer')) {
+@include modules(('header', 'footer')) {
 	...
 }
 ```
@@ -351,7 +351,7 @@ If `$components` is not defined, it will look for a `name` value in your module'
 ##### Flex
 
 ```scss
-@include component('header', 'flex') {
+@include module('header', 'flex') {
 	...
 }
 ```
@@ -361,7 +361,7 @@ This is the default value for a component; it creates wildcards for both `.compo
 Or if using the default `$type` value of `flex`, you do not need to pass a second parmeter here:
 
 ```scss
-@include component('header') {
+@include module('header') {
 	...
 }
 ```
@@ -369,7 +369,7 @@ Or if using the default `$type` value of `flex`, you do not need to pass a secon
 ##### Chain
 
 ```scss
-@include component('header', 'chain') {
+@include module('header', 'chain') {
 	...
 }
 ```
@@ -379,7 +379,7 @@ The chain option should be used if you are looking to optimise your CSS output, 
 ##### Static
 
 ```scss
-@include component('header', 'static') {
+@include module('header', 'static') {
 	...
 }
 ```
@@ -389,15 +389,15 @@ The static option creates only the naked selector for your component; ie - `.sel
 ##### Advanced Example
 
 ```scss
-@include components(('header', 'footer'), 'static') {
+@include modules(('header', 'footer'), 'static') {
 	// apply to both header and footer components
 }
 
-@include component('header', 'static') {
+@include module('header', 'static') {
 	// apply only to header
 }
 
-@include component('footer', 'static') {
+@include module('footer', 'static') {
 	// apply only to footer
 }
 ```
@@ -415,9 +415,9 @@ To keep as similar to BEM as possible, Modular provies an easy way to create rel
 * `$sub-components` - the name of your sub-component(s) [optional]
 
 ```scss
-@include component('header') {
+@include module('header') {
 	
-	@include sub-component('wrapper') {
+	@include component('wrapper') {
 		...	
 	}	
 	
@@ -431,9 +431,9 @@ To keep as similar to BEM as possible, Modular provies an easy way to create rel
 Sub-Components work like regular components, in the sense that you can add modifiers:
 
 ```scss
-@include component('header') {
+@include module('header') {
 	
-	@include sub-component('wrapper') {
+	@include component('wrapper') {
 		@include modifier('full-screen') {
 			...
 		}
@@ -449,9 +449,9 @@ Sub-Components work like regular components, in the sense that you can add modif
 ##### Alias Mixin For Multiple Components
 
 ```scss
-@include component('footer') {
+@include module('footer') {
 	
-	@include sub-components(('nav', 'copyright')) {
+	@include components(('nav', 'copyright')) {
 		...	
 	}	
 	
@@ -470,19 +470,19 @@ Sub-Components work like regular components, in the sense that you can add modif
 By not passing a parameter to the `sub-component()` mixin, you can apply styles to all sub-components of the parent component:
 
 ```scss
-@include component('widget') {
+@include module('widget') {
 
-	@include sub-component {
+	@include component {
 		@include modifier('inline') {
 			...
 		}	
 	}
 	
-	@include sub-component('icon') {
+	@include component('icon') {
 		...
 	}
 	
-	@include sub-component('header') {
+	@include component('header') {
 		...
 	}
 	
@@ -499,15 +499,15 @@ By not passing a parameter to the `sub-component()` mixin, you can apply styles 
 ##### Advanced Example
 
 ```scss
-@include component('footer') {
+@include module('footer') {
 	
 	...
 	
-	@include sub-component('wrapper', 'static') {
+	@include component('wrapper', 'static') {
 		...	
 	}
 	
-	@include sub-components(('nav', 'copyright'), 'static') {
+	@include components(('nav', 'copyright'), 'static') {
 		display: inline-block;
 	}
 	
@@ -540,15 +540,15 @@ This mixin allows you to overwrite the styles of existing components and modifie
 > Leaving `$components` undefined will instead look for a `name` value of your module's config (see [Advanced Example](#advanced-example-2)).
 
 ```scss
-@include components(('logo', 'nav')) {
+@include modules(('logo', 'nav')) {
 	color: black;	
 }
 
-@include component('logo') {
+@include module('logo') {
 	font-size: 1em;	
 }
 
-@include component('header') {
+@include module('header') {
 	
 	@include overwrite(('logo', 'nav')) {
 		color: white;
@@ -588,11 +588,11 @@ This mixin allows you to overwrite the styles of existing components and modifie
 ###### Example
 
 ```scss
-@include component('logo') {
+@include module('logo') {
 	color: red;
 }
 	
-@include component('navigation') {
+@include module('navigation') {
 
 	@include overwrite('logo', $special: 'adjacent-sibling') {
 		color: blue;
@@ -624,7 +624,7 @@ This mixin allows you to overwrite the styles of existing components and modifie
         
 	), $custom) !global;
 
-	@include component {
+	@include module {
         
         ...
         
@@ -667,9 +667,9 @@ As above, this mixin is used for overwriting styles for an existing sub-componen
 > The `$parent` parameter is used if you are including this mixin inside a different component to your sub-component's parent.
 
 ```scss
-@include component('form') {
+@include module('form') {
 
-	@include sub-component('input') {
+	@include component('input') {
 		...
 	}
 
@@ -690,13 +690,13 @@ As above, this mixin is used for overwriting styles for an existing sub-componen
 ##### Alias Mixin For Multiple Components
 
 ```scss
-@include component('form') {
+@include module('form') {
 
-	@include sub-component('input') {
+	@include component('input') {
 		...
 	}
 	
-	@include sub-component('group') {
+	@include component('group') {
 		...
 	}
 
@@ -711,15 +711,15 @@ As above, this mixin is used for overwriting styles for an existing sub-componen
 ##### Using Inside a Different Component
 
 ```scss
-@include component('heading') {
+@include module('heading') {
 	
-	@include sub-component('group') {
+	@include component('group') {
 		...	
 	}	
 	
 }
 
-@include component('widget') {
+@include module('widget') {
 
 	@include overwrite-sub('group', $parent: 'heading') {
 		...
@@ -744,13 +744,13 @@ As above, this mixin is used for overwriting styles for an existing sub-componen
 ###### Adjacent Sibling
 
 ```scss
-@include component('widget') {
+@include module('widget') {
 
-	@include sub-component('title') {
+	@include component('title') {
 		color: red;
 	}
 	
-	@include sub-component('icon') {
+	@include component('icon') {
 		@include overwrite-sub('title', $special: 'adjacent-sibling') {
 			color: blue;
 		}
@@ -779,7 +779,7 @@ The `modifier()` mixin generates the selector for any modifier of your component
 
 
 ```scss
-@include component('button') {
+@include module('button') {
 	
 	...
 	
@@ -810,7 +810,7 @@ You can use any number of modifiers on a single element in the HTML, and in any 
 ##### Alias Mixin For Multiple Modifiers
 
 ```scss
-@include component('button') {
+@include module('button') {
 	
 	...
 	
@@ -836,7 +836,7 @@ The `nested-modifier()` mixin is used to nest modifiers within one another, mean
 * `$modifiers` - the name of your modifier(s) [required]
 
 ```scss
-@include component('button') {
+@include module('button') {
 	
 	content: "null";
 
@@ -869,7 +869,7 @@ This means that in your HTML the element would require both the **border** and *
 ##### Alternate Use-Case
 
 ```scss
-@include component('header') {
+@include module('header') {
 
 	@include modifier('side') {
 		...
@@ -887,7 +887,7 @@ This means that in your HTML the element would require both the **border** and *
 ##### Alias Mixin For Multiple Modifiers
 
 ```scss
-@include component('button') {
+@include module('button') {
 
 	@include modifier('buy-now') {
 		...
@@ -911,7 +911,7 @@ This means that in your HTML the element would require both the **border** and *
 This mixin allows you to extend multiple modifiers into a new, seperate modifer, essentially combining several modifiers into one.
 
 ```scss
-@include component('button') {
+@include module('button') {
 
 	@include modifier('round')   {...}
 	@include modifier('large')   {...}
@@ -942,9 +942,9 @@ The following conditions can be passed to the mixin:
 ##### Parent-Hovered
 
 ```scss
-@include component('widget') {
+@include module('widget') {
 
-	@include sub-component('icon') {
+	@include component('icon') {
 		color: blue;
 		@include context('parent-hovered') {
 			color: white;
@@ -953,7 +953,7 @@ The following conditions can be passed to the mixin:
 	
 //	This is equivilent to:
 //
-//	@include sub-component(icon) {
+//	@include component(icon) {
 //		color: blue;
 //	}
 //
@@ -981,7 +981,7 @@ As outlined in the [overview](#overview) section, Modular allows you to configur
 		
 	), $custom);
 
-	@include component('header') {
+	@include module('header') {
 		
 		// Core Styles
 		background-color: option($header, bg-color);
@@ -1005,7 +1005,7 @@ For all intents and purposes, there are 2 types of options; bools and non-bools.
 		
 	), $custom);
 
-	@include component('header') {
+	@include module('header') {
 		
 		// Core Styles
 		margin-top: option($header, top);
@@ -1128,7 +1128,7 @@ In some cases, you may require a hybrid of the above 2 options. You may have a s
 		
 	), $custom);
 	
-	@include component('header') {
+	@include module('header') {
 		
 		@include option('side') {
 			// core side header styles
@@ -1185,7 +1185,7 @@ In some circumstances, we can achieve the same thing without having to use the `
 		
 	), $custom);
 	
-	@include component('header') {
+	@include module('header') {
 		
 		@include setting('side') {
 			// Side-Header Styles
@@ -1221,7 +1221,7 @@ Taking the above example a step further, let's say we want to pass some child op
 		
 	), $custom);
 	
-	@include component('header') {
+	@include module('header') {
 		
 		@include option('side') {
             ...
@@ -1410,7 +1410,7 @@ _theme.scss
     // Component
     //-------------------------------------------------------------
 
-    @include component('button') {
+    @include module('button') {
 
     // Core Styles
     //-------------------------------------------------------------
@@ -1499,7 +1499,7 @@ _theme.scss
     // Component
     //-------------------------------------------------------------
 
-    @include component('header') {
+    @include module('header') {
 
     // Core Styles
     //-------------------------------------------------------------
