@@ -187,7 +187,7 @@ $module: null;
 //      <input class="form_input" type="text" />
 //  </div>
 
-@mixin overwrite-component($components, $parent: null, $special: null) {
+@mixin overwrite-component($components, $parent: null, $is: null, $not: null, $special: null) {
     $module: if($parent != null, $parent, $module);
     $selectors: ();
     @each $component in $components {
@@ -196,6 +196,24 @@ $module: null;
             $selectors: join($selectors, '+ [class*="#{$selector}"]', comma);
         } @else {
             $selectors: join($selectors, '[class*="#{$selector}"]', comma);
+        }
+        @if $is {
+            $modifiers-list: ();
+            @each $modifier in $is {
+                $selectors: join(
+                    $modifiers-list, 
+                    selector-append($selectors,'[class*="-#{$modifier}"]'), 
+                comma);
+            }
+        }
+        @if $not {
+            $modifiers-list: ();
+            @each $modifier in $not {
+                $selectors: join(
+                    $modifiers-list, 
+                    selector-append($selectors,':not([class*="-#{$modifier}"])'), 
+                comma);
+            }
         }
     }
     #{$selectors} {
