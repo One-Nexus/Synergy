@@ -20,6 +20,7 @@ tod.txt
 .settings
 /node_modules
 .sass-cache
+/test
 
 # =========================
 # Operating System Files

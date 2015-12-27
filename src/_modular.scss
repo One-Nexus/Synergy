@@ -246,7 +246,7 @@ $module: null;
     
     $selectors: &;
     
-    @if length(&) != 1 {
+    @if nth(&, 1) + unquote('') == '.#{$module}' {
         @if map-get($config, selector-type) == flex {
             $selectors: ();
             $i: 1;
