@@ -434,7 +434,7 @@ $extend-options: true;
             @include extend($setting);
         }
     }
-    @include nested-modifier($nested-modifier) {	
+    @include modifier($nested-modifier) {	
         @content;
     }
 }
