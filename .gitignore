@@ -1,45 +1,48 @@
-# Windows image file caches
-Thumbs.db
-ehthumbs.db
+# Compiled source
+#============================================================
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
 
-# Folder config file
-Desktop.ini
+# Packages
+#============================================================
+# it's better to unpack these files and commit the raw source
+# git has its own built in compression methods
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
 
-# Recycle Bin used on file shares
-$RECYCLE.BIN/
+# Logs and databases
+#============================================================
+*.log
+*.sql
+*.sqlite
 
-# Windows Installer files
-*.cab
-*.msi
-*.msm
-*.msp
-
-# Custom Options
-*.cfg
-tod.txt
-.settings
-/node_modules
-.sass-cache
-/test
-
-# =========================
-# Operating System Files
-# =========================
-
-# OSX
-# =========================
-
+# OS generated files
+#============================================================
 .DS_Store
-.AppleDouble
-.LSOverride
-
-# Icon must ends with two \r.
-Icon
-
-
-# Thumbnails
+.DS_Store?
 ._*
-
-# Files that might appear on external disk
 .Spotlight-V100
 .Trashes
+ehthumbs.db
+Thumbs.db
+
+# Custom Options
+#============================================================
+*.cfg
+.vscode
+.settings
+.sass-cache
+node_modules
+todo.md
+*.cfg
+/test
