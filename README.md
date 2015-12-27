@@ -285,7 +285,6 @@ Now import the respective `_modular.scss` and optional `modular.js` files into y
 * [Overwrite](#overwrite)
 * [Overwrite-Component](#overwrite-component)
 * [Modifier](#modifier)
-* [Nested Modifier](#nested-modifier)
 * [Extend Modifiers](#extend-modifiers)
 * [Context](#context)
 * [Option](#bool-options)
@@ -775,7 +774,7 @@ As above, this mixin is used for overwriting styles for an existing component in
 
 #### Modifier
 
-The `modifier()` mixin generates the selector for any modifier of your module, for example a **small** or **large** modifier. This mixin accepts only 1 paramter:
+The `modifier()` mixin generates the selector for any modifiers of your module, for example a **small** or **large** modifier. This mixin accepts only 1 paramter:
 
 * `$modifiers` - the name of your modifier(s) [required]
 
@@ -802,6 +801,30 @@ The `modifier()` mixin generates the selector for any modifier of your module, f
 <div class="button-large">Button</div>
 ```
 
+The `modifier()` mixin is infinitely nestable allowing you to require more than one modifier for styles to take affect:
+
+```scss
+@include module('header') {
+	
+	...
+	
+	@include modifier('side') {
+        position: absolute;
+		@include modifier('left') {
+            left: 0;
+        }
+		@include modifier('right') {
+            right: 0;
+        }
+	}
+	
+}
+```
+
+```html
+<div class="header-side-left">...</div>
+```
+
 You can use any number of modifiers on a single element in the HTML, and in any order, for example:
 
 ```html
@@ -826,83 +849,6 @@ You can use any number of modifiers on a single element in the HTML, and in any 
 	
 	@include modifier('add-to-basket') {
 		...
-	}
-	
-}
-```
-
-#### Nested Modifier
-
-The `nested-modifier()` mixin is used to nest modifiers within one another, meaning that both modifiers must be passed to the element's HTML for the styles to take effect. Again, this mixin accepts only 1 parameter:
-
-* `$modifiers` - the name of your modifier(s) [required]
-
-```scss
-@include module('button') {
-	
-	content: "null";
-
-	@include modifier('white') {
-		content: "foo";
-	}
-	
-	@include modifier('border') {
-		content: "bar";
-		@include nested-modifier('white') {
-			content: "baz";
-		}
-	}
-	
-}
-```
-
-This means that in your HTML the element would require both the **border** and **white** modifiers for the styles to take place:
-
-```html
-<div class="button">null</div>
-<div class="button-white">foo</div>
-<div class="button-border">bar</div>
-<div class="button-border-white">baz</div>
-<div class="button-white-border">baz</div>
-```
-
-> If you try to nest the regular modifier mixin, it will output the CSS as if it weren't nested. It is essential to use the `nested-modifier` mixin for any nested modifiers. Other than that, nested-modifiers can be infinitely nested.
-
-##### Alternate Use-Case
-
-```scss
-@include module('header') {
-
-	@include modifier('side') {
-		...
-		@include nested-modifier('left') {
-			...
-		}
-		@include nested-modifier('right') {
-			...
-		}
-	}
-	
-}
-```
-
-##### Alias Mixin For Multiple Modifiers
-
-```scss
-@include module('button') {
-
-	@include modifier('buy-now') {
-		...
-	}
-	
-	@include modifier('add-to-basket') {
-		...
-	}
-	
-	@include modifier('clearance') {
-		@include nested-modifiers(('buy-now', 'add-to-basket')) {
-			...
-		}
 	}
 	
 }
@@ -1767,6 +1713,15 @@ It's important to understand the CSS that is generated when using Modular in ord
 If you then try to add the class **header-wrapper** anywhere, the header module's core styles would also be applied to this class, as the module is looking for any class that contains "header-".
 
 ## Changelog
+
+#### Version 3.2.0
+
+Released: ---
+
+###### Release Notes
+
+* removing `nested-modifier()` mixin - no longer needed as regular `modifier()` mixin now more intelligent
+* separating source code into individual modules
 
 #### Version 3.1.0
 
