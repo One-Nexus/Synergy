@@ -15,11 +15,10 @@ http://github.com/esr360/Modular/
 //  3. overwrite()
 //  4. overwrite-component()
 //  5. modifier()
-//  6. nested-modifier()
-//  7. extend()
-//  8. context()
-//  9. option()
-//  10. value()
+//  6. extend()
+//  7. context()
+//  8. option()
+//  9. value()
 
 //-----------------------------------------------------------------
 
@@ -284,40 +283,7 @@ $module: null;
     }
 }
 
-// 6. Nested Modifier
-// Nest a modifier for appropriate specificity
-//-----------------------------------------------------------------
-
-//  Usage
-//
-//  @include module(button) {
-//      @include modifier(white) {
-//          @include nested-modifier(border) {
-//              ...
-//          }
-//      }
-//  }
-//
-//  <div class="button-white-border">...</div>
-
-@mixin nested-modifier($modifiers) {
-    $selectors: ();
-    @each $modifier in $modifiers {
-        $selectors: join($selectors, '&[class*="-#{$modifier}"]', comma);
-    }
-    @at-root #{$selectors} {
-        @content;
-    }
-}
-
-// Alias for multiple modifiers
-@mixin nested-modifiers($modifiers) {
-    @include nested-modifier($modifiers) {
-        @content;
-    }
-}
-
-// 7. Extend Modifiers
+// 6. Extend Modifiers
 // Extend one or more modifiers of a module
 //-----------------------------------------------------------------
 
@@ -361,7 +327,7 @@ $module: null;
     }
 }
 
-// 8. Context
+// 7. Context
 // Apply styles when in special context
 //-----------------------------------------------------------------
 
@@ -389,7 +355,7 @@ $module: null;
     }
 }
 
-// 9. Option
+// 8. Option
 // Add a configurable option to a module
 //-----------------------------------------------------------------
 
@@ -431,7 +397,7 @@ $extend-options: true;
     }
 }
 
-// 10. Value
+// 9. Value
 // Style when option is a certain value
 //-----------------------------------------------------------------
 
