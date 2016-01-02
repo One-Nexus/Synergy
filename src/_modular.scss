@@ -578,3 +578,8 @@ $config-JSON: ();
 @function setting($map, $keys...) {
     @return option($map, $keys...);
 }
+
+// Quick Current Module's Access
+@function this($option) {
+    @return option($config, $option)
+}
