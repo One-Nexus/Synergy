@@ -580,6 +580,6 @@ $config-JSON: ();
 }
 
 // Quick Current Module's Access
-@function this($option) {
-    @return option($config, $option)
+@function this($options...) {
+    @return option($config, $options...)
 }
