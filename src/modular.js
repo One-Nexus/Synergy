@@ -77,7 +77,7 @@ function _option(component, option) {
 		$selector = $id.is('[class*="-' + option + '"]') == true;
 		
 	if (typeof($option[Object.keys($option)[0]]) == 'boolean') {
-		return $selector || $option['default'] != false;
+		return $selector || $option['enabled'] != false;
 	} else {
 		return $selector || $option != false;
 	}
