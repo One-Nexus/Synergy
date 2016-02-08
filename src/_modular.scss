@@ -386,7 +386,7 @@ $extend-options: true;
     $option: $option !global;
     $enabled: if(
         (type-of(map-get($config, $option)) == bool and map-get($config, $option) != false) or
-        (type-of(map-get($config, $option)) == map and map-get(map-get($config, $option), default) != false),
+        (type-of(map-get($config, $option)) == map and map-get(map-get($config, $option), 'enabled') != false),
         true, false
     );
     @if $enabled {
@@ -423,12 +423,12 @@ $extend-options: true;
 //      side : left
 //  ));
 
-@mixin value($setting: default, $value: true) {
+@mixin value($setting: 'enabled', $value: true) {
     $nested-modifier: if(
-        $setting == default, $value, $setting
+        $setting == 'enabled', $value, $setting
     );
     @if (option($config, $option, $setting) == $value) {	
-        @if $setting == default {
+        @if $setting == 'enabled' {
             @include extend($value);
         } @else {
             @include extend($setting);
