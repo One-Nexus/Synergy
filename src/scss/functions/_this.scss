@@ -1,0 +1,3 @@
+@function this($options...) {
+    @return option($config, $options...)
+}

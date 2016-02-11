@@ -1,0 +1,41 @@
+// 8. Option
+// Add a configurable option to a module
+//-----------------------------------------------------------------
+
+//  Usage
+//
+//  @mixin billboard($custom: ()) {
+//
+//      $billboard: config((
+//          full-screen : false
+//      ), $custom);
+//
+//      @include module(billboard) {
+//          @include option(full-screen) {
+//              ...
+//          }
+//      }
+//
+//  }
+//
+//  @include billboard: ((
+//      full-screen : true
+//  ));
+
+// Extend each option as a modifier by default?
+$extend-options: true;
+
+@mixin option($option) {
+    $option: $option !global;
+    $enabled: if(
+        (type-of(map-get($config, $option)) == bool and map-get($config, $option) != false) or
+        (type-of(map-get($config, $option)) == map and map-get(map-get($config, $option), 'enabled') != false),
+        true, false
+    );
+    @if $enabled {
+        @include extend($option);
+    }
+    @include modifier($option) {	
+        @content;
+    }
+}

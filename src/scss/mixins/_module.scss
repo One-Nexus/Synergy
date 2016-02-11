@@ -1,0 +1,38 @@
+// 1. Module
+// Define the main module
+//-----------------------------------------------------------------
+
+// 	Usage
+// 
+// 	@include module(header) {
+//      ...
+// 	}
+//
+// 	<div class="header">...</div>
+
+// Set the default selector type (flex, chain, static)
+$type: flex;
+
+$module: null;
+@mixin module($modules: map-get($config, name), $type: map-get($config, selector-type)) {
+    $module: $modules !global;
+    $selectors: ();
+    @each $module in $modules {
+        @if $type == flex or $type == static {
+            $selectors: join($selectors, '.#{$module}', comma);
+        }
+        @if $type == flex or $type == chain {
+            $selectors: join($selectors, '[class*="#{$module}-"]', comma);
+        }
+    }
+    #{$selectors} {
+        @content;
+    }
+}
+
+// Alias for multiple modules
+@mixin modules($modules, $type: $type) {
+    @include module($modules, $type) {
+        @content;
+    }
+}

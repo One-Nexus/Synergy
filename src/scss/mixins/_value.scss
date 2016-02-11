@@ -1,0 +1,41 @@
+// 9. Value
+// Style when option is a certain value
+//-----------------------------------------------------------------
+
+//  Usage
+//
+//  @mixin header($custom: ()) {
+//
+//      $header: config((
+//          side : false
+//      ), $custom);
+//
+//      @include module(header) {
+//          @include option(side) {
+//              @include value(left) {
+//                  ...
+//              }
+//          }
+//      }
+//
+//  }
+//
+//  @include header: ((
+//      side : left
+//  ));
+
+@mixin value($setting: 'enabled', $value: true) {
+    $nested-modifier: if(
+        $setting == 'enabled', $value, $setting
+    );
+    @if (option($config, $option, $setting) == $value) {	
+        @if $setting == 'enabled' {
+            @include extend($value);
+        } @else {
+            @include extend($setting);
+        }
+    }
+    @include modifier($nested-modifier) {	
+        @content;
+    }
+}

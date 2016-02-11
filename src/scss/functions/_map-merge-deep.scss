@@ -1,0 +1,26 @@
+@function map-merge-deep($map-old, $map-new, $overwrite: true) {
+
+	// Iterate through each value of the new map
+	@each $key, $new-value in $map-new {
+		// Check if that value already exists on the old map
+		@if map-has-key($map-old, $key) {
+			// There is an existing key
+			$old-value: map-get($map-old, $key);
+			@if type-of($new-value) == map and type-of($old-value) == map {
+				// If both are maps, recurse regardless of $overwrite
+				$merged-value: map-merge-deep($old-value, $new-value);
+				$map-old: map-set($map-old, $key, $merged-value);	
+			} @else {
+				// Otherwise check $overwrite
+				@if $overwrite{
+					$map-old: map-set($map-old, $key, $new-value);
+				}
+			}
+		} @else {
+			// There is no existing key to add
+			$map-old: map-set($map-old, $key, $new-value);
+		}
+	}
+	@return $map-old;
+	
+}

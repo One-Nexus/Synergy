@@ -1,0 +1,3 @@
+@function setting($map, $keys...) {
+    @return option($map, $keys...);
+}

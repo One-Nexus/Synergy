@@ -1,0 +1,27 @@
+// 7. Context
+// Apply styles when in special context
+//-----------------------------------------------------------------
+
+@mixin context($context) {
+    $child-selectors: &;
+    $selectors: ();
+    @each $item in $context {
+        @if map-get($config, selector-type) == flex or map-get($config, selector-type) == static {
+            $selectors: join($selectors, '.#{$module}', comma);
+        }
+        @if map-get($config, selector-type) == flex or map-get($config, selector-type) == chain {
+            $selectors: join($selectors, '[class*="#{$module}-"]', comma);
+        }
+    }
+    @if $context == 'parent-hovered' {
+        @at-root {
+            #{$selectors} {
+                &:hover {
+                    #{$child-selectors} {
+                        @content;
+                    }
+                }
+            }
+        }
+    }
+}

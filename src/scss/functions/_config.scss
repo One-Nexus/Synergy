@@ -1,0 +1,27 @@
+$config-JSON: ();
+
+@function config($map-old, $map-new) {
+	
+	$map-old: map-merge((
+		selector-type   : $type,
+		extend-settings : $extend-options,
+		output-JSON     : $output-JSON
+	), $map-old);
+	
+	$map-old: map-merge-deep($map-old, $map-new);
+	
+	// Store merged map in a variable
+	$config: $map-old !global;
+	
+	// Output options to JSON
+	@if option($map-old, output-JSON) {
+		$config-JSON: map-merge-deep(
+			(map-get($map-old, name): ($map-old)), 
+			$config-JSON
+		) !global;
+	}
+	
+	// Return merged map
+	@return $map-old;
+	
+} // config()

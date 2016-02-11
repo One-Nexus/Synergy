@@ -1,0 +1,35 @@
+// 2. Component
+// Create a component based off the main module
+//-----------------------------------------------------------------
+
+//  Usage
+//
+//  @include module(header) {
+//      @include component(wrapper) {
+//          ...
+//      }
+//  }
+//
+//  <div class="header_wrapper">...</div>
+
+@mixin component($components: null) {
+    $selectors: '[class*="#{$module}_"]';
+    @if $components != null {
+        $selectors: ();
+        @each $component in $components {
+            $selectors: join($selectors, '[class*="#{$module}_#{$component}"]', comma);
+        }
+    }
+    @at-root {
+        #{$selectors} {
+            @content;
+        }
+    }	
+}
+
+// Alias for multiple components
+@mixin components($sub-components) {
+    @include component($sub-components) {
+        @content;
+    }
+}

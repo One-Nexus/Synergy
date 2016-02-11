@@ -1,0 +1,64 @@
+// 3. Overwrite
+// Overwrite a module in alternate context
+//-----------------------------------------------------------------
+
+//  Usage
+//
+//  @include module(header) {
+//      @include overwrite(logo) {
+//          ...
+//      }
+//  }
+//
+//  <div class="header">
+//      <div class="logo">...</div>
+//  </div>
+
+@mixin overwrite($modules: map-get($config, name), $type: $type, $is: null, $not: null, $special: null) {
+    $selectors: ();
+    @if $is {
+        $type: 'chain';
+    }
+    @each $module in $modules {
+        $selector: #{$module};
+        @if $type == flex or $type == static {
+            @if $special == 'adjacent-sibling' {
+                $selectors: join($selectors, '+ .#{$selector}', comma);
+            } @else if $special == 'general-sibling' {
+                $selectors: join($selectors, '~ .#{$selector}', comma);
+            } @else {
+                $selectors: join($selectors, '.#{$selector}', comma);
+            }
+        }
+        @if $type == flex or $type == chain {
+            @if $special == adjacent-sibling {
+                $selectors: join($selectors, '+ [class*="#{$selector}-"]', comma);
+            } @else if $special == 'general-sibling' {
+                $selectors: join($selectors, '~ [class*="#{$selector}-"]', comma);
+            }  @else {
+                $selectors: join($selectors, '[class*="#{$selector}-"]', comma);
+            }
+        }
+        @if $is {
+            $modifiers-list: ();
+            @each $modifier in $is {
+                $selectors: join(
+                    $modifiers-list, 
+                    selector-append($selectors,'[class*="-#{$modifier}"]'), 
+                comma);
+            }
+        }
+        @if $not {
+            $modifiers-list: ();
+            @each $modifier in $not {
+                $selectors: join(
+                    $modifiers-list, 
+                    selector-append($selectors,':not([class*="-#{$modifier}"])'), 
+                comma);
+            }
+        }
+    }
+    #{$selectors} {
+        @content;
+    }
+}
