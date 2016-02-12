@@ -10,13 +10,13 @@
  * @param $type    - 'static' | 'chain' | 'flex' 
  */
 
-// 	Usage
-// 
-// 	@include module(header) {
-//      ...
-// 	}
+//  Usage
 //
-// 	<div class="header">...</div>
+//  @include module(header) {
+//      ...
+//  }
+//
+//  <div class="header">...</div>
 
 @mixin module($modules: map-get($config, 'name'), $type: map-get($config, 'selector-type')) {
     $module: $modules !global;
