@@ -1,27 +1,3 @@
-/*-----------------------------------------------------------------
-
-Modular
-Made by @esr360
-http://github.com/esr360/Modular/
-	
------------------------------------------------------------------*/
-
-//-----------------------------------------------------------------
-// Mixins
-//-----------------------------------------------------------------
-
-//  1. module()
-//  2. component()
-//  3. overwrite()
-//  4. overwrite-component()
-//  5. modifier()
-//  6. extend()
-//  7. context()
-//  8. option()
-//  9. value()
-
-//-----------------------------------------------------------------
-
 // 1. Module
 // Define the main module
 //-----------------------------------------------------------------
@@ -60,7 +36,6 @@ $module: null;
         @content;
     }
 }
-
 // 2. Component
 // Create a component based off the main module
 //-----------------------------------------------------------------
@@ -96,7 +71,61 @@ $module: null;
         @content;
     }
 }
+// 5. Modifiers 
+// Add a modifier to an existing module/component
+//-----------------------------------------------------------------
 
+//  Usage
+//
+//  @include module(button) {
+//      @include modifier(large) {
+//          ...
+//      }
+//  }
+//
+//  <div class="button-large">...</div>
+
+@mixin modifier($modifiers, $special: null) {
+    
+    $selectors: &;
+    
+    @if nth(&, 1) + unquote('') == '.#{$module}' {
+        @if map-get($config, selector-type) == flex {
+            $selectors: ();
+            $i: 1;
+            @each $item in & {
+                $i: $i + 1;
+                @if $i == 2 {
+                    $i: 0;
+                } @else {
+                    $selectors: append($selectors, $item, comma);
+                }
+            }
+        }
+    }
+    
+    @at-root #{$selectors} {
+        $modifier-selectors: ();
+        @each $modifier in $modifiers {
+            @if $special == "not" {
+                $modifier-selectors: join($modifier-selectors, '&:not([class*="-#{$modifier}"])', comma);
+            } @else {
+                $modifier-selectors: join($modifier-selectors, '&[class*="-#{$modifier}"]', comma);
+            }
+        }
+        #{$modifier-selectors} {
+            @content;
+        }
+    }
+
+} // modifier()
+
+// Alias for multiple modifiers
+@mixin modifiers($modifiers) {
+    @include modifier($modifiers) {
+        @content;
+    }
+}
 // 3. Overwrite
 // Overwrite a module in alternate context
 //-----------------------------------------------------------------
@@ -161,7 +190,6 @@ $module: null;
         @content;
     }
 }
-
 // 4. Overwrite-Component
 // Overwrite a module component in alternate context
 //-----------------------------------------------------------------
@@ -226,63 +254,6 @@ $module: null;
         @content;
     }
 }
-
-// 5. Modifiers 
-// Add a modifier to an existing module/component
-//-----------------------------------------------------------------
-
-//  Usage
-//
-//  @include module(button) {
-//      @include modifier(large) {
-//          ...
-//      }
-//  }
-//
-//  <div class="button-large">...</div>
-
-@mixin modifier($modifiers, $special: null) {
-    
-    $selectors: &;
-    
-    @if nth(&, 1) + unquote('') == '.#{$module}' {
-        @if map-get($config, selector-type) == flex {
-            $selectors: ();
-            $i: 1;
-            @each $item in & {
-                $i: $i + 1;
-                @if $i == 2 {
-                    $i: 0;
-                } @else {
-                    $selectors: append($selectors, $item, comma);
-                }
-            }
-        }
-    }
-    
-    @at-root #{$selectors} {
-        $modifier-selectors: ();
-        @each $modifier in $modifiers {
-            @if $special == "not" {
-                $modifier-selectors: join($modifier-selectors, '&:not([class*="-#{$modifier}"])', comma);
-            } @else {
-                $modifier-selectors: join($modifier-selectors, '&[class*="-#{$modifier}"]', comma);
-            }
-        }
-        #{$modifier-selectors} {
-            @content;
-        }
-    }
-
-} // modifier()
-
-// Alias for multiple modifiers
-@mixin modifiers($modifiers) {
-    @include modifier($modifiers) {
-        @content;
-    }
-}
-
 // 6. Extend Modifiers
 // Extend one or more modifiers of a module
 //-----------------------------------------------------------------
@@ -326,7 +297,6 @@ $module: null;
         }
     }
 }
-
 // 7. Context
 // Apply styles when in special context
 //-----------------------------------------------------------------
@@ -354,7 +324,6 @@ $module: null;
         }
     }
 }
-
 // 8. Option
 // Add a configurable option to a module
 //-----------------------------------------------------------------
@@ -396,7 +365,6 @@ $extend-options: true;
         @content;
     }
 }
-
 // 9. Value
 // Style when option is a certain value
 //-----------------------------------------------------------------
@@ -438,20 +406,6 @@ $extend-options: true;
         @content;
     }
 }
-
-//-----------------------------------------------------------------
-// Advanced Functions
-//-----------------------------------------------------------------
-
-// Module configuration
-//-----------------------------------------------------------------
-
-// Enable JSON output?
-$to-JSON    : false !default;
-
-// Output config for each module by default?
-$output-JSON: false !default;
-
 $config-JSON: ();
 
 @function config($map-old, $map-new) {
@@ -479,23 +433,9 @@ $config-JSON: ();
 	@return $map-old;
 	
 } // config()
-
-// Map-Set Function
-// http://git.io/vmBKD
-//-----------------------------------------------------------------
-
-@function get-keys($keys, $counter) {
-	$return: ();
-	@for $i from 1 to $counter {
-		$return: append($return, nth($keys, $i));
-	}
-	@return $return;
-}
-
 @function map-set($map, $key, $value) {
 	@return map-merge($map, ($key: $value));
 }
-
 @function map-set-deep($map, $keys, $value) {
 	$private-sassy-maps-suppress-warnings: true !global;
 	$length: length($keys);
@@ -531,11 +471,6 @@ $config-JSON: ();
 	$private-sassy-maps-suppress-warnings: false !global;
 	@return $map;
 }
-
-// Map Deep Merge
-// http://git.io/vmBVH
-//-----------------------------------------------------------------
-
 @function map-merge-deep($map-old, $map-new, $overwrite: true) {
 
 	// Iterate through each value of the new map
@@ -562,24 +497,15 @@ $config-JSON: ();
 	@return $map-old;
 	
 }
-
-// Map Deep Get
-// https://css-tricks.com/snippets/sass/deep-getset-maps/
-//-----------------------------------------------------------------
-
 @function option($map, $keys...) {
     @each $key in $keys {
         $map: map-get($map, $key);
     }
     @return $map;
 }
-
-// Alias for settings
 @function setting($map, $keys...) {
     @return option($map, $keys...);
 }
-
-// Quick Current Module's Access
 @function this($options...) {
     @return option($config, $options...)
 }

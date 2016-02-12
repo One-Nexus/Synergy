@@ -82,7 +82,6 @@ $.each(_module, function(module) {
 	window['_' + moduleCamelCase] = '.' + module + ', [class*="' + module + '-"]';   
 	moduleIndex++; 
 });
-
 /**
  * @function _option
  * @description Get the computed value of a module's option
@@ -110,7 +109,6 @@ function _option(module, option) {
     }
 	
 }
-
 /**
  * @function $.isModifier
  * @description Determine if a particular module has a certain 
