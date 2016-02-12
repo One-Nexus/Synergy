@@ -60,7 +60,7 @@ function parseJSON(toCamelCase) {
 var _module = parseJSON();
 
 /**
- * @var _module
+ * @var modulesCamelCase
  * @description Holds all configuration data for all modules in
  * camelCase form
  */
