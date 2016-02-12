@@ -8,7 +8,7 @@
  * @param module - The module which you wish to get an option from
  */
 
-//	Usage
+//  Usage
 //
 //  if(_navigation.isModifier('sticky')) {
 //      ...
