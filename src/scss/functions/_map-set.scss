@@ -11,5 +11,5 @@
  */
 
 @function map-set($map, $key, $value) {
-	@return map-merge($map, ($key: $value));
+    @return map-merge($map, ($key: $value));
 }
