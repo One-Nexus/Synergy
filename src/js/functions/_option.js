@@ -7,11 +7,11 @@
  * @param option - The module's option which you are interested in
  */
 
-//	Usage
+//  Usage
 //
-//	if(_option('navigation', 'sticky')) {
-//		...
-//	}
+//  if(_option('navigation', 'sticky')) {
+//      ...
+//  }
 
 function _option(module, option) {
 

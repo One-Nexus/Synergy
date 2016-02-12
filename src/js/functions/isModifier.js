@@ -10,9 +10,9 @@
 
 //	Usage
 //
-//	if(_navigation.isModifier('sticky')) {
-//		...
-//	}
+//  if(_navigation.isModifier('sticky')) {
+//      ...
+//  }
 
 $.fn.isModifier = function(modifier) {
 
