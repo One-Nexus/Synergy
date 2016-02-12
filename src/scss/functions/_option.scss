@@ -1,6 +1,15 @@
+/** 
+ * Modular
+ * @author Edmund Reed | @esr360
+ * 
+ * @function option
+ *
+ * @description Alias function to map-deep-get()
+ *
+ * @param $map
+ * @param $keys
+ */
+
 @function option($map, $keys...) {
-    @each $key in $keys {
-        $map: map-get($map, $key);
-    }
-    @return $map;
+    @return map-deep-get($map, $keys...);
 }

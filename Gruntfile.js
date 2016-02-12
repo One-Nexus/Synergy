@@ -116,7 +116,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-notify');
-    grunt.loadNpmTasks('grunt-sass');
     grunt.loadNpmTasks('grunt-scss-lint');
 
 }; // function(grunt)

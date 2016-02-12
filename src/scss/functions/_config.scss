@@ -1,11 +1,22 @@
-$config-JSON: ();
+/** 
+ * Modular
+ * @author Edmund Reed | @esr360
+ * 
+ * @function config
+ *
+ * @description Used to merge a module's default configuration with
+ * any custom values passed to the module
+ *
+ * @param $map-old - The map which will store default configuration
+ * @param $map-new - The map which will hold custom values
+ */
 
 @function config($map-old, $map-new) {
 	
 	$map-old: map-merge((
-		selector-type   : $type,
-		extend-settings : $extend-options,
-		output-JSON     : $output-JSON
+		'selector-type'   : $type,
+		'extend-settings' : $extend-options,
+		'output-JSON'     : $output-JSON
 	), $map-old);
 	
 	$map-old: map-merge-deep($map-old, $map-new);
@@ -14,14 +25,14 @@ $config-JSON: ();
 	$config: $map-old !global;
 	
 	// Output options to JSON
-	@if option($map-old, output-JSON) {
+	@if option($map-old, 'output-JSON') {
 		$config-JSON: map-merge-deep(
-			(map-get($map-old, name): ($map-old)), 
-			$config-JSON
+			(map-get($map-old, 'name') : ($map-old)), 
+            $config-JSON
 		) !global;
 	}
 	
 	// Return merged map
 	@return $map-old;
 	
-} // config()
+}

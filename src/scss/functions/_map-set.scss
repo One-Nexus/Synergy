@@ -1,3 +1,15 @@
+/** 
+ * Modular
+ * @author Edmund Reed | @esr360
+ * 
+ * @function map-set
+ * @author Sam Richard
+ *
+ * @param $map
+ * @param $key
+ * @param $value
+ */
+
 @function map-set($map, $key, $value) {
 	@return map-merge($map, ($key: $value));
 }
