@@ -1,6 +1,18 @@
-// 3. Overwrite
-// Overwrite a module in alternate context
-//-----------------------------------------------------------------
+/** 
+ * Modular
+ * @author Edmund Reed | @esr360
+ * 
+ * @mixin overwrite
+ *
+ * @description Overwrite an existing module when in different 
+ * context, such as inside another module
+ *
+ * @param $modules - The module(s) which you wish to overwrite
+ * @param $is - Overwrite if moulde is certain modifier
+ * @param $not - Overwrite if module is not certain modifier
+ * @param $type - 'static' | 'chain' | 'flex
+ * @param $special - 'adjacent-sibling' | 'general-sibling'
+ */
 
 //  Usage
 //
@@ -21,7 +33,7 @@
     }
     @each $module in $modules {
         $selector: #{$module};
-        @if $type == flex or $type == static {
+        @if $type == 'flex' or $type == 'static' {
             @if $special == 'adjacent-sibling' {
                 $selectors: join($selectors, '+ .#{$selector}', comma);
             } @else if $special == 'general-sibling' {
@@ -30,8 +42,8 @@
                 $selectors: join($selectors, '.#{$selector}', comma);
             }
         }
-        @if $type == flex or $type == chain {
-            @if $special == adjacent-sibling {
+        @if $type == 'flex' or $type == 'chain' {
+            @if $special == 'adjacent-sibling' {
                 $selectors: join($selectors, '+ [class*="#{$selector}-"]', comma);
             } @else if $special == 'general-sibling' {
                 $selectors: join($selectors, '~ [class*="#{$selector}-"]', comma);

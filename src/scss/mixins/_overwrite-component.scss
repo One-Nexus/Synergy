@@ -1,6 +1,18 @@
-// 4. Overwrite-Component
-// Overwrite a module component in alternate context
-//-----------------------------------------------------------------
+/** 
+ * Modular
+ * @author Edmund Reed | @esr360
+ * 
+ * @mixin overwrite-component
+ *
+ * @description Overwrite an existing component when in different 
+ * context, such as inside another module or component
+ *
+ * @param $components - The component(s) which you wish to overwrite
+ * @param $is - Overwrite if moulde is certain modifier
+ * @param $not - Overwrite if module is not certain modifier
+ * @param $parent - The parent module of the component
+ * @param $special - 'adjacent-sibling' |
+ */
 
 //  Usage
 // 
@@ -27,7 +39,7 @@
     $selectors: ();
     @each $component in $components {
         $selector: #{$module}_#{$component};
-        @if $special == adjacent-sibling {
+        @if $special == 'adjacent-sibling' {
             $selectors: join($selectors, '+ [class*="#{$selector}"]', comma);
         } @else {
             $selectors: join($selectors, '[class*="#{$selector}"]', comma);

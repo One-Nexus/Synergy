@@ -1,6 +1,14 @@
-// 8. Option
-// Add a configurable option to a module
-//-----------------------------------------------------------------
+/** 
+ * Modular
+ * @author Edmund Reed | @esr360
+ * 
+ * @mixin option
+ *
+ * @description Apply styles to a module if a defined option 
+ * returns true
+ *
+ * @param $option - The option which you wish to test against
+ */
 
 //  Usage
 //
@@ -21,9 +29,6 @@
 //  @include billboard: ((
 //      full-screen : true
 //  ));
-
-// Extend each option as a modifier by default?
-$extend-options: true;
 
 @mixin option($option) {
     $option: $option !global;

@@ -10,6 +10,15 @@
  * @param $keys
  */
 
+// @TODO Why doesn't this work? :(
+//
+// @function option($map, $keys...) {
+//     @return map-deep-get($map, $keys...);
+// }
+
 @function option($map, $keys...) {
-    @return map-deep-get($map, $keys...);
+    @each $key in $keys {
+        $map: map-get($map, $key);
+    }
+    @return $map;
 }

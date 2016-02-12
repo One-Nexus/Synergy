@@ -1,6 +1,16 @@
-// 6. Extend Modifiers
-// Extend one or more modifiers of a module
-//-----------------------------------------------------------------
+/** 
+ * Modular
+ * @author Edmund Reed | @esr360
+ * 
+ * @mixin extend
+ *
+ * @description Extend one or more modifiers of a module to create
+ * a new modifier combining the ones you pass
+ *
+ * @param $modifiers - The modifiers which you wish to combine
+ * @param $parent    - The parent module if not current one
+ * @param $core      - Extend the core '.module' styles?
+ */
 
 //  Usage
 //

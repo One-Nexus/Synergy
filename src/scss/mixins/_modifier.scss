@@ -1,6 +1,14 @@
-// 5. Modifiers 
-// Add a modifier to an existing module/component
-//-----------------------------------------------------------------
+/** 
+ * Modular
+ * @author Edmund Reed | @esr360
+ * 
+ * @mixin modifier
+ *
+ * @description Create a modifier for a module
+ *
+ * @param $modifiers - The modifier(s) which you wish to create
+ * @param $special   - 'not' | 
+ */
 
 //  Usage
 //
@@ -17,7 +25,7 @@
     $selectors: &;
     
     @if nth(&, 1) + unquote('') == '.#{$module}' {
-        @if map-get($config, selector-type) == flex {
+        @if map-get($config, 'selector-type') == 'flex' {
             $selectors: ();
             $i: 1;
             @each $item in & {

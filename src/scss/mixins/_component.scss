@@ -1,6 +1,13 @@
-// 2. Component
-// Create a component based off the main module
-//-----------------------------------------------------------------
+/** 
+ * Modular
+ * @author Edmund Reed | @esr360
+ * 
+ * @mixin component
+ *
+ * @description Create a component based off the main module
+ *
+ * @param $components - The component or components to be used
+ */
 
 //  Usage
 //
@@ -14,7 +21,7 @@
 
 @mixin component($components: null) {
     $selectors: '[class*="#{$module}_"]';
-    @if $components != null {
+    @if $components {
         $selectors: ();
         @each $component in $components {
             $selectors: join($selectors, '[class*="#{$module}_#{$component}"]', comma);

@@ -46,10 +46,11 @@ module.exports = function(grunt) {
         sass: {
             test: {
                 options: {
-                    style: 'expanded'
+                    style: 'expanded',
+                    sourcemap: 'none'
                 },
                 files: {
-                    ['test/test.css']: 'test/test.scss'
+                    ['test/test-results.css']: 'test/test.scss'
                 }
             } 
         },
@@ -118,4 +119,4 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-notify');
     grunt.loadNpmTasks('grunt-scss-lint');
 
-}; // function(grunt)
+};
