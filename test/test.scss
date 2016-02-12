@@ -11,10 +11,10 @@
 @mixin foo($custom: ()) {
     
     $foo: config((
-        'foo' : 'bar'
+        'name' : 'foo'
     ), $custom);
     
-    @include module('foo') {
+    @include module {
         
         content: '#{&}';
         /* What we expect */
