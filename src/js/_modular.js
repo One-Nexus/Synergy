@@ -27,9 +27,9 @@ function removeQuotes(arg) {
  * @param arg - The argument which you wish to make camelCased
  */
 function camelCase(arg) {
-	arg = arg.replace(/-([a-z])/g, function (g) { 
-		return g[1].toUpperCase(); 
-	}); return arg;
+    arg = arg.replace(/-([a-z])/g, function (g) { 
+        return g[1].toUpperCase(); 
+    }); return arg;
 }
 
 /**
@@ -38,19 +38,19 @@ function camelCase(arg) {
  * @param toCamelCase - Convert the parsed JSON to camelCase?
  */
 function parseJSON(toCamelCase) {
-    
+
     var style = null;
-    
+
     style = window.getComputedStyle(modularSelector, '::before');
     style = style.content;
-	style = removeQuotes(style);
-    
-	if(toCamelCase) {
-		style = camelCase(style);
-	}
-    
+    style = removeQuotes(style);
+
+    if(toCamelCase) {
+        style = camelCase(style);
+    }
+
     return JSON.parse(style);
-    
+
 }
 
 /**
@@ -78,7 +78,7 @@ var moduleIndex = 0;
  * namespace with a variable to access the module
  */
 $.each(_module, function(module) {
-	var moduleCamelCase = modulesCamelCase[Object.keys(modulesCamelCase)[moduleIndex]]['name'];
-	window['_' + moduleCamelCase] = '.' + module + ', [class*="' + module + '-"]';   
-	moduleIndex++; 
+    var moduleCamelCase = modulesCamelCase[Object.keys(modulesCamelCase)[moduleIndex]]['name'];
+    window['_' + moduleCamelCase] = '.' + module + ', [class*="' + module + '-"]';   
+    moduleIndex++; 
 });

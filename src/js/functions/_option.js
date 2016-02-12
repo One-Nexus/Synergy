@@ -1,6 +1,8 @@
 /**
  * @function _option
+ * 
  * @description Get the computed value of a module's option
+ * 
  * @param module - The module which you wish to get an option from
  * @param option - The module's option which you are interested in
  */
@@ -23,5 +25,5 @@ function _option(module, option) {
     } else {
         return $selector || $option != false;
     }
-	
+
 }
