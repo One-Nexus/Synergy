@@ -120,7 +120,7 @@ if (_option('header', 'fixed')) {
 ```js
 // This will test for the 'noLogo' modifier in the markup
 if (_header.isModifier('noLogo')) {
-    alert('Header's logo is hidden!');
+    alert('The header logo is hidden!');
 }
 
 // Do something to the header module regardless of any modifiers
