@@ -1621,19 +1621,6 @@ if(_header.isModifier('dark')) {
 * [Advanced Sass List Functions](http://hugogiraudel.com/2013/08/08/advanced-sass-list-functions/)
 * [Bringing Configuration Objects To Sass](http://hugogiraudel.com/2014/05/05/bringing-configuration-objects-to-sass/)
 
-#### Caveats
-
-It's important to understand the CSS that is generated when using Modular in order to avoid potential conflicts. One common example might be if you have a **header** module which generates this CSS:
-
-```scss
-.header,
-[class*="header-"] {
-	...	
-}
-```
-
-If you then try to add the class **header-wrapper** anywhere, the header module's core styles would also be applied to this class, as the module is looking for any class that contains "header-".
-
 ## Changelog
 
 #### Version 3.2.0
