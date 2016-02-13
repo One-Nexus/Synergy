@@ -235,11 +235,11 @@ If `$modules` is not defined, it will look for a `name` value in your module's c
 `$type` can be one of three values: `flex` (default), `chain` and `static`. By default, `flex` is enabled for all componenets. To globally change the default type from `flex` to something else, pass the `$selector-type` variable with the value you desire in your Sass before any modules.
 
 ```scss
-// Import Modular
-@import "path/to/modular"
-
 // Re-define default selector type
 $selector-type: 'chain';
+
+// Import Modular
+@import "path/to/modular"
 
 /* Your Modules */
 ```
@@ -944,7 +944,17 @@ If you are watching your CSS output, you may wish to remove these modifiers (and
 }
 ```
 
-To disable the extension of settings globally by default, set the `$extend-settings` variable in **modular.scss** to **false**. This is defined above the `settings()` mixin.
+To disable the extension of settings globally by default, pass the `$extend-settings` variable and set it to `false`:
+
+```scss
+// Disable creation of modifiers for module settings
+$extend-settings : false;
+
+// Import Modular
+@import "path/to/modular"
+
+/* Your Modules */
+```
 
 #### Non-Bool Options
 
@@ -1457,11 +1467,16 @@ And that's it, you're now ready to start using `modular.js`!
 
 #### Configuration
 
-To enable JSON output of your modules' configuration, you need to set the `$to-JSON` variable to `true`. This can be found in the `_modular.scss` file, and is set to `false` by default:
+To enable JSON output of your modules' configuration, you need to pass the `$to-JSON` variable and set it to `true`. This variable should be passed before any Modular related code:
 
 ```scss
-// Enable JSON output?
-$to-JSON : false !default;
+// Enable JSON output
+$to-JSON : true;
+
+// Import Modular
+@import "path/to/modular"
+
+/* Your Modules */
 ```
 
 Alternatively, you can pass this variable at the top of your main project's Sass file, above all Modular related Sass.
@@ -1486,7 +1501,17 @@ By default, output to JSON is enabled on a per-module basis by passing `name` an
 } // @mixin header
 ```
 
-If you want all your modules to output their configuation to JSON by default, you can set the `$output-JSON` variable in `_modular.scss` to `true`. Alternatively, you can add this variable at the top of your project's main Sass file, above all Modular related Sass.
+If you want all your modules to output their configuation to JSON by default, you can pass the `$output-JSON` variable and set it to `true`:
+
+```scss
+// Output JSON by default for each module
+$output-JSON: true;
+
+// Import Modular
+@import "path/to/modular"
+
+/* Your Modules */
+```
 
 If everything is running as expected, once your Sass has been compiled your CSS should now contain the configuration for your modules as JSON. It should look something like this:
 

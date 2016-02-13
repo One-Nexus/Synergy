@@ -4,6 +4,21 @@
  * little coverage, it is enough to know that the core Modular
  * functions are working
  */
+ 
+// Enable JSON output?
+$to-JSON : true;
+
+// Output config for each module by default?
+$output-JSON : true;
+
+// Set the default selector type (flex | chain | static)
+$selector-type : 'flex';
+
+// Extend each option as a modifier by default?
+$extend-options : true;
+
+// Import SassyJSON
+@import "../vendor/SassyJSON/src/SassyJSON";
 
 // Import Modular
 @import "../src/scss/modular";
@@ -45,3 +60,9 @@
 }
 
 @include bar;
+
+// Output all configuration data to JSON only if setting exists and 
+// setting is "true"
+@if variable-exists('to-JSON') and $to-JSON {
+	@include json-encode($_modules);
+}
