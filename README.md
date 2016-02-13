@@ -135,6 +135,8 @@ var headerWrapperWidth = _module['header']['wrapper-width'] // returns the wrapp
 
 ## Installation
 
+The compiled source files can be found in the `/dist` directory. Load these into your project before you attempt to execute any Modular related code and you're good to go.
+
 ##### Clone The Repo
 
 ```
