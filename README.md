@@ -161,9 +161,9 @@ git submodule update --init --recursive
 
 * [Module](#module)
 * [Component](#component)
+* [Modifier](#modifier)
 * [Overwrite](#overwrite)
 * [Overwrite-Component](#overwrite-component)
-* [Modifier](#modifier)
 * [Extend Modifiers](#extend-modifiers)
 * [Context](#context)
 * [Option](#bool-options)
@@ -204,9 +204,7 @@ If `$modules` is not defined, it will look for a `name` value in your module's c
 @mixin header($custom: ()) {
     
     $header: config((
-        
         'name' : 'header'
-            
     ), $custom);
     
     @include module {
@@ -462,6 +460,7 @@ This mixin allows you to overwrite the styles of existing modules, components an
 
 * `adjacent-sibling` - overwrite a module when it is also an adjacent sibling to the parent module
 * `general-sibling` - overwrite a module when it is also a general sibling to the parent module
+* `at-root` - Instead of being treated as nested inside the parent module, overwrite the core module styles
 
 ###### Example
 
@@ -489,8 +488,6 @@ This mixin allows you to overwrite the styles of existing modules, components an
 
 ##### Advanced Example
 
-> This is from a real life profect. We're into some pretty next level shit here already, so for brevetiy I won't explain what `@at-root` is doing in the below example.
-
 ```scss
 @mixin billboard($custom: ()) {
 
@@ -507,15 +504,13 @@ This mixin allows you to overwrite the styles of existing modules, components an
         ...
         
 		// If website has "top-bar" and top-bar is "fixed" and header is "absolute"
-		@at-root {
-			@include overwrite('top-bar', $is: 'fixed') {
-				@include overwrite('header', $is: 'absolute', $special: 'adjacent-sibling') {
-					@include overwrite($is: 'full-screen', $special: 'adjacent-sibling') {
-						margin-top: option($top-bar, 'height');
-					}
-				}
-			}
-		}
+        @include overwrite('top-bar', $is: 'fixed', $special: 'at-root') {
+            @include overwrite('header', $is: 'absolute', $special: 'adjacent-sibling') {
+                @include overwrite($is: 'full-screen', $special: 'adjacent-sibling') {
+                    margin-top: option($top-bar, 'height');
+                }
+            }
+        }
         
         ...
 	
@@ -553,7 +548,7 @@ As above, this mixin is used for overwriting styles for an existing component in
 		...
 	}
 
-	@include modifier('html5') {
+	@include modifier('large') {
 		@include overwrite-component('input') {
 			...
 		}
@@ -562,7 +557,7 @@ As above, this mixin is used for overwriting styles for an existing component in
 ```
 
 ```html
-<div class="form-html5">
+<div class="form-large">
 	<input class="form_input" type="text" />
 </div>	
 ```
@@ -580,7 +575,7 @@ As above, this mixin is used for overwriting styles for an existing component in
 		...
 	}
 
-	@include modifier('html5') {
+	@include modifier('large') {
 		@include overwrite-components(('input', 'group')) {
 			...
 		}
@@ -594,7 +589,7 @@ As above, this mixin is used for overwriting styles for an existing component in
 @include module('heading') {
 	
 	@include component('group') {
-		...	
+		color: red;
 	}	
 	
 }
@@ -602,17 +597,17 @@ As above, this mixin is used for overwriting styles for an existing component in
 @include module('widget') {
 
 	@include overwrite-component('group', $parent: 'heading') {
-		...
+		color: blue;
 	}
 	
 }
 ```
 
 ```html
+<div class="heading_group">I'm Red!</div>	
+
 <div class="widget">
-	<div class="heading_group">
-		...
-	</div>	
+	<div class="heading_group">I'm Blue!</div>	
 </div>
 ```
 
@@ -642,11 +637,11 @@ As above, this mixin is used for overwriting styles for an existing component in
 ```html
 <div class="widget">
 	<div class="widget_icon">...</div>
-	<div class="widget_title">I'm blue!</div>
+	<div class="widget_title">I'm Blue!</div>
 </div>
 
 <div class="widget">
-	<div class="widget_title">I'm red!</div>
+	<div class="widget_title">I'm Red!</div>
 	<div class="widget_icon">...</div>
 </div>
 ```
@@ -780,12 +775,12 @@ The following conditions can be passed to the mixin:
 	
 //	This is equivilent to:
 //
-//	@include component(icon) {
+//	@include component('icon') {
 //		color: blue;
 //	}
 //
 //	&:hover {
-//		@include overwrite-component(icon) {
+//		@include overwrite-component('icon') {
 //			color: white;
 //		}
 //	}
@@ -811,12 +806,12 @@ As outlined in the [overview](#overview) section, Modular allows you to configur
 	@include module('header') {
 		
 		// Core Styles
-		background-color: option($header, bg-color);
-		margin-top: option($header, top);
+		background-color: this('bg-color');
+		margin-top: this('top');
 		
-	} // module('header')
+	}
 		
-} // @mixin header
+}
 ```
 
 For all intents and purposes, there are 2 types of options; bools and non-bools. A bool option is one whose value determines whether or not some code should be applied. A non-bool option is one whose value is used as a value for a CSS property. In the below example there is one of each.
@@ -835,16 +830,16 @@ For all intents and purposes, there are 2 types of options; bools and non-bools.
 	@include module('header') {
 		
 		// Core Styles
-		margin-top: option($header, top);
+		margin-top: this('top');
 		
 		// Settings
 		@include option('dark') {
 			background-color: black;
 		}
 		
-	} // module('header')
+	}
 		
-} // @mixin header
+}
 ```
 
 Your configuration can be infinitely nested, like so:
@@ -857,13 +852,17 @@ Your configuration can be infinitely nested, like so:
 		// Options
 		'typography': (
 			'sizes': (
-				'size-1'    : 1em,
-				'size-2'    : 1.2em,
-				'size-3'    : 1.6em
+				'size-1'      : 1em,
+				'size-2'      : 1.2em,
+				'size-3'      : 1.6em
 			),
 			'colors': (
-				'primary'   : red,
-				'secondary' : blue
+				'primary'     : red,
+				'secondary'   : blue,
+                'validation'  : (
+                    'valid'   : #19d36d,
+                    'invalid' : #d32828
+                )
 			)
 		)
 		
@@ -871,7 +870,7 @@ Your configuration can be infinitely nested, like so:
 	
 	...
 		
-} // @mixin global
+}
 ```
 
 #### Bool Options
@@ -929,10 +928,10 @@ To disable the extension of settings globally by default, set the `$extend-setti
 
 #### Non-Bool Options
 
-If your option is a CSS property, to call the option in your module the `option()` *function* is (note: not mixin, as used for bool options) used, like so:
+If your option is a CSS property, to call the option in your module the `this()` *function* is used, like so:
 
 ```scss
-margin-top: option($header, 'top');
+margin-top: this('top');
 ```
 
 which will generate:
@@ -1017,7 +1016,7 @@ In some circumstances, we can achieve the same thing without having to use the `
 		@include setting('side') {
 			// Side-Header Styles
 			...
-			#{option($header, side)}: 0; // left: 0;
+			#{this('side')}: 0; // left: 0;
 		}
 		
 	} // module('header')
@@ -1041,7 +1040,7 @@ Taking the above example a step further, let's say we want to pass some child op
 		
 		// Options
 		'side'                 : (
-			'default'          : false, // left or right
+			'enabled'          : false, // left or right
 			'width'            : 350px,
 			'show-y-scrollbar' : false
 		)
@@ -1053,14 +1052,14 @@ Taking the above example a step further, let's say we want to pass some child op
 		@include option('side') {
             ...
 			width: option($header, 'side', 'width');
-            @include value(left) {
+            @include value('left') {
                 ...
             }	
-            @include value(right) {
+            @include value('right') {
                 ...
             }		
             // apply styles when 'show-y-scrollbar' is 'true'
-			@include value($value: show-y-scrollbar) {
+			@include value($value: 'show-y-scrollbar') {
 				...
 			}
 		}
@@ -1070,12 +1069,12 @@ Taking the above example a step further, let's say we want to pass some child op
 } // @mixin header
 ```
 
-Above, the `default` value in `side` allows you to use the `value()` just as in the previous example. By passing the `$value` variable to the `value()` mixin, you can specify an alternate child boolean option.
+Above, the `enabled` value in `side` allows you to use the `value()` mixin just as in the previous example. By passing the `$value` variable to the `value()` mixin, you can specify an alternate child boolean option.
 
-To use non-bool options, the `option()` function is used as normal:
+To use non-bool options, the `this()` function is used as normal:
 
 ```scss
-width: option($header, 'side', 'width');
+width: this('side', 'width');
 ```
 
 #### Including Your Module
@@ -1143,6 +1142,12 @@ This is entirely possible, and requires the addition of the `!global` flag:
 }
 ```
 
+The `option()` function is used to get values from another module's configuration, like so:
+
+```scss
+width: option($grid, 'breakpoints', 'break-3'); // will return 960px
+```
+
 As long as your other modules are included after this one, we can now access the breakpoint values using:
 
 ```scss
@@ -1167,7 +1172,7 @@ _theme.scss
 
 ```scss
 // Modular
-@import "src/modular";
+@import "src/scss/smodular";
 
 // Project Partials
 @import "typography";
@@ -1243,10 +1248,10 @@ _theme.scss
     //-------------------------------------------------------------
 
         display: inline-block;
-        line-height: option($buttons, line-height);
-        padding: 0 option($buttons, side-spacing);
-        background: option($buttons, background);
-        color: option($buttons, color);
+        line-height: this('line-height');
+        padding: 0 this('side-spacing');
+        background: this('background');
+        color: this('color');
 
     // Modifiers
     //-------------------------------------------------------------
@@ -1254,7 +1259,7 @@ _theme.scss
         // Patterns
 		
         @include modifier('round') {
-            border-radius: option($buttons, radius);
+            border-radius: this('radius');
         }
 
         @include modifier('block') {
@@ -1331,21 +1336,21 @@ _theme.scss
     // Core Styles
     //-------------------------------------------------------------
 
-        background: option($header, 'background');   
-        margin-top: option($header, 'top');
+        background: this('background');   
+        margin-top: this('top');
 
     // Settings
     //-------------------------------------------------------------
 
         @include setting('dark') {
-            background: option($header, 'dark-color');   
+            background: this('dark-color');   
         }
 
         @include setting('side') {
             // Core Side-Header Styles
             position: fixed;
             top: 0;
-            width: option($header, 'side-width');
+            width: this('side-width');
             z-index: 99;
             @include option('left') {
                 left: 0;
@@ -1407,7 +1412,7 @@ The first thing you need to do is import SassyJSON into your project, *before* M
 
 ```scss
 @import "vendor/SassyJSON/stylesheets/SassyJSON";
-@import "src/modular"
+@import "src/scss/modular"
 ```
 
 Then include `modular.js` in your project, *before* any scripts which use Modular.
@@ -1421,7 +1426,7 @@ Next, you need to create an element in your HTML which corresponds to the select
 Finally, in your project's main Sass file at the end of everything (or rather, at the end of all Modular related files), add the following code:
 
 ```scss
-@if variable-exists(to-JSON) and $to-JSON {
+@if variable-exists('to-JSON') and $to-JSON {
 	@include json-encode($config-JSON);
 }
 ```
@@ -1436,7 +1441,7 @@ To enable JSON output of your modules' configuration, you need to set the `$to-J
 
 ```scss
 // Enable JSON output?
-$to-JSON    : false !default;
+$to-JSON : false !default;
 ```
 
 Alternatively, you can pass this variable at the top of your main project's Sass file, above all Modular related Sass.
@@ -1451,7 +1456,8 @@ By default, output to JSON is enabled on a per-module basis by passing `name` an
 		// Options
 		'name'        : 'header',
 		'output-JSON' : true,
-        'dark'        : false
+        'dark'        : false,
+        'height'      : 70px
 		
 	), $custom);
 
@@ -1495,7 +1501,8 @@ $('.header, [class*="header-"]').doSomething();
 To access a specific option, you can do:
 
 ```js
-_module['app-header']['dark']; // returns true or false
+_module['header']['dark']; // returns true or false by default
+_module['header']['height']; // returns 70px by default
 ```
 
 ##### Custom '_option()' Function
@@ -1571,6 +1578,32 @@ function breakpoint(media, value) {
 ```
 
 They key part of the above code is `_module['grid']['breakpoints'][value]`, which fetches the value from the JSON.
+
+##### Custom '$.isModifier()' Function
+
+Similar to the `_option()` function, the `$.isModifier()' function will return `true` if either the option itself is set to `true`, or if your element has a `modifier` of the option name:
+
+```scss
+@include header((
+	'dark' : true
+));
+```
+
+Or ...
+
+```html
+<div class="header-dark">
+    ...
+</div>
+```
+
+Using a simple `if` statement you can now conditionally run JavaScript based off your module's option:
+
+```js
+if(_header.isModifier('dark')) {
+    ...
+}
+```
 
 ## Credits & Notes
 

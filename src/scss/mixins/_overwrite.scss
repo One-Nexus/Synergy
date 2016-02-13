@@ -70,7 +70,13 @@
             }
         }
     }
-    #{$selectors} {
-        @content;
+    @if $special == 'at-root' {
+        @at-root #{$selectors} {
+            @content;
+        }
+    } @else {
+        #{$selectors} {
+            @content;
+        }
     }
 }
