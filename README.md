@@ -1631,6 +1631,7 @@ Released: -
 ###### Release Notes
 
 * separating source code into individual files
+* allow creation of modules without configuration
 * removing `nested-modifier()` mixin - no longer needed as regular `modifier()` mixin now more intelligent
 * adding ability to extend entire module + modifiers within another
 * adding 'this' function to access current modules config
