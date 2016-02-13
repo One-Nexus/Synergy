@@ -73,7 +73,7 @@ Your markup for the above module may now look something like the following:
 </div>
 ```
 
-If we want to hide the logo, we can add the `noLogo` modifier to the header:
+If you want to hide the logo, you can add the `noLogo` modifier to the header:
 
 ```html
 <div class="header-noLogo">
@@ -81,7 +81,7 @@ If we want to hide the logo, we can add the `noLogo` modifier to the header:
 </div>
 ```
 
-If we want to set the header's position to `fixed`, there are two ways we can do this. Firstly, we can again add the appropriate modifier to the markup:
+If you want to set the header's position to `fixed`, there are two ways you can do this. Firstly, you can again add the appropriate modifier to the markup:
 
 ```html
 <div class="header-fixed">
