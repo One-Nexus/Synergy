@@ -232,7 +232,17 @@ If `$modules` is not defined, it will look for a `name` value in your module's c
 }
 ```
 
-`$type` can be one of three values: `flex` (default), `chain` and `static`. By default, `flex` is enabled for all componenets. To globally change the default type, change the `$type` variable at the top of **_modular.scss**.
+`$type` can be one of three values: `flex` (default), `chain` and `static`. By default, `flex` is enabled for all componenets. To globally change the default type from `flex` to something else, pass the `$selector-type` variable with the value you desire in your Sass before any modules.
+
+```scss
+// Import Modular
+@import "path/to/modular"
+
+// Re-define default selector type
+$selector-type: 'chain';
+
+/* Your Modules */
+```
 
 ##### Flex
 
@@ -1437,7 +1447,7 @@ This is what ties all of your configuration together between the HTML, CSS and J
 
 ```scss
 @if variable-exists('to-JSON') and $to-JSON {
-	@include json-encode($config-JSON);
+	@include json-encode($_modules);
 }
 ```
 

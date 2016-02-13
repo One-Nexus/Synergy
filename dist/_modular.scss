@@ -4,15 +4,17 @@ $to-JSON : false !default;
 // Output config for each module by default?
 $output-JSON : false !default;
  
-$config-JSON : ();
+ // The variable which will store all module's configuration (do not edit)
+$_modules : () !default;
 
-$module : null;
+// The variable to hold a single module (do not edit)
+$module : null !default;
 
 // Set the default selector type (flex | chain | static)
-$type : 'flex' !default;
+$selector-type : 'flex' !default;
 
 // Extend each option as a modifier by default?
-$extend-options : true;
+$extend-options : true !default;
 /** 
  * Modular
  * @author Edmund Reed | @esr360
@@ -35,7 +37,7 @@ $extend-options : true;
 
 @mixin module(
     $modules: if(variable-exists('config'), (map-get($config, 'name')), ''), 
-    $type: if(variable-exists('config'), (map-get($config, 'selector-type')), $type)
+    $type: if(variable-exists('config'), (map-get($config, 'selector-type')), $selector-type)
 ) {
     $module: $modules !global;
     $selectors: ();
@@ -53,7 +55,7 @@ $extend-options : true;
 }
 
 // Alias for multiple modules
-@mixin modules($modules, $type: $type) {
+@mixin modules($modules, $type: $selector-type) {
     @include module($modules, $type) {
         @content;
     }
@@ -127,11 +129,8 @@ $extend-options : true;
     $selectors: &;
     
     @if nth(&, 1) + unquote('') == '.#{$module}' {
-        @if (
-            variable-exists('config') and map-get($config, 'selector-type') == 'flex'
-        ) or (
-            not variable-exists('config') and $type == 'flex'
-        ) {
+        @if (variable-exists('config') and map-get($config, 'selector-type') == 'flex') 
+        or (not variable-exists('config') and $selector-type == 'flex') {
             $selectors: ();
             $i: 1;
             @each $item in & {
@@ -195,7 +194,7 @@ $extend-options : true;
 //      <div class="logo">...</div>
 //  </div>
 
-@mixin overwrite($modules: map-get($config, name), $type: $type, $is: null, $not: null, $special: null) {
+@mixin overwrite($modules: map-get($config, name), $type: $selector-type, $is: null, $not: null, $special: null) {
     $selectors: ();
     @if $is {
         $type: 'chain';
@@ -320,8 +319,8 @@ $extend-options : true;
 }
 
 // Alias for multiple components
-@mixin overwrite-components($components, $type: $type) {
-    @include overwrite-component($components, $type) {
+@mixin overwrite-components($args...) {
+    @include overwrite-component($args...) {
         @content;
     }
 }
@@ -525,7 +524,7 @@ $extend-options : true;
 @function config($map-old, $map-new) {
 
     $map-old: map-merge((
-        'selector-type'   : $type,
+        'selector-type'   : $selector-type,
         'extend-settings' : $extend-options,
         'output-JSON'     : $output-JSON
     ), $map-old);
@@ -537,9 +536,9 @@ $extend-options : true;
 
     // Output options to JSON
     @if option($map-old, 'output-JSON') {
-        $config-JSON: map-merge-deep(
+        $_modules: map-merge-deep(
             (map-get($map-old, 'name') : ($map-old)), 
-            $config-JSON
+            $_modules
         ) !global;
     }
 

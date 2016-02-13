@@ -14,7 +14,7 @@
 @function config($map-old, $map-new) {
 
     $map-old: map-merge((
-        'selector-type'   : $type,
+        'selector-type'   : $selector-type,
         'extend-settings' : $extend-options,
         'output-JSON'     : $output-JSON
     ), $map-old);
@@ -26,9 +26,9 @@
 
     // Output options to JSON
     @if option($map-old, 'output-JSON') {
-        $config-JSON: map-merge-deep(
+        $_modules: map-merge-deep(
             (map-get($map-old, 'name') : ($map-old)), 
-            $config-JSON
+            $_modules
         ) !global;
     }
 

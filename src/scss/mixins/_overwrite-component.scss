@@ -69,8 +69,8 @@
 }
 
 // Alias for multiple components
-@mixin overwrite-components($components, $type: $type) {
-    @include overwrite-component($components, $type) {
+@mixin overwrite-components($args...) {
+    @include overwrite-component($args...) {
         @content;
     }
 }

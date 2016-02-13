@@ -26,7 +26,7 @@
     
     @if nth(&, 1) + unquote('') == '.#{$module}' {
         @if (variable-exists('config') and map-get($config, 'selector-type') == 'flex') 
-        or (not variable-exists('config') and $type == 'flex') {
+        or (not variable-exists('config') and $selector-type == 'flex') {
             $selectors: ();
             $i: 1;
             @each $item in & {
