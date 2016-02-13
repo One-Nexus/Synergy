@@ -10,19 +10,32 @@
 
 ## Overview
 
-### 30 Second Example
+#### 30 Second Example
+
+Inside a file called `_header.scss`
 
 ```scss
 @mixin header($custom: ()) {
     
     $header: config((
-        'fixed'      : false
-        'background' : #000000
+        'fixed'         : false,
+        'background'    : #000000,
+        'wrapper-width' : 960px
     ), $custom);
     
     @include module('header') {
         
         background: this('background');
+        
+        @include modifier('noLogo') {
+            @include overwrite('logo') {
+                display: none;   
+            }    
+        }
+        
+        @include component('wrapper') {
+            width: this('wrapper-width'); 
+        }
         
         @include option('fixed') {
             position: fixed;
@@ -31,23 +44,75 @@
     }
 
 }
-
-@include header((
-    'fixed'      : true,
-    'background' : #1b4247
-))
 ```
 
+Wherever you want to output the code, in the same or another file...
+
+```scss
+@include header();
+```
+
+Your markup for the above module may now look something like the following:
+
 ```html
-<div class="header-fixed">
-    ...    
+<div class="header">
+    <div class="header_wrapper">
+        <div class="logo">...</div>
+        ...
+    </div>    
 </div>
 ```
 
+If we want to hide the logo, we can add the `noLogo` modifier to the header:
+
+```html
+<div class="header-noLogo">
+    ...   
+</div>
+```
+
+If we want to set the header's position to `fixed`, there are two ways we can do this. Firstly, we can again add the appropriate modifier to the markup:
+
+```html
+<div class="header-fixed">
+    ...   
+</div>
+```
+
+N.B. Modifiers can be chained in any order:
+
+```html
+<div class="header-fixed-noLogo">
+    ...   
+</div>
+```
+
+Or you can set the header to be fixed by passing the option to the mixin when calling it:
+
+```scss
+@include header((
+    'fixed' : true
+));
+```
+
+The header will now be fixed even without passing the modifier in the markup.
+
+Now inside your JavaScript you can do the following:
+
 ```js
-if(_header.isModifier('fixed')) {
+if (_option('header', 'fixed')) {
     alert('Header is fixed!');
 }
+```
+
+```js
+if (_header.isModifier('noLogo')) {
+    alert('Header\'s logo is hidden!');
+}
+```
+
+```js
+var headerBackground = _module['header']['background'] // returns #000000
 ```
 
 ## Installation
