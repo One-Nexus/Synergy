@@ -27,9 +27,9 @@ function removeQuotes(arg) {
  * @param arg - The argument which you wish to make camelCased
  */
 function camelCase(arg) {
-	arg = arg.replace(/-([a-z])/g, function (g) { 
-		return g[1].toUpperCase(); 
-	}); return arg;
+    arg = arg.replace(/-([a-z])/g, function (g) { 
+        return g[1].toUpperCase(); 
+    }); return arg;
 }
 
 /**
@@ -38,19 +38,19 @@ function camelCase(arg) {
  * @param toCamelCase - Convert the parsed JSON to camelCase?
  */
 function parseJSON(toCamelCase) {
-    
+
     var style = null;
-    
+
     style = window.getComputedStyle(modularSelector, '::before');
     style = style.content;
-	style = removeQuotes(style);
-    
-	if(toCamelCase) {
-		style = camelCase(style);
-	}
-    
+    style = removeQuotes(style);
+
+    if(toCamelCase) {
+        style = camelCase(style);
+    }
+
     return JSON.parse(style);
-    
+
 }
 
 /**
@@ -60,7 +60,7 @@ function parseJSON(toCamelCase) {
 var _module = parseJSON();
 
 /**
- * @var _module
+ * @var modulesCamelCase
  * @description Holds all configuration data for all modules in
  * camelCase form
  */
@@ -78,22 +78,24 @@ var moduleIndex = 0;
  * namespace with a variable to access the module
  */
 $.each(_module, function(module) {
-	var moduleCamelCase = modulesCamelCase[Object.keys(modulesCamelCase)[moduleIndex]]['name'];
-	window['_' + moduleCamelCase] = '.' + module + ', [class*="' + module + '-"]';   
-	moduleIndex++; 
+    var moduleCamelCase = modulesCamelCase[Object.keys(modulesCamelCase)[moduleIndex]]['name'];
+    window['_' + moduleCamelCase] = '.' + module + ', [class*="' + module + '-"]';   
+    moduleIndex++; 
 });
 /**
  * @function _option
+ * 
  * @description Get the computed value of a module's option
+ * 
  * @param module - The module which you wish to get an option from
  * @param option - The module's option which you are interested in
  */
 
-//	Usage
+//  Usage
 //
-//	if(_option('navigation', 'sticky')) {
-//		...
-//	}
+//  if(_option('navigation', 'sticky')) {
+//      ...
+//  }
 
 function _option(module, option) {
 
@@ -107,28 +109,30 @@ function _option(module, option) {
     } else {
         return $selector || $option != false;
     }
-	
+
 }
 /**
  * @function $.isModifier
+ * 
  * @description Determine if a particular module has a certain 
  * modifier. Will look for either the modifier on the module in the
  * DOM or look for a corresponding value in the configuration.
+ * 
  * @param module - The module which you wish to get an option from
  */
 
-//	Usage
+//  Usage
 //
-//	if(_navigation.isModifier('sticky')) {
-//		...
-//	}
+//  if(_navigation.isModifier('sticky')) {
+//      ...
+//  }
 
 $.fn.isModifier = function(modifier) {
-    
+
     var moduleName = $(this)['selector'].split(',')[0].split('.').join('');
-    
+
     moduleName = moduleName.toString();
-    
+
     return _option(moduleName, modifier);
-    
+
 };
