@@ -1427,13 +1427,13 @@ The first thing you need to do is import SassyJSON into your project, *before* M
 
 Then include `modular.js` in your project, *before* any scripts which use Modular.
 
-Next, you need to create an element in your HTML which corresponds to the selector SassyJSON attaches to, which is `#stylesConfigJSON`, so create the following element somewhere in your markup:
+**Key Step:** Next, you need to create an element in your HTML which corresponds to the selector SassyJSON attaches to, which is `#modulesConfigJSON`, so create the following element somewhere in your markup:
 
 ```html
-<div id="stylesConfigJSON"></div>
+<div id="modulesConfigJSON"></div>
 ```
 
-Finally, in your project's main Sass file at the end of everything (or rather, at the end of all Modular related files), add the following code:
+This is what ties all of your configuration together between the HTML, CSS and JS. Finally, in your project's main Sass file at the end of everything (or rather, at the end of all Modular related files), add the following code:
 
 ```scss
 @if variable-exists('to-JSON') and $to-JSON {
@@ -1481,7 +1481,7 @@ If you want all your modules to output their configuation to JSON by default, yo
 If everything is running as expected, once your Sass has been compiled your CSS should now contain the configuration for your modules as JSON. It should look something like this:
 
 ```css
-#stylesConfigJSON::before {
+#modulesConfigJSON::before {
     content: '{"header": {"selector-type": "flex", "extend-settings": true, "output-JSON": true, "name": "header", "dark": false}}';
     display: block;
     height: 0;
@@ -1647,7 +1647,8 @@ Released: 13th February 2016
 * adding ability to extend entire module + modifiers within another
 * adding 'this' function to access current modules config
 * renaming 'default' to more semantic 'enabled' for option mixin
-* adding at-root option to overwrite() mixin
+* adding `at-root` option to `overwrite()` mixin
+* renaming `stylesConfigJSON` selector to `modulesConfigJSON`
 
 #### Version 3.1.0
 

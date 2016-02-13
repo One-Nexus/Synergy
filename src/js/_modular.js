@@ -11,7 +11,7 @@
  * @var modularSelector
  * @description The DOM element which contains your JSON data
  */
-var modularSelector = document.getElementById('stylesConfigJSON');
+var modularSelector = document.getElementById('modulesConfigJSON');
 
 /**
  * @function removeQuotes
