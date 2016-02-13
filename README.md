@@ -10,7 +10,7 @@
 
 ## Overview
 
-#### 30 Second Example
+#### 60 Second Example
 
 Inside a file called `_header.scss`
 
@@ -50,6 +50,15 @@ Wherever you want to output the code, in the same or another file...
 
 ```scss
 @include header();
+```
+
+To change any values in the configuration, pass them to the mixin:
+
+```scss
+@include header((
+    'background'    : blue,
+    'wrapper-width' : 90%
+));
 ```
 
 Your markup for the above module may now look something like the following:
@@ -97,22 +106,30 @@ Or you can set the header to be fixed by passing the option to the mixin when ca
 
 The header will now be fixed even without passing the modifier in the markup.
 
-Now inside your JavaScript you can do the following:
+Now inside your JavaScript you can do the following (assuming you are using `modular.js`):
 
 ```js
+// This will test for either the 'fixed' modifier in the markup,
+// or a value of 'true' for the corresponding option in the config
 if (_option('header', 'fixed')) {
     alert('Header is fixed!');
 }
 ```
 
 ```js
+// This will test for the 'noLogo' modifier in the markup
 if (_header.isModifier('noLogo')) {
-    alert('Header\'s logo is hidden!');
+    alert('Header's logo is hidden!');
 }
+
+// Do something to the header module regardless of any modifiers
+$(_header).doSomething();
 ```
 
 ```js
-var headerBackground = _module['header']['background'] // returns #000000
+var headerFixed = _module['header']['fixed'] // returns true or false
+var headerBackground = _module['header']['background'] // returns the background value
+var headerWrapperWidth = _module['header']['wrapper-width'] // returns the wrapper-width value
 ```
 
 ## Installation
