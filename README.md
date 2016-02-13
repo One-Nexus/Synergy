@@ -1638,7 +1638,7 @@ If you then try to add the class **header-wrapper** anywhere, the header module'
 
 #### Version 3.2.0
 
-Released: 13th February 2016
+Released: -
 
 ###### Release Notes
 
