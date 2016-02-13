@@ -1618,6 +1618,7 @@ if(_header.isModifier('dark')) {
 ## Credits & Notes
 
 * [Sassy Maps](https://github.com/at-import/sassy-maps)
+* [SassyJSON](https://github.com/HugoGiraudel/SassyJSON)
 * [Advanced Sass List Functions](http://hugogiraudel.com/2013/08/08/advanced-sass-list-functions/)
 * [Bringing Configuration Objects To Sass](http://hugogiraudel.com/2014/05/05/bringing-configuration-objects-to-sass/)
 

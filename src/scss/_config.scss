@@ -9,7 +9,7 @@ $config-JSON : ();
 $module : null;
 
 // Set the default selector type (flex | chain | static)
-$type : 'flex';
+$type : 'flex' !default;
 
 // Extend each option as a modifier by default?
 $extend-options : true;

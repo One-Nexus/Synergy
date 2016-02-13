@@ -8,26 +8,40 @@
 // Import Modular
 @import "../src/scss/modular";
 
-@mixin foo($custom: ()) {
+@include module('foo') {
     
-    $foo: config((
-        'name' : 'foo'
+    content: '#{&}';
+    /* What we expect */
+    content: '.foo, [class*="foo-"]';
+    
+    @include modifier('modifier') {
+        content: '#{&}';
+        /* What we expect */
+        content: '[class*="foo-"][class*="-modifier"]';
+    }
+    
+}
+
+@mixin bar($custom: ()) {
+    
+    $bar: config((
+        'name' : 'bar'
     ), $custom);
     
     @include module {
         
         content: '#{&}';
         /* What we expect */
-        content: '.foo, [class*="foo-"]';
+        content: '.bar, [class*="bar-"]';
         
-        @include modifier('bar') {
+        @include modifier('modifier') {
             content: '#{&}';
             /* What we expect */
-            content: '[class*="foo-"][class*="-bar"]';
+            content: '[class*="bar-"][class*="-modifier"]';
         }
         
     }
 
 }
 
-@include foo;
+@include bar;
