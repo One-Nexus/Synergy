@@ -137,7 +137,9 @@ var headerWrapperWidth = _module['header']['wrapper-width'] // returns the wrapp
 
 ##### Clone The Repo
 
+```
 git clone https://github.com/esr360/Modular.git
+```
 
 Or...
 
