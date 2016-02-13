@@ -1,7 +1,7 @@
 
 [![Modular](https://raw.githubusercontent.com/esr360/Modular/gh-pages/logo-small.png "Modular Logo")](https://github.com/esr360/Modular)
 
-> A front-end framework for architecting modular, configurable and scalable projects built with CSS (Sass) and JavaScript (jQuery).
+> A front-end framework for building modular, configurable and scalable projects built with CSS (Sass) and JavaScript (jQuery).
 
 * [Overview](#overview)
 * [Installation](#installation)
@@ -154,6 +154,10 @@ git submodule add https://github.com/esr360/Modular.git
 ```
 git submodule update --init --recursive
 ```
+
+##### Using Grunt
+
+If you are using grunt, after cloning the repo run `npm-install` to install the required node modules. To compile the source files and test that Modular framework is working, run `grunt compile`. This will overwrite the files already present in the `dist` directory, which you can then use in your project. Running this task will also compile a test `.scss` file which contains a basic example module and modifier. This is just to ensure that Modular is working properly, if there are any issues the task will throw an error on your command line. The related **test** files are located in the `/test` directory. 
 
 ## Advanced Documentation
 
