@@ -1,9 +1,7 @@
 
 [![Modular](https://raw.githubusercontent.com/esr360/Modular/gh-pages/logo-small.png "Modular Logo")](https://github.com/esr360/Modular)
 
-> A library of Sass mixins for architecting modular, configurable and scalable CSS.
-
-**New in Version 3:** Optional `modular.js` file - pass your Sass config to your JS - [learn more](#accessing-in-js)
+> A front-end framework for architecting modular, configurable and scalable projects built with CSS (Sass) and JavaScript (jQuery).
 
 * [Overview](#overview)
 * [Installation](#installation)
@@ -12,253 +10,49 @@
 
 ## Overview
 
-Modular aims to take modular CSS architecting to the next level. Similar in principle to the popular [BEM](http://csswizardry.com/2013/01/mindbemding-getting-your-head-round-bem-syntax/) convention, Modular is based off the idea of having **modules**, **components** and **modifiers**. 
-
-Have you ever found yourself using BEM and ending up with HTML like this?
-
-```html
-<div class="button button--large button--success">Large Success Button</div>
-```
-
-What if you could just do this:
-
-```html
-<div class="button-large-success">Large Success Button</div>
-```
-
-The benefits of using this HTML over conventional BEM syntax are self-apparent. However, you may be looking at that thinking of several reasons why it wouldn't work; what if I want to only use the "button" class on its own? What if I only want a large button, or only want a success button? Well, with Modular, all this is possible.
-
-```scss
-@include module('button') {
-    // core button styles
-    ...
-    @include modifier('large') {
-        // large button styles
-        ...
-    }
-    @include modifier('success') {
-        // success button styles
-        ...
-    }
-}
-```
-
-The above code would allow for the use of all of the following:
-
-```html
-<div class="button">Button</div>
-<div class="button-large">Large Button</div>
-<div class="button-success">Success Button</div>
-<div class="button-large-success">Large Success Button</div>
-<div class="button-success-large">Success Large Button</div>
-```
-
-And, crazily enough, you could also use the original BEM syntax of:
-
-```html
-<div class="button button--large button--success">Large Success Button</div>
-```
-
-### But how?
-
-I'm glad you asked. The answer is simple - [wildcard selectors](http://www.surfingsuccess.com/css/css-wildcard-css-attribute-selector.html). Under the hood, Modular has created a wildcard selector for the module and each modifier
-
-*But aren't wildcard selectors bad for performance?*
-
-Well, no. Perhaps this was true many years ago, but today, [any performance impact is negilable](http://www.telerik.com/blogs/css_tip_star_selector_not_that_bad) (and this article is 3 years old). [Further reading](http://benfrain.com/css-performance-revisited-selectors-bloat-expensive-styles/). 
-
-*Why bother using a mixin for this? Why not just write the wildcard selector?*
-
-For starters, writing `[class*="module-"]` over and over again can become tedious. Secondly, for the core styles we also need them to be applied to the naked `.module` class, meaning we would now have to write:
-
-```scss
-.module,
-[class*="module-"] {
-	...
-}
-```
-
-Which is exactly what the  `module()` mixin does. The reason `[class*="module"]` on its own isn't used is because this can cause undesired effects elsewhere in your styles due to how fragile it is. A very simple example would be if you wanted to use a `.buttons` class in the presence on a **button** module - `[class*="button"]` would target this class and apply the core button styles to it. Using `[class*="button-"]` is a fairly safe selector in a project we have control over, in terms of potential conflicts.
-
-### Configuring a Module
-
-Modular allows you to create configurable modules with customizable settings, such as the below, awesome example:
-
-```scss
-// perhaps in a file called _header.scss
-@mixin header($custom: ()) {
-    
-    $header: config((
-        
-        // Default Options
-        'dark' : false,
-        'top'  : 50px
-        
-    ), $custom);
-    
-    ...
-        
-} // header()
-
-// perhaps in a seperate file named _theme.scss
-@include header((
-    'dark' : true,
-    'top'  : 65px	
-))
-```
-
-To configure a new module, create a mixin named after your module (ensure the name is unique) and pass an empty `$custom: ()` variable to it:
-
-```scss
-@mixin header($custom: ()) {
-    ...	
-}
-```
-
-The `$custom` variable passed to the mixin is what will serve any custom options when the module is included. For the default options, a new variable named after your module is used, in our example this is `$header`.
-
-```scss
-@mixin header($custom: ()) {
-
-    $header: config((
-        
-        // Options
-        'top'      : 50px,
-        'bg-color' : black
-        
-    ), $custom);
-    
-    ...
-
-}
-```
-
-> `config()` is a custom function which merges multi-dimensional maps - above it is being used to merge the default options with any custom options.
-
-To allow any subsequent modules to access the current module's options, set the module's config variable (eg: `$header`) to `!global`:
+### 30 Second Example
 
 ```scss
 @mixin header($custom: ()) {
     
     $header: config((
-        
-        // Options
-        'top'      : 50px,
-        'bg-color' : black
-        
-    ), $custom) !global;
-    
-    ...
-        
-}
-```
-
-The basis for your module is now ready. Next, the actual module mixin itself:
-
-```scss
-@mixin header($custom: ()) {
-
-    $header: config((
-        
-        // Options
-        'top'      : 50px,
-        'bg-color' : black
-        
+        'fixed'      : false
+        'background' : #000000
     ), $custom);
     
     @include module('header') {
         
-        // Core Styles
-        margin-top: option($header, 'top');
-        background-color: option($header, 'bg-color');
+        background: this('background');
         
-    } // module('header')
+        @include option('fixed') {
+            position: fixed;
+        }
         
-} // @mixin header
-```
+    }
 
-To print an option's value, the `option` function is used. The basic header can now be created with the following HTML:
-
-```html
-<div class="header">
-    ...
-</div>
-```
-
-Read the [Advanced Documentation](#module-configuration-1) section to find out how to use bool options, for something like:
-
-```scss
-@mixin header($custom: ()) {
-    
-    $header: config((
-        
-        // Options
-        'dark' : false,
-        'side' : false // left or right
-        
-    ), $custom);
-    
-    ...
-        
 }
 
 @include header((
-    'dark' : true,
-    'side' : left	
+    'fixed'      : true,
+    'background' : #1b4247
 ))
 ```
 
-### Accessing in JS
-
-> Make sure to read the [complete section](#modularjs-1) on `modular.js` if you intend on using it - this is just an overview of what is possible.
-
-If you are using `modular.js`, you are now free to do something like the following, in some far away JavaScript file:
-
-```js
-// get a module's option value
-console.log(_module['header']['dark']); // returns true or false
-
-// target your module in the DOM
-$(_header).doSomething();
-```
-
-Using Modular's custom function, you can also do:
-
-```js
-if (_option('header', 'dark')) {
-    
-    $(_header).doSomething();
-    
-}
-```
-
-Using this function, you can also apply scripts to your element like so:
-
 ```html
-<div class="header-dark">
-    ...
+<div class="header-fixed">
+    ...    
 </div>
 ```
 
-[Read more](#modularjs-1) about `modular.js`.
+```js
+if(_header.isModifier('fixed')) {
+    alert('Header is fixed!');
+}
+```
 
 ## Installation
 
 In addition to the classic way of downloading and extracting the files into your project, you can also do one of the following:
-
-##### With Bower
-
-```html
-bower install Modular
-```
-
-###### If using modular.js:
-
-```html
-bower install Modular-SassyJSON
-```
-
-Or...
 
 ##### As Git Submodule
 
