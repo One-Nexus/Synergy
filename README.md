@@ -1479,8 +1479,6 @@ $to-JSON : true;
 /* Your Modules */
 ```
 
-Alternatively, you can pass this variable at the top of your main project's Sass file, above all Modular related Sass.
-
 By default, output to JSON is enabled on a per-module basis by passing `name` and `output-JSON` options to your module's config:
 
 ```scss
