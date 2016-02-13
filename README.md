@@ -135,7 +135,11 @@ var headerWrapperWidth = _module['header']['wrapper-width'] // returns the wrapp
 
 ## Installation
 
-In addition to the classic way of downloading and extracting the files into your project, you can also do one of the following:
+##### Clone The Repo
+
+git clone https://github.com/esr360/Modular.git
+
+Or...
 
 ##### As Git Submodule
 
@@ -148,10 +152,6 @@ git submodule add https://github.com/esr360/Modular.git
 ```
 git submodule update --init --recursive
 ```
-
-Now import the respective `_modular.scss` and optional `modular.js` files into your project as desired. 
-
-> Ensure to import the files *before* you attempt to run any Modular code.
 
 ## Advanced Documentation
 
