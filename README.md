@@ -17,6 +17,7 @@ Inside a file called `_header.scss`
 ```scss
 @mixin header($custom: ()) {
     
+    // Default module configuration
     $header: config((
         'fixed'         : false,
         'background'    : #000000,
