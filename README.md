@@ -1628,12 +1628,16 @@ If you then try to add the class **header-wrapper** anywhere, the header module'
 
 #### Version 3.2.0
 
-Released: ---
+Released: 13th February 2016
 
 ###### Release Notes
 
+* separating source code into individual files
 * removing `nested-modifier()` mixin - no longer needed as regular `modifier()` mixin now more intelligent
-* separating source code into individual modules
+* adding ability to extend entire module + modifiers within another
+* adding 'this' function to access current modules config
+* renaming 'default' to more semantic 'enabled' for option mixin
+* adding at-root option to overwrite() mixin
 
 #### Version 3.1.0
 
