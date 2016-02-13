@@ -1,0 +1,63 @@
+/** 
+ * Modular
+ * @author Edmund Reed | @esr360
+ * 
+ * @mixin modifier
+ *
+ * @description Create a modifier for a module
+ *
+ * @param $modifiers - The modifier(s) which you wish to create
+ * @param $special   - 'not' | 
+ */
+
+//  Usage
+//
+//  @include module(button) {
+//      @include modifier(large) {
+//          ...
+//      }
+//  }
+//
+//  <div class="button-large">...</div>
+
+@mixin modifier($modifiers, $special: null) {
+    
+    $selectors: &;
+    
+    @if nth(&, 1) + unquote('') == '.#{$module}' {
+        @if map-get($config, 'selector-type') == 'flex' {
+            $selectors: ();
+            $i: 1;
+            @each $item in & {
+                $i: $i + 1;
+                @if $i == 2 {
+                    $i: 0;
+                } @else {
+                    $selectors: append($selectors, $item, comma);
+                }
+            }
+        }
+    }
+    
+    @at-root #{$selectors} {
+        $modifier-selectors: ();
+        @each $modifier in $modifiers {
+            @if $special == "not" {
+                $modifier-selectors: join($modifier-selectors, '&:not([class*="-#{$modifier}"])', comma);
+            } @else {
+                $modifier-selectors: join($modifier-selectors, '&[class*="-#{$modifier}"]', comma);
+            }
+        }
+        #{$modifier-selectors} {
+            @content;
+        }
+    }
+
+} // modifier()
+
+// Alias for multiple modifiers
+@mixin modifiers($modifiers) {
+    @include modifier($modifiers) {
+        @content;
+    }
+}

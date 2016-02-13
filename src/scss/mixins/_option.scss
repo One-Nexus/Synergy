@@ -1,0 +1,46 @@
+/** 
+ * Modular
+ * @author Edmund Reed | @esr360
+ * 
+ * @mixin option
+ *
+ * @description Apply styles to a module if a defined option 
+ * returns true
+ *
+ * @param $option - The option which you wish to test against
+ */
+
+//  Usage
+//
+//  @mixin billboard($custom: ()) {
+//
+//      $billboard: config((
+//          full-screen : false
+//      ), $custom);
+//
+//      @include module(billboard) {
+//          @include option(full-screen) {
+//              ...
+//          }
+//      }
+//
+//  }
+//
+//  @include billboard: ((
+//      full-screen : true
+//  ));
+
+@mixin option($option) {
+    $option: $option !global;
+    $enabled: if(
+        (type-of(map-get($config, $option)) == bool and map-get($config, $option) != false) or
+        (type-of(map-get($config, $option)) == map and map-get(map-get($config, $option), 'enabled') != false),
+        true, false
+    );
+    @if $enabled {
+        @include extend($option);
+    }
+    @include modifier($option) {	
+        @content;
+    }
+}

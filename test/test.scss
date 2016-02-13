@@ -1,0 +1,33 @@
+/**
+ * Generally, any serious issues will prevent Modular from 
+ * compiling whatsoever, so whilst the below tests have very
+ * little coverage, it is enough to know that the core Modular
+ * functions are working
+ */
+
+// Import Modular
+@import "../src/scss/modular";
+
+@mixin foo($custom: ()) {
+    
+    $foo: config((
+        'name' : 'foo'
+    ), $custom);
+    
+    @include module {
+        
+        content: '#{&}';
+        /* What we expect */
+        content: '.foo, [class*="foo"]';
+        
+        @include modifier('bar') {
+            content: '#{&}';
+            /* What we expect */
+            content: '[class*="foo-"][class*="-bar"]';
+        }
+        
+    }
+
+}
+
+@include foo;

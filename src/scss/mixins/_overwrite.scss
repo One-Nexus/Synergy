@@ -1,0 +1,82 @@
+/** 
+ * Modular
+ * @author Edmund Reed | @esr360
+ * 
+ * @mixin overwrite
+ *
+ * @description Overwrite an existing module when in different 
+ * context, such as inside another module
+ *
+ * @param $modules - The module(s) which you wish to overwrite
+ * @param $is - Overwrite if moulde is certain modifier
+ * @param $not - Overwrite if module is not certain modifier
+ * @param $type - 'static' | 'chain' | 'flex
+ * @param $special - 'adjacent-sibling' | 'general-sibling'
+ */
+
+//  Usage
+//
+//  @include module(header) {
+//      @include overwrite(logo) {
+//          ...
+//      }
+//  }
+//
+//  <div class="header">
+//      <div class="logo">...</div>
+//  </div>
+
+@mixin overwrite($modules: map-get($config, name), $type: $type, $is: null, $not: null, $special: null) {
+    $selectors: ();
+    @if $is {
+        $type: 'chain';
+    }
+    @each $module in $modules {
+        $selector: #{$module};
+        @if $type == 'flex' or $type == 'static' {
+            @if $special == 'adjacent-sibling' {
+                $selectors: join($selectors, '+ .#{$selector}', comma);
+            } @else if $special == 'general-sibling' {
+                $selectors: join($selectors, '~ .#{$selector}', comma);
+            } @else {
+                $selectors: join($selectors, '.#{$selector}', comma);
+            }
+        }
+        @if $type == 'flex' or $type == 'chain' {
+            @if $special == 'adjacent-sibling' {
+                $selectors: join($selectors, '+ [class*="#{$selector}-"]', comma);
+            } @else if $special == 'general-sibling' {
+                $selectors: join($selectors, '~ [class*="#{$selector}-"]', comma);
+            }  @else {
+                $selectors: join($selectors, '[class*="#{$selector}-"]', comma);
+            }
+        }
+        @if $is {
+            $modifiers-list: ();
+            @each $modifier in $is {
+                $selectors: join(
+                    $modifiers-list, 
+                    selector-append($selectors,'[class*="-#{$modifier}"]'), 
+                comma);
+            }
+        }
+        @if $not {
+            $modifiers-list: ();
+            @each $modifier in $not {
+                $selectors: join(
+                    $modifiers-list, 
+                    selector-append($selectors,':not([class*="-#{$modifier}"])'), 
+                comma);
+            }
+        }
+    }
+    @if $special == 'at-root' {
+        @at-root #{$selectors} {
+            @content;
+        }
+    } @else {
+        #{$selectors} {
+            @content;
+        }
+    }
+}

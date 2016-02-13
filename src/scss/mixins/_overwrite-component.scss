@@ -1,0 +1,76 @@
+/** 
+ * Modular
+ * @author Edmund Reed | @esr360
+ * 
+ * @mixin overwrite-component
+ *
+ * @description Overwrite an existing component when in different 
+ * context, such as inside another module or component
+ *
+ * @param $components - The component(s) which you wish to overwrite
+ * @param $is - Overwrite if moulde is certain modifier
+ * @param $not - Overwrite if module is not certain modifier
+ * @param $parent - The parent module of the component
+ * @param $special - 'adjacent-sibling' |
+ */
+
+//  Usage
+// 
+//  @include module(form) {
+//
+//      @include component(input) {
+//          ...
+//      }
+//
+//      @include modifier(html5) {
+//          @include overwrite-component(input) {
+//              ...
+//          }
+//      }
+//
+//  }
+//
+//  <div class="form-html5">
+//      <input class="form_input" type="text" />
+//  </div>
+
+@mixin overwrite-component($components, $parent: null, $is: null, $not: null, $special: null) {
+    $module: if($parent != null, $parent, $module);
+    $selectors: ();
+    @each $component in $components {
+        $selector: #{$module}_#{$component};
+        @if $special == 'adjacent-sibling' {
+            $selectors: join($selectors, '+ [class*="#{$selector}"]', comma);
+        } @else {
+            $selectors: join($selectors, '[class*="#{$selector}"]', comma);
+        }
+        @if $is {
+            $modifiers-list: ();
+            @each $modifier in $is {
+                $selectors: join(
+                    $modifiers-list, 
+                    selector-append($selectors,'[class*="-#{$modifier}"]'), 
+                comma);
+            }
+        }
+        @if $not {
+            $modifiers-list: ();
+            @each $modifier in $not {
+                $selectors: join(
+                    $modifiers-list, 
+                    selector-append($selectors,':not([class*="-#{$modifier}"])'), 
+                comma);
+            }
+        }
+    }
+    #{$selectors} {
+        @content;
+    }
+}
+
+// Alias for multiple components
+@mixin overwrite-components($components, $type: $type) {
+    @include overwrite-component($components, $type) {
+        @content;
+    }
+}

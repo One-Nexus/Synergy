@@ -1,0 +1,24 @@
+/** 
+ * Modular
+ * @author Edmund Reed | @esr360
+ * 
+ * @function option
+ *
+ * @description Alias function to map-deep-get()
+ *
+ * @param $map
+ * @param $keys
+ */
+
+// @TODO Why doesn't this work? :(
+//
+// @function option($map, $keys...) {
+//     @return map-deep-get($map, $keys...);
+// }
+
+@function option($map, $keys...) {
+    @each $key in $keys {
+        $map: map-get($map, $key);
+    }
+    @return $map;
+}

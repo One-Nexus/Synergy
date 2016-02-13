@@ -1,0 +1,15 @@
+// Enable JSON output?
+$to-JSON : false !default;
+
+// Output config for each module by default?
+$output-JSON : false !default;
+ 
+$config-JSON : ();
+
+$module : null;
+
+// Set the default selector type (flex | chain | static)
+$type : 'flex';
+
+// Extend each option as a modifier by default?
+$extend-options : true;

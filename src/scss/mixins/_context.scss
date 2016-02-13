@@ -1,0 +1,35 @@
+/** 
+ * Modular
+ * @author Edmund Reed | @esr360
+ * 
+ * @mixin context
+ *
+ * @description Apply styles to a component when certain conditions
+ * are met
+ *
+ * @param $context - The context you wish to use
+ */
+
+@mixin context($context) {
+    $child-selectors: &;
+    $selectors: ();
+    @each $item in $context {
+        @if map-get($config, 'selector-type') == 'flex' or map-get($config, 'selector-type') == 'static' {
+            $selectors: join($selectors, '.#{$module}', comma);
+        }
+        @if map-get($config, 'selector-type') == 'flex' or map-get($config, 'selector-type') == 'chain' {
+            $selectors: join($selectors, '[class*="#{$module}-"]', comma);
+        }
+    }
+    @if $context == 'parent-hovered' {
+        @at-root {
+            #{$selectors} {
+                &:hover {
+                    #{$child-selectors} {
+                        @content;
+                    }
+                }
+            }
+        }
+    }
+}

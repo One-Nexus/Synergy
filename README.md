@@ -1,9 +1,7 @@
 
 [![Modular](https://raw.githubusercontent.com/esr360/Modular/gh-pages/logo-small.png "Modular Logo")](https://github.com/esr360/Modular)
 
-> A library of Sass mixins for architecting modular, configurable and scalable CSS.
-
-**New in Version 3:** Optional `modular.js` file - pass your Sass config to your JS - [learn more](#accessing-in-js)
+> A front-end framework for architecting modular, configurable and scalable projects built with CSS (Sass) and JavaScript (jQuery).
 
 * [Overview](#overview)
 * [Installation](#installation)
@@ -12,250 +10,135 @@
 
 ## Overview
 
-Modular aims to take modular CSS architecting to the next level. Similar in principle to the popular [BEM](http://csswizardry.com/2013/01/mindbemding-getting-your-head-round-bem-syntax/) convention, Modular is based off the idea of having **modules**, **components** and **modifiers**. 
+#### 60 Second Example
 
-Have you ever found yourself using BEM and ending up with HTML like this?
-
-```html
-<div class="button button--large button--success">Large Success Button</div>
-```
-
-What if you could just do this:
-
-```html
-<div class="button-large-success">Large Success Button</div>
-```
-
-The benefits of using this HTML over conventional BEM syntax are self-apparent. However, you may be looking at that thinking of several reasons why it wouldn't work; what if I want to only use the "button" class on its own? What if I only want a large button, or only want a success button? Well, with Modular, all this is possible.
+Inside a file called `_header.scss`
 
 ```scss
-@include module('button') {
-    // core button styles
-    ...
-    @include modifier('large') {
-        // large button styles
-        ...
-    }
-    @include modifier('success') {
-        // success button styles
-        ...
-    }
-}
-```
-
-The above code would allow for the use of all of the following:
-
-```html
-<div class="button">Button</div>
-<div class="button-large">Large Button</div>
-<div class="button-success">Success Button</div>
-<div class="button-large-success">Large Success Button</div>
-<div class="button-success-large">Success Large Button</div>
-```
-
-And, crazily enough, you could also use the original BEM syntax of:
-
-```html
-<div class="button button--large button--success">Large Success Button</div>
-```
-
-### But how?
-
-I'm glad you asked. The answer is simple - [wildcard selectors](http://www.surfingsuccess.com/css/css-wildcard-css-attribute-selector.html). Under the hood, Modular has created a wildcard selector for the module and each modifier
-
-*But aren't wildcard selectors bad for performance?*
-
-Well, no. Perhaps this was true many years ago, but today, [any performance impact is negilable](http://www.telerik.com/blogs/css_tip_star_selector_not_that_bad) (and this article is 3 years old). [Further reading](http://benfrain.com/css-performance-revisited-selectors-bloat-expensive-styles/). 
-
-*Why bother using a mixin for this? Why not just write the wildcard selector?*
-
-For starters, writing `[class*="module-"]` over and over again can become tedious. Secondly, for the core styles we also need them to be applied to the naked `.module` class, meaning we would now have to write:
-
-```scss
-.module,
-[class*="module-"] {
-	...
-}
-```
-
-Which is exactly what the  `module()` mixin does. The reason `[class*="module"]` on its own isn't used is because this can cause undesired effects elsewhere in your styles due to how fragile it is. A very simple example would be if you wanted to use a `.buttons` class in the presence on a **button** module - `[class*="button"]` would target this class and apply the core button styles to it. Using `[class*="button-"]` is a fairly safe selector in a project we have control over, in terms of potential conflicts.
-
-### Configuring a Module
-
-Modular allows you to create configurable modules with customizable settings, such as the below, awesome example:
-
-```scss
-// perhaps in a file called _header.scss
 @mixin header($custom: ()) {
     
+    // Default module configuration
     $header: config((
-        
-        // Default Options
-        'dark' : false,
-        'top'  : 50px
-        
-    ), $custom);
-    
-    ...
-        
-} // header()
-
-// perhaps in a seperate file named _theme.scss
-@include header((
-    'dark' : true,
-    'top'  : 65px	
-))
-```
-
-To configure a new module, create a mixin named after your module (ensure the name is unique) and pass an empty `$custom: ()` variable to it:
-
-```scss
-@mixin header($custom: ()) {
-    ...	
-}
-```
-
-The `$custom` variable passed to the mixin is what will serve any custom options when the module is included. For the default options, a new variable named after your module is used, in our example this is `$header`.
-
-```scss
-@mixin header($custom: ()) {
-
-    $header: config((
-        
-        // Options
-        'top'      : 50px,
-        'bg-color' : black
-        
-    ), $custom);
-    
-    ...
-
-}
-```
-
-> `config()` is a custom function which merges multi-dimensional maps - above it is being used to merge the default options with any custom options.
-
-To allow any subsequent modules to access the current module's options, set the module's config variable (eg: `$header`) to `!global`:
-
-```scss
-@mixin header($custom: ()) {
-    
-    $header: config((
-        
-        // Options
-        'top'      : 50px,
-        'bg-color' : black
-        
-    ), $custom) !global;
-    
-    ...
-        
-}
-```
-
-The basis for your module is now ready. Next, the actual module mixin itself:
-
-```scss
-@mixin header($custom: ()) {
-
-    $header: config((
-        
-        // Options
-        'top'      : 50px,
-        'bg-color' : black
-        
+        'fixed'         : false,
+        'background'    : #000000,
+        'wrapper-width' : 960px
     ), $custom);
     
     @include module('header') {
         
-        // Core Styles
-        margin-top: option($header, 'top');
-        background-color: option($header, 'bg-color');
+        background: this('background');
         
-    } // module('header')
+        @include modifier('noLogo') {
+            @include overwrite('logo') {
+                display: none;   
+            }    
+        }
         
-} // @mixin header
+        @include component('wrapper') {
+            width: this('wrapper-width'); 
+        }
+        
+        @include option('fixed') {
+            position: fixed;
+        }
+        
+    }
+
+}
 ```
 
-To print an option's value, the `option` function is used. The basic header can now be created with the following HTML:
+Wherever you want to output the code, in the same or another file...
+
+```scss
+@include header();
+```
+
+To change any values in the configuration, pass them to the mixin:
+
+```scss
+@include header((
+    'background'    : blue,
+    'wrapper-width' : 90%
+));
+```
+
+Your markup for the above module may now look something like the following:
 
 ```html
 <div class="header">
-    ...
+    <div class="header_wrapper">
+        <div class="logo">...</div>
+        ...
+    </div>    
 </div>
 ```
 
-Read the [Advanced Documentation](#module-configuration-1) section to find out how to use bool options, for something like:
+If you want to hide the logo, you can add the `noLogo` modifier to the header:
 
-```scss
-@mixin header($custom: ()) {
-    
-    $header: config((
-        
-        // Options
-        'dark' : false,
-        'side' : false // left or right
-        
-    ), $custom);
-    
-    ...
-        
-}
-
-@include header((
-    'dark' : true,
-    'side' : left	
-))
+```html
+<div class="header-noLogo">
+    ...   
+</div>
 ```
 
-### Accessing in JS
+If you want to set the header's position to `fixed`, there are two ways you can do this. Firstly, you can again add the appropriate modifier to the markup:
 
-> Make sure to read the [complete section](#modularjs-1) on `modular.js` if you intend on using it - this is just an overview of what is possible.
+```html
+<div class="header-fixed">
+    ...   
+</div>
+```
 
-If you are using `modular.js`, you are now free to do something like the following, in some far away JavaScript file:
+N.B. Modifiers can be chained in any order:
+
+```html
+<div class="header-fixed-noLogo">
+    ...   
+</div>
+```
+
+Or you can set the header to be fixed by passing the option to the mixin when calling it:
+
+```scss
+@include header((
+    'fixed' : true
+));
+```
+
+The header will now be fixed even without passing the modifier in the markup.
+
+Now inside your JavaScript you can do the following (assuming you are using `modular.js`):
 
 ```js
-// get a module's option value
-console.log(_module['header']['dark']); // returns true or false
+// This will test for either the 'fixed' modifier in the markup,
+// or a value of 'true' for the corresponding option in the config
+if (_option('header', 'fixed')) {
+    alert('Header is fixed!');
+}
+```
 
-// target your module in the DOM
+```js
+// This will test for the 'noLogo' modifier in the markup
+if (_header.isModifier('noLogo')) {
+    alert('The header logo is hidden!');
+}
+
+// Do something to the header module regardless of any modifiers
 $(_header).doSomething();
 ```
 
-Using Modular's custom function, you can also do:
-
 ```js
-if (_option('header', 'dark')) {
-    
-    $(_header).doSomething();
-    
-}
+var headerFixed = _module['header']['fixed'] // returns true or false
+var headerBackground = _module['header']['background'] // returns the background value
+var headerWrapperWidth = _module['header']['wrapper-width'] // returns the wrapper-width value
 ```
-
-Using this function, you can also apply scripts to your element like so:
-
-```html
-<div class="header-dark">
-    ...
-</div>
-```
-
-[Read more](#modularjs-1) about `modular.js`.
 
 ## Installation
 
-In addition to the classic way of downloading and extracting the files into your project, you can also do one of the following:
+##### Clone The Repo
 
-##### With Bower
-
-```html
-bower install Modular
 ```
-
-###### If using modular.js:
-
-```html
-bower install Modular-SassyJSON
+git clone https://github.com/esr360/Modular.git
 ```
 
 Or...
@@ -272,19 +155,15 @@ git submodule add https://github.com/esr360/Modular.git
 git submodule update --init --recursive
 ```
 
-Now import the respective `_modular.scss` and optional `modular.js` files into your project as desired. 
-
-> Ensure to import the files *before* you attempt to run any Modular code.
-
 ## Advanced Documentation
 
 ### Mixins
 
 * [Module](#module)
 * [Component](#component)
+* [Modifier](#modifier)
 * [Overwrite](#overwrite)
 * [Overwrite-Component](#overwrite-component)
-* [Modifier](#modifier)
 * [Extend Modifiers](#extend-modifiers)
 * [Context](#context)
 * [Option](#bool-options)
@@ -325,9 +204,7 @@ If `$modules` is not defined, it will look for a `name` value in your module's c
 @mixin header($custom: ()) {
     
     $header: config((
-        
         'name' : 'header'
-            
     ), $custom);
     
     @include module {
@@ -583,6 +460,7 @@ This mixin allows you to overwrite the styles of existing modules, components an
 
 * `adjacent-sibling` - overwrite a module when it is also an adjacent sibling to the parent module
 * `general-sibling` - overwrite a module when it is also a general sibling to the parent module
+* `at-root` - Instead of being treated as nested inside the parent module, overwrite the core module styles
 
 ###### Example
 
@@ -610,8 +488,6 @@ This mixin allows you to overwrite the styles of existing modules, components an
 
 ##### Advanced Example
 
-> This is from a real life profect. We're into some pretty next level shit here already, so for brevetiy I won't explain what `@at-root` is doing in the below example.
-
 ```scss
 @mixin billboard($custom: ()) {
 
@@ -628,15 +504,13 @@ This mixin allows you to overwrite the styles of existing modules, components an
         ...
         
 		// If website has "top-bar" and top-bar is "fixed" and header is "absolute"
-		@at-root {
-			@include overwrite('top-bar', $is: 'fixed') {
-				@include overwrite('header', $is: 'absolute', $special: 'adjacent-sibling') {
-					@include overwrite($is: 'full-screen', $special: 'adjacent-sibling') {
-						margin-top: option($top-bar, 'height');
-					}
-				}
-			}
-		}
+        @include overwrite('top-bar', $is: 'fixed', $special: 'at-root') {
+            @include overwrite('header', $is: 'absolute', $special: 'adjacent-sibling') {
+                @include overwrite($is: 'full-screen', $special: 'adjacent-sibling') {
+                    margin-top: option($top-bar, 'height');
+                }
+            }
+        }
         
         ...
 	
@@ -674,7 +548,7 @@ As above, this mixin is used for overwriting styles for an existing component in
 		...
 	}
 
-	@include modifier('html5') {
+	@include modifier('large') {
 		@include overwrite-component('input') {
 			...
 		}
@@ -683,7 +557,7 @@ As above, this mixin is used for overwriting styles for an existing component in
 ```
 
 ```html
-<div class="form-html5">
+<div class="form-large">
 	<input class="form_input" type="text" />
 </div>	
 ```
@@ -701,7 +575,7 @@ As above, this mixin is used for overwriting styles for an existing component in
 		...
 	}
 
-	@include modifier('html5') {
+	@include modifier('large') {
 		@include overwrite-components(('input', 'group')) {
 			...
 		}
@@ -715,7 +589,7 @@ As above, this mixin is used for overwriting styles for an existing component in
 @include module('heading') {
 	
 	@include component('group') {
-		...	
+		color: red;
 	}	
 	
 }
@@ -723,17 +597,17 @@ As above, this mixin is used for overwriting styles for an existing component in
 @include module('widget') {
 
 	@include overwrite-component('group', $parent: 'heading') {
-		...
+		color: blue;
 	}
 	
 }
 ```
 
 ```html
+<div class="heading_group">I'm Red!</div>	
+
 <div class="widget">
-	<div class="heading_group">
-		...
-	</div>	
+	<div class="heading_group">I'm Blue!</div>	
 </div>
 ```
 
@@ -763,11 +637,11 @@ As above, this mixin is used for overwriting styles for an existing component in
 ```html
 <div class="widget">
 	<div class="widget_icon">...</div>
-	<div class="widget_title">I'm blue!</div>
+	<div class="widget_title">I'm Blue!</div>
 </div>
 
 <div class="widget">
-	<div class="widget_title">I'm red!</div>
+	<div class="widget_title">I'm Red!</div>
 	<div class="widget_icon">...</div>
 </div>
 ```
@@ -901,12 +775,12 @@ The following conditions can be passed to the mixin:
 	
 //	This is equivilent to:
 //
-//	@include component(icon) {
+//	@include component('icon') {
 //		color: blue;
 //	}
 //
 //	&:hover {
-//		@include overwrite-component(icon) {
+//		@include overwrite-component('icon') {
 //			color: white;
 //		}
 //	}
@@ -932,12 +806,12 @@ As outlined in the [overview](#overview) section, Modular allows you to configur
 	@include module('header') {
 		
 		// Core Styles
-		background-color: option($header, bg-color);
-		margin-top: option($header, top);
+		background-color: this('bg-color');
+		margin-top: this('top');
 		
-	} // module('header')
+	}
 		
-} // @mixin header
+}
 ```
 
 For all intents and purposes, there are 2 types of options; bools and non-bools. A bool option is one whose value determines whether or not some code should be applied. A non-bool option is one whose value is used as a value for a CSS property. In the below example there is one of each.
@@ -956,16 +830,16 @@ For all intents and purposes, there are 2 types of options; bools and non-bools.
 	@include module('header') {
 		
 		// Core Styles
-		margin-top: option($header, top);
+		margin-top: this('top');
 		
 		// Settings
 		@include option('dark') {
 			background-color: black;
 		}
 		
-	} // module('header')
+	}
 		
-} // @mixin header
+}
 ```
 
 Your configuration can be infinitely nested, like so:
@@ -978,13 +852,17 @@ Your configuration can be infinitely nested, like so:
 		// Options
 		'typography': (
 			'sizes': (
-				'size-1'    : 1em,
-				'size-2'    : 1.2em,
-				'size-3'    : 1.6em
+				'size-1'      : 1em,
+				'size-2'      : 1.2em,
+				'size-3'      : 1.6em
 			),
 			'colors': (
-				'primary'   : red,
-				'secondary' : blue
+				'primary'     : red,
+				'secondary'   : blue,
+                'validation'  : (
+                    'valid'   : #19d36d,
+                    'invalid' : #d32828
+                )
 			)
 		)
 		
@@ -992,7 +870,7 @@ Your configuration can be infinitely nested, like so:
 	
 	...
 		
-} // @mixin global
+}
 ```
 
 #### Bool Options
@@ -1050,10 +928,10 @@ To disable the extension of settings globally by default, set the `$extend-setti
 
 #### Non-Bool Options
 
-If your option is a CSS property, to call the option in your module the `option()` *function* is (note: not mixin, as used for bool options) used, like so:
+If your option is a CSS property, to call the option in your module the `this()` *function* is used, like so:
 
 ```scss
-margin-top: option($header, 'top');
+margin-top: this('top');
 ```
 
 which will generate:
@@ -1138,7 +1016,7 @@ In some circumstances, we can achieve the same thing without having to use the `
 		@include setting('side') {
 			// Side-Header Styles
 			...
-			#{option($header, side)}: 0; // left: 0;
+			#{this('side')}: 0; // left: 0;
 		}
 		
 	} // module('header')
@@ -1162,7 +1040,7 @@ Taking the above example a step further, let's say we want to pass some child op
 		
 		// Options
 		'side'                 : (
-			'default'          : false, // left or right
+			'enabled'          : false, // left or right
 			'width'            : 350px,
 			'show-y-scrollbar' : false
 		)
@@ -1174,14 +1052,14 @@ Taking the above example a step further, let's say we want to pass some child op
 		@include option('side') {
             ...
 			width: option($header, 'side', 'width');
-            @include value(left) {
+            @include value('left') {
                 ...
             }	
-            @include value(right) {
+            @include value('right') {
                 ...
             }		
             // apply styles when 'show-y-scrollbar' is 'true'
-			@include value($value: show-y-scrollbar) {
+			@include value($value: 'show-y-scrollbar') {
 				...
 			}
 		}
@@ -1191,12 +1069,12 @@ Taking the above example a step further, let's say we want to pass some child op
 } // @mixin header
 ```
 
-Above, the `default` value in `side` allows you to use the `value()` just as in the previous example. By passing the `$value` variable to the `value()` mixin, you can specify an alternate child boolean option.
+Above, the `enabled` value in `side` allows you to use the `value()` mixin just as in the previous example. By passing the `$value` variable to the `value()` mixin, you can specify an alternate child boolean option.
 
-To use non-bool options, the `option()` function is used as normal:
+To use non-bool options, the `this()` function is used as normal:
 
 ```scss
-width: option($header, 'side', 'width');
+width: this('side', 'width');
 ```
 
 #### Including Your Module
@@ -1264,6 +1142,12 @@ This is entirely possible, and requires the addition of the `!global` flag:
 }
 ```
 
+The `option()` function is used to get values from another module's configuration, like so:
+
+```scss
+width: option($grid, 'breakpoints', 'break-3'); // will return 960px
+```
+
 As long as your other modules are included after this one, we can now access the breakpoint values using:
 
 ```scss
@@ -1288,7 +1172,7 @@ _theme.scss
 
 ```scss
 // Modular
-@import "src/modular";
+@import "src/scss/smodular";
 
 // Project Partials
 @import "typography";
@@ -1364,10 +1248,10 @@ _theme.scss
     //-------------------------------------------------------------
 
         display: inline-block;
-        line-height: option($buttons, line-height);
-        padding: 0 option($buttons, side-spacing);
-        background: option($buttons, background);
-        color: option($buttons, color);
+        line-height: this('line-height');
+        padding: 0 this('side-spacing');
+        background: this('background');
+        color: this('color');
 
     // Modifiers
     //-------------------------------------------------------------
@@ -1375,7 +1259,7 @@ _theme.scss
         // Patterns
 		
         @include modifier('round') {
-            border-radius: option($buttons, radius);
+            border-radius: this('radius');
         }
 
         @include modifier('block') {
@@ -1452,21 +1336,21 @@ _theme.scss
     // Core Styles
     //-------------------------------------------------------------
 
-        background: option($header, 'background');   
-        margin-top: option($header, 'top');
+        background: this('background');   
+        margin-top: this('top');
 
     // Settings
     //-------------------------------------------------------------
 
         @include setting('dark') {
-            background: option($header, 'dark-color');   
+            background: this('dark-color');   
         }
 
         @include setting('side') {
             // Core Side-Header Styles
             position: fixed;
             top: 0;
-            width: option($header, 'side-width');
+            width: this('side-width');
             z-index: 99;
             @include option('left') {
                 left: 0;
@@ -1528,7 +1412,7 @@ The first thing you need to do is import SassyJSON into your project, *before* M
 
 ```scss
 @import "vendor/SassyJSON/stylesheets/SassyJSON";
-@import "src/modular"
+@import "src/scss/modular"
 ```
 
 Then include `modular.js` in your project, *before* any scripts which use Modular.
@@ -1542,7 +1426,7 @@ Next, you need to create an element in your HTML which corresponds to the select
 Finally, in your project's main Sass file at the end of everything (or rather, at the end of all Modular related files), add the following code:
 
 ```scss
-@if variable-exists(to-JSON) and $to-JSON {
+@if variable-exists('to-JSON') and $to-JSON {
 	@include json-encode($config-JSON);
 }
 ```
@@ -1557,7 +1441,7 @@ To enable JSON output of your modules' configuration, you need to set the `$to-J
 
 ```scss
 // Enable JSON output?
-$to-JSON    : false !default;
+$to-JSON : false !default;
 ```
 
 Alternatively, you can pass this variable at the top of your main project's Sass file, above all Modular related Sass.
@@ -1572,7 +1456,8 @@ By default, output to JSON is enabled on a per-module basis by passing `name` an
 		// Options
 		'name'        : 'header',
 		'output-JSON' : true,
-        'dark'        : false
+        'dark'        : false,
+        'height'      : 70px
 		
 	), $custom);
 
@@ -1616,7 +1501,8 @@ $('.header, [class*="header-"]').doSomething();
 To access a specific option, you can do:
 
 ```js
-_module['app-header']['dark']; // returns true or false
+_module['header']['dark']; // returns true or false by default
+_module['header']['height']; // returns 70px by default
 ```
 
 ##### Custom '_option()' Function
@@ -1692,6 +1578,32 @@ function breakpoint(media, value) {
 ```
 
 They key part of the above code is `_module['grid']['breakpoints'][value]`, which fetches the value from the JSON.
+
+##### Custom '$.isModifier()' Function
+
+Similar to the `_option()` function, the `$.isModifier()' function will return `true` if either the option itself is set to `true`, or if your element has a `modifier` of the option name:
+
+```scss
+@include header((
+	'dark' : true
+));
+```
+
+Or ...
+
+```html
+<div class="header-dark">
+    ...
+</div>
+```
+
+Using a simple `if` statement you can now conditionally run JavaScript based off your module's option:
+
+```js
+if(_header.isModifier('dark')) {
+    ...
+}
+```
 
 ## Credits & Notes
 
