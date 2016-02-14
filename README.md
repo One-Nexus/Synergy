@@ -1662,7 +1662,7 @@ if(_header.isModifier('dark')) {
 
 #### Version 3.2.0
 
-Released: -
+Released: 14th February ♥
 
 ###### Release Notes
 
@@ -1671,9 +1671,10 @@ Released: -
 * removing `nested-modifier()` mixin - no longer needed as regular `modifier()` mixin now more intelligent
 * adding ability to extend entire module + modifiers within another
 * adding 'this' function to access current modules config
-* renaming 'default' to more semantic 'enabled' for option mixin
+* renaming `default` to more semantic `enabled` for option mixin
 * adding `at-root` option to `overwrite()` mixin
 * renaming `stylesConfigJSON` selector to `modulesConfigJSON`
+* bower support dropped
 
 #### Version 3.1.0
 

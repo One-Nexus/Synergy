@@ -1,6 +1,6 @@
 {
   "name": "Modular",
-  "description": "A library of Sass mixins for architecting modular, configurable and scalable CSS.",
+  "description": "A front-end framework for building modular, configurable and scalable projects built with CSS (Sass) and JavaScript (jQuery).",
   "keywords": [
     "sass",
     "scss",
