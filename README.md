@@ -252,7 +252,7 @@ $selector-type: 'chain';
 }
 ```
 
-This is the default value for a module; it creates wildcards for both `.module` and `[class*="module-"]`, allowing you to use both the naked module as well as modifiers. Whilst this is the most flexible option, it does mean the generated CSS is slightly greater, which is what the other 2 options are for.
+This is the default value for a module; it creates selectors for both `.module` and `[class*="module-"]`, allowing you to use both the naked module as well as modifiers. Whilst this is the most flexible option, it does mean the generated CSS is slightly greater, which is what the other 2 options are for.
 
 Or if using the default `$type` value of `flex`, you do not need to pass a second parmeter here:
 
@@ -300,7 +300,7 @@ The static option creates only the naked selector for your module; ie - `.select
 
 #### Component
 
-Because of how the wildcard selectors are generated, it is not possible to create relating modules which begin with the same namespace. For example, if you have a `header` component with the default `$type` of `flex`, it would not be possible to create a `header-wrapper` class, as the *hyphen* is reserved for modifiers. There are several options to get around this, including:
+Because of how the selectors are generated, it is not possible to create relating modules which begin with the same namespace. For example, if you have a `header` component with the default `$type` of `flex`, it would not be possible to create a `header-wrapper` class, as the *hyphen* is reserved for modifiers. There are several options to get around this, including:
 
 * camelCase (headerWrapper)
 * reversed wording (wrap-header)
@@ -925,7 +925,7 @@ Alternatively, since by default adding a setting will also create a modifier for
 </div>
 ```
 
-If you are watching your CSS output, you may wish to remove these modifiers (and related wildcard selectors) from the generated styles and only use them conditionally. To do so, you can pass the `extend-options` option to your module's config, and set it to **false**:
+If you are watching your CSS output, you may wish to remove these modifiers (and related selectors) from the generated styles and only use them conditionally. To do so, you can pass the `extend-options` option to your module's config, and set it to **false**:
 
 ```scss
 @mixin header($custom: ()) {
