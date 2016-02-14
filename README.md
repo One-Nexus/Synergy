@@ -300,7 +300,7 @@ The static option creates only the naked selector for your module; ie - `.select
 
 #### Component
 
-Because of how the selectors are generated, it is not possible to create relating modules which begin with the same namespace. For example, if you have a `header` component with the default `$type` of `flex`, it would not be possible to create a `header-wrapper` class, as the *hyphen* is reserved for modifiers. There are several options to get around this, including:
+Because of how the selectors are generated, it is not possible to create relating modules which begin with the same namespace. For example, if you have a `header` module with the default `$type` of `flex`, any classes which contain `header-` will receive the core header styles, so if you were to create a `header-button` element, this would inherit the `header` styles. There are several options to get around this, including:
 
 * camelCase (headerWrapper)
 * reversed wording (wrap-header)
