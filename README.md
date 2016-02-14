@@ -302,9 +302,9 @@ The static option creates only the naked selector for your module; ie - `.select
 
 Because of how the selectors are generated, it is not possible to create relating modules which begin with the same namespace. For example, if you have a `header` module with the default `$type` of `flex`, any classes which contain `header-` will receive the core header styles, so if you were to create a `header-button` element, this would inherit the `header` styles. There are several options to get around this, including:
 
-* camelCase (headerWrapper)
-* reversed wording (wrap-header)
-* underscore (header_wrapper)
+* camelCase (headerButton)
+* reversed wording (button-header)
+* underscore (header_button)
 
 To keep things as similar to BEM as possible, Modular provies an easy way to create relating components using underscores, eg - `header_wrapper`. The `component` mixin accepts a single parameter:
 
