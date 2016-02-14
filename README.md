@@ -1502,6 +1502,9 @@ By default, output to JSON is enabled on a per-module basis by passing `name` an
 If you want all your modules to output their configuation to JSON by default, you can pass the `$output-JSON` variable and set it to `true`:
 
 ```scss
+// Enable JSON output
+$to-JSON : true;
+
 // Output JSON by default for each module
 $output-JSON: true;
 
