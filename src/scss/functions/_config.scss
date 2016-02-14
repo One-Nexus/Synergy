@@ -15,7 +15,7 @@
 
     $map-old: map-merge((
         'selector-type'   : $selector-type,
-        'extend-settings' : $extend-options,
+        'extend-options' : $extend-options,
         'output-JSON'     : $output-JSON
     ), $map-old);
 

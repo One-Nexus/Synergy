@@ -903,7 +903,7 @@ If your option is a bool, you can use the `option()` mixin. The styles added wit
 	$header: config((
 		
 		// Options
-		'extend-settings': false,
+		'extend-options': false,
 		'dark' : false,
 		'top'  : 50px
 		
@@ -925,7 +925,7 @@ Alternatively, since by default adding a setting will also create a modifier for
 </div>
 ```
 
-If you are watching your CSS output, you may wish to remove these modifiers (and related wildcard selectors) from the generated styles and only use them conditionally. To do so, you can pass the `extend-settings` option to your module's config, and set it to **false**:
+If you are watching your CSS output, you may wish to remove these modifiers (and related wildcard selectors) from the generated styles and only use them conditionally. To do so, you can pass the `extend-options` option to your module's config, and set it to **false**:
 
 ```scss
 @mixin header($custom: ()) {
@@ -933,7 +933,7 @@ If you are watching your CSS output, you may wish to remove these modifiers (and
 	$header: config((
 		
 		// Options
-		'extend-settings': false,
+		'extend-options': false,
 		'dark' : false,
 		'top'  : 50px
 		
@@ -944,11 +944,11 @@ If you are watching your CSS output, you may wish to remove these modifiers (and
 }
 ```
 
-To disable the extension of settings globally by default, pass the `$extend-settings` variable and set it to `false`:
+To disable the extension of settings globally by default, pass the `$extend-options` variable and set it to `false`:
 
 ```scss
 // Disable creation of modifiers for module settings
-$extend-settings : false;
+$extend-options : false;
 
 // Import Modular
 @import "path/to/modular"
@@ -1515,7 +1515,7 @@ If everything is running as expected, once your Sass has been compiled your CSS 
 
 ```css
 #modulesConfigJSON::before {
-    content: '{"header": {"selector-type": "flex", "extend-settings": true, "output-JSON": true, "name": "header", "dark": false}}';
+    content: '{"header": {"selector-type": "flex", "extend-options": true, "output-JSON": true, "name": "header", "dark": false}}';
     display: block;
     height: 0;
     overflow: hidden;

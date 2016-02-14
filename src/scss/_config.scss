@@ -3,15 +3,15 @@ $to-JSON : false !default;
 
 // Output config for each module by default?
 $output-JSON : false !default;
- 
- // The variable which will store all module's configuration (do not edit)
-$_modules : () !default;
-
-// The variable to hold a single module (do not edit)
-$module : null !default;
 
 // Set the default selector type (flex | chain | static)
 $selector-type : 'flex' !default;
 
 // Extend each option as a modifier by default?
 $extend-options : true !default;
+ 
+ // The variable which will store all module's configuration (do not edit)
+$_modules : () !default;
+
+// The variable to hold a single module (do not edit)
+$module : null !default;
