@@ -28,7 +28,7 @@ Using Modular:
 panels-list_item-blog-featured-noSummary-image
 ```
 
-###### Configurable Modules
+##### Configurable Modules
 
 Configure your modules without touching the source code. Call the mixin and pass your values to it, leaving the module's source code untouched, allowing you to easily change options and styles.
 
