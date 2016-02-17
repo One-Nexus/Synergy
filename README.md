@@ -10,6 +10,76 @@
 
 ## Overview
 
+#### Why Use Modular?
+
+For three reasons:
+
+#### Smarter Selectors
+
+Using BEM ([example source](http://eu.battle.net/heroes/en/)):
+
+```css
+panels-list__item panels-list__item--blog panels-list__item--featured panels-list__item--no-summary panels-list__item--image
+```
+
+Using Modular:
+
+```css
+panels-list_item-blog-featured-noSummary-image
+```
+
+#### Configurable Modules
+
+Configure your modules without touching the source code. Call the mixin and pass your values to it, leaving the module's source code untouched, allowing you to easily change options and styles.
+
+```scss
+@mixin header($custom: ()) {
+    
+    // Default module configuration
+    $header: config((
+        'background'    : #000000
+    ), $custom);
+    
+    @include module('header') {
+        background: this('background');  
+    }
+
+}
+
+@include header((
+    'background': #254554
+));
+```
+
+#### Pass Configuration to JavaScript
+
+```scss
+@mixin grid($custom: ()) {
+
+    $grid: config((
+        'breakpoints': (
+            'break-0'       : 0px,
+            'break-1'       : 460px,
+            'break-2'       : 720px,
+            'break-3'       : 940px,
+            'break-4'       : 1200px,
+            'break-5'       : 1400px
+        )
+    ), $custom) !global;
+    
+}
+
+@include grid((
+    'break-3': 1020px
+));
+```
+
+In your JavaScript:
+
+```js
+_module['grid']['breakpoints']['break-3'] // => 1020px
+```
+
 #### 60 Second Example
 
 Inside a file called `_header.scss`
