@@ -14,7 +14,7 @@
 
 For three reasons:
 
-#### Smarter Selectors
+##### Smarter Selectors
 
 Using BEM ([example source](http://eu.battle.net/heroes/en/)):
 
@@ -28,7 +28,7 @@ Using Modular:
 panels-list_item-blog-featured-noSummary-image
 ```
 
-#### Configurable Modules
+###### Configurable Modules
 
 Configure your modules without touching the source code. Call the mixin and pass your values to it, leaving the module's source code untouched, allowing you to easily change options and styles.
 
@@ -51,7 +51,7 @@ Configure your modules without touching the source code. Call the mixin and pass
 ));
 ```
 
-#### Pass Configuration to JavaScript
+##### Pass Configuration to JavaScript
 
 ```scss
 @mixin grid($custom: ()) {
