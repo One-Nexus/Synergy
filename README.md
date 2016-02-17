@@ -37,7 +37,7 @@ Configure your modules without touching the source code. Call the mixin and pass
     
     // Default module configuration
     $header: config((
-        'background'    : #000000
+        'background' : #000000
     ), $custom);
     
     @include module('header') {
@@ -47,7 +47,7 @@ Configure your modules without touching the source code. Call the mixin and pass
 }
 
 @include header((
-    'background': #254554
+    'background' : #254554
 ));
 ```
 
@@ -58,12 +58,12 @@ Configure your modules without touching the source code. Call the mixin and pass
 
     $grid: config((
         'breakpoints': (
-            'break-0'       : 0px,
-            'break-1'       : 460px,
-            'break-2'       : 720px,
-            'break-3'       : 940px,
-            'break-4'       : 1200px,
-            'break-5'       : 1400px
+            'break-0' : 0px,
+            'break-1' : 460px,
+            'break-2' : 720px,
+            'break-3' : 940px,
+            'break-4' : 1200px,
+            'break-5' : 1400px
         )
     ), $custom) !global;
     
