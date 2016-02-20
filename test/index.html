@@ -1,0 +1,34 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+
+    <title>Modular</title>
+    <meta name="description" content="Modulat Test Page">
+    <meta name="author" content="SitePoint">
+
+    <link rel="stylesheet" href="test-results.css">
+    
+</head>
+
+<body>
+    
+    <h1>Modular Test Page</h1>
+    <h2>Check the console for errors!</h2>
+    
+    <div id="modulesConfigJSON"></div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src="../dist/modular.js"></script>
+    
+    <script>
+        console.log(_module['bar']);
+        console.log(_bar);
+        console.log(_option('bar', 'foo'));
+        console.log($(_bar).isModifier('foo'));
+    </script>
+    
+</body>
+</html>

@@ -1,6 +1,6 @@
 {
   "name": "Modular",
-  "description": "A front-end framework for building modular, configurable and scalable projects built with CSS (Sass) and JavaScript (jQuery).",
+  "description": "A front-end framework for building modular, configurable and scalable projects built with CSS (Sass).",
   "keywords": [
     "sass",
     "scss",

@@ -40,7 +40,8 @@ $extend-options : true;
 @mixin bar($custom: ()) {
     
     $bar: config((
-        'name' : 'bar'
+        'name' : 'bar',
+        'foo'  : false
     ), $custom);
     
     @include module {
@@ -59,7 +60,9 @@ $extend-options : true;
 
 }
 
-@include bar;
+@include bar((
+    'foo' : true
+));
 
 // Output all configuration data to JSON only if setting exists and 
 // setting is "true"
