@@ -28,6 +28,8 @@ Using Modular:
 panels-list_item-blog-featured-noSummary-image
 ```
 
+Modular takes advantage of CSS attribute wildcard selectors. By looking for classes which contain certain strings as opposed to looking for specific classes, your markup can be much more flexible, allowing your to chain modifiers in the DOM, removing the need for any repetition (i.e. no more 'button button--large button--round').
+
 ##### Configurable Modules
 
 Configure your modules without touching the source code. Call the mixin and pass your values to it, leaving the module's source code untouched, allowing you to easily change options and styles.
