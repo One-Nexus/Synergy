@@ -57,7 +57,7 @@ function parseJSON(toCamelCase) {
  * @var _module
  * @description Holds all configuration data for all modules
  */
-var _module = parseJSON();
+var _modules = parseJSON();
 
 /**
  * @var modulesCamelCase
@@ -67,21 +67,29 @@ var _module = parseJSON();
 var modulesCamelCase = parseJSON(true);
 
 /**
- * @var moduleIndex
- * @description Used to increment the function which loops through
- * each module
- */
-var moduleIndex = 0;
-
-/**
  * @description Loop through each module and populate the global
  * namespace with a variable to access the module
- */
-$.each(_module, function(module) {
+$.each(_modules, function(module) {
     var moduleCamelCase = modulesCamelCase[Object.keys(modulesCamelCase)[moduleIndex]]['name'];
     window['_' + moduleCamelCase] = '.' + module + ', [class*="' + module + '-"]';   
     moduleIndex++; 
 });
+ */
+
+var moduleNames = [];
+var moduleNamesCamelCase = [];
+
+for (var module in _modules) {
+    moduleNames.push(_modules[module].name);
+}
+
+for (var moduleCamelCase in modulesCamelCase) {
+    moduleNamesCamelCase.push(modulesCamelCase[moduleCamelCase].name);
+}
+
+for (var i = 0; i < moduleNames.length; i++) {
+    window['_' + moduleNamesCamelCase[i]] = '.' + moduleNames[i] + ', [class*="' + moduleNames[i] + '-"]' ;
+}
 /**
  * @function _option
  * 
@@ -99,10 +107,10 @@ $.each(_module, function(module) {
 
 function _option(module, option) {
 
-    var $option   = _module[module][option];
+    var $option   = _modules[module][option];
     var $value    = $option[Object.keys($option)[0]];
-    var $id       = $('.' + module + ', [class*="' + module + '-"]');
-    var $selector = $id.is('[class*="-' + option + '"]') == true;
+    var $id       = '.' + module + ', [class*="' + module + '-"]';
+    var $selector = ('' + $id.className + '').indexOf('' + '[class*="-' + option + '"]' + '') > -1;
         
     if (typeof($value) == 'boolean') {
         return $selector || $option['enabled'] != false;
@@ -111,28 +119,3 @@ function _option(module, option) {
     }
 
 }
-/**
- * @function $.isModifier
- * 
- * @description Determine if a particular module has a certain 
- * modifier. Will look for either the modifier on the module in the
- * DOM or look for a corresponding value in the configuration.
- * 
- * @param module - The module which you wish to get an option from
- */
-
-//  Usage
-//
-//  if(_navigation.isModifier('sticky')) {
-//      ...
-//  }
-
-$.fn.isModifier = function(modifier) {
-
-    var moduleName = $(this)['selector'].split(',')[0].split('.').join('');
-
-    moduleName = moduleName.toString();
-
-    return _option(moduleName, modifier);
-
-};

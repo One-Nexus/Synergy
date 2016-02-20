@@ -57,7 +57,7 @@ function parseJSON(toCamelCase) {
  * @var _module
  * @description Holds all configuration data for all modules
  */
-var _module = parseJSON();
+var _modules = parseJSON();
 
 /**
  * @var modulesCamelCase
@@ -67,18 +67,26 @@ var _module = parseJSON();
 var modulesCamelCase = parseJSON(true);
 
 /**
- * @var moduleIndex
- * @description Used to increment the function which loops through
- * each module
- */
-var moduleIndex = 0;
-
-/**
  * @description Loop through each module and populate the global
  * namespace with a variable to access the module
- */
-$.each(_module, function(module) {
+$.each(_modules, function(module) {
     var moduleCamelCase = modulesCamelCase[Object.keys(modulesCamelCase)[moduleIndex]]['name'];
     window['_' + moduleCamelCase] = '.' + module + ', [class*="' + module + '-"]';   
     moduleIndex++; 
 });
+ */
+
+var moduleNames = [];
+var moduleNamesCamelCase = [];
+
+for (var module in _modules) {
+    moduleNames.push(_modules[module].name);
+}
+
+for (var moduleCamelCase in modulesCamelCase) {
+    moduleNamesCamelCase.push(modulesCamelCase[moduleCamelCase].name);
+}
+
+for (var i = 0; i < moduleNames.length; i++) {
+    window['_' + moduleNamesCamelCase[i]] = '.' + moduleNames[i] + ', [class*="' + moduleNames[i] + '-"]' ;
+}

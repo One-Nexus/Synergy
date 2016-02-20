@@ -15,10 +15,10 @@
 
 function _option(module, option) {
 
-    var $option   = _module[module][option];
+    var $option   = _modules[module][option];
     var $value    = $option[Object.keys($option)[0]];
-    var $id       = $('.' + module + ', [class*="' + module + '-"]');
-    var $selector = $id.is('[class*="-' + option + '"]') == true;
+    var $id       = '.' + module + ', [class*="' + module + '-"]';
+    var $selector = ('' + $id.className + '').indexOf('' + '[class*="-' + option + '"]' + '') > -1;
         
     if (typeof($value) == 'boolean') {
         return $selector || $option['enabled'] != false;
