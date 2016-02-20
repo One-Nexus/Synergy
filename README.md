@@ -1,7 +1,7 @@
 
 [![Modular](https://raw.githubusercontent.com/esr360/Modular/gh-pages/logo-small.png "Modular Logo")](https://github.com/esr360/Modular)
 
-> A front-end framework for building modular, configurable and scalable projects built with CSS (Sass) and JavaScript (jQuery).
+> A front-end framework for building modular, configurable and scalable projects.
 
 * [Overview](#overview)
 * [Installation](#installation)
@@ -49,6 +49,14 @@ Configure your modules without touching the source code. Call the mixin and pass
 @include header((
     'background' : #254554
 ));
+```
+
+###### CSS Output
+
+```css
+.header, [class*="header-"] {
+    background: #254554;
+}
 ```
 
 ##### Pass Configuration to JavaScript
@@ -132,6 +140,27 @@ To change any values in the configuration, pass them to the mixin:
 ));
 ```
 
+###### CSS Output
+
+```css
+.header, [class*="header-"] {
+    background: blue;
+}
+
+[class*="header-"][class*="-noLogo"] .logo,
+[class*="header-"][class*="-noLogo"] [class*="-logo"] {
+    display: none;
+}
+
+[class*="header_wrapper"] {
+    width: 90%;   
+}
+
+[class*="header-"][class*="-fixed"] {
+    position: fixed;
+}
+```
+
 Your markup for the above module may now look something like the following:
 
 ```html
@@ -186,12 +215,6 @@ if (_option('header', 'fixed')) {
     alert('Header is fixed!');
 }
 ```
-
-```js
-// This will test for the 'noLogo' modifier in the markup
-if (_header.isModifier('noLogo')) {
-    alert('The header logo is hidden!');
-}
 
 // Do something to the header module regardless of any modifiers
 $(_header).doSomething();
@@ -1498,8 +1521,6 @@ Every configurable aspect of your project can now quickly and easily be changed 
 
 #### Getting Started
 
-> modular.js requires a recent version of jQuery
-
 So you've decided to see what this whole modular.js thing is about, great! The first thing you should know is that the man behind the magic here is [@HugoGiraudel](https://github.com/HugoGiraudel) for his project [SassyJSON](https://github.com/HugoGiraudel/SassyJSON). This is what actually outputs your Sass config to JSON format, which is how you interact with your modules in JS. Modular uses a slightly customized version of SassyJSON [available here](https://github.com/esr360/SassyJSON). SassyJSON comes included with Modular as a Git submodule. 
 
 Ensure you have a copy of the forked SassyJSON in your project. If you have installed Modular as a Git submodule, you can run:
@@ -1600,6 +1621,8 @@ You may not recognize all the values that are generarted; don't worry, they're j
 
 #### Usage
 
+> Whilst modular.js doesn't require jQuery, for simplicity the below examples assume Modular is used in a jQuery environment
+
 It is now possible to access your module like so:
 
 ```js
@@ -1694,32 +1717,6 @@ function breakpoint(media, value) {
 ```
 
 They key part of the above code is `_module['grid']['breakpoints'][value]`, which fetches the value from the JSON.
-
-##### Custom '$.isModifier()' Function
-
-Similar to the `_option()` function, the `$.isModifier()' function will return `true` if either the option itself is set to `true`, or if your element has a `modifier` of the option name:
-
-```scss
-@include header((
-	'dark' : true
-));
-```
-
-Or ...
-
-```html
-<div class="header-dark">
-    ...
-</div>
-```
-
-Using a simple `if` statement you can now conditionally run JavaScript based off your module's option:
-
-```js
-if(_header.isModifier('dark')) {
-    ...
-}
-```
 
 ## Credits & Notes
 

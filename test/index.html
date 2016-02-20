@@ -6,8 +6,8 @@
     <meta charset="utf-8">
 
     <title>Modular</title>
-    <meta name="description" content="Modulat Test Page">
-    <meta name="author" content="SitePoint">
+    <meta name="description" content="Modular Test Page">
+    <meta name="author" content="Edmund Reed">
 
     <link rel="stylesheet" href="test-results.css">
     
@@ -20,14 +20,14 @@
     
     <div id="modulesConfigJSON"></div>
     
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <div class="bar"></div>
+    
     <script src="../dist/modular.js"></script>
     
     <script>
-        console.log(_module['bar']);
+        console.log(_modules['bar']);
         console.log(_bar);
         console.log(_option('bar', 'foo'));
-        console.log($(_bar).isModifier('foo'));
     </script>
     
 </body>
