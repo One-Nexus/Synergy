@@ -85,7 +85,7 @@ Configure your modules without touching the source code. Call the mixin and pass
 In your JavaScript:
 
 ```js
-_module['grid']['breakpoints']['break-3'] // => 1020px
+_modules['grid']['breakpoints']['break-3'] // => 1020px
 ```
 
 #### 60 Second Example
@@ -221,9 +221,9 @@ $(_header).doSomething();
 ```
 
 ```js
-var headerFixed = _module['header']['fixed'] // returns true or false
-var headerBackground = _module['header']['background'] // returns the background value
-var headerWrapperWidth = _module['header']['wrapper-width'] // returns the wrapper-width value
+var headerFixed = _modules['header']['fixed'] // returns true or false
+var headerBackground = _modules['header']['background'] // returns the background value
+var headerWrapperWidth = _modules['header']['wrapper-width'] // returns the wrapper-width value
 ```
 
 ## Installation
@@ -1640,8 +1640,8 @@ $('.header, [class*="header-"]').doSomething();
 To access a specific option, you can do:
 
 ```js
-_module['header']['dark']; // returns true or false by default
-_module['header']['height']; // returns 70px by default
+_modules['header']['dark']; // returns true or false by default
+_modules['header']['height']; // returns 70px by default
 ```
 
 ##### Custom '_option()' Function
@@ -1712,11 +1712,11 @@ This can be achieved with the following code:
 
 ```js
 function breakpoint(media, value) {
-	return window.matchMedia('(' + media + ':' + _module['grid']['breakpoints'][value] + ')').matches;
+	return window.matchMedia('(' + media + ':' + _modules['grid']['breakpoints'][value] + ')').matches;
 }
 ```
 
-They key part of the above code is `_module['grid']['breakpoints'][value]`, which fetches the value from the JSON.
+They key part of the above code is `_modules['grid']['breakpoints'][value]`, which fetches the value from the JSON.
 
 ## Credits & Notes
 
