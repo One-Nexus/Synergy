@@ -20,6 +20,7 @@
     
     <div id="modulesConfigJSON"></div>
     
+    <div class="foo-foo"></div>
     <div class="bar"></div>
     
     <script src="../dist/modular.js"></script>
@@ -27,7 +28,8 @@
     <script>
         console.log(_modules['bar']);
         console.log(_bar);
-        console.log(_option('bar', 'foo'));
+        console.log(_option('foo', 'foo'));
+        console.log(_option('bar', 'foo')); 
     </script>
     
 </body>

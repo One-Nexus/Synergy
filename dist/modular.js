@@ -107,15 +107,18 @@ for (var i = 0; i < moduleNames.length; i++) {
 
 function _option(module, option) {
 
-    var $option   = _modules[module][option];
-    var $value    = $option[Object.keys($option)[0]];
-    var $id       = '.' + module + ', [class*="' + module + '-"]';
-    var $selector = ('' + $id.className + '').indexOf('' + '[class*="-' + option + '"]' + '') > -1;
+    var _option  = _modules[module][option];
+    var value    = _option[Object.keys(_option)[0]];
+    var id       = '.' + module + ', [class*="' + module + '-"]';
+    var modifier = '[class*="-' + option + '"]';
+
+    var target   = document.querySelector(id);
+    var selector = target.matches(modifier);
         
-    if (typeof($value) == 'boolean') {
-        return $selector || $option['enabled'] != false;
+    if (typeof value == 'boolean') {
+        return selector || _option['enabled'] != false;
     } else {
-        return $selector || $option != false;
+        return selector || _option != false;
     }
 
 }

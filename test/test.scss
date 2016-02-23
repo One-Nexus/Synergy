@@ -23,6 +23,8 @@ $extend-options : true;
 // Import Modular
 @import "../src/scss/modular";
 
+/**/
+
 @include module('foo') {
     
     content: '#{&}';
@@ -36,6 +38,23 @@ $extend-options : true;
     }
     
 }
+
+/**/
+
+@mixin foo($custom: ()) {
+    
+    $foo: config((
+        'name' : 'foo',
+        'foo'  : false
+    ), $custom);
+    
+    @include module;
+    
+}
+
+@include foo;
+
+/**/
 
 @mixin bar($custom: ()) {
     
