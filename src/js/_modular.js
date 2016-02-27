@@ -69,11 +69,6 @@ var modulesCamelCase = parseJSON(true);
 /**
  * @description Loop through each module and populate the global
  * namespace with a variable to access the module
-$.each(_modules, function(module) {
-    var moduleCamelCase = modulesCamelCase[Object.keys(modulesCamelCase)[moduleIndex]]['name'];
-    window['_' + moduleCamelCase] = '.' + module + ', [class*="' + module + '-"]';   
-    moduleIndex++; 
-});
  */
 
 var moduleNames = [];
