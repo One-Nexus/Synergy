@@ -218,6 +218,7 @@ if (_option('header', 'fixed')) {
 }
 ```
 
+```js
 // Do something to the header module regardless of any modifiers
 $(_header).doSomething();
 ```
