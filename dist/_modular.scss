@@ -24,7 +24,7 @@ $module : null !default;
  * @description Create a new module
  *
  * @param $modules - The module(s) you wish to create
- * @param $type    - 'static' | 'chain' | 'flex' 
+ * @param $type    - 'static' | 'chain' | 'flex' | 'data'
  */
 
 //  Usage
@@ -47,6 +47,9 @@ $module : null !default;
         }
         @if $type == 'flex' or $type == 'chain' {
             $selectors: join($selectors, '[class*="#{$module}-"]', comma);
+        }
+        @if $type == 'data' {
+            $selectors: join($selectors, '[data-#{$module}]', comma);
         }
     }
     #{$selectors} {
