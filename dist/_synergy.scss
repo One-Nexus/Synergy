@@ -497,7 +497,7 @@ $module : null !default;
 //  ));
 
 @mixin value($setting: 'enabled', $value: true) {
-    $nested-modifier: if(
+    $modifier: if(
         $setting == 'enabled', $value, $setting
     );
     @if (option($config, $option, $setting) == $value) {	
@@ -507,7 +507,7 @@ $module : null !default;
             @include extend($setting);
         }
     }
-    @include modifier($nested-modifier) {	
+    @include modifier($modifier) {	
         @content;
     }
 }

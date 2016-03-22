@@ -13,10 +13,10 @@ module.exports = function(grunt) {
         concat: {   
             js: {
                 src:[
-                    'src/js/_modular.js',
+                    'src/js/_synergy.js',
                     'src/js/functions/*.js'
                 ],
-                dest: 'dist/modular.js',
+                dest: 'dist/synergy.js',
             }, 
             scss: {
                 src: [
@@ -39,7 +39,7 @@ module.exports = function(grunt) {
                     'src/scss/functions/_setting.scss',
                     'src/scss/functions/_this.scss',
                 ],
-                dest: 'dist/_modular.scss',
+                dest: 'dist/_synergy.scss',
             }
         },
         

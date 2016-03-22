@@ -1,7 +1,7 @@
 /**
- * Generally, any serious issues will prevent Modular from 
+ * Generally, any serious issues will prevent Synergy from 
  * compiling whatsoever, so whilst the below tests have very
- * little coverage, it is enough to know that the core Modular
+ * little coverage, it is enough to know that the core Synergy
  * functions are working
  */
  
@@ -20,8 +20,8 @@ $extend-options : true;
 // Import SassyJSON
 @import "../vendor/SassyJSON/src/SassyJSON";
 
-// Import Modular
-@import "../src/scss/modular";
+// Import Synergy
+@import "../src/scss/synergy";
 
 /**/
 
