@@ -20,11 +20,11 @@
 //
 //  <div class="button-large">...</div>
 
-@mixin modifier($modifiers, $special: null) {
+@mixin modifier($modifiers, $special: null, $glue: '-') {
     
     $selectors: &;
     
-    @if nth(&, 1) + unquote('') == '.#{$module}' {
+    @if str-index(inspect(&), '.#{$module}') {
         @if (variable-exists('config') and map-get($config, 'selector-type') == 'flex') 
         or (not variable-exists('config') and $selector-type == 'flex') {
             $selectors: ();
@@ -44,9 +44,9 @@
         $modifier-selectors: ();
         @each $modifier in $modifiers {
             @if $special == "not" {
-                $modifier-selectors: join($modifier-selectors, '&:not([class*="-#{$modifier}"])', comma);
+                $modifier-selectors: join($modifier-selectors, '&:not([class*="#{$glue}#{$modifier}"])', comma);
             } @else {
-                $modifier-selectors: join($modifier-selectors, '&[class*="-#{$modifier}"]', comma);
+                $modifier-selectors: join($modifier-selectors, '&[class*="#{$glue}#{$modifier}"]', comma);
             }
         }
         #{$modifier-selectors} {
