@@ -40,7 +40,7 @@
     @if $enabled {
         @include extend($option);
     }
-    @include modifier($option) {	
+    @include modifier($option) {
         @content;
     }
 }
