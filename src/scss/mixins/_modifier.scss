@@ -28,13 +28,9 @@
         @if (variable-exists('config') and map-get($config, 'selector-type') == 'flex') 
         or (not variable-exists('config') and $selector-type == 'flex') {
             $selectors: ();
-            $i: 1;
-            @each $item in & {
-                $i: $i + 1;
-                @if $i == 2 {
-                    $i: 0;
-                } @else {
-                    $selectors: append($selectors, $item, comma);
+            @for $i from 1 through length(&) {
+                @if $i % 2 == 0 {
+                    $selectors: append($selectors, nth(&, $i), comma);
                 }
             }
         }
