@@ -101,15 +101,19 @@ for (var i = 0; i < moduleNames.length; i++) {
 //  }
 
 function _option(module, option) {
+    
+    if (Element && !Element.prototype.matches) {
+        var proto = Element.prototype;
+        proto.matches = proto.matchesSelector || proto.msMatchesSelector;
+    }
 
     var _option  = _modules[module][option];
     var value    = _option[Object.keys(_option)[0]];
     var id       = '.' + module + ', [class*="' + module + '-"]';
     var modifier = '[class*="-' + option + '"]';
-
     var target   = document.querySelector(id);
     var selector = target.matches(modifier);
-        
+    
     if (typeof value == 'boolean') {
         return selector || _option['enabled'] != false;
     } else {

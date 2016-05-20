@@ -21,7 +21,8 @@ function _option(module, option) {
     var modifier = '[class*="-' + option + '"]';
 
     var target   = document.querySelector(id);
-    var selector = target.matches(modifier);
+    var selector = target.matches(modifier) || target.msMatchesSelector(modifier);
+    //var selector = target.querySelectorAll(modifier).length;
         
     if (typeof value == 'boolean') {
         return selector || _option['enabled'] != false;

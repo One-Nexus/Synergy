@@ -15,7 +15,7 @@
 
     $map-old: map-merge((
         'selector-type'   : $selector-type,
-        'extend-options' : $extend-options,
+        'extend-options'  : $extend-options,
         'output-JSON'     : $output-JSON
     ), $map-old);
 
@@ -26,9 +26,13 @@
 
     // Output options to JSON
     @if option($map-old, 'output-JSON') {
+        // remove superfluous keys from JSON
+        $map-old: map-remove($map-old, 
+            'selector-type', 'extend-options', 'output-JSON'
+        );
+        // add the module to the list of modules
         $_modules: map-merge-deep(
-            (map-get($map-old, 'name') : ($map-old)), 
-            $_modules
+            (map-get($map-old, 'name') : ($map-old)), $_modules
         ) !global;
     }
 

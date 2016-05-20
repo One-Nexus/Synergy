@@ -34,7 +34,7 @@
         $selectors: ();
             
         @each $component in $components {           
-            // Create the naked class selectors     
+            // Create the naked class selectors   
             $selectors: if(
                 nth(&, 1) + unquote('') == '.#{$module}',
                 (

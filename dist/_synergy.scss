@@ -85,18 +85,50 @@ $module : null !default;
 //  <div class="header_wrapper">...</div>
 
 @mixin component($components: null) {
+    
     $selectors: '[class*="#{$module}_"]';
+    
     @if $components {
+        
+        // Get target namespace
+        $parents: str-replace(inspect(nth(&, 1)), '.', '');
+        $parents: str-replace($parents, '[class*="', '');
+        $parents: str-replace($parents, '-"]', '');
+        $parents: str-replace($parents, '"]', '');
+        
         $selectors: ();
-        @each $component in $components {
-            $selectors: join($selectors, '[class*="#{$module}_#{$component}"]', comma);
+            
+        @each $component in $components {           
+            // Create the naked class selectors     
+            $selectors: if(
+                nth(&, 1) + unquote('') == '.#{$module}',
+                (
+                    join($selectors, '.#{$module}_#{$component}', comma)
+                ),
+                (
+                    join($selectors, '.#{$parents}_#{$component}', comma)
+                )
+            );         
+            // Create the attribute wildcard selectors      
+            $selectors: if(
+                nth(&, 1) + unquote('') == '.#{$module}',
+                (
+                    join($selectors, '[class*="#{$module}_#{$component}-"]', comma)
+                ),
+                (
+                    join($selectors, '[class*="#{$parents}_#{$component}-"]', comma)
+                )
+            );
         }
+        
     }
+    
     @at-root {
         #{$selectors} {
             @content;
         }
     }	
+
 }
 
 // Alias for multiple components
@@ -127,21 +159,17 @@ $module : null !default;
 //
 //  <div class="button-large">...</div>
 
-@mixin modifier($modifiers, $special: null) {
+@mixin modifier($modifiers, $special: null, $glue: '-') {
     
     $selectors: &;
     
-    @if nth(&, 1) + unquote('') == '.#{$module}' {
+    @if str-index(inspect(&), '.#{$module}') {
         @if (variable-exists('config') and map-get($config, 'selector-type') == 'flex') 
         or (not variable-exists('config') and $selector-type == 'flex') {
             $selectors: ();
-            $i: 1;
-            @each $item in & {
-                $i: $i + 1;
-                @if $i == 2 {
-                    $i: 0;
-                } @else {
-                    $selectors: append($selectors, $item, comma);
+            @for $i from 1 through length(&) {
+                @if $i % 2 == 0 {
+                    $selectors: append($selectors, nth(&, $i), comma);
                 }
             }
         }
@@ -151,9 +179,9 @@ $module : null !default;
         $modifier-selectors: ();
         @each $modifier in $modifiers {
             @if $special == "not" {
-                $modifier-selectors: join($modifier-selectors, '&:not([class*="-#{$modifier}"])', comma);
+                $modifier-selectors: join($modifier-selectors, '&:not([class*="#{$glue}#{$modifier}"])', comma);
             } @else {
-                $modifier-selectors: join($modifier-selectors, '&[class*="-#{$modifier}"]', comma);
+                $modifier-selectors: join($modifier-selectors, '&[class*="#{$glue}#{$modifier}"]', comma);
             }
         }
         #{$modifier-selectors} {
@@ -457,7 +485,7 @@ $module : null !default;
     @if $enabled {
         @include extend($option);
     }
-    @include modifier($option) {	
+    @include modifier($option) {
         @content;
     }
 }
