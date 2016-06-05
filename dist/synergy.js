@@ -112,7 +112,7 @@ function _option(module, option) {
     var id       = '.' + module + ', [class*="' + module + '-"]';
     var modifier = '[class*="-' + option + '"]';
     var target   = document.querySelector(id);
-    var selector = target.matches(modifier);
+    var selector = (target !== null && target.length !== 0) ? target.matches(modifier) : false;
     
     if (typeof value == 'boolean') {
         return selector || _option['enabled'] != false;
