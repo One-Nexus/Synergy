@@ -1,5 +1,5 @@
 {
-  "name": "Modular",
+  "name": "Synergy",
   "description": "A front-end framework for building modular, configurable and scalable projects.",
   "keywords": [
     "sass",
@@ -12,11 +12,11 @@
     "framework",
     "web"
   ],
-  "homepage": "http://esr360.github.io/Modular/",
+  "homepage": "https://github.com/esr360/Synergy",
   "author": "Edmund Reed | @esr360",
-  "version": "3.2.0",
+  "version": "3.3.0",
   "bugs": {
-    "url": "https://github.com/esr360/Modular/issues"
+    "url": "https://github.com/esr360/Synergy/issues"
   },
   "license": "MIT",
   "devDependencies": {

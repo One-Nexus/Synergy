@@ -1730,6 +1730,21 @@ They key part of the above code is `_modules['grid']['breakpoints'][value]`, whi
 
 ## Changelog
 
+#### Version 3.3.0
+
+Released: -
+
+###### Release Notes
+
+* recoded using vanilla JS, removing jQuery as a dependency
+* removing `isModifier()` JS function
+* improving `_option()` JS function
+* renaming global `_module` variable to `_modules`
+* adding new `data` option to `module` mixin for data-attributes
+* improving `component` mixin logic and functionality
+* improving `modifier` mixin logic and functionality
+* improving JSON output by removing superfluous keys
+
 #### Version 3.2.0
 
 Released: 14th February ♥
