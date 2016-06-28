@@ -1,0 +1,237 @@
+/**
+ * Generally, any serious issues will prevent Synergy from 
+ * compiling whatsoever, so whilst the below tests have very
+ * little coverage, it is enough to know that the core Synergy
+ * functions are working
+ */
+/** 
+ * Modular
+ * @author Edmund Reed | @esr360
+ * 
+ * @mixin module
+ *
+ * @description Create a new module
+ *
+ * @param $modules - The module(s) you wish to create
+ * @param $type    - 'static' | 'chain' | 'flex' | 'data'
+ */
+/** 
+ * Modular
+ * @author Edmund Reed | @esr360
+ * 
+ * @mixin component
+ *
+ * @description Create a component based off the main module
+ *
+ * @param $components - The component or components to be used
+ */
+/** 
+ * Modular
+ * @author Edmund Reed | @esr360
+ * 
+ * @mixin modifier
+ *
+ * @description Create a modifier for a module
+ *
+ * @param $modifiers - The modifier(s) which you wish to create
+ * @param $special   - 'not' | 
+ */
+/** 
+ * Modular
+ * @author Edmund Reed | @esr360
+ * 
+ * @mixin overwrite
+ *
+ * @description Overwrite an existing module when in different 
+ * context, such as inside another module
+ *
+ * @param $modules - The module(s) which you wish to overwrite
+ * @param $is - Overwrite if moulde is certain modifier
+ * @param $not - Overwrite if module is not certain modifier
+ * @param $type - 'static' | 'chain' | 'flex
+ * @param $special - 'adjacent-sibling' | 'general-sibling'
+ */
+/** 
+ * Modular
+ * @author Edmund Reed | @esr360
+ * 
+ * @mixin overwrite-component
+ *
+ * @description Overwrite an existing component when in different 
+ * context, such as inside another module or component
+ *
+ * @param $components - The component(s) which you wish to overwrite
+ * @param $is - Overwrite if moulde is certain modifier
+ * @param $not - Overwrite if module is not certain modifier
+ * @param $parent - The parent module of the component
+ * @param $special - 'adjacent-sibling' |
+ */
+/** 
+ * Modular
+ * @author Edmund Reed | @esr360
+ * 
+ * @mixin extend
+ *
+ * @description Extend one or more modifiers of a module to create
+ * a new modifier combining the ones you pass
+ *
+ * @param $modifiers - The modifiers which you wish to combine
+ * @param $parent    - The parent module if not current one
+ * @param $core      - Extend the core '.module' styles?
+ */
+/** 
+ * Modular
+ * @author Edmund Reed | @esr360
+ * 
+ * @mixin context
+ *
+ * @description Apply styles to a component when certain conditions
+ * are met
+ *
+ * @param $context - The context you wish to use
+ */
+/** 
+ * Modular
+ * @author Edmund Reed | @esr360
+ * 
+ * @mixin option
+ *
+ * @description Apply styles to a module if a defined option 
+ * returns true
+ *
+ * @param $option - The option which you wish to test against
+ */
+/** 
+ * Modular
+ * @author Edmund Reed | @esr360
+ * 
+ * @mixin value
+ *
+ * @description Apply styles when a defined option is a particular
+ * value
+ *
+ * @param $setting - The setting/option you are targetting
+ * @param $value   - The value you wish to apply styles to
+ */
+/** 
+ * Modular
+ * @author Edmund Reed | @esr360
+ * 
+ * @function config
+ *
+ * @description Used to merge a module's default configuration with
+ * any custom values passed to the module
+ *
+ * @param $map-old - The map which will store default configuration
+ * @param $map-new - The map which will hold custom values
+ */
+/** 
+ * Modular
+ * @author Edmund Reed | @esr360
+ * 
+ * @function get-keys
+ * @author Sam Richard
+ *
+ * @description Returns a list of keys to to pass into 
+ * the map-set-deep() function
+ *
+ * @param $keys
+ * @param $counter
+ */
+/** 
+ * Modular
+ * @author Edmund Reed | @esr360
+ * 
+ * @function map-set
+ * @author Sam Richard
+ *
+ * @param $map
+ * @param $key
+ * @param $value
+ */
+/** 
+ * Modular
+ * @author Edmund Reed | @esr360
+ * 
+ * @function map-set-deep
+ * @author Sam Richard
+ *
+ * @param $map
+ * @param $keys
+ * @param $value
+ */
+/** 
+ * Modular
+ * @author Edmund Reed | @esr360
+ * 
+ * @function map-merge-deep
+ * @author Pedr Browne
+ *
+ * @description Used to recursively merge (deep merge) two maps
+ *
+ * @param $map-old - The map which will store default configuration
+ * @param $map-new - The map which will hold custom values
+ * @param $overwrite - The map which will hold custom values
+ */
+/** 
+ * Modular
+ * @author Edmund Reed | @esr360
+ * 
+ * @function option
+ *
+ * @description Alias function to map-deep-get()
+ *
+ * @param $map
+ * @param $keys
+ */
+/** 
+ * Modular
+ * @author Edmund Reed | @esr360
+ * 
+ * @function option
+ *
+ * @description Alias function to option()
+ *
+ * @param $map
+ * @param $keys
+ */
+/** 
+ * Modular
+ * @author Edmund Reed | @esr360
+ * 
+ * @function this
+ * @description Get a value from the current module's configuration
+ * @param $options
+ */
+/**/
+.foo, [class*="foo-"] {
+  content: '.foo, [class*="foo-"]';
+  /* What we expect */
+  content: '.foo, [class*="foo-"]';
+}
+[class*="foo-"][class*="-modifier"] {
+  content: '[class*="foo-"][class*="-modifier"]';
+  /* What we expect */
+  content: '[class*="foo-"][class*="-modifier"]';
+}
+
+/**/
+/**/
+.bar, [class*="bar-"] {
+  content: '.bar, [class*="bar-"]';
+  /* What we expect */
+  content: '.bar, [class*="bar-"]';
+}
+[class*="bar-"][class*="-modifier"] {
+  content: '[class*="bar-"][class*="-modifier"]';
+  /* What we expect */
+  content: '[class*="bar-"][class*="-modifier"]';
+}
+
+#modulesConfigJSON::before {
+  content: '{"bar": {"name": "bar", "foo": true}, "foo": {"name": "foo", "foo": false}}';
+  display: block;
+  height: 0;
+  overflow: hidden;
+  width: 0;
+}
