@@ -1,5 +1,5 @@
 
-[![Modular](https://raw.githubusercontent.com/esr360/Modular/gh-pages/logo-small.png "Modular Logo")](https://github.com/esr360/Modular)
+[![Synergy](https://raw.githubusercontent.com/esr360/Synergy/gh-pages/logo-small.png "Synergy Logo")](https://github.com/esr360/Synergy)
 
 > A front-end framework for building modular, configurable and scalable projects.
 
@@ -10,7 +10,7 @@
 
 ## Overview
 
-#### Why Use Modular?
+#### Why Use Synergy?
 
 For three reasons:
 
@@ -22,13 +22,13 @@ Using BEM ([example source](http://eu.battle.net/heroes/en/)):
 panels-list__item panels-list__item--blog panels-list__item--featured panels-list__item--no-summary panels-list__item--image
 ```
 
-Using Modular:
+Using Synergy:
 
 ```css
 panels-list_item-blog-featured-noSummary-image
 ```
 
-Modular takes advantage of CSS attribute wildcard selectors. By looking for classes which contain certain strings as opposed to looking for specific classes, your markup can be much more flexible, allowing you to chain modifiers, removing the need for any repetition (i.e. no more 'button button--large button--round').
+Synergy takes advantage of CSS attribute wildcard selectors. By looking for classes which contain certain strings as opposed to looking for specific classes, your markup can be much more flexible, allowing you to chain modifiers, removing the need for any repetition (i.e. no more 'button button--large button--round').
 
 ##### Configurable Modules
 
@@ -208,7 +208,7 @@ Or you can set the header to be fixed by passing the option to the mixin when ca
 
 The header will now be fixed even without passing the modifier in the markup.
 
-Now inside your JavaScript you can do the following (assuming you are using `modular.js`):
+Now inside your JavaScript you can do the following (assuming you are using `synergy.js`):
 
 ```js
 // This will test for either the 'fixed' modifier in the markup,
@@ -231,12 +231,12 @@ var headerWrapperWidth = _modules['header']['wrapper-width'] // returns the wrap
 
 ## Installation
 
-The compiled source files can be found in the `/dist` directory. Load these into your project before you attempt to execute any Modular related code and you're good to go.
+The compiled source files can be found in the `/dist` directory. Load these into your project before you attempt to execute any Synergy related code and you're good to go.
 
 ##### Clone The Repo
 
 ```
-git clone https://github.com/esr360/Modular.git
+git clone https://github.com/esr360/Synergy.git
 ```
 
 Or...
@@ -244,10 +244,10 @@ Or...
 ##### As Git Submodule
 
 ```
-git submodule add https://github.com/esr360/Modular.git
+git submodule add https://github.com/esr360/Synergy.git
 ```
 
-###### If using modular.js:
+###### If using synergy.js:
 
 ```
 git submodule update --init --recursive
@@ -255,11 +255,11 @@ git submodule update --init --recursive
 
 ##### Using Grunt
 
-If you are using grunt, after cloning the repo run `npm-install` to install the required node modules. To compile the source files and test that Modular framework is working, run `grunt compile`. This will overwrite the files already present in the `dist` directory, which you can then use in your project. Running this task will also compile a test `.scss` file which contains a basic example module and modifier. This is just to ensure that Modular is working properly, if there are any issues the task will throw an error on your command line. The related **test** files are located in the `/test` directory. 
+If you are using grunt, after cloning the repo run `npm-install` to install the required node modules. To compile the source files and test that the Synergy framework is working, run `grunt compile`. This will overwrite the files already present in the `dist` directory, which you can then use in your project. Running this task will also compile a test `.scss` file which contains a basic example module and modifier. This is just to ensure that Synergy is working properly, if there are any issues the task will throw an error on your command line. The related **test** files are located in the `/test` directory. 
 
 ##### Requirements
 
-Modular requires **Sass 3.4**, so as of writing this unfortunately means you cannot use Libsass and must use Ruby Sass.
+Synergy requires **Sass 3.4**, so as of writing this unfortunately means you cannot use Libsass and must use Ruby Sass.
 
 ## Advanced Documentation
 
@@ -285,7 +285,7 @@ Modular requires **Sass 3.4**, so as of writing this unfortunately means you can
 * [Global Configuration](#global-configuration)
 * [Setting Up A Project](#setting-up-a-project)
 
-### modular.js
+### synergy.js
 
 * [Getting Started](#getting-started)
 * [Configuration](#configuration)
@@ -334,8 +334,8 @@ If `$modules` is not defined, it will look for a `name` value in your module's c
 // Re-define default selector type
 $selector-type: 'chain';
 
-// Import Modular
-@import "path/to/modular"
+// Import Synergy
+@import "path/to/synergy"
 
 /* Your Modules */
 ```
@@ -402,7 +402,7 @@ Because of how the selectors are generated, it is not possible to create relatin
 * reversed wording (button-header)
 * underscore (header_button)
 
-To keep things as similar to BEM as possible, Modular provies an easy way to create relating components using underscores, eg - `header_wrapper`. The `component` mixin accepts a single parameter:
+To keep things as similar to BEM as possible, Synergy provies an easy way to create relating components using underscores, eg - `header_wrapper`. The `component` mixin accepts a single parameter:
 
 * `$components` - the name of your component(s) [optional]
 
@@ -906,7 +906,7 @@ The following conditions can be passed to the mixin:
 
 ### Module Configuration
 
-As outlined in the [overview](#overview) section, Modular allows you to configure your modules with customizable options.
+As outlined in the [overview](#overview) section, Synergy allows you to configure your modules with customizable options.
 
 ```scss
 @mixin header($custom: ()) {
@@ -1046,8 +1046,8 @@ To disable the extension of settings globally by default, pass the `$extend-opti
 // Disable creation of modifiers for module settings
 $extend-options : false;
 
-// Import Modular
-@import "path/to/modular"
+// Import Synergy
+@import "path/to/synergy"
 
 /* Your Modules */
 ```
@@ -1297,8 +1297,8 @@ _theme.scss
 ##### app.scss
 
 ```scss
-// Modular
-@import "src/scss/smodular";
+// Synergy
+@import "src/scss/synergy";
 
 // Project Partials
 @import "typography";
@@ -1520,26 +1520,26 @@ _theme.scss
 
 Every configurable aspect of your project can now quickly and easily be changed from just one file, whilst retaining a completely modular architecture.
 
-### modular.js
+### synergy.js
 
 #### Getting Started
 
-So you've decided to see what this whole modular.js thing is about, great! The first thing you should know is that the man behind the magic here is [@HugoGiraudel](https://github.com/HugoGiraudel) for his project [SassyJSON](https://github.com/HugoGiraudel/SassyJSON). This is what actually outputs your Sass config to JSON format, which is how you interact with your modules in JS. Modular uses a slightly customized version of SassyJSON [available here](https://github.com/esr360/SassyJSON). SassyJSON comes included with Modular as a Git submodule. 
+So you've decided to see what this whole synergy.js thing is about, great! The first thing you should know is that the man behind the magic here is [@HugoGiraudel](https://github.com/HugoGiraudel) for his project [SassyJSON](https://github.com/HugoGiraudel/SassyJSON). This is what actually outputs your Sass config to JSON format, which is how you interact with your modules in JS. Synergy uses a slightly customized version of SassyJSON [available here](https://github.com/esr360/SassyJSON). SassyJSON comes included with Synergy as a Git submodule. 
 
-Ensure you have a copy of the forked SassyJSON in your project. If you have installed Modular as a Git submodule, you can run:
+Ensure you have a copy of the forked SassyJSON in your project. If you have installed Synergy as a Git submodule, you can run:
 
 ```
 git submodule update --init --recursive
 ```
 
-The first thing you need to do is import SassyJSON into your project, *before* Modular and any Modular related files:
+The first thing you need to do is import SassyJSON into your project, *before* Synergy and any Synergy related files:
 
 ```scss
 @import "vendor/SassyJSON/stylesheets/SassyJSON";
-@import "src/scss/modular"
+@import "src/scss/synergy"
 ```
 
-Then include `modular.js` in your project, *before* any scripts which use Modular.
+Then include `synergy.js` in your project, *before* any scripts which use Synergy.
 
 **Key Step:** Next, you need to create an element in your HTML which corresponds to the selector SassyJSON attaches to, which is `#modulesConfigJSON`, so create the following element somewhere in your markup:
 
@@ -1547,7 +1547,7 @@ Then include `modular.js` in your project, *before* any scripts which use Modula
 <div id="modulesConfigJSON"></div>
 ```
 
-This is what ties all of your configuration together between the HTML, CSS and JS. Finally, in your project's main Sass file at the end of everything (or rather, at the end of all Modular related files), add the following code:
+This is what ties all of your configuration together between the HTML, CSS and JS. Finally, in your project's main Sass file at the end of everything (or rather, at the end of all Synergy related files), add the following code:
 
 ```scss
 @if variable-exists('to-JSON') and $to-JSON {
@@ -1557,18 +1557,18 @@ This is what ties all of your configuration together between the HTML, CSS and J
 
 This function will output your configuration as JSON in your project's CSS file, which is how the JS will interact with it.
 
-And that's it, you're now ready to start using `modular.js`!
+And that's it, you're now ready to start using `synergy.js`!
 
 #### Configuration
 
-To enable JSON output of your modules' configuration, you need to pass the `$to-JSON` variable and set it to `true`. This variable should be passed before any Modular related code:
+To enable JSON output of your modules' configuration, you need to pass the `$to-JSON` variable and set it to `true`. This variable should be passed before any Synergy related code:
 
 ```scss
 // Enable JSON output
 $to-JSON : true;
 
-// Import Modular
-@import "path/to/modular"
+// Import Synergy
+@import "path/to/synergy"
 
 /* Your Modules */
 ```
@@ -1602,8 +1602,8 @@ $to-JSON : true;
 // Output JSON by default for each module
 $output-JSON: true;
 
-// Import Modular
-@import "path/to/modular"
+// Import Synergy
+@import "path/to/synergy"
 
 /* Your Modules */
 ```
@@ -1624,7 +1624,7 @@ You may not recognize all the values that are generarted; don't worry, they're j
 
 #### Usage
 
-> Whilst modular.js doesn't require jQuery, for simplicity the below examples assume Modular is used in a jQuery environment
+> Whilst synergy.js doesn't require jQuery, for simplicity the below examples assume Synergy is used in a jQuery environment
 
 It is now possible to access your module like so:
 
@@ -1649,7 +1649,7 @@ _modules['header']['height']; // returns 70px by default
 
 ##### Custom '_option()' Function
 
-Modular.js comes with a custom `_option()` function for usage on boolean options. The function will return `true` if either the option itself is set to `true`, or if your element has a `modifier` of the option name:
+Synergy.js comes with a custom `_option()` function for usage on boolean options. The function will return `true` if either the option itself is set to `true`, or if your element has a `modifier` of the option name:
 
 ```scss
 @include header((
