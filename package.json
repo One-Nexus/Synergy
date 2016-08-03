@@ -1,5 +1,6 @@
 {
   "name": "Synergy",
+  "version": "3.3.0",
   "description": "A front-end framework for building modular, configurable and scalable projects.",
   "keywords": [
     "sass",
@@ -14,7 +15,6 @@
   ],
   "homepage": "https://github.com/esr360/Synergy",
   "author": "Edmund Reed | @esr360",
-  "version": "3.3.0",
   "bugs": {
     "url": "https://github.com/esr360/Synergy/issues"
   },
