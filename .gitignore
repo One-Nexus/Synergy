@@ -1,8 +1,5 @@
-*.cfg
 .vscode
 .settings
 .sass-cache
 node_modules
-app
-pages
 test-results.css
