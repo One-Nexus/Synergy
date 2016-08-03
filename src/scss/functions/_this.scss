@@ -1,12 +1,7 @@
-/** 
- * Modular
- * @author Edmund Reed | @esr360
- * 
- * @function this
- * @description Get a value from the current module's configuration
- * @param $options
- */
-
+/// Get a value from the current module's configuration
+/// @author Edmund Reed | @esr360
+/// @group synergy
+/// @param $options
 @function this($options...) {
     @return option($config, $options...)
 }

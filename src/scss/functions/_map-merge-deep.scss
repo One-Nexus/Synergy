@@ -1,17 +1,9 @@
-/** 
- * Modular
- * @author Edmund Reed | @esr360
- * 
- * @function map-merge-deep
- * @author Pedr Browne
- *
- * @description Used to recursively merge (deep merge) two maps
- *
- * @param $map-old - The map which will store default configuration
- * @param $map-new - The map which will hold custom values
- * @param $overwrite - The map which will hold custom values
- */
-
+/// Used to recursively merge (deep merge) two maps
+/// @author Pedr Browne
+/// @group synergy
+/// @param $map-old - The map which will store default configuration
+/// @param $map-new - The map which will hold custom values
+/// @param $overwrite - The map which will hold custom values
 @function map-merge-deep($map-old, $map-new, $overwrite: true) {
 
     // Iterate through each value of the new map

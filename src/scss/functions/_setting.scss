@@ -1,15 +1,8 @@
-/** 
- * Modular
- * @author Edmund Reed | @esr360
- * 
- * @function option
- *
- * @description Alias function to option()
- *
- * @param $map
- * @param $keys
- */
-
+/// Alias function to option()
+/// @author Edmund Reed | @esr360
+/// @group synergy
+/// @param $map
+/// @param $keys
 @function setting($map, $keys...) {
     @return option($map, $keys...);
 }

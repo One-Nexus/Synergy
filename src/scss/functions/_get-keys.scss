@@ -1,17 +1,9 @@
-/** 
- * Modular
- * @author Edmund Reed | @esr360
- * 
- * @function get-keys
- * @author Sam Richard
- *
- * @description Returns a list of keys to to pass into 
- * the map-set-deep() function
- *
- * @param $keys
- * @param $counter
- */
-
+/// Returns a list of keys to to pass into the map-set-deep() function
+/// @author Sam Richard
+/// @group synergy
+/// @access public
+/// @param $keys
+/// @param $counter
 @function get-keys($keys, $counter) {
     $return: ();
     @for $i from 1 to $counter {

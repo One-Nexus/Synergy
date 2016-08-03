@@ -1,15 +1,9 @@
-/** 
- * Modular
- * @author Edmund Reed | @esr360
- * 
- * @function map-set
- * @author Sam Richard
- *
- * @param $map
- * @param $key
- * @param $value
- */
-
+/// Set a key in an existing map
+/// @author Sam Richard
+/// @group synergy
+/// @param $map
+/// @param $key
+/// @param $value
 @function map-set($map, $key, $value) {
     @return map-merge($map, ($key: $value));
 }

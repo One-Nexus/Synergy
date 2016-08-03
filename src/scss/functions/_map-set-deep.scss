@@ -1,15 +1,9 @@
-/** 
- * Modular
- * @author Edmund Reed | @esr360
- * 
- * @function map-set-deep
- * @author Sam Richard
- *
- * @param $map
- * @param $keys
- * @param $value
- */
-
+/// Set a nested key in an existing map
+/// @author Sam Richard
+/// @group synergy
+/// @param $map
+/// @param $keys
+/// @param $value
 @function map-set-deep($map, $keys, $value) {
 
     $private-sassy-maps-suppress-warnings: true !global;

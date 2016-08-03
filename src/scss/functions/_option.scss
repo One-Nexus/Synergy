@@ -1,24 +1,17 @@
-/** 
- * Modular
- * @author Edmund Reed | @esr360
- * 
- * @function option
- *
- * @description Alias function to map-deep-get()
- *
- * @param $map
- * @param $keys
- */
-
-// @TODO Why doesn't this work? :(
-//
-// @function option($map, $keys...) {
-//     @return map-deep-get($map, $keys...);
-// }
-
-@function option($map, $keys...) {
+/// Alias function to map-deep-get()
+/// @author Edmund Reed | @esr360
+/// @group synergy
+/// @param {map} $module - the module you are interested in
+/// @param {arglist} $keys - the key you are interested in
+///
+/// @todo Why doesn't this work? :(
+///
+///     @function option($map, $keys...) {
+///         @return map-deep-get($map, $keys...);
+///     }
+@function option($module, $keys...) {
     @each $key in $keys {
-        $map: map-get($map, $key);
+        $module: map-get($module, $key);
     }
-    @return $map;
+    @return $module;
 }

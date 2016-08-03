@@ -1,5 +1,6 @@
 /// Replace `$search` with `$replace` in `$string`
 /// @author Hugo Giraudel
+/// @group synergy
 /// @param {String} $string - Initial string
 /// @param {String} $search - Substring to replace
 /// @param {String} $replace ('') - New value

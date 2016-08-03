@@ -1,16 +1,10 @@
-/** 
- * Modular
- * @author Edmund Reed | @esr360
- * 
- * @function config
- *
- * @description Used to merge a module's default configuration with
- * any custom values passed to the module
- *
- * @param $map-old - The map which will store default configuration
- * @param $map-new - The map which will hold custom values
- */
-
+/// Used to merge a module's default configuration with any custom 
+/// values passed to the module
+/// @author Edmund Reed | @esr360
+/// @group synergy
+/// @access public
+/// @param {map} $map-old - The map which will store default configuration
+/// @param {map} $map-new - The map which will hold custom values
 @function config($map-old, $map-new) {
 
     $map-old: map-merge((

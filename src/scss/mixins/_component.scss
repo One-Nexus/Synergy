@@ -1,24 +1,17 @@
-/** 
- * Modular
- * @author Edmund Reed | @esr360
- * 
- * @mixin component
- *
- * @description Create a component based off the main module
- *
- * @param $components - The component or components to be used
- */
-
-//  Usage
-//
-//  @include module(header) {
-//      @include component(wrapper) {
-//          ...
-//      }
-//  }
-//
-//  <div class="header_wrapper">...</div>
-
+/// Create a component based off the main module
+///
+/// @author Edmund Reed | @esr360
+/// @group synergy
+/// @access public
+/// @param {string|list} $components - The component or components to be used
+/// @example
+///     @include module('header') {
+///         @include component('wrapper') {
+///             ...
+///         }
+///     }
+///
+///     <div class="header_wrapper">...</div>
 @mixin component($components: null) {
     
     $selectors: '[class*="#{$module}_"]';
