@@ -1,0 +1,28 @@
+{
+    "name":"Synergy",
+    "description":"A library of Sass mixins for architecting modular, configurable and scalable CSS.",
+    "version":"3.3.0",
+    "main":[
+        "src/scss._synergy.scss",
+        "src/js/_synergy.js"
+    ],
+    "keywords":[
+        "css",
+        "sass",
+        "scss",
+        "module",
+        "modular",
+        "components",
+        "scalable",
+        "front-end",
+        "front end"
+    ],
+    "homepage":"http://esr360.github.io/Synergy/",
+    "ignore":[
+        ".gitignore",
+        ".sass-cache",
+        ".node_modules",
+        "vendor",
+        "bower.json"
+    ]
+}

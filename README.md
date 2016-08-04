@@ -262,6 +262,20 @@ git submodule add https://github.com/esr360/Synergy.git
 git submodule update --init --recursive
 ```
 
+Or...
+
+##### With Bower
+
+```html
+bower install Synergy
+```
+
+###### If using modular.js:
+
+```
+git submodule update --init --recursive
+```
+
 ##### Using Grunt
 
 If you are using grunt, after cloning the repo run `npm-install` to install the required node modules. To compile the source files and test that the Synergy framework is working, run `grunt compile`. This will overwrite the files already present in the `dist` directory, which you can then use in your project. Running this task will also compile a test `.scss` file which contains a basic example module and modifier. This is just to ensure that Synergy is working properly, if there are any issues the task will throw an error on your command line. The related **test** files are located in the `/test` directory. 
@@ -1741,7 +1755,7 @@ They key part of the above code is `_modules['grid']['breakpoints'][value]`, whi
 
 #### Version 3.3.0
 
-Released: -
+Released: 5th August 2016
 
 ###### Release Notes
 
@@ -1753,10 +1767,12 @@ Released: -
 * improving `component` mixin logic and functionality
 * improving `modifier` mixin logic and functionality
 * improving JSON output by removing superfluous keys
+* adding SassDoc compatibility
+* re-adding bower support
 
 #### Version 3.2.0
 
-Released: 14th February ♥
+Released: 14th February ♥ 2016
 
 ###### Release Notes
 
