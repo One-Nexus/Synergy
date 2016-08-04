@@ -3,6 +3,13 @@
 
 [![Synergy](https://raw.githubusercontent.com/esr360/Synergy/gh-pages/logo-small.png "Synergy Logo")](https://github.com/esr360/Synergy)
 
+#### Table of Contents
+
+* [Overview](#overview)
+* [Installation](#installation)
+* [Advanced Documentation](#advanced-documentation)
+* [Changelog](#changelog)
+
 ## Overview
 
 > A front-end framework for building modular, configurable and scalable projects.
@@ -11,13 +18,6 @@
 [View Sass Documentation](http://esr360.github.io/Synergy/docs/sass)
 
 [![Kayzen - Premium HTML Theme Framework](http://skyux.com/images/kayzen-gh.png)](http://preview.themeforest.net/item/kayzen-multipurpose-html5-template/full_screen_preview/16768920)
-
-#### Table of Contents
-
-* [Overview](#overview)
-* [Installation](#installation)
-* [Advanced Documentation](#advanced-documentation)
-* [Changelog](#changelog)
 
 #### Why Use Synergy?
 
