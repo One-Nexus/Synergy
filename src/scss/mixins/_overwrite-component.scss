@@ -1,39 +1,34 @@
-/** 
- * Modular
- * @author Edmund Reed | @esr360
- * 
- * @mixin overwrite-component
- *
- * @description Overwrite an existing component when in different 
- * context, such as inside another module or component
- *
- * @param $components - The component(s) which you wish to overwrite
- * @param $is - Overwrite if moulde is certain modifier
- * @param $not - Overwrite if module is not certain modifier
- * @param $parent - The parent module of the component
- * @param $special - 'adjacent-sibling' |
- */
-
-//  Usage
-// 
-//  @include module(form) {
-//
-//      @include component(input) {
-//          ...
-//      }
-//
-//      @include modifier(html5) {
-//          @include overwrite-component(input) {
-//              ...
-//          }
-//      }
-//
-//  }
-//
-//  <div class="form-html5">
-//      <input class="form_input" type="text" />
-//  </div>
-
+/// Overwrite an existing component when in different context, such as 
+/// inside another module or component
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group mixins
+/// @access public
+///
+/// @param {string|list} $components - The component(s) which you wish to overwrite
+/// @param {string|list} $is - Overwrite if moulde is certain modifier
+/// @param {string|list} $not - Overwrite if module is not certain modifier
+/// @param {string} $parent - The parent module of the component
+/// @param {string} $special - Pass a special contextual option
+///
+/// @example
+///     @include module('form') {
+///
+///         @include component('input') {
+///             ...
+///         }
+///
+///         @include modifier('html5') {
+///             @include overwrite-component('input') {
+///                 ...
+///             }
+///         }
+///
+///     }
+///
+///     <div class="form-html5">
+///         <input class="form_input" type="text" />
+///     </div>
 @mixin overwrite-component($components, $parent: null, $is: null, $not: null, $special: null) {
     $module: if($parent != null, $parent, $module);
     $selectors: ();
@@ -68,7 +63,13 @@
     }
 }
 
-// Alias for multiple components
+/// Alias for overwrite-component() mixin
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group mixins
+/// @access public
+///
+/// @param {arglist} $args - The arguments you wish to pass
 @mixin overwrite-components($args...) {
     @include overwrite-component($args...) {
         @content;

@@ -1,33 +1,29 @@
-/** 
- * Modular
- * @author Edmund Reed | @esr360
- * 
- * @mixin extend
- *
- * @description Extend one or more modifiers of a module to create
- * a new modifier combining the ones you pass
- *
- * @param $modifiers - The modifiers which you wish to combine
- * @param $parent    - The parent module if not current one
- * @param $core      - Extend the core '.module' styles?
- */
-
-//  Usage
-//
-//  @include module(button) {
-//
-//      @include modifier(round)   {...}
-//      @include modifier(large)   {...}
-//      @include modifier(success) {...}
-//
-//      @include modifier(primary) {
-//          @include extend((round, large, success));
-//      }	
-//
-//  }
-//
-//  <div class="button-primary">...</div>
-
+/// Extend one or more modifiers of a module to create a new modifier 
+/// combining the ones you pass
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group mixins
+/// @access public
+///
+/// @param {string|list} $modifiers [null] - The modifiers which you wish to combine
+/// @param {string} $parent [null] - The parent module if not current one
+/// @param {bool} $core [false] - Extend the core '.module' styles?
+///
+/// @example
+///
+///     @include module(button) {
+///
+///         @include modifier('round')   {...}
+///         @include modifier('large')   {...}
+///         @include modifier('success') {...}
+///
+///         @include modifier('primary') {
+///             @include extend(('round', 'large', 'success'));
+///         }	
+///
+///     }
+///
+///     <div class="button-primary">...</div>
 @mixin extend($modifiers: null, $parent: null, $core: false) {
     @if $core {
         @extend .#{$parent}
@@ -40,9 +36,7 @@
             @extend [class*="#{$selector}-"][class*="-#{$modifier}"];
         } @else if type-of($modifier) == list {
             $selectors: if(
-                $parent,
-                ('[class*="#{$parent}-"]'),
-                ('[class*="#{$module}-"]')
+                $parent, ('[class*="#{$parent}-"]'), ('[class*="#{$module}-"]')
             );
             @each $item in $modifier {
                 $selectors: join($selectors, '[class*="-#{$item}"]', comma);

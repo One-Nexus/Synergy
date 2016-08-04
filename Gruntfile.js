@@ -54,6 +54,15 @@ module.exports = function(grunt) {
                 }
             } 
         },
+
+        sassdoc: {
+            default: {
+                src: 'src/scss',
+                options: {
+                    dest: 'docs/sass'
+                }
+            },
+        },
         
         watch: {
             js: {
@@ -65,7 +74,11 @@ module.exports = function(grunt) {
             },
             scss: {
                 files: 'src/scss/**/*.scss',
-                tasks: ['concat:scss', 'notify:scss'],
+                tasks: [
+                    'concat:scss',
+                    'sassdoc', 
+                    'notify:scss'
+                ],
                 options: {
                     spawn: false
                 }
@@ -106,6 +119,7 @@ module.exports = function(grunt) {
         'clean',
         'concat',
         'sass',
+        'sassdoc',
         'notify:dist'
     ]);
     
@@ -118,5 +132,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-notify');
     grunt.loadNpmTasks('grunt-scss-lint');
+    grunt.loadNpmTasks('grunt-sassdoc');
 
 };

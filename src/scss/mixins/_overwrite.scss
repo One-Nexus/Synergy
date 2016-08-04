@@ -1,32 +1,27 @@
-/** 
- * Modular
- * @author Edmund Reed | @esr360
- * 
- * @mixin overwrite
- *
- * @description Overwrite an existing module when in different 
- * context, such as inside another module
- *
- * @param $modules - The module(s) which you wish to overwrite
- * @param $is - Overwrite if moulde is certain modifier
- * @param $not - Overwrite if module is not certain modifier
- * @param $type - 'static' | 'chain' | 'flex
- * @param $special - 'adjacent-sibling' | 'general-sibling'
- */
-
-//  Usage
-//
-//  @include module(header) {
-//      @include overwrite(logo) {
-//          ...
-//      }
-//  }
-//
-//  <div class="header">
-//      <div class="logo">...</div>
-//  </div>
-
-@mixin overwrite($modules: map-get($config, name), $type: $selector-type, $is: null, $not: null, $special: null) {
+/// Overwrite an existing module when in different context, such as 
+/// inside another module
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group mixins
+/// @access public
+///
+/// @param {string|list} $modules - The module(s) which you wish to overwrite
+/// @param {string|list} $is - Overwrite if moulde is certain modifier(s)
+/// @param {string|list} $not - Overwrite if module is not certain modifier(s)
+/// @param {string} $type - Set what type the module has
+/// @param {string} $special - Pass a special contextual option
+///
+/// @example
+///     @include module('header') {
+///         @include overwrite('logo') {
+///             ...
+///         }
+///     }
+///
+///     <div class="header">
+///         <div class="logo">...</div>
+///     </div>
+@mixin overwrite($modules: map-get($config, 'name'), $type: $selector-type, $is: null, $not: null, $special: null) {
     $selectors: ();
     @if $is {
         $type: 'chain';

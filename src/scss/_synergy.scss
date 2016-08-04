@@ -10,12 +10,13 @@
 @import "mixins/option";
 @import "mixins/value";
 
-@import "functions/config";
 @import "functions/get-keys";
 @import "functions/map-set";
 @import "functions/map-set-deep";
 @import "functions/map-merge-deep";
-@import "functions/option";
-@import "functions/setting";
 @import "functions/string-replace";
-@import "functions/this";
+
+@import "utilities/config";
+@import "utilities/option";
+@import "utilities/setting";
+@import "utilities/this";

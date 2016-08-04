@@ -1,35 +1,29 @@
-/** 
- * Modular
- * @author Edmund Reed | @esr360
- * 
- * @mixin option
- *
- * @description Apply styles to a module if a defined option 
- * returns true
- *
- * @param $option - The option which you wish to test against
- */
-
-//  Usage
-//
-//  @mixin billboard($custom: ()) {
-//
-//      $billboard: config((
-//          full-screen : false
-//      ), $custom);
-//
-//      @include module(billboard) {
-//          @include option(full-screen) {
-//              ...
-//          }
-//      }
-//
-//  }
-//
-//  @include billboard: ((
-//      full-screen : true
-//  ));
-
+/// Apply styles to a module if a passed option returns true
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group mixins
+/// @access public
+///
+/// @param {string} $option - The option which you wish to test against
+///
+/// @example
+///     @mixin billboard($custom: ()) {
+///
+///         $billboard: config((
+///             full-screen : false
+///         ), $custom);
+///
+///         @include module('billboard') {
+///             @include option('full-screen') {
+///                 ...
+///             }
+///         }
+///
+///     }
+///
+///     @include billboard: ((
+///         full-screen : true
+///     ));
 @mixin option($option) {
     $option: $option !global;
     $enabled: if(

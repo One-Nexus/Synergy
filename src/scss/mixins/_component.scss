@@ -1,10 +1,13 @@
 /// Create a component based off the main module
 ///
-/// @author Edmund Reed | @esr360
-/// @group synergy
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group mixins
 /// @access public
+///
 /// @param {string|list} $components - The component or components to be used
+///
 /// @example
+///
 ///     @include module('header') {
 ///         @include component('wrapper') {
 ///             ...
@@ -29,21 +32,17 @@
         @each $component in $components {           
             // Create the naked class selectors   
             $selectors: if(
-                nth(&, 1) + unquote('') == '.#{$module}',
-                (
+                nth(&, 1) + unquote('') == '.#{$module}', (
                     join($selectors, '.#{$module}_#{$component}', comma)
-                ),
-                (
+                ), (
                     join($selectors, '.#{$parents}_#{$component}', comma)
                 )
             );         
             // Create the attribute wildcard selectors      
             $selectors: if(
-                nth(&, 1) + unquote('') == '.#{$module}',
-                (
+                nth(&, 1) + unquote('') == '.#{$module}', (
                     join($selectors, '[class*="#{$module}_#{$component}-"]', comma)
-                ),
-                (
+                ), (
                     join($selectors, '[class*="#{$parents}_#{$component}-"]', comma)
                 )
             );
@@ -59,9 +58,15 @@
 
 }
 
-// Alias for multiple components
-@mixin components($sub-components) {
-    @include component($sub-components) {
+/// Alias for component() mixin
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group mixins
+/// @access public
+///
+/// @param {string|list} $components - The component(s) you wish to create
+@mixin components($components) {
+    @include component($components) {
         @content;
     }
 }

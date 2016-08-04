@@ -1,23 +1,18 @@
-/** 
- * Modular
- * @author Edmund Reed | @esr360
- * 
- * @mixin module
- *
- * @description Create a new module
- *
- * @param $modules - The module(s) you wish to create
- * @param $type    - 'static' | 'chain' | 'flex' | 'data'
- */
-
-//  Usage
-//
-//  @include module(header) {
-//      ...
-//  }
-//
-//  <div class="header">...</div>
-
+/// Create a new module
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group mixins
+/// @access public
+///
+/// @param {string|list} $modules - The module(s) you wish to create
+/// @param {string} $type - Determine module type
+///
+/// @example
+///     @include module('header') {
+///         ...
+///     }
+///
+///     <div class="header">...</div>
 @mixin module(
     $modules: if(variable-exists('config'), (map-get($config, 'name')), ''), 
     $type: if(variable-exists('config'), (map-get($config, 'selector-type')), $selector-type)
@@ -40,7 +35,14 @@
     }
 }
 
-// Alias for multiple modules
+/// Alias for module() mixin
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group Synergy
+/// @access public
+///
+/// @param {string|list} $modules - The module(s) you wish to create
+/// @param {string} $type - Determine module type
 @mixin modules($modules, $type: $selector-type) {
     @include module($modules, $type) {
         @content;

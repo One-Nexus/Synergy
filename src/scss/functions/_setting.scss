@@ -1,8 +1,0 @@
-/// Alias function to option()
-/// @author Edmund Reed | @esr360
-/// @group synergy
-/// @param $map
-/// @param $keys
-@function setting($map, $keys...) {
-    @return option($map, $keys...);
-}

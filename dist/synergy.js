@@ -82,7 +82,7 @@ for (var moduleCamelCase in modulesCamelCase) {
     moduleNamesCamelCase.push(modulesCamelCase[moduleCamelCase].name);
 }
 
-for (var i = 0; i < moduleNames.length; i++) {
+for (var i = 0, moduleNamesLength = moduleNames.length; i < moduleNamesLength; i++) {
     window['_' + moduleNamesCamelCase[i]] = '.' + moduleNames[i] + ', [class*="' + moduleNames[i] + '-"]' ;
 }
 /**

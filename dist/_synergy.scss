@@ -15,26 +15,21 @@ $_modules : () !default;
 
 // The variable to hold a single module (do not edit)
 $module : null !default;
-/** 
- * Modular
- * @author Edmund Reed | @esr360
- * 
- * @mixin module
- *
- * @description Create a new module
- *
- * @param $modules - The module(s) you wish to create
- * @param $type    - 'static' | 'chain' | 'flex' | 'data'
- */
-
-//  Usage
-//
-//  @include module(header) {
-//      ...
-//  }
-//
-//  <div class="header">...</div>
-
+/// Create a new module
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group Synergy
+/// @access public
+///
+/// @param {string|list} $modules - The module(s) you wish to create
+/// @param {string} $type - Determine module type
+///
+/// @example
+///     @include module('header') {
+///         ...
+///     }
+///
+///     <div class="header">...</div>
 @mixin module(
     $modules: if(variable-exists('config'), (map-get($config, 'name')), ''), 
     $type: if(variable-exists('config'), (map-get($config, 'selector-type')), $selector-type)
@@ -57,33 +52,35 @@ $module : null !default;
     }
 }
 
-// Alias for multiple modules
+/// Alias for module() mixin
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group Synergy
+/// @access public
+///
+/// @param {string|list} $modules - The module(s) you wish to create
+/// @param {string} $type - Determine module type
 @mixin modules($modules, $type: $selector-type) {
     @include module($modules, $type) {
         @content;
     }
 }
-/** 
- * Modular
- * @author Edmund Reed | @esr360
- * 
- * @mixin component
- *
- * @description Create a component based off the main module
- *
- * @param $components - The component or components to be used
- */
-
-//  Usage
-//
-//  @include module(header) {
-//      @include component(wrapper) {
-//          ...
-//      }
-//  }
-//
-//  <div class="header_wrapper">...</div>
-
+/// Create a component based off the main module
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group Synergy
+/// @access public
+///
+/// @param {string|list} $components - The component or components to be used
+///
+/// @example
+///     @include module('header') {
+///         @include component('wrapper') {
+///             ...
+///         }
+///     }
+///
+///     <div class="header_wrapper">...</div>
 @mixin component($components: null) {
     
     $selectors: '[class*="#{$module}_"]';
@@ -137,28 +134,24 @@ $module : null !default;
         @content;
     }
 }
-/** 
- * Modular
- * @author Edmund Reed | @esr360
- * 
- * @mixin modifier
- *
- * @description Create a modifier for a module
- *
- * @param $modifiers - The modifier(s) which you wish to create
- * @param $special   - 'not' | 
- */
-
-//  Usage
-//
-//  @include module(button) {
-//      @include modifier(large) {
-//          ...
-//      }
-//  }
-//
-//  <div class="button-large">...</div>
-
+/// Create a modifier for a module
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group Synergy
+/// @access public
+///
+/// @param {string|list} $modifiers  - The modifier(s) which you wish to create
+/// @param {string} $special [null] - Add special contextual options to modifier
+/// @param {bool} $glue ['-'] - Desired modifier separator/glue
+///
+/// @example
+///     @include module('button') {
+///         @include modifier('large') {
+///             ...
+///         }
+///     }
+///
+///     <div class="button-large">...</div>
 @mixin modifier($modifiers, $special: null, $glue: '-') {
     
     $selectors: &;
@@ -197,35 +190,30 @@ $module : null !default;
         @content;
     }
 }
-/** 
- * Modular
- * @author Edmund Reed | @esr360
- * 
- * @mixin overwrite
- *
- * @description Overwrite an existing module when in different 
- * context, such as inside another module
- *
- * @param $modules - The module(s) which you wish to overwrite
- * @param $is - Overwrite if moulde is certain modifier
- * @param $not - Overwrite if module is not certain modifier
- * @param $type - 'static' | 'chain' | 'flex
- * @param $special - 'adjacent-sibling' | 'general-sibling'
- */
-
-//  Usage
-//
-//  @include module(header) {
-//      @include overwrite(logo) {
-//          ...
-//      }
-//  }
-//
-//  <div class="header">
-//      <div class="logo">...</div>
-//  </div>
-
-@mixin overwrite($modules: map-get($config, name), $type: $selector-type, $is: null, $not: null, $special: null) {
+/// Overwrite an existing module when in different context, such as 
+/// inside another module
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group Synergy
+/// @access public
+///
+/// @param {string|list} $modules - The module(s) which you wish to overwrite
+/// @param {string|list} $is - Overwrite if moulde is certain modifier(s)
+/// @param {string|list} $not - Overwrite if module is not certain modifier(s)
+/// @param {string} $type - Set what type the module has
+/// @param {string} $special - Pass a special contextual option
+///
+/// @example
+///     @include module('header') {
+///         @include overwrite('logo') {
+///             ...
+///         }
+///     }
+///
+///     <div class="header">
+///         <div class="logo">...</div>
+///     </div>
+@mixin overwrite($modules: map-get($config, 'name'), $type: $selector-type, $is: null, $not: null, $special: null) {
     $selectors: ();
     @if $is {
         $type: 'chain';
@@ -279,42 +267,37 @@ $module : null !default;
         }
     }
 }
-/** 
- * Modular
- * @author Edmund Reed | @esr360
- * 
- * @mixin overwrite-component
- *
- * @description Overwrite an existing component when in different 
- * context, such as inside another module or component
- *
- * @param $components - The component(s) which you wish to overwrite
- * @param $is - Overwrite if moulde is certain modifier
- * @param $not - Overwrite if module is not certain modifier
- * @param $parent - The parent module of the component
- * @param $special - 'adjacent-sibling' |
- */
-
-//  Usage
-// 
-//  @include module(form) {
-//
-//      @include component(input) {
-//          ...
-//      }
-//
-//      @include modifier(html5) {
-//          @include overwrite-component(input) {
-//              ...
-//          }
-//      }
-//
-//  }
-//
-//  <div class="form-html5">
-//      <input class="form_input" type="text" />
-//  </div>
-
+/// Overwrite an existing component when in different context, such as 
+/// inside another module or component
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group Synergy
+/// @access public
+///
+/// @param {string|list} $components - The component(s) which you wish to overwrite
+/// @param {string|list} $is - Overwrite if moulde is certain modifier
+/// @param {string|list} $not - Overwrite if module is not certain modifier
+/// @param {string} $parent - The parent module of the component
+/// @param {string} $special - Pass a special contextual option
+///
+/// @example
+///     @include module('form') {
+///
+///         @include component('input') {
+///             ...
+///         }
+///
+///         @include modifier('html5') {
+///             @include overwrite-component('input') {
+///                 ...
+///             }
+///         }
+///
+///     }
+///
+///     <div class="form-html5">
+///         <input class="form_input" type="text" />
+///     </div>
 @mixin overwrite-component($components, $parent: null, $is: null, $not: null, $special: null) {
     $module: if($parent != null, $parent, $module);
     $selectors: ();
@@ -355,36 +338,31 @@ $module : null !default;
         @content;
     }
 }
-/** 
- * Modular
- * @author Edmund Reed | @esr360
- * 
- * @mixin extend
- *
- * @description Extend one or more modifiers of a module to create
- * a new modifier combining the ones you pass
- *
- * @param $modifiers - The modifiers which you wish to combine
- * @param $parent    - The parent module if not current one
- * @param $core      - Extend the core '.module' styles?
- */
-
-//  Usage
-//
-//  @include module(button) {
-//
-//      @include modifier(round)   {...}
-//      @include modifier(large)   {...}
-//      @include modifier(success) {...}
-//
-//      @include modifier(primary) {
-//          @include extend((round, large, success));
-//      }	
-//
-//  }
-//
-//  <div class="button-primary">...</div>
-
+/// Extend one or more modifiers of a module to create a new modifier 
+/// combining the ones you pass
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group Synergy
+/// @access public
+///
+/// @param {string|list} $modifiers [null] - The modifiers which you wish to combine
+/// @param {string} $parent [null] - The parent module if not current one
+/// @param {bool} $core [false] - Extend the core '.module' styles?
+///
+/// @example
+///     @include module(button) {
+///
+///         @include modifier('round')   {...}
+///         @include modifier('large')   {...}
+///         @include modifier('success') {...}
+///
+///         @include modifier('primary') {
+///             @include extend(('round', 'large', 'success'));
+///         }	
+///
+///     }
+///
+///     <div class="button-primary">...</div>
 @mixin extend($modifiers: null, $parent: null, $core: false) {
     @if $core {
         @extend .#{$parent}
@@ -408,18 +386,12 @@ $module : null !default;
         }
     }
 }
-/** 
- * Modular
- * @author Edmund Reed | @esr360
- * 
- * @mixin context
- *
- * @description Apply styles to a component when certain conditions
- * are met
- *
- * @param $context - The context you wish to use
- */
-
+/// Apply styles to a component when certain conditions are met
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group Synergy
+/// @access public
+/// @param {string} $context - The context you wish to use
 @mixin context($context) {
     $child-selectors: &;
     $selectors: ();
@@ -443,38 +415,32 @@ $module : null !default;
         }
     }
 }
-/** 
- * Modular
- * @author Edmund Reed | @esr360
- * 
- * @mixin option
- *
- * @description Apply styles to a module if a defined option 
- * returns true
- *
- * @param $option - The option which you wish to test against
- */
-
-//  Usage
-//
-//  @mixin billboard($custom: ()) {
-//
-//      $billboard: config((
-//          full-screen : false
-//      ), $custom);
-//
-//      @include module(billboard) {
-//          @include option(full-screen) {
-//              ...
-//          }
-//      }
-//
-//  }
-//
-//  @include billboard: ((
-//      full-screen : true
-//  ));
-
+/// Apply styles to a module if a passed option returns true
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group Synergy
+/// @access public
+///
+/// @param {string} $option - The option which you wish to test against
+///
+/// @example
+///     @mixin billboard($custom: ()) {
+///
+///         $billboard: config((
+///             full-screen : false
+///         ), $custom);
+///
+///         @include module('billboard') {
+///             @include option('full-screen') {
+///                 ...
+///             }
+///         }
+///
+///     }
+///
+///     @include billboard: ((
+///         full-screen : true
+///     ));
 @mixin option($option) {
     $option: $option !global;
     $enabled: if(
@@ -489,41 +455,35 @@ $module : null !default;
         @content;
     }
 }
-/** 
- * Modular
- * @author Edmund Reed | @esr360
- * 
- * @mixin value
- *
- * @description Apply styles when a defined option is a particular
- * value
- *
- * @param $setting - The setting/option you are targetting
- * @param $value   - The value you wish to apply styles to
- */
-
-//  Usage
-//
-//  @mixin header($custom: ()) {
-//
-//      $header: config((
-//          side : false
-//      ), $custom);
-//
-//      @include module(header) {
-//          @include option(side) {
-//              @include value(left) {
-//                  ...
-//              }
-//          }
-//      }
-//
-//  }
-//
-//  @include header: ((
-//      side : left
-//  ));
-
+/// Apply styles when a defined option is a particular value
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group Synergy
+/// @access public
+///
+/// @param $setting - The setting/option you are targetting
+/// @param $value - The value you wish to apply styles to
+///
+/// @example
+///     @mixin header($custom: ()) {
+///
+///         $header: config((
+///             side : false
+///         ), $custom);
+///
+///         @include module(header) {
+///             @include option(side) {
+///                 @include value(left) {
+///                     ...
+///                 }
+///             }
+///         }
+///
+///     }
+///
+///     @include header: ((
+///         side : left
+///     ));
 @mixin value($setting: 'enabled', $value: true) {
     $modifier: if(
         $setting == 'enabled', $value, $setting
@@ -539,19 +499,13 @@ $module : null !default;
         @content;
     }
 }
-/** 
- * Modular
- * @author Edmund Reed | @esr360
- * 
- * @function config
- *
- * @description Used to merge a module's default configuration with
- * any custom values passed to the module
- *
- * @param $map-old - The map which will store default configuration
- * @param $map-new - The map which will hold custom values
- */
-
+/// Used to merge a module's default configuration with any custom 
+/// values passed to the module
+/// @author Edmund Reed | @esr360
+/// @group synergy
+/// @access public
+/// @param {map} $map-old - The map which will store default configuration
+/// @param {map} $map-new - The map which will hold custom values
 @function config($map-old, $map-new) {
 
     $map-old: map-merge((
@@ -581,33 +535,21 @@ $module : null !default;
     @return $map-old;
 
 }
-/** 
- * Modular
- * @author Edmund Reed | @esr360
- * 
- * @function map-set
- * @author Sam Richard
- *
- * @param $map
- * @param $key
- * @param $value
- */
-
+/// Set a key in an existing map
+/// @author Sam Richard
+/// @group synergy
+/// @param $map
+/// @param $key
+/// @param $value
 @function map-set($map, $key, $value) {
     @return map-merge($map, ($key: $value));
 }
-/** 
- * Modular
- * @author Edmund Reed | @esr360
- * 
- * @function map-set-deep
- * @author Sam Richard
- *
- * @param $map
- * @param $keys
- * @param $value
- */
-
+/// Set a nested key in an existing map
+/// @author Sam Richard
+/// @group synergy
+/// @param $map
+/// @param $keys
+/// @param $value
 @function map-set-deep($map, $keys, $value) {
 
     $private-sassy-maps-suppress-warnings: true !global;
@@ -651,20 +593,12 @@ $module : null !default;
     @return $map;
 
 }
-/** 
- * Modular
- * @author Edmund Reed | @esr360
- * 
- * @function map-merge-deep
- * @author Pedr Browne
- *
- * @description Used to recursively merge (deep merge) two maps
- *
- * @param $map-old - The map which will store default configuration
- * @param $map-new - The map which will hold custom values
- * @param $overwrite - The map which will hold custom values
- */
-
+/// Used to recursively merge (deep merge) two maps
+/// @author Pedr Browne
+/// @group synergy
+/// @param $map-old - The map which will store default configuration
+/// @param $map-new - The map which will hold custom values
+/// @param $overwrite - The map which will hold custom values
 @function map-merge-deep($map-old, $map-new, $overwrite: true) {
 
     // Iterate through each value of the new map
@@ -692,54 +626,35 @@ $module : null !default;
     @return $map-old;
 
 }
-/** 
- * Modular
- * @author Edmund Reed | @esr360
- * 
- * @function option
- *
- * @description Alias function to map-deep-get()
- *
- * @param $map
- * @param $keys
- */
-
-// @TODO Why doesn't this work? :(
-//
-// @function option($map, $keys...) {
-//     @return map-deep-get($map, $keys...);
-// }
-
-@function option($map, $keys...) {
+/// Alias function to map-deep-get()
+/// @author Edmund Reed | @esr360
+/// @group synergy
+/// @param {map} $module - the module you are interested in
+/// @param {arglist} $keys - the key you are interested in
+///
+/// @todo Why doesn't this work? :(
+///
+///     @function option($map, $keys...) {
+///         @return map-deep-get($map, $keys...);
+///     }
+@function option($module, $keys...) {
     @each $key in $keys {
-        $map: map-get($map, $key);
+        $module: map-get($module, $key);
     }
-    @return $map;
+    @return $module;
 }
-/** 
- * Modular
- * @author Edmund Reed | @esr360
- * 
- * @function option
- *
- * @description Alias function to option()
- *
- * @param $map
- * @param $keys
- */
-
+/// Alias function to option()
+/// @author Edmund Reed | @esr360
+/// @group synergy
+/// @param $map
+/// @param $keys
 @function setting($map, $keys...) {
     @return option($map, $keys...);
 }
-/** 
- * Modular
- * @author Edmund Reed | @esr360
- * 
- * @function this
- * @description Get a value from the current module's configuration
- * @param $options
- */
-
+/// Get a value from the current module's configuration
+/// @author Edmund Reed | @esr360
+/// @group synergy
+/// @param $options
 @function this($options...) {
     @return option($config, $options...)
 }

@@ -1,15 +1,10 @@
-/** 
- * Modular
- * @author Edmund Reed | @esr360
- * 
- * @mixin context
- *
- * @description Apply styles to a component when certain conditions
- * are met
- *
- * @param $context - The context you wish to use
- */
-
+/// Apply styles to a component when certain conditions are met
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group mixins
+/// @access public
+///
+/// @param {string} $context - The context you wish to use
 @mixin context($context) {
     $child-selectors: &;
     $selectors: ();

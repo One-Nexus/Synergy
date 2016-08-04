@@ -30,6 +30,7 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-notify": "^0.4.1",
     "grunt-sass": "^1.2.0-beta",
+    "grunt-sassdoc": "^2.0.2",
     "grunt-scss-lint": "^0.3.8"
   }
 }

@@ -7,7 +7,7 @@ $output-JSON : false !default;
 // Set the default selector type (flex | chain | static)
 $selector-type : 'flex' !default;
 
-// Extend each option as a modifier by default?
+// Extend each module option as a modifier by default?
 $extend-options : true !default;
  
  // The variable which will store all module's configuration (do not edit)

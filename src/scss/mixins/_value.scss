@@ -1,38 +1,33 @@
-/** 
- * Modular
- * @author Edmund Reed | @esr360
- * 
- * @mixin value
- *
- * @description Apply styles when a defined option is a particular
- * value
- *
- * @param $setting - The setting/option you are targetting
- * @param $value   - The value you wish to apply styles to
- */
-
-//  Usage
-//
-//  @mixin header($custom: ()) {
-//
-//      $header: config((
-//          side : false
-//      ), $custom);
-//
-//      @include module(header) {
-//          @include option(side) {
-//              @include value(left) {
-//                  ...
-//              }
-//          }
-//      }
-//
-//  }
-//
-//  @include header: ((
-//      side : left
-//  ));
-
+/// Apply styles when a defined option is a particular value
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group mixins
+/// @access public
+///
+/// @param $setting - The setting/option you are targetting
+/// @param $value - The value you wish to apply styles to
+///
+/// @example
+///
+///     @mixin header($custom: ()) {
+///
+///         $header: config((
+///             side : false
+///         ), $custom);
+///
+///         @include module(header) {
+///             @include option(side) {
+///                 @include value(left) {
+///                     ...
+///                 }
+///             }
+///         }
+///
+///     }
+///
+///     @include header: ((
+///         side : left
+///     ));
 @mixin value($setting: 'enabled', $value: true) {
     $modifier: if(
         $setting == 'enabled', $value, $setting

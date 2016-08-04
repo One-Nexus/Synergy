@@ -1,25 +1,21 @@
-/** 
- * Modular
- * @author Edmund Reed | @esr360
- * 
- * @mixin modifier
- *
- * @description Create a modifier for a module
- *
- * @param $modifiers - The modifier(s) which you wish to create
- * @param $special   - 'not' | 
- */
-
-//  Usage
-//
-//  @include module(button) {
-//      @include modifier(large) {
-//          ...
-//      }
-//  }
-//
-//  <div class="button-large">...</div>
-
+/// Create a modifier for a module
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group mixins
+/// @access public
+///
+/// @param {string|list} $modifiers  - The modifier(s) which you wish to create
+/// @param {string} $special [null] - Add special contextual options to modifier
+/// @param {bool} $glue ['-'] - Desired modifier separator/glue
+///
+/// @example
+///     @include module('button') {
+///         @include modifier('large') {
+///             ...
+///         }
+///     }
+///
+///     <div class="button-large">...</div>
 @mixin modifier($modifiers, $special: null, $glue: '-') {
     
     $selectors: &;
@@ -52,7 +48,13 @@
 
 } // modifier()
 
-// Alias for multiple modifiers
+/// Alias for modifier() mixin
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group mixins
+/// @access public
+///
+/// @param {string|list} $modifiers - The modifier(s) you wish to create
 @mixin modifiers($modifiers) {
     @include modifier($modifiers) {
         @content;
