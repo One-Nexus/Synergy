@@ -1,0 +1,62 @@
+/// Create a modifier for a module
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group Synergy
+/// @access public
+///
+/// @param {string|list} $modifiers  - The modifier(s) which you wish to create
+/// @param {string} $special [null] - Add special contextual options to modifier
+/// @param {bool} $glue ['-'] - Desired modifier separator/glue
+///
+/// @example
+///     @include module('button') {
+///         @include modifier('large') {
+///             ...
+///         }
+///     }
+///
+///     <div class="button-large">...</div>
+@mixin modifier($modifiers, $special: null, $glue: '-') {
+    
+    $selectors: &;
+    
+    @if str-index(inspect(&), '.#{$module}') {
+        @if (variable-exists('config') and map-get($config, 'selector-type') == 'flex') 
+        or (not variable-exists('config') and $selector-type == 'flex') {
+            $selectors: ();
+            @for $i from 1 through length(&) {
+                @if $i % 2 == 0 {
+                    $selectors: append($selectors, nth(&, $i), comma);
+                }
+            }
+        }
+    }
+    
+    @at-root #{$selectors} {
+        $modifier-selectors: ();
+        @each $modifier in $modifiers {
+            @if $special == "not" {
+                $modifier-selectors: join($modifier-selectors, '&:not([class*="#{$glue}#{$modifier}"])', comma);
+            } @else {
+                $modifier-selectors: join($modifier-selectors, '&[class*="#{$glue}#{$modifier}"]', comma);
+            }
+        }
+        #{$modifier-selectors} {
+            @content;
+        }
+    }
+
+} // modifier()
+
+/// Alias for modifier() mixin
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group mixins
+/// @access public
+///
+/// @param {string|list} $modifiers - The modifier(s) you wish to create
+@mixin modifiers($modifiers) {
+    @include modifier($modifiers) {
+        @content;
+    }
+}

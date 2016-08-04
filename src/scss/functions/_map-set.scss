@@ -1,0 +1,11 @@
+/// Set a key in an existing map
+///
+/// @author Sam Richard
+/// @group Synergy
+///
+/// @param $map
+/// @param $key
+/// @param $value
+@function map-set($map, $key, $value) {
+    @return map-merge($map, ($key: $value));
+}

@@ -1,0 +1,10 @@
+/// Get a value from the current module's configuration
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group utilities
+/// @access public
+///
+/// @param {arglist} $options
+@function this($options...) {
+    @return option($config, $options...)
+}

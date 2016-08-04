@@ -1,0 +1,40 @@
+/// Apply styles to a module if a passed option returns true
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group Synergy
+/// @access public
+///
+/// @param {string} $option - The option which you wish to test against
+///
+/// @example
+///     @mixin billboard($custom: ()) {
+///
+///         $billboard: config((
+///             full-screen : false
+///         ), $custom);
+///
+///         @include module('billboard') {
+///             @include option('full-screen') {
+///                 ...
+///             }
+///         }
+///
+///     }
+///
+///     @include billboard: ((
+///         full-screen : true
+///     ));
+@mixin option($option) {
+    $option: $option !global;
+    $enabled: if(
+        (type-of(map-get($config, $option)) == bool and map-get($config, $option) != false) or
+        (type-of(map-get($config, $option)) == map and map-get(map-get($config, $option), 'enabled') != false),
+        true, false
+    );
+    @if $enabled {
+        @include extend($option);
+    }
+    @include modifier($option) {
+        @content;
+    }
+}
