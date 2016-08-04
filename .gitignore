@@ -2,5 +2,5 @@
 .settings
 .sass-cache
 node_modules
-test-results.css
 docs
+test-results.css

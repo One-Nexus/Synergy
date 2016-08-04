@@ -1,7 +1,9 @@
 /// Returns a list of keys to to pass into the map-set-deep() function
+///
 /// @author Sam Richard
-/// @group functions
+/// @group Synergy
 /// @access public
+///
 /// @param $keys
 /// @param $counter
 @function get-keys($keys, $counter) {
