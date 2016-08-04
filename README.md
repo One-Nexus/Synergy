@@ -19,8 +19,6 @@
 * [Advanced Documentation](#advanced-documentation)
 * [Changelog](#changelog)
 
-## Overview
-
 #### Why Use Synergy?
 
 For three reasons:
