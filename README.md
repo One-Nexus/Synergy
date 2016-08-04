@@ -1,7 +1,8 @@
-
 [![Synergy](https://raw.githubusercontent.com/esr360/Synergy/gh-pages/logo-small.png "Synergy Logo")](https://github.com/esr360/Synergy)
 
 > A front-end framework for building modular, configurable and scalable projects.
+
+[![Kayzen - Premium HTML Theme Framework](http://skyux.com/images/kayzen-gh.png)](http://preview.themeforest.net/item/kayzen-multipurpose-html5-template/full_screen_preview/16768920)
 
 * [Overview](#overview)
 * [Installation](#installation)
