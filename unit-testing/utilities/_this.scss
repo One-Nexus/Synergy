@@ -1,11 +1,11 @@
+@mixin foo($custom: ()) {
+    $foo: config((
+        'foo' : ('bar' : false)
+    ), $custom);
+}
+
 @include test-module('this') {
     @include test('get a value from the current module`s configuration') {
-    
-        @mixin foo($custom: ()) {
-            $foo: config((
-                'foo' : ('bar' : false)
-            ), $custom);
-        }
 
         @include foo((
             'foo' : ('bar' : true)
