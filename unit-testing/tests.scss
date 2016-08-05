@@ -1,5 +1,6 @@
 // Import testing framework
-@import 'true';
+//@import 'true';
+@import '../node_modules/sass-true/sass/true';
 
 // Import the project
 @import '../src/scss/synergy';
