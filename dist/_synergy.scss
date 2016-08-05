@@ -1,20 +1,20 @@
 // Enable JSON output?
-$to-JSON : false !default;
+$to-json: false !default;
 
 // Output config for each module by default?
-$output-JSON : false !default;
+$output-json: false !default;
 
 // Set the default selector type (flex | chain | static)
-$selector-type : 'flex' !default;
+$selector-type: 'flex' !default;
 
-// Extend each option as a modifier by default?
-$extend-options : true !default;
- 
+// Extend each module option as a modifier by default?
+$extend-options: true !default;
+
  // The variable which will store all module's configuration (do not edit)
-$_modules : () !default;
+$_modules: () !default;
 
 // The variable to hold a single module (do not edit)
-$module : null !default;
+$module: null !default;
 /// Create a new module
 ///
 /// @author [@esr360](http://twitter.com/esr360)
@@ -31,11 +31,13 @@ $module : null !default;
 ///
 ///     <div class="header">...</div>
 @mixin module(
-    $modules: if(variable-exists('config'), (map-get($config, 'name')), ''), 
+    $modules: if(variable-exists('config'), (map-get($config, 'name')), ''),
     $type: if(variable-exists('config'), (map-get($config, 'selector-type')), $selector-type)
 ) {
+
     $module: $modules !global;
     $selectors: ();
+
     @each $module in $modules {
         @if $type == 'flex' or $type == 'static' {
             $selectors: join($selectors, '.#{$module}', comma);
@@ -47,9 +49,11 @@ $module : null !default;
             $selectors: join($selectors, '[data-#{$module}]', comma);
         }
     }
+
     #{$selectors} {
         @content;
     }
+
 }
 
 /// Alias for module() mixin
@@ -74,6 +78,7 @@ $module : null !default;
 /// @param {string|list} $components - The component or components to be used
 ///
 /// @example
+///
 ///     @include module('header') {
 ///         @include component('wrapper') {
 ///             ...
@@ -82,55 +87,57 @@ $module : null !default;
 ///
 ///     <div class="header_wrapper">...</div>
 @mixin component($components: null) {
-    
+
     $selectors: '[class*="#{$module}_"]';
-    
+
     @if $components {
-        
+
         // Get target namespace
         $parents: str-replace(inspect(nth(&, 1)), '.', '');
         $parents: str-replace($parents, '[class*="', '');
         $parents: str-replace($parents, '-"]', '');
         $parents: str-replace($parents, '"]', '');
-        
+
         $selectors: ();
-            
-        @each $component in $components {           
-            // Create the naked class selectors   
+
+        @each $component in $components {
+            // Create the naked class selectors
             $selectors: if(
-                nth(&, 1) + unquote('') == '.#{$module}',
-                (
+                nth(&, 1) + unquote('') == '.#{$module}', (
                     join($selectors, '.#{$module}_#{$component}', comma)
-                ),
-                (
+                ), (
                     join($selectors, '.#{$parents}_#{$component}', comma)
                 )
-            );         
-            // Create the attribute wildcard selectors      
+            );
+            // Create the attribute wildcard selectors
             $selectors: if(
-                nth(&, 1) + unquote('') == '.#{$module}',
-                (
+                nth(&, 1) + unquote('') == '.#{$module}', (
                     join($selectors, '[class*="#{$module}_#{$component}-"]', comma)
-                ),
-                (
+                ), (
                     join($selectors, '[class*="#{$parents}_#{$component}-"]', comma)
                 )
             );
         }
-        
+
     }
-    
+
     @at-root {
         #{$selectors} {
             @content;
         }
-    }	
+    }
 
 }
 
-// Alias for multiple components
-@mixin components($sub-components) {
-    @include component($sub-components) {
+/// Alias for component() mixin
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group Synergy
+/// @access public
+///
+/// @param {string|list} $components - The component(s) you wish to create
+@mixin components($components) {
+    @include component($components) {
         @content;
     }
 }
@@ -153,11 +160,11 @@ $module : null !default;
 ///
 ///     <div class="button-large">...</div>
 @mixin modifier($modifiers, $special: null, $glue: '-') {
-    
+
     $selectors: &;
-    
+
     @if str-index(inspect(&), '.#{$module}') {
-        @if (variable-exists('config') and map-get($config, 'selector-type') == 'flex') 
+        @if (variable-exists('config') and map-get($config, 'selector-type') == 'flex')
         or (not variable-exists('config') and $selector-type == 'flex') {
             $selectors: ();
             @for $i from 1 through length(&) {
@@ -167,30 +174,40 @@ $module : null !default;
             }
         }
     }
-    
+
     @at-root #{$selectors} {
+
         $modifier-selectors: ();
+
         @each $modifier in $modifiers {
-            @if $special == "not" {
+            @if $special == 'not' {
                 $modifier-selectors: join($modifier-selectors, '&:not([class*="#{$glue}#{$modifier}"])', comma);
             } @else {
                 $modifier-selectors: join($modifier-selectors, '&[class*="#{$glue}#{$modifier}"]', comma);
             }
         }
+
         #{$modifier-selectors} {
             @content;
         }
+
     }
 
 } // modifier()
 
-// Alias for multiple modifiers
+/// Alias for modifier() mixin
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group Synergy
+/// @access public
+///
+/// @param {string|list} $modifiers - The modifier(s) you wish to create
 @mixin modifiers($modifiers) {
     @include modifier($modifiers) {
         @content;
     }
 }
-/// Overwrite an existing module when in different context, such as 
+/// Overwrite an existing module when in different context, such as
 /// inside another module
 ///
 /// @author [@esr360](http://twitter.com/esr360)
@@ -242,8 +259,8 @@ $module : null !default;
             $modifiers-list: ();
             @each $modifier in $is {
                 $selectors: join(
-                    $modifiers-list, 
-                    selector-append($selectors,'[class*="-#{$modifier}"]'), 
+                    $modifiers-list,
+                    selector-append($selectors, '[class*="-#{$modifier}"]'),
                 comma);
             }
         }
@@ -251,8 +268,8 @@ $module : null !default;
             $modifiers-list: ();
             @each $modifier in $not {
                 $selectors: join(
-                    $modifiers-list, 
-                    selector-append($selectors,':not([class*="-#{$modifier}"])'), 
+                    $modifiers-list,
+                    selector-append($selectors, ':not([class*="-#{$modifier}"])'),
                 comma);
             }
         }
@@ -267,7 +284,7 @@ $module : null !default;
         }
     }
 }
-/// Overwrite an existing component when in different context, such as 
+/// Overwrite an existing component when in different context, such as
 /// inside another module or component
 ///
 /// @author [@esr360](http://twitter.com/esr360)
@@ -299,8 +316,10 @@ $module : null !default;
 ///         <input class="form_input" type="text" />
 ///     </div>
 @mixin overwrite-component($components, $parent: null, $is: null, $not: null, $special: null) {
+
     $module: if($parent != null, $parent, $module);
     $selectors: ();
+
     @each $component in $components {
         $selector: #{$module}_#{$component};
         @if $special == 'adjacent-sibling' {
@@ -312,8 +331,8 @@ $module : null !default;
             $modifiers-list: ();
             @each $modifier in $is {
                 $selectors: join(
-                    $modifiers-list, 
-                    selector-append($selectors,'[class*="-#{$modifier}"]'), 
+                    $modifiers-list,
+                    selector-append($selectors, '[class*="-#{$modifier}"]'),
                 comma);
             }
         }
@@ -321,24 +340,32 @@ $module : null !default;
             $modifiers-list: ();
             @each $modifier in $not {
                 $selectors: join(
-                    $modifiers-list, 
-                    selector-append($selectors,':not([class*="-#{$modifier}"])'), 
+                    $modifiers-list,
+                    selector-append($selectors, ':not([class*="-#{$modifier}"])'),
                 comma);
             }
         }
     }
+
     #{$selectors} {
         @content;
     }
+
 }
 
-// Alias for multiple components
+/// Alias for overwrite-component() mixin
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group Synergy
+/// @access public
+///
+/// @param {arglist} $args - The arguments you wish to pass
 @mixin overwrite-components($args...) {
     @include overwrite-component($args...) {
         @content;
     }
 }
-/// Extend one or more modifiers of a module to create a new modifier 
+/// Extend one or more modifiers of a module to create a new modifier
 /// combining the ones you pass
 ///
 /// @author [@esr360](http://twitter.com/esr360)
@@ -350,6 +377,7 @@ $module : null !default;
 /// @param {bool} $core [false] - Extend the core '.module' styles?
 ///
 /// @example
+///
 ///     @include module(button) {
 ///
 ///         @include modifier('round')   {...}
@@ -358,14 +386,14 @@ $module : null !default;
 ///
 ///         @include modifier('primary') {
 ///             @include extend(('round', 'large', 'success'));
-///         }	
+///         }
 ///
 ///     }
 ///
 ///     <div class="button-primary">...</div>
 @mixin extend($modifiers: null, $parent: null, $core: false) {
     @if $core {
-        @extend .#{$parent}
+        @extend .#{$parent};
     }
     @each $modifier in $modifiers {
         @if type-of($modifier) == string {
@@ -375,9 +403,7 @@ $module : null !default;
             @extend [class*="#{$selector}-"][class*="-#{$modifier}"];
         } @else if type-of($modifier) == list {
             $selectors: if(
-                $parent,
-                ('[class*="#{$parent}-"]'),
-                ('[class*="#{$module}-"]')
+                $parent, ('[class*="#{$parent}-"]'), ('[class*="#{$module}-"]')
             );
             @each $item in $modifier {
                 $selectors: join($selectors, '[class*="-#{$item}"]', comma);
@@ -391,6 +417,7 @@ $module : null !default;
 /// @author [@esr360](http://twitter.com/esr360)
 /// @group Synergy
 /// @access public
+///
 /// @param {string} $context - The context you wish to use
 @mixin context($context) {
     $child-selectors: &;
@@ -442,18 +469,23 @@ $module : null !default;
 ///         full-screen : true
 ///     ));
 @mixin option($option) {
+
     $option: $option !global;
+
     $enabled: if(
         (type-of(map-get($config, $option)) == bool and map-get($config, $option) != false) or
         (type-of(map-get($config, $option)) == map and map-get(map-get($config, $option), 'enabled') != false),
         true, false
     );
+
     @if $enabled {
         @include extend($option);
     }
+
     @include modifier($option) {
         @content;
     }
+
 }
 /// Apply styles when a defined option is a particular value
 ///
@@ -465,6 +497,7 @@ $module : null !default;
 /// @param $value - The value you wish to apply styles to
 ///
 /// @example
+///
 ///     @mixin header($custom: ()) {
 ///
 ///         $header: config((
@@ -485,117 +518,40 @@ $module : null !default;
 ///         side : left
 ///     ));
 @mixin value($setting: 'enabled', $value: true) {
+
     $modifier: if(
         $setting == 'enabled', $value, $setting
     );
-    @if (option($config, $option, $setting) == $value) {	
+
+    @if (option($config, $option, $setting) == $value) {
         @if $setting == 'enabled' {
             @include extend($value);
         } @else {
             @include extend($setting);
         }
     }
-    @include modifier($modifier) {	
+
+    @include modifier($modifier) {
         @content;
     }
-}
-/// Used to merge a module's default configuration with any custom 
-/// values passed to the module
-/// @author Edmund Reed | @esr360
-/// @group synergy
-/// @access public
-/// @param {map} $map-old - The map which will store default configuration
-/// @param {map} $map-new - The map which will hold custom values
-@function config($map-old, $map-new) {
-
-    $map-old: map-merge((
-        'selector-type'   : $selector-type,
-        'extend-options'  : $extend-options,
-        'output-JSON'     : $output-JSON
-    ), $map-old);
-
-    $map-old: map-merge-deep($map-old, $map-new);
-
-    // Store merged map in a variable
-    $config: $map-old !global;
-
-    // Output options to JSON
-    @if option($map-old, 'output-JSON') {
-        // remove superfluous keys from JSON
-        $map-old: map-remove($map-old, 
-            'selector-type', 'extend-options', 'output-JSON'
-        );
-        // add the module to the list of modules
-        $_modules: map-merge-deep(
-            (map-get($map-old, 'name') : ($map-old)), $_modules
-        ) !global;
-    }
-
-    // Return merged map
-    @return $map-old;
 
 }
 /// Set a key in an existing map
+///
 /// @author Sam Richard
-/// @group synergy
+/// @group Synergy
+///
 /// @param $map
 /// @param $key
 /// @param $value
 @function map-set($map, $key, $value) {
     @return map-merge($map, ($key: $value));
 }
-/// Set a nested key in an existing map
-/// @author Sam Richard
-/// @group synergy
-/// @param $map
-/// @param $keys
-/// @param $value
-@function map-set-deep($map, $keys, $value) {
-
-    $private-sassy-maps-suppress-warnings: true !global;
-    $length: length($keys);
-    $get-keys: ();
-    $map-level: ();
-
-    @if $length > 1 {
-        $get-keys: get-keys($keys, $length);
-        $map-level: map-get-deep($map, $get-keys);
-    }
-
-    $merge: (nth($keys, $length): $value);
-        
-    @if $map-level {
-        $merge: map-merge($map-level, $merge);
-    }
-
-    @for $i from ($length * -1 + 1) through -1 {
-        $j: abs($i);
-        $key: nth($keys, $j);
-        // @debug $get-keys;
-        @if $j > 1 {
-            $get-keys: get-keys($keys, $j);
-            $map-level: map-get-deep($map, $get-keys);
-            @if $map-level {
-                $merge: map-merge($map-level, ($key: $merge));
-            }
-            @else {
-                $merge: ($key: $merge);
-            }
-        }
-        @else {
-            $merge: ($key: $merge);
-        }
-    }
-
-    $map: map-merge($map, $merge);
-    $private-sassy-maps-suppress-warnings: false !global;
-
-    @return $map;
-
-}
 /// Used to recursively merge (deep merge) two maps
+///
 /// @author Pedr Browne
-/// @group synergy
+/// @group Synergy
+///
 /// @param $map-old - The map which will store default configuration
 /// @param $map-new - The map which will hold custom values
 /// @param $overwrite - The map which will hold custom values
@@ -610,7 +566,7 @@ $module : null !default;
             @if type-of($new-value) == map and type-of($old-value) == map {
                 // If both are maps, recurse regardless of $overwrite
                 $merged-value: map-merge-deep($old-value, $new-value);
-                $map-old: map-set($map-old, $key, $merged-value);	
+                $map-old: map-set($map-old, $key, $merged-value);
             } @else {
                 // Otherwise check $overwrite
                 @if $overwrite{
@@ -625,36 +581,4 @@ $module : null !default;
 
     @return $map-old;
 
-}
-/// Alias function to map-deep-get()
-/// @author Edmund Reed | @esr360
-/// @group synergy
-/// @param {map} $module - the module you are interested in
-/// @param {arglist} $keys - the key you are interested in
-///
-/// @todo Why doesn't this work? :(
-///
-///     @function option($map, $keys...) {
-///         @return map-deep-get($map, $keys...);
-///     }
-@function option($module, $keys...) {
-    @each $key in $keys {
-        $module: map-get($module, $key);
-    }
-    @return $module;
-}
-/// Alias function to option()
-/// @author Edmund Reed | @esr360
-/// @group synergy
-/// @param $map
-/// @param $keys
-@function setting($map, $keys...) {
-    @return option($map, $keys...);
-}
-/// Get a value from the current module's configuration
-/// @author Edmund Reed | @esr360
-/// @group synergy
-/// @param $options
-@function this($options...) {
-    @return option($config, $options...)
 }

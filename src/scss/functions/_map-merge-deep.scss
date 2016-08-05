@@ -17,7 +17,7 @@
             @if type-of($new-value) == map and type-of($old-value) == map {
                 // If both are maps, recurse regardless of $overwrite
                 $merged-value: map-merge-deep($old-value, $new-value);
-                $map-old: map-set($map-old, $key, $merged-value);	
+                $map-old: map-set($map-old, $key, $merged-value);
             } @else {
                 // Otherwise check $overwrite
                 @if $overwrite{

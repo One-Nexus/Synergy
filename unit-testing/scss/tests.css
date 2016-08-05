@@ -1,0 +1,51 @@
+@charset "UTF-8";
+/* # Module: map-deep-get */
+/* ---------------------- */
+/* Test: get a nested map value */
+/*   ✔ should return the expected nested value */
+/*  */
+/*  */
+/* # Module: map-merge-deep */
+/* ------------------------ */
+/* Test: recursively merge two maps */
+/*   ✔ should return new merged map */
+/*  */
+/*  */
+/* # Module: map-set */
+/* ----------------- */
+/* Test: set a key in an existing map */
+/*   ✔ should return a map with new set value */
+/*  */
+/*  */
+/* # Module: str-replace */
+/* --------------------- */
+/* Test: replace part of a string */
+/*   ✔ should return new updated string */
+/*  */
+/*  */
+/* # Module: config */
+/* ---------------- */
+/* Test: merge a module`s default configuration with any custom values */
+/*   ✖ FAILED [assert-equal]: should return the updated configuration */
+/*     - Output [map]: ("selector-type": "flex", "extend-options": true, "output-json": false, "breakpoints": ("break-1": 420px, "break-2": 800px, "break-3": 960px, "break-4": 1200px)) */
+/*     - Expected [map]: ("selector-type": "flex", "extend-options": true, "output-JSON": false, "breakpoints": ("break-1": 420px, "break-2": 800px, "break-3": 960px, "break-4": 1200px)) */
+/*  */
+/*  */
+/* # Module: option */
+/* ---------------- */
+/* Test: get a nested option from a module`s config */
+/*   ✔ should return the expected nested value */
+/*  */
+/*  */
+/* # Module: setting */
+/* ----------------- */
+/* Test: get a nested setting from a module`s config */
+/*   ✔ should return the expected nested value */
+/*  */
+/*  */
+/* # Module: this */
+/* -------------- */
+/* Test: get a value from the current module`s configuration */
+/*   ✔ should return the expected value */
+/*  */
+/*  */

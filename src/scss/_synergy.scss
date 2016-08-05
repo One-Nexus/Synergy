@@ -1,21 +1,21 @@
-@import "config";
+@import 'config';
 
-@import "mixins/module";
-@import "mixins/component";
-@import "mixins/modifier";
-@import "mixins/overwrite";
-@import "mixins/overwrite-component";
-@import "mixins/extend";
-@import "mixins/context";
-@import "mixins/option";
-@import "mixins/value";
+@import 'mixins/module';
+@import 'mixins/component';
+@import 'mixins/modifier';
+@import 'mixins/overwrite';
+@import 'mixins/overwrite-component';
+@import 'mixins/extend';
+@import 'mixins/context';
+@import 'mixins/option';
+@import 'mixins/value';
 
-@import "functions/map-deep-get";
-@import "functions/map-set";
-@import "functions/map-merge-deep";
-@import "functions/string-replace";
+@import 'functions/map-deep-get';
+@import 'functions/map-set';
+@import 'functions/map-merge-deep';
+@import 'functions/string-replace';
 
-@import "utilities/config";
-@import "utilities/option";
-@import "utilities/setting";
-@import "utilities/this";
+@import 'utilities/config';
+@import 'utilities/option';
+@import 'utilities/setting';
+@import 'utilities/this';

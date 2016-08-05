@@ -29,17 +29,21 @@
 ///         side : left
 ///     ));
 @mixin value($setting: 'enabled', $value: true) {
+
     $modifier: if(
         $setting == 'enabled', $value, $setting
     );
-    @if (option($config, $option, $setting) == $value) {	
+
+    @if (option($config, $option, $setting) == $value) {
         @if $setting == 'enabled' {
             @include extend($value);
         } @else {
             @include extend($setting);
         }
     }
-    @include modifier($modifier) {	
+
+    @include modifier($modifier) {
         @content;
     }
+
 }

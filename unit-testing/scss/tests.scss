@@ -1,9 +1,8 @@
 // Import testing framework
-//@import 'true';
-@import '../node_modules/sass-true/sass/true';
+@import '../../node_modules/sass-true/sass/true';
 
 // Import the project
-@import '../src/scss/synergy';
+@import '../../src/scss/synergy';
 
 // Import the test files
 @import 'functions/map-deep-get';
@@ -15,6 +14,3 @@
 @import 'utilities/option';
 @import 'utilities/setting';
 @import 'utilities/this';
-
-// Run the tests
-@include report();

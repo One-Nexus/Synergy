@@ -1,4 +1,4 @@
-/// Extend one or more modifiers of a module to create a new modifier 
+/// Extend one or more modifiers of a module to create a new modifier
 /// combining the ones you pass
 ///
 /// @author [@esr360](http://twitter.com/esr360)
@@ -19,14 +19,14 @@
 ///
 ///         @include modifier('primary') {
 ///             @include extend(('round', 'large', 'success'));
-///         }	
+///         }
 ///
 ///     }
 ///
 ///     <div class="button-primary">...</div>
 @mixin extend($modifiers: null, $parent: null, $core: false) {
     @if $core {
-        @extend .#{$parent}
+        @extend .#{$parent};
     }
     @each $modifier in $modifiers {
         @if type-of($modifier) == string {

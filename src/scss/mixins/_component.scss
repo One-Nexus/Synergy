@@ -16,29 +16,29 @@
 ///
 ///     <div class="header_wrapper">...</div>
 @mixin component($components: null) {
-    
+
     $selectors: '[class*="#{$module}_"]';
-    
+
     @if $components {
-        
+
         // Get target namespace
         $parents: str-replace(inspect(nth(&, 1)), '.', '');
         $parents: str-replace($parents, '[class*="', '');
         $parents: str-replace($parents, '-"]', '');
         $parents: str-replace($parents, '"]', '');
-        
+
         $selectors: ();
-            
-        @each $component in $components {           
-            // Create the naked class selectors   
+
+        @each $component in $components {
+            // Create the naked class selectors
             $selectors: if(
                 nth(&, 1) + unquote('') == '.#{$module}', (
                     join($selectors, '.#{$module}_#{$component}', comma)
                 ), (
                     join($selectors, '.#{$parents}_#{$component}', comma)
                 )
-            );         
-            // Create the attribute wildcard selectors      
+            );
+            // Create the attribute wildcard selectors
             $selectors: if(
                 nth(&, 1) + unquote('') == '.#{$module}', (
                     join($selectors, '[class*="#{$module}_#{$component}-"]', comma)
@@ -47,14 +47,14 @@
                 )
             );
         }
-        
+
     }
-    
+
     @at-root {
         #{$selectors} {
             @content;
         }
-    }	
+    }
 
 }
 

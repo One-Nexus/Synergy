@@ -86,22 +86,14 @@ for (var i = 0, moduleNamesLength = moduleNames.length; i < moduleNamesLength; i
     window['_' + moduleNamesCamelCase[i]] = '.' + moduleNames[i] + ', [class*="' + moduleNames[i] + '-"]' ;
 }
 /**
- * @function _option
+ * Get the computed value of a module's option
  * 
- * @description Get the computed value of a module's option
- * 
+ * @name _option
  * @param module - The module which you wish to get an option from
  * @param option - The module's option which you are interested in
  */
-
-//  Usage
-//
-//  if(_option('navigation', 'sticky')) {
-//      ...
-//  }
-
 function _option(module, option) {
-    
+
     if (Element && !Element.prototype.matches) {
         var proto = Element.prototype;
         proto.matches = proto.matchesSelector || proto.msMatchesSelector;
@@ -121,3 +113,5 @@ function _option(module, option) {
     }
 
 }
+
+module.exports = _option

@@ -1,4 +1,4 @@
-/// Used to merge a module's default configuration with any custom 
+/// Used to merge a module's default configuration with any custom
 /// values passed to the module
 ///
 /// @author [@esr360](http://twitter.com/esr360)
@@ -12,7 +12,7 @@
     $map-old: map-merge((
         'selector-type'   : $selector-type,
         'extend-options'  : $extend-options,
-        'output-JSON'     : $output-JSON
+        'output-json'     : $output-json
     ), $map-old);
 
     $map-old: map-merge-deep($map-old, $map-new);
@@ -21,10 +21,10 @@
     $config: $map-old !global;
 
     // Output options to JSON
-    @if option($map-old, 'output-JSON') {
+    @if option($map-old, 'output-json') {
         // remove superfluous keys from JSON
-        $map-old: map-remove($map-old, 
-            'selector-type', 'extend-options', 'output-JSON'
+        $map-old: map-remove($map-old,
+            'selector-type', 'extend-options', 'output-json'
         );
         // add the module to the list of modules
         $_modules: map-merge-deep(

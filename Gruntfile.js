@@ -10,14 +10,7 @@ module.exports = function(grunt) {
             }
         },
                 
-        concat: {   
-            js: {
-                src:[
-                    'src/js/_synergy.js',
-                    'src/js/functions/*.js'
-                ],
-                dest: 'dist/synergy.js',
-            }, 
+        concat: {
             scss: {
                 src: [
                     'src/scss/_config.scss',
@@ -40,19 +33,48 @@ module.exports = function(grunt) {
                     'src/scss/functions/_this.scss',
                 ],
                 dest: 'dist/_synergy.scss',
+            },
+            js: {
+                src:[
+                    'src/js/_synergy.js',
+                    'src/js/functions/*.js'
+                ],
+                dest: 'dist/synergy.js',
             }
         },
         
         sass: {
             test: {
                 files: {
-                    'unit-testing/tests.css': 'unit-testing/tests.scss'
+                    'unit-testing/scss/tests.css': 'unit-testing/scss/tests.scss'
                 },
                 options: {
                     style: 'expanded',
                     sourcemap: 'none'
                 }
             } 
+        },
+
+        scsslint: {
+            options: {
+                configFile: '.scss-lint.yml',
+            },
+            target: [
+                'src/scss/**/*.scss'
+            ]
+        },
+
+        jshint: {
+            all: [
+                'Gruntfile.js', 
+                'src/js/**/*.js', 
+                'unit-testing/js/**/*.js'
+            ]
+        },
+
+        mochacli: {
+            scss: ['unit-testing/scss/tests.js'],
+            js:   ['unit-testing/js/tests.js']
         },
 
         sassdoc: {
@@ -64,42 +86,55 @@ module.exports = function(grunt) {
             },
         },
 
-        mochacli: {
-            all: ['unit-testing/tests.js']
+        jsdoc : {
+            dist : {
+                src: 'src/js',
+                options: {
+                    destination: 'docs/js'
+                }
+            }
         },
         
         watch: {
-            js: {
-                files: 'src/js/**/*.js',
-                tasks: ['concat:js', 'notify:js'],
-                options: {
-                    spawn: false
-                },
-            },
             scss: {
                 files: 'src/scss/**/*.scss',
                 tasks: [
                     'concat:scss',
+                    'scsslint',
+                    'mochacli:scss',
                     'sassdoc', 
                     'notify:scss'
                 ],
                 options: {
                     spawn: false
                 }
+            },
+            js: {
+                files: 'src/js/**/*.js',
+                tasks: [
+                    'concat:js', 
+                    'jshint',
+                    //'mochacli:js',
+                    'jsdoc',
+                    'notify:js'
+                ],
+                options: {
+                    spawn: false
+                },
             }
         },
         
         notify: {
-            js: {
-                options: {
-                    title: 'Scripts Compiled',
-                    message: 'All scripts have been successfully compiled!'
-                }
-            },
             scss: {
                 options: {
                     title: 'Styles Compiled',
                     message: 'All styles have been successfully compiled!'
+                }
+            },
+            js: {
+                options: {
+                    title: 'Scripts Compiled',
+                    message: 'All scripts have been successfully compiled!'
                 }
             },
             dist: {
@@ -123,13 +158,28 @@ module.exports = function(grunt) {
         'clean',
         'concat',
         'sass',
-        'sassdoc',
+        'lint',
+        'test',
+        'docs',
         'notify:dist'
+    ]);
+        
+    // Lint
+    grunt.registerTask('lint', [
+        'scsslint',
+        'jshint'
     ]);
         
     // Test
     grunt.registerTask('test', [
-        'mochacli'
+        'mochacli:scss',
+        //'mochacli:js'
+    ]);
+        
+    // Docs
+    grunt.registerTask('docs', [
+        'sassdoc',
+        'jsdoc'
     ]);
     
     grunt.loadNpmTasks('grunt-contrib-clean');
@@ -139,6 +189,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-jsdoc');
     grunt.loadNpmTasks('grunt-mocha-cli');
     grunt.loadNpmTasks('grunt-notify');
     grunt.loadNpmTasks('grunt-sassdoc');

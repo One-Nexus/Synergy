@@ -25,16 +25,21 @@
 ///         full-screen : true
 ///     ));
 @mixin option($option) {
+
     $option: $option !global;
+
     $enabled: if(
         (type-of(map-get($config, $option)) == bool and map-get($config, $option) != false) or
         (type-of(map-get($config, $option)) == map and map-get(map-get($config, $option), 'enabled') != false),
         true, false
     );
+
     @if $enabled {
         @include extend($option);
     }
+
     @include modifier($option) {
         @content;
     }
+
 }

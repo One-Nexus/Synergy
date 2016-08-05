@@ -1,4 +1,4 @@
-/// Overwrite an existing module when in different context, such as 
+/// Overwrite an existing module when in different context, such as
 /// inside another module
 ///
 /// @author [@esr360](http://twitter.com/esr360)
@@ -50,8 +50,8 @@
             $modifiers-list: ();
             @each $modifier in $is {
                 $selectors: join(
-                    $modifiers-list, 
-                    selector-append($selectors,'[class*="-#{$modifier}"]'), 
+                    $modifiers-list,
+                    selector-append($selectors, '[class*="-#{$modifier}"]'),
                 comma);
             }
         }
@@ -59,8 +59,8 @@
             $modifiers-list: ();
             @each $modifier in $not {
                 $selectors: join(
-                    $modifiers-list, 
-                    selector-append($selectors,':not([class*="-#{$modifier}"])'), 
+                    $modifiers-list,
+                    selector-append($selectors, ':not([class*="-#{$modifier}"])'),
                 comma);
             }
         }
