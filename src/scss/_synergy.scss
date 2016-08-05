@@ -10,9 +10,8 @@
 @import "mixins/option";
 @import "mixins/value";
 
-@import "functions/get-keys";
+@import "functions/map-deep-get";
 @import "functions/map-set";
-@import "functions/map-set-deep";
 @import "functions/map-merge-deep";
 @import "functions/string-replace";
 

@@ -45,12 +45,12 @@ module.exports = function(grunt) {
         
         sass: {
             test: {
+                files: {
+                    'unit-testing/tests.css': 'unit-testing/tests.scss'
+                },
                 options: {
                     style: 'expanded',
                     sourcemap: 'none'
-                },
-                files: {
-                    ['test/test-results.css']: 'test/test.scss'
                 }
             } 
         },
@@ -62,6 +62,10 @@ module.exports = function(grunt) {
                     dest: 'docs/sass'
                 }
             },
+        },
+
+        mochacli: {
+            all: ['unit-testing/tests.js']
         },
         
         watch: {
@@ -130,8 +134,9 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-mocha-cli');
     grunt.loadNpmTasks('grunt-notify');
-    grunt.loadNpmTasks('grunt-scss-lint');
     grunt.loadNpmTasks('grunt-sassdoc');
+    grunt.loadNpmTasks('grunt-scss-lint');
 
 };

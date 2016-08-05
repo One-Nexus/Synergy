@@ -28,9 +28,11 @@
     "grunt-contrib-sass": "^0.9.2",
     "grunt-contrib-uglify": "^0.9.2",
     "grunt-contrib-watch": "^0.6.1",
+    "grunt-mocha-cli": "^2.1.0",
     "grunt-notify": "^0.4.1",
     "grunt-sass": "^1.2.0-beta",
     "grunt-sassdoc": "^2.0.2",
-    "grunt-scss-lint": "^0.3.8"
+    "grunt-scss-lint": "^0.3.8",
+    "sass-true": "^2.1.2"
   }
 }

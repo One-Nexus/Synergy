@@ -1,0 +1,12 @@
+@include test-module('str-replace') {
+    @include test('replace part of a string') {
+
+        $string: 'Lorem ipsum dolor sit amet';
+
+        $actual   : str-replace($string, 'ipsum', 'foo');
+        $expected : 'Lorem foo dolor sit amet';
+
+        @include assert-equal($actual, $expected, 'should return new updated string');
+
+    }
+}

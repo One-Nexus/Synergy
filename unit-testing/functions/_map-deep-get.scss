@@ -1,0 +1,14 @@
+@include test-module('map-deep-get') {
+    @include test('get a nested map value') {
+
+        $map: (
+            'foo' : ('bar' : 'baz')
+        );
+
+        $actual   : map-deep-get($map, 'foo', 'bar');
+        $expected : 'baz';
+
+        @include assert-equal($actual, $expected, 'should return the expected nested value');
+
+    }
+}
