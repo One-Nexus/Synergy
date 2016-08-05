@@ -126,6 +126,11 @@ module.exports = function(grunt) {
         'sassdoc',
         'notify:dist'
     ]);
+        
+    // Test
+    grunt.registerTask('test', [
+        'mochacli'
+    ]);
     
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-concat');
