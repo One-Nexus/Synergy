@@ -36,7 +36,7 @@ module.exports = function(grunt) {
             },
             js: {
                 src:[
-                    'src/js/_synergy.js',
+                    'src/js/synergy.js',
                     'src/js/functions/*.js'
                 ],
                 dest: 'dist/synergy.js',
@@ -86,7 +86,7 @@ module.exports = function(grunt) {
             },
         },
 
-        jsdoc : {
+        jsdoc: {
             dist : {
                 src: 'src/js',
                 options: {

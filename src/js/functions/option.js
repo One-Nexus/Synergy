@@ -1,9 +1,9 @@
 /**
  * Get the computed value of a module's option
  * 
- * @name _option
- * @param module - The module which you wish to get an option from
- * @param option - The module's option which you are interested in
+ * @function _option
+ * @param {object} module - The module which you wish to get an option from
+ * @param {object} option - The module's option which you are interested in
  */
 function _option(module, option) {
 
@@ -20,11 +20,11 @@ function _option(module, option) {
     var selector = (target !== null && target.length !== 0) ? target.matches(modifier) : false;
     
     if (typeof value == 'boolean') {
-        return selector || _option['enabled'] != false;
+        return selector || _option.enabled !== false;
     } else {
-        return selector || _option != false;
+        return selector || _option !== false;
     }
 
 }
 
-module.exports = _option
+module.exports = _option;

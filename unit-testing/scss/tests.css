@@ -26,9 +26,7 @@
 /* # Module: config */
 /* ---------------- */
 /* Test: merge a module`s default configuration with any custom values */
-/*   ✖ FAILED [assert-equal]: should return the updated configuration */
-/*     - Output [map]: ("selector-type": "flex", "extend-options": true, "output-json": false, "breakpoints": ("break-1": 420px, "break-2": 800px, "break-3": 960px, "break-4": 1200px)) */
-/*     - Expected [map]: ("selector-type": "flex", "extend-options": true, "output-JSON": false, "breakpoints": ("break-1": 420px, "break-2": 800px, "break-3": 960px, "break-4": 1200px)) */
+/*   ✔ should return the updated configuration */
 /*  */
 /*  */
 /* # Module: option */

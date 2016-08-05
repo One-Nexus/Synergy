@@ -1,4 +1,4 @@
 require('../../dist/synergy.js');
 
-require('./_synergy.js');
-require('./functions/_option.js');
+require('./synergy.js');
+require('./functions/option.js');
