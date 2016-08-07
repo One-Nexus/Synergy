@@ -73,8 +73,7 @@ module.exports = function(grunt) {
         },
 
         mochacli: {
-            scss: ['unit-testing/scss/tests.js'],
-            js:   ['unit-testing/js/tests.js']
+            scss: ['unit-testing/scss/tests.js']
         },
 
         sassdoc: {
@@ -114,7 +113,6 @@ module.exports = function(grunt) {
                 tasks: [
                     'concat:js', 
                     'jshint',
-                    //'mochacli:js',
                     'jsdoc',
                     'notify:js'
                 ],
@@ -172,8 +170,7 @@ module.exports = function(grunt) {
         
     // Test
     grunt.registerTask('test', [
-        'mochacli:scss',
-        //'mochacli:js'
+        'mochacli:scss'
     ]);
         
     // Docs
