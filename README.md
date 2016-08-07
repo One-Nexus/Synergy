@@ -14,7 +14,7 @@
 
 > A front-end framework for building modular, configurable and scalable projects.
 
-[Kayzen - Premium Theme Built Using Synergy](http://preview.themeforest.net/item/kayzen-multipurpose-html5-template/full_screen_preview/16768920) | 
+[View Premium Demo](http://preview.themeforest.net/item/kayzen-multipurpose-html5-template/full_screen_preview/16768920) | 
 [View Sass Documentation](http://esr360.github.io/Synergy/docs/sass)
 
 [![Kayzen - Premium HTML Theme Framework](http://skyux.com/images/kayzen-gh.png)](http://preview.themeforest.net/item/kayzen-multipurpose-html5-template/full_screen_preview/16768920)
