@@ -88,9 +88,9 @@ for (var i = 0, moduleNamesLength = moduleNames.length; i < moduleNamesLength; i
 /**
  * Get the computed value of a module's option
  * 
- * @name _option
- * @param module - The module which you wish to get an option from
- * @param option - The module's option which you are interested in
+ * @function _option
+ * @param {object} module - The module which you wish to get an option from
+ * @param {object} option - The module's option which you are interested in
  */
 function _option(module, option) {
 
