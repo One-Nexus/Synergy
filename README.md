@@ -1596,7 +1596,7 @@ $to-JSON : true;
 /* Your Modules */
 ```
 
-By default, output to JSON is enabled on a per-module basis by passing `name` and `output-JSON` options to your module's config:
+By default, output to JSON is enabled on a per-module basis by passing `name` and `output-json` options to your module's config:
 
 ```scss
 @mixin header($custom: ()) {
@@ -1605,7 +1605,7 @@ By default, output to JSON is enabled on a per-module basis by passing `name` an
 		
 		// Options
 		'name'        : 'header',
-		'output-JSON' : true,
+		'output-json' : true,
         'dark'        : false,
         'height'      : 70px
 		
@@ -1616,14 +1616,14 @@ By default, output to JSON is enabled on a per-module basis by passing `name` an
 } // @mixin header
 ```
 
-If you want all your modules to output their configuation to JSON by default, you can pass the `$output-JSON` variable and set it to `true`:
+If you want all your modules to output their configuation to JSON by default, you can pass the `$output-json` variable and set it to `true`:
 
 ```scss
 // Enable JSON output
 $to-JSON : true;
 
 // Output JSON by default for each module
-$output-JSON: true;
+$output-json: true;
 
 // Import Synergy
 @import "path/to/synergy"
@@ -1635,7 +1635,7 @@ If everything is running as expected, once your Sass has been compiled your CSS 
 
 ```css
 #modulesConfigJSON::before {
-    content: '{"header": {"selector-type": "flex", "extend-options": true, "output-JSON": true, "name": "header", "dark": false}}';
+    content: '{"header": {"selector-type": "flex", "extend-options": true, "output-json": true, "name": "header", "dark": false}}';
     display: block;
     height: 0;
     overflow: hidden;
@@ -1709,7 +1709,7 @@ Consider the following `grid` module:
 	$grid: config((
         // Options
 		'name'              : 'grid',
-		'output-JSON'       : true,
+		'output-json'       : true,
         // Breakpoints
 		'breakpoints': (
 			'break-0'       : 0px,

@@ -26,5 +26,3 @@ function _option(module, option) {
     }
 
 }
-
-module.exports = _option;
