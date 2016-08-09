@@ -58,7 +58,7 @@ module.exports = function(grunt) {
         scsslint: {
             options: {
                 configFile: '.scss-lint.yml',
-                //bundleExec: true
+                bundleExec: true
             },
             target: [
                 'src/scss/**/*.scss'
