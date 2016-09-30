@@ -157,7 +157,7 @@ module.exports = function(grunt) {
         'clean',
         'concat',
         'sass',
-        'lint',
+        //'lint',
         'test',
         'docs',
         'notify:dist'
