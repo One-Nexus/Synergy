@@ -25,9 +25,11 @@
 ///
 ///     <div class="button-primary">...</div>
 @mixin extend($modifiers: null, $parent: null, $core: false) {
+
     @if $core {
         @extend .#{$parent};
     }
+
     @each $modifier in $modifiers {
         @if type-of($modifier) == string {
             $selector: if(
@@ -44,4 +46,5 @@
             @extend #{$selectors};
         }
     }
+    
 }

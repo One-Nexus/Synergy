@@ -28,22 +28,39 @@
 ///     @include header: ((
 ///         side : left
 ///     ));
-@mixin value($setting: 'enabled', $value: true) {
+@mixin value($value) {
 
-    $modifier: if(
-        $setting == 'enabled', $value, $setting
+    // Create a unique, random placeholder to store styles
+    $placeholder : $value + random(9999);
+
+    // Determine if the option's value is our value of interest
+    $enabled: if(
+        option($config, $option, 'enabled') == $value, true, false
     );
 
-    @if (option($config, $option, $setting) == $value) {
-        @if $setting == 'enabled' {
-            @include extend($value);
-        } @else {
-            @include extend($setting);
-        }
-    }
+    @at-root {
 
-    @include modifier($modifier) {
-        @content;
+        // Store the styles in the placeholder
+        %#{$placeholder} {
+            @content;
+        }
+
+        @include overwrite($module) {
+
+            // Output the styles if the option is enabled
+            @if ($enabled) {
+                @extend %#{$placeholder};
+            }
+
+            // Create a modifier for the option
+            @include modifier($option) {
+                @include modifier($value) {
+                    @extend %#{$placeholder};
+                }
+            }
+
+        }
+
     }
 
 }
