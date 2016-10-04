@@ -10,11 +10,11 @@
 ///     @mixin billboard($custom: ()) {
 ///
 ///         $billboard: config((
-///             full-screen : false
+///             fullscreen : false
 ///         ), $custom);
 ///
 ///         @include module('billboard') {
-///             @include option('full-screen') {
+///             @include option('fullscreen') {
 ///                 ...
 ///             }
 ///         }
@@ -22,7 +22,7 @@
 ///     }
 ///
 ///     @include billboard: ((
-///         full-screen : true
+///         fullscreen : true
 ///     ));
 @mixin option($option) {
 

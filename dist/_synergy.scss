@@ -457,11 +457,11 @@ $module: null !default;
 ///     @mixin billboard($custom: ()) {
 ///
 ///         $billboard: config((
-///             full-screen : false
+///             fullscreen : false
 ///         ), $custom);
 ///
 ///         @include module('billboard') {
-///             @include option('full-screen') {
+///             @include option('fullscreen') {
 ///                 ...
 ///             }
 ///         }
@@ -469,7 +469,7 @@ $module: null !default;
 ///     }
 ///
 ///     @include billboard: ((
-///         full-screen : true
+///         fullscreen : true
 ///     ));
 @mixin option($option) {
 

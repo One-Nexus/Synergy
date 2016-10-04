@@ -449,7 +449,7 @@ Components work like regular modules, in the sense that you can add modifiers:
 @include module('header') {
 	
 	@include component('wrapper') {
-		@include modifier('full-screen') {
+		@include modifier('fullscreen') {
 			...
 		}
 	}
@@ -458,7 +458,7 @@ Components work like regular modules, in the sense that you can add modifiers:
 ```
 
 ```html
-<div class="header_wrapper-full-screen">...</div>
+<div class="header_wrapper-fullscreen">...</div>
 ```
 
 ##### Alias Mixin For Multiple Components
@@ -634,7 +634,7 @@ This mixin allows you to overwrite the styles of existing modules, components an
         
 		'name'            : 'billboard',
         'selector-type'   : 'chain',
-		'full-screen'     : false
+		'fullscreen'     : false
         
 	), $custom) !global;
 
@@ -645,7 +645,7 @@ This mixin allows you to overwrite the styles of existing modules, components an
 		// If website has "top-bar" and top-bar is "fixed" and header is "absolute"
         @include overwrite('top-bar', $is: 'fixed', $special: 'at-root') {
             @include overwrite('header', $is: 'absolute', $special: 'adjacent-sibling') {
-                @include overwrite($is: 'full-screen', $special: 'adjacent-sibling') {
+                @include overwrite($is: 'fullscreen', $special: 'adjacent-sibling') {
                     margin-top: option($top-bar, 'height');
                 }
             }
@@ -661,7 +661,7 @@ This mixin allows you to overwrite the styles of existing modules, components an
 You're probably curious as to what the hell is going on here. Let's take a look at the computed selector:
 
 ```css
-[class*="top-bar-"][class*="-fixed"] + [class*="header-"][class*="-absolute"] + [class*="billboard-"][class*="-full-screen"] {
+[class*="top-bar-"][class*="-fixed"] + [class*="header-"][class*="-absolute"] + [class*="billboard-"][class*="-fullscreen"] {
     ...
 }
 ```
