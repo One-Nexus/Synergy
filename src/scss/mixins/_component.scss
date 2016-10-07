@@ -32,7 +32,7 @@
         @each $component in $components {
             // Create the naked class selectors
             $selectors: if(
-                nth(&, 1) + unquote('') == '.#{$module}', (
+                '#{nth(&, 1)}' + unquote('') == '.#{$module}', (
                     join($selectors, '.#{$module}_#{$component}', comma)
                 ), (
                     join($selectors, '.#{$parents}_#{$component}', comma)
@@ -40,7 +40,7 @@
             );
             // Create the attribute wildcard selectors
             $selectors: if(
-                nth(&, 1) + unquote('') == '.#{$module}', (
+                '#{nth(&, 1)}' + unquote('') == '.#{$module}', (
                     join($selectors, '[class*="#{$module}_#{$component}-"]', comma)
                 ), (
                     join($selectors, '[class*="#{$parents}_#{$component}-"]', comma)
