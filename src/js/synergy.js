@@ -5,6 +5,7 @@
  * @version 3.2
  * @license The MIT License (MIT)
  * @see http://github.com/esr360/Modular/
+ */
 
 /**
  * @var modularSelector
