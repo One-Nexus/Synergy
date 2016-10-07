@@ -5,7 +5,6 @@
  * @version 3.2
  * @license The MIT License (MIT)
  * @see http://github.com/esr360/Modular/
- */
 
 /**
  * @var modularSelector
@@ -38,7 +37,6 @@ function camelCase(arg) {
  * @param toCamelCase - Convert the parsed JSON to camelCase?
  */
 function parseJSON(toCamelCase) {
-
     var style = null;
 
     style = window.getComputedStyle(modularSelector, '::before');
@@ -50,7 +48,6 @@ function parseJSON(toCamelCase) {
     }
 
     return JSON.parse(style);
-
 }
 
 /**

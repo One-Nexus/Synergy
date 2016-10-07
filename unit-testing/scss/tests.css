@@ -2,48 +2,48 @@
 /* # Module: map-deep-get */
 /* ---------------------- */
 /* Test: get a nested map value */
-/*   ✔ should return the expected nested value */
+/*   Ô£ö should return the expected nested value */
 /*  */
 /*  */
 /* # Module: map-merge-deep */
 /* ------------------------ */
 /* Test: recursively merge two maps */
-/*   ✔ should return new merged map */
+/*   Ô£ö should return new merged map */
 /*  */
 /*  */
 /* # Module: map-set */
 /* ----------------- */
 /* Test: set a key in an existing map */
-/*   ✔ should return a map with new set value */
+/*   Ô£ö should return a map with new set value */
 /*  */
 /*  */
 /* # Module: str-replace */
 /* --------------------- */
 /* Test: replace part of a string */
-/*   ✔ should return new updated string */
+/*   Ô£ö should return new updated string */
 /*  */
 /*  */
 /* # Module: config */
 /* ---------------- */
 /* Test: merge a module`s default configuration with any custom values */
-/*   ✔ should return the updated configuration */
+/*   Ô£ö should return the updated configuration */
 /*  */
 /*  */
 /* # Module: option */
 /* ---------------- */
 /* Test: get a nested option from a module`s config */
-/*   ✔ should return the expected nested value */
+/*   Ô£ö should return the expected nested value */
 /*  */
 /*  */
 /* # Module: setting */
 /* ----------------- */
 /* Test: get a nested setting from a module`s config */
-/*   ✔ should return the expected nested value */
+/*   Ô£ö should return the expected nested value */
 /*  */
 /*  */
 /* # Module: this */
 /* -------------- */
 /* Test: get a value from the current module`s configuration */
-/*   ✔ should return the expected value */
+/*   Ô£ö should return the expected value */
 /*  */
 /*  */
