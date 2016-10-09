@@ -26,7 +26,7 @@
 ///     <div class="button-primary">...</div>
 @mixin extend($modifiers: null, $parent: null, $core: false) {
 
-    @if $core {
+    @if $core or not $modifiers {
         @extend .#{$parent};
     }
 
@@ -47,4 +47,9 @@
         }
     }
     
+}
+
+// Alias for extending entire modules
+@mixin _module($module, $modifiers, $core: true) {
+    @include extend($parent: $module, $modifiers: $modifiers, $core: $core);
 }

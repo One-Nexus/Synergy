@@ -103,7 +103,7 @@ $module: null !default;
         @each $component in $components {
             // Create the naked class selectors
             $selectors: if(
-                nth(&, 1) + unquote('') == '.#{$module}', (
+                inspect(nth(&, 1)) == '.#{$module}', (
                     join($selectors, '.#{$module}_#{$component}', comma)
                 ), (
                     join($selectors, '.#{$parents}_#{$component}', comma)
@@ -111,7 +111,7 @@ $module: null !default;
             );
             // Create the attribute wildcard selectors
             $selectors: if(
-                nth(&, 1) + unquote('') == '.#{$module}', (
+                inspect(nth(&, 1)) == '.#{$module}', (
                     join($selectors, '[class*="#{$module}_#{$component}-"]', comma)
                 ), (
                     join($selectors, '[class*="#{$parents}_#{$component}-"]', comma)
@@ -393,7 +393,7 @@ $module: null !default;
 ///     <div class="button-primary">...</div>
 @mixin extend($modifiers: null, $parent: null, $core: false) {
 
-    @if $core {
+    @if $core or not $modifiers {
         @extend .#{$parent};
     }
 
@@ -414,6 +414,11 @@ $module: null !default;
         }
     }
     
+}
+
+// Alias for extending entire modules
+@mixin _module($module, $modifiers, $core: true) {
+    @include extend($parent: $module, $modifiers: $modifiers, $core: $core);
 }
 /// Apply styles to a component when certain conditions are met
 ///
