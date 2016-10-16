@@ -1,3 +1,6 @@
+@import '../../vendor/Sass-Boost/src/sass-boost';
+@import '../../vendor/SassyJSON/src/SassyJSON';
+
 @import 'config';
 
 @import 'mixins/module';
@@ -9,11 +12,6 @@
 @import 'mixins/context';
 @import 'mixins/option';
 @import 'mixins/value';
-
-@import 'functions/map-deep-get';
-@import 'functions/map-set';
-@import 'functions/map-merge-deep';
-@import 'functions/string-replace';
 
 @import 'utilities/config';
 @import 'utilities/option';
