@@ -19,6 +19,10 @@
     "end"
   ],
   "homepage": "http://esr360.github.io/Synergy/",
+  "dependencies": {
+      "Sass-Boost": "~1.0.1",
+      "Sass-JSON": "~1.0.0"
+  },
   "ignore": [
     ".gitignore",
     ".sass-cache",
