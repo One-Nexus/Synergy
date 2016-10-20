@@ -27,9 +27,7 @@
     ".gitignore",
     ".sass-cache",
     ".node_modules",
-    "vendor",
     "bower.json",
-    "**/.*"
   ],
   "authors": [
     "Edmund Reed <esr360@live.com>"

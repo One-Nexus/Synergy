@@ -244,43 +244,28 @@ var headerWrapperWidth = _modules['header']['wrapper-width'] // returns the wrap
 
 The compiled source files can be found in the `/dist` directory. Load these into your project before you attempt to execute any Synergy related code and you're good to go.
 
-##### Clone The Repo
+##### Via Git Clone
 
 ```
-git clone https://github.com/esr360/Synergy.git
+git clone --recursive https://github.com/esr360/Synergy.git 
 ```
-
-Or...
 
 ##### As Git Submodule
 
 ```
-git submodule add https://github.com/esr360/Synergy.git
+git submodule add https://github.com/esr360/Synergy.git && git submodule update --init --recursive
+
+##### Via Bower
+
 ```
-
-###### If using synergy.js:
-
-```
-git submodule update --init --recursive
-```
-
-Or...
-
-##### With Bower
-
-```html
 bower install Synergy
 ```
 
-###### If using modular.js:
+##### Via NPM
 
 ```
-git submodule update --init --recursive
+npm install Synergy
 ```
-
-##### Using Grunt
-
-If you are using grunt, after cloning the repo run `npm-install` to install the required node modules. To compile the source files and test that the Synergy framework is working, run `grunt compile`. This will overwrite the files already present in the `dist` directory, which you can then use in your project. Running this task will also compile a test `.scss` file which contains a basic example module and modifier. This is just to ensure that Synergy is working properly, if there are any issues the task will throw an error on your command line. The related **test** files are located in the `/test` directory. 
 
 ##### Requirements
 
@@ -1754,6 +1739,16 @@ They key part of the above code is `_modules['grid']['breakpoints'][value]`, whi
 * [Bringing Configuration Objects To Sass](http://hugogiraudel.com/2014/05/05/bringing-configuration-objects-to-sass/)
 
 ## Changelog
+
+#### Version 3.4.0
+
+Released: 21st October 2016
+
+###### Release Notes
+
+* removing custom functions and adding Sass-Boost dependency
+* added as npm package
+* added unit tests
 
 #### Version 3.3.0
 
