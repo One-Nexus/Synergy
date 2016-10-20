@@ -575,3 +575,82 @@ $module: null !default;
     }
 
 }
+/// Used to merge a module's default configuration with any custom
+/// values passed to the module
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group Synergy
+/// @access public
+///
+/// @param {map} $map-old - The map which will store default configuration
+/// @param {map} $map-new - The map which will hold custom values
+@function config($map-old, $map-new) {
+
+    $map-old: map-merge((
+        'selector-type'   : $selector-type,
+        'extend-options'  : $extend-options,
+        'output-json'     : $output-json
+    ), $map-old);
+
+    $map-old: map-merge-deep($map-old, $map-new);
+
+    // Store merged map in a variable
+    $config: $map-old !global;
+
+    // Output options to JSON
+    @if option($map-old, 'output-json') {
+        // remove superfluous keys from JSON
+        $map-old: map-remove($map-old,
+            'selector-type', 'extend-options', 'output-json'
+        );
+        // add the module to the list of modules
+        $_modules: map-merge-deep(
+            (map-get($map-old, 'name') : ($map-old)), $_modules
+        ) !global;
+    }
+
+    // Return merged map
+    @return $map-old;
+
+}
+/// Alias function to map-deep-get()
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group Synergy
+/// @access public
+///
+/// @param {map} $module - the module you are interested in
+/// @param {arglist} $keys - the key you are interested in
+///
+/// @todo Why doesn't this work? :(
+///
+///     @function option($map, $keys...) {
+///         @return map-deep-get($map, $keys...);
+///     }
+@function option($module, $keys...) {
+    @each $key in $keys {
+        $module: map-get($module, $key);
+    }
+    @return $module;
+}
+/// Alias function to option()
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group Synergy
+/// @access public
+///
+/// @param {map} $map
+/// @param {arglist} $keys
+@function setting($map, $keys...) {
+    @return option($map, $keys...);
+}
+/// Get a value from the current module's configuration
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group Synergy
+/// @access public
+///
+/// @param {arglist} $options
+@function this($options...) {
+    @return option($config, $options...)
+}
