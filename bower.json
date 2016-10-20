@@ -1,7 +1,7 @@
 {
   "name": "Synergy",
   "description": "A library of Sass mixins for architecting modular, configurable and scalable CSS.",
-  "version": "3.3.0",
+  "version": "3.4.0",
   "main": [
     "src/scss/_synergy.scss",
     "src/js/synergy.js"

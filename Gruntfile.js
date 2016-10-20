@@ -23,14 +23,10 @@ module.exports = function(grunt) {
                     'src/scss/mixins/_context.scss',
                     'src/scss/mixins/_option.scss',
                     'src/scss/mixins/_value.scss',
-                    'src/scss/functions/_config.scss',
-                    'src/scss/functions/_map-keys.scss',
-                    'src/scss/functions/_map-set.scss',
-                    'src/scss/functions/_map-set-deep.scss',
-                    'src/scss/functions/_map-merge-deep.scss',
-                    'src/scss/functions/_option.scss',
-                    'src/scss/functions/_setting.scss',
-                    'src/scss/functions/_this.scss',
+                    'src/scss/utilities/_config.scss',
+                    'src/scss/utilities/_option.scss',
+                    'src/scss/utilities/_setting.scss',
+                    'src/scss/utilities/_this.scss',
                 ],
                 dest: 'dist/_synergy.scss',
             },
@@ -41,18 +37,6 @@ module.exports = function(grunt) {
                 ],
                 dest: 'dist/synergy.js',
             }
-        },
-        
-        sass: {
-            test: {
-                files: {
-                    'unit-testing/scss/tests.css': 'unit-testing/scss/tests.scss'
-                },
-                options: {
-                    style: 'expanded',
-                    sourcemap: 'none'
-                }
-            } 
         },
 
         scsslint: {
@@ -156,8 +140,7 @@ module.exports = function(grunt) {
     grunt.registerTask('compile', [
         'clean',
         'concat',
-        'sass',
-        //'lint',
+        'lint',
         'test',
         'docs',
         'notify:dist'
@@ -184,7 +167,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-jsdoc');
