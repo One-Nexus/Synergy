@@ -13,8 +13,8 @@
     "framework",
     "web"
   ],
+  "author": "Edmund Reed (http://twitter.com/esr360)",
   "homepage": "https://github.com/esr360/Synergy",
-  "author": "Edmund Reed | @esr360",
   "bugs": {
     "url": "https://github.com/esr360/Synergy/issues"
   },

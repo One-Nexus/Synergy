@@ -1,7 +1,7 @@
 {
   "name": "Synergy",
-  "description": "A library of Sass mixins for architecting modular, configurable and scalable CSS.",
   "version": "3.4.0",
+  "description": "A library of Sass mixins for architecting modular, configurable and scalable CSS.",
   "main": [
     "src/scss/_synergy.scss",
     "src/js/synergy.js"
@@ -34,6 +34,5 @@
   "authors": [
     "Edmund Reed <esr360@live.com>"
   ],
-  "moduleType": [],
   "license": "MIT"
 }
