@@ -28,8 +28,5 @@
   "authors": [
     "Edmund Reed <esr360@live.com>"
   ],
-  "license": "MIT",
-  "scripts": {
-    "postinstall": "bower install Sass-Boost && bower install Sass-JSON"
-  }
+  "license": "MIT"
 }
