@@ -1,5 +1,0 @@
-{
-  "scripts": {
-    "postinstall": "git clone https://github.com/esr360/Sass-Boost.git vendor/Sass-Boost && git clone https://github.com/esr360/Sass-JSON.git vendor/Sass-JSON"
-  }
-}
