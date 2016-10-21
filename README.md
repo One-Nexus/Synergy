@@ -259,7 +259,7 @@ git submodule add https://github.com/esr360/Synergy.git && git submodule update 
 ##### Via Bower
 
 ```
-bower install Synergy
+bower install Synergy && npm run vendor
 ```
 
 ##### Via NPM

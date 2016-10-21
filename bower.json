@@ -3,7 +3,6 @@
   "version": "3.4.0",
   "description": "A library of Sass mixins for architecting modular, configurable and scalable CSS.",
   "main": [
-    "vendor/**/*",
     "src/scss/_synergy.scss",
     "src/js/synergy.js"
   ],
@@ -24,6 +23,7 @@
     ".gitignore",
     ".sass-cache",
     ".node_modules",
+    "vendor",
     "bower.json"
   ],
   "authors": [
