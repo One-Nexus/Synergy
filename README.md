@@ -1741,6 +1741,14 @@ They key part of the above code is `_modules['grid']['breakpoints'][value]`, whi
 
 ## Changelog
 
+#### Version 3.4.1
+
+Released: 21st October 2016
+
+###### Release Notes
+
+* fixing issue with commit hash used in bower install
+
 #### Version 3.4.0
 
 Released: 21st October 2016
