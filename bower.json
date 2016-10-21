@@ -19,17 +19,17 @@
     "end"
   ],
   "homepage": "http://esr360.github.io/Synergy/",
-  "dependencies": {
-      "Sass-Boost": "~1.0.1",
-      "Sass-JSON": "~1.0.0"
-  },
   "ignore": [
     ".gitignore",
     ".sass-cache",
-    ".node_modules"
+    ".node_modules",
+    "bower.json"
   ],
   "authors": [
     "Edmund Reed <esr360@live.com>"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "postinstall": "bower install Sass-Boost && bower install Sass-JSON"
+  }
 }
