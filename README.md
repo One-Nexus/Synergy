@@ -254,6 +254,7 @@ git clone --recursive https://github.com/esr360/Synergy.git
 
 ```
 git submodule add https://github.com/esr360/Synergy.git && git submodule update --init --recursive
+```
 
 ##### Via Bower
 
