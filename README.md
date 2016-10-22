@@ -278,7 +278,7 @@ dist/_synergy.scss
 
 ##### If using synergy.js
 
-Load the following file on your page before you attempt to load any Synergy related scripts:
+Include the following file on your page before you attempt to load any Synergy related scripts:
 
 ```
 dist/synergy.js
