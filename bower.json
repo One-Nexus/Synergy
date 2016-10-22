@@ -20,10 +20,8 @@
   ],
   "homepage": "http://esr360.github.io/Synergy/",
   "ignore": [
-    ".gitignore",
-    ".sass-cache",
+    "**/.*",
     ".node_modules",
-    "vendor",
     "bower.json"
   ],
   "authors": [
