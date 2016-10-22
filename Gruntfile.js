@@ -13,6 +13,8 @@ module.exports = function(grunt) {
         concat: {
             scss: {
                 src: [
+                    'vendor/Sass-Boost/dist/_sass-boost.scss',
+                    'vendor/Sass-JSON/dist/_sass-json.scss',
                     'src/scss/_config.scss',
                     'src/scss/mixins/_module.scss',
                     'src/scss/mixins/_component.scss',

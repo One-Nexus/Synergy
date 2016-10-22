@@ -1,3 +1,447 @@
+/// Returns a list of keys to to pass into the map-set-deep() function
+///
+/// @author Sam Richard
+/// @access public
+/// @link https://git.io/vPrlJ
+///
+/// @param $keys
+/// @param $counter
+@function get-keys($keys, $counter) {
+    $return: ();
+
+    @for $i from 1 to $counter {
+        $return: append($return, nth($keys, $i));
+    }
+
+    @return $return;
+}
+/// Replace a value in a list
+///
+/// @author Hugo Giraudel
+/// @access public
+/// @link https://goo.gl/NCFTHF
+///
+/// @param {map} $list - the list which contains the value you wish to replace
+/// @param {*} $old-value - the value you wish to replace
+/// @param {*} $new-value - what you wish to replace the old value with
+/// @param {bool} $recursive [false] - used if the target list is nested
+///
+/// @return {list} - updated list
+@function list-replace($list, $old-value, $new-value, $recursive: false) {
+    $result: ();
+
+    @for $i from 1 through length($list) {
+        @if type-of(nth($list, $i)) == list and $recursive {
+            $result: append($result, list-replace(nth($list, $i), $old-value, $new-value, $recursive));
+        } @else {
+            @if nth($list, $i) == $old-value {
+                $result: append($result, $new-value);
+            } @else {
+                $result: append($result, nth($list, $i));
+            }
+        }
+    }
+
+    @return $result;
+}
+/// Reverse a list
+///
+/// @author Hugo Giraudel
+/// @access public
+/// @link http://hugogiraudel.com/2013/08/08/advanced-sass-list-functions/
+///
+/// @param {list }$list - the list which you wish to reverse
+/// @param {bool} $recursive [false] - enable if target list has nested values
+///
+/// @return {list} - reversed list
+@function list-reverse($list, $recursive: false) {
+    $result: ();
+
+    @for $i from length($list) * -1 through -1 {
+        @if type-of(nth($list, abs($i))) == list and $recursive {
+            $result: append($result, list-reverse(nth($list, abs($i)), $recursive));
+        } @else {
+            $result: append($result, nth($list, abs($i)));
+        }
+    }
+
+    @return $result;
+}
+/// Get a value from a nested map
+///
+/// @author Hugo Giraudel
+/// @access public
+/// @link https://www.sitepoint.com/extra-map-functions-sass/
+///
+/// @param {map} $map - map
+/// @param {arglist} $keys - key chain
+///
+/// @return {*} - desired value
+@function map-get-deep($map, $keys...) {
+    @each $key in $keys {
+        $map: map-get($map, $key);
+    }
+    @return $map;
+}
+/// Used to recursively merge (deep merge) two maps
+///
+/// @author Pedr Browne
+/// @access public
+/// @link https://git.io/vPrlX
+///
+/// @param {map} $map-old - The original map
+/// @param {map} $map-new - The new map you wish to merge into the original
+/// @param {bool} $overwrite [true] - Overwrite existing keys
+///
+/// @return {map} - merged map
+@function map-merge-deep($map-old, $map-new, $overwrite: true) {
+
+    // Iterate through each value of the new map
+    @each $key, $new-value in $map-new {
+
+        // Check if that value already exists on the old map
+        @if map-has-key($map-old, $key) {
+            // There is an existing key
+            $old-value: map-get($map-old, $key);
+            @if type-of($new-value) == map and type-of($old-value) == map {
+                // If both are maps, recurse regardless of $overwrite
+                $merged-value: map-merge-deep($old-value, $new-value);
+                $map-old: map-set($map-old, $key, $merged-value);
+            } @else {
+                // Otherwise check $overwrite
+                @if $overwrite {
+                    $map-old: map-set($map-old, $key, $new-value);
+                }
+            }
+        } @else {
+            // There is no existing key to add
+            $map-old: map-set($map-old, $key, $new-value);
+        }
+
+    }
+
+    @return $map-old;
+}
+/// Reverse a map
+///
+/// @author Sean McEmerson
+/// @access public
+/// @link http://git.io/vLfuz
+///
+/// @param {map} $map - the map to be reversed
+///
+/// @return {map} - reversed map
+@function map-reverse($map) {
+    $keys: map-keys($map);
+    $map-reversed: ();
+
+    @for $i from length($keys) through 1 {
+        $map-reversed: map-merge(
+            $map-reversed, (nth($keys, $i): map-get($map, nth($keys, $i)))
+        );
+    }
+
+    $result: $map-reversed;
+
+    @return $result;
+}
+/// Get the value of a unique key from a nested map
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @access public
+///
+/// @param {map} $map - the map which contains the target key
+/// @param {string} $target-key - the key of interest
+/// @param {*} $target-value - optional fallback value if key not found
+///
+/// @return {*} - desired value
+@function map-search($map, $target-key, $target-value: '') {
+    @each $key, $value in $map {
+        // Is this our key?
+        @if $key == $target-key {
+            $target-value: $value;
+        } @else {
+            @if type-of($value) == 'map' {
+                // Does the new map contain our key?
+                @if map-has-key($value, $target-key) {
+                    $target-value: map-get($value, $target-key);
+                } @else {
+                    // if not, recurse the function
+                    $target-value: map-search($value, $target-key, $target-value);
+                }
+            }
+        }
+    }
+    @return $target-value;
+}
+/// Set a nested key in an existing map
+///
+/// @author Sam Richard
+/// @access public
+/// @link https://git.io/vPr80
+///
+/// @param {map} $map - the map which contains the key you wish to set
+/// @param {string|list} $keys - the keychain trail to your desired key
+/// @param {*} $value - the value you wish to set for the key
+///
+/// @return {map} - updated map
+@function map-set-deep($map, $keys, $value) {
+
+    $private-sassy-maps-suppress-warnings: true !global;
+    $length: length($keys);
+    $get-keys: ();
+    $map-level: ();
+
+    @if $length > 1 {
+        $get-keys: get-keys($keys, $length);
+        $map-level: map-get-deep($map, $get-keys);
+    }
+
+    $merge: (nth($keys, $length): $value);
+
+    @if $map-level {
+        $merge: map-merge($map-level, $merge);
+    }
+
+    @for $i from ($length * -1 + 1) through -1 {
+        $j: abs($i);
+        $key: nth($keys, $j);
+        @if $j > 1 {
+            $get-keys: get-keys($keys, $j);
+            $map-level: map-get-deep($map, $get-keys);
+            @if $map-level {
+                $merge: map-merge($map-level, ($key: $merge));
+            } @else {
+                $merge: ($key: $merge);
+            }
+        } @else {
+            $merge: ($key: $merge);
+        }
+    }
+
+    $map: map-merge($map, $merge);
+    $private-sassy-maps-suppress-warnings: false !global;
+
+    @return $map;
+}
+/// Set a key in an existing map
+///
+/// @author Sam Richard
+/// @access public
+/// @link https://git.io/vPr8B
+///
+/// @param {map} $map - the map which contains the key you wish to set
+/// @param {string} $key - the key you wish to set
+/// @param {*} $value - the value you wish to set for the key
+///
+/// @return {map} - updated map
+@function map-set($map, $key, $value) {
+    @return map-merge($map, ($key: $value));
+}
+/// Replace `$search` with `$replace` in `$string`
+///
+/// @author Hugo Giraudel
+/// @access public
+/// @link https://css-tricks.com/snippets/sass/str-replace-function/
+///
+/// @param {string} $string - initial string
+/// @param {string} $search - substring to replace
+/// @param {string} $replace - new value
+///
+/// @return {string} - updated string
+@function str-replace($string, $search, $replace: '') {
+    $index: str-index($string, $search);
+
+    @if $index {
+        @return str-slice($string, 1, $index - 1) + $replace + str-replace(
+            str-slice($string, $index + str-length($search)), $search, $replace
+        );
+    }
+
+    @return $string;
+}
+/// Delay the encoding of a literal to JSON to a type-specific method
+///
+/// @author Hugo Giraudel
+/// @access public
+///
+/// @require {function} _json-encode--string
+/// @require {function} _json-encode--number
+/// @require {function} _json-encode--list
+/// @require {function} _json-encode--map
+/// @require {function} _json-encode--null
+/// @require {function} _json-encode--color
+/// @require {function} _json-encode--bool
+///
+/// @param {*} $value - value to be stringified
+///
+/// @throw Unknown type for #{$value} (#{$type}).
+/// @return {string} - JSON encoded string
+@function json-encode($value) {
+    $type: type-of($value);
+
+    @if function-exists('_json-encode--#{$type}') {
+        @return call('_json-encode--#{$type}', $value);
+    }
+
+    @error 'Unknown type for #{$value} (#{$type}).';
+}
+/// Proof quote a value
+///
+/// @author Hugo Giraudel
+/// @access public
+///
+/// @param {*} $value - value to be quoted
+///
+/// @return {string} - quoted value
+@function _proof-quote($value) {
+    $value: to-string($value);
+    @return '"' + $value + '"';
+}
+/// Joins all elements of `$list` with `$glue`
+///
+/// @author Hugo Giraudel
+/// @access public
+///
+/// @param {List} $list - list to cast
+/// @param {String} $glue ('') - value to use as a join string
+///
+/// @return {String} - quoted value
+@function to-string($list, $glue: '', $is-nested: false, $recursive: false) {
+    $result: '';
+
+    @for $i from 1 through length($list) {
+        $e: nth($list, $i);
+        @if type-of($e) == 'list' and $recursive {
+            $result: $result + to-string($e, $glue, $is-nested: true, $recursive: true);
+        } @else {
+            $result: if(
+                $i != length($list) or $is-nested,
+                $result + $e + $glue, $result + $e
+            );
+        }
+    }
+
+    @return $result;
+}
+/// JSON.stringify a value and pass it to the content property of a specified selector
+///
+/// @author Hugo Giraudel
+/// @access public
+///
+/// @require {function} json-encode
+///
+/// @param {*} $value - value to be stringified
+/// @param {string} $selector ['#modulesConfigJSON'] - DOM selector to hold config
+@mixin json-encode($value, $selector: '#modulesConfigJSON') {
+    #{$selector}::before {
+        content: json-encode($value);
+        display: block;
+        height: 0;
+        overflow: hidden;
+        width: 0;
+    }
+}
+/// Encode a bool to JSON
+///
+/// @author Hugo Giraudel
+/// @access private
+///
+/// @param {bool} $bool - bool to be encoded
+///
+/// @return {bool} - encoded bool
+@function _json-encode--bool($boolean) {
+    @return $boolean;
+}
+/// Encode a color to JSON
+///
+/// @author Hugo Giraudel
+/// @access private
+///
+/// @require {function} _proof-quote
+///
+/// @param {color} $color - color to be encoded
+///
+/// @return {string} - encoded color
+@function _json-encode--color($color) {
+    @return _proof-quote($color);
+}
+/// Encode a list to JSON
+///
+/// @author Hugo Giraudel
+/// @access private
+///
+/// @require {function} json-encore
+///
+/// @param {list} $list - list to be encoded
+///
+/// @return {string} - encoded list
+@function _json-encode--list($list) {
+    $str: '';
+
+    @each $item in $list {
+        $str: $str + ', ' + json-encode($item);
+    }
+
+    @return '[' + str-slice($str, 3) + ']';
+}
+/// Encode a map to JSON
+///
+/// @author Hugo Giraudel
+/// @access private
+///
+/// @require {function} _proof-quote
+/// @require {function} json-encode
+///
+/// @param {map} $map - map to be encoded
+///
+/// @return {string} - encoded map
+@function _json-encode--map($map) {
+    $str: '';
+
+    @each $key, $value in $map {
+        $str: $str + ', ' + _proof-quote($key) + ': ' + json-encode($value);
+    }
+
+    @return '{' + str-slice($str, 3) + '}';
+}
+/// Encode `null` to JSON
+///
+/// @author Hugo Giraudel
+/// @access private
+///
+/// @param {null} $null - `null`
+///
+/// @return {string}
+@function _json-encode--null($null) {
+    @return 'null';
+}
+/// Encode a number to JSON
+///
+/// @author Hugo Giraudel
+/// @access private
+///
+/// @require {function} _proof-quote
+///
+/// @param {number} $number - number to be encoded
+///
+/// @return {string} - encoded number
+@function _json-encode--number($number) {
+    @return if(unitless($number), $number, _proof-quote($number));
+}
+/// Encode a string to JSON
+///
+/// @author Hugo Giraudel
+/// @access private
+///
+/// @require {function} _proof-quote
+///
+/// @param {string} $string - string to be encoded
+///
+/// @return {string} - encoded string
+@function _json-encode--string($string) {
+    @return _proof-quote($string);
+}
 // Enable JSON output?
 $to-json: false !default;
 

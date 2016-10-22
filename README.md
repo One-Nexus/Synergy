@@ -242,7 +242,9 @@ var headerWrapperWidth = _modules['header']['wrapper-width'] // returns the wrap
 
 ## Installation
 
-The compiled source files can be found in the `/dist` directory. Load these into your project before you attempt to execute any Synergy related code and you're good to go.
+##### Requirements
+
+Synergy requires **Sass 3.4+**, so as of writing this unfortunately means you cannot use Libsass and must use Ruby Sass.
 
 ##### Via Git Clone
 
@@ -267,10 +269,6 @@ bower install Synergy && cd bower_components/Synergy && npm run vendor
 ```
 npm install Synergy
 ```
-
-##### Requirements
-
-Synergy requires **Sass 3.4**, so as of writing this unfortunately means you cannot use Libsass and must use Ruby Sass.
 
 ## Advanced Documentation
 
@@ -802,7 +800,7 @@ The `modifier()` mixin generates the selector for any modifiers of your module, 
 <div class="button-large">Button</div>
 ```
 
-The `modifier()` mixin is infinitely nestable allowing you to require more than one modifier for styles to take affect:
+The `modifier()` mixin is infinitely nestable allowing you to require more than one modifier for styles to take effect:
 
 ```scss
 @include module('header') {
