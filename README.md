@@ -242,8 +242,6 @@ var headerWrapperWidth = _modules['header']['wrapper-width'] // returns the wrap
 
 ## Installation
 
-##### Requirements
-
 Synergy requires **Sass 3.4+**, so as of writing this unfortunately means you cannot use Libsass and must use Ruby Sass.
 
 ##### Via Git Clone
@@ -268,6 +266,22 @@ bower install Synergy && cd bower_components/Synergy && npm run vendor
 
 ```
 npm install Synergy
+```
+
+---
+
+After you have installed Synergy, import the following file into your project's main `.scss` file:
+
+```
+dist/_synergy.scss
+```
+
+##### If using synergy.js
+
+Load the following file on your page before you attempt to load any Synergy related scripts:
+
+```
+dist/synergy.js
 ```
 
 ## Advanced Documentation
