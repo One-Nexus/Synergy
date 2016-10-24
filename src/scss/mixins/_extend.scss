@@ -50,6 +50,6 @@
 }
 
 // Alias for extending entire modules
-@mixin _module($module, $modifiers, $core: true) {
+@mixin _module($module, $modifiers: null, $core: true) {
     @include extend($parent: $module, $modifiers: $modifiers, $core: $core);
 }
