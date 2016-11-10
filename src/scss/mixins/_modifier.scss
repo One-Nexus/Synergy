@@ -16,7 +16,7 @@
 ///     }
 ///
 ///     <div class="button-large">...</div>
-@mixin modifier($modifiers, $special: null, $glue: '-') {
+@mixin modifier($modifiers, $special: null, $glue: $modifier-glue) {
 
     $selectors: &;
 
@@ -38,9 +38,9 @@
 
         @each $modifier in $modifiers {
             @if $special == 'not' {
-                $modifier-selectors: join($modifier-selectors, '&:not([class*="#{$glue}#{$modifier}"])', comma);
+                $modifier-selectors: join($modifier-selectors, '&:not([class*="#{$glue $modifier}"])', comma);
             } @else {
-                $modifier-selectors: join($modifier-selectors, '&[class*="#{$glue}#{$modifier}"]', comma);
+                $modifier-selectors: join($modifier-selectors, '&[class*="#{$glue $modifier}"]', comma);
             }
         }
 

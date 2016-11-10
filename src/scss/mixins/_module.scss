@@ -26,7 +26,7 @@
             $selectors: join($selectors, '.#{$module}', comma);
         }
         @if $type == 'flex' or $type == 'chain' {
-            $selectors: join($selectors, '[class*="#{$module}-"]', comma);
+            $selectors: join($selectors, '[class*="#{$module $modifier-glue}"]', comma);
         }
         @if $type == 'data' {
             $selectors: join($selectors, '[data-#{$module}]', comma);

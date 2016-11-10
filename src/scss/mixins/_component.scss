@@ -17,7 +17,7 @@
 ///     <div class="header_wrapper">...</div>
 @mixin component($components: null) {
 
-    $selectors: '[class*="#{$module}_"]';
+    $selectors: '[class*="#{$module $component-glue}"]';
 
     @if $components {
 
@@ -33,17 +33,17 @@
             // Create the naked class selectors
             $selectors: if(
                 inspect(nth(&, 1)) == '.#{$module}', (
-                    join($selectors, '.#{$module}_#{$component}', comma)
+                    join($selectors, '.#{$module $component-glue $component}', comma)
                 ), (
-                    join($selectors, '.#{$parents}_#{$component}', comma)
+                    join($selectors, '.#{$parents $component-glue $component}', comma)
                 )
             );
             // Create the attribute wildcard selectors
             $selectors: if(
                 inspect(nth(&, 1)) == '.#{$module}', (
-                    join($selectors, '[class*="#{$module}_#{$component}-"]', comma)
+                    join($selectors, '[class*="#{$module $component-glue $component $modifier-glue}"]', comma)
                 ), (
-                    join($selectors, '[class*="#{$parents}_#{$component}-"]', comma)
+                    join($selectors, '[class*="#{$parents $component-glue $component $modifier-glue}"]', comma)
                 )
             );
         }

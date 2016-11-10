@@ -35,7 +35,7 @@
     $selectors: ();
 
     @each $component in $components {
-        $selector: #{$module}_#{$component};
+        $selector: #{$module $component-glue $component};
         @if $special == 'adjacent-sibling' {
             $selectors: join($selectors, '+ [class*="#{$selector}"]', comma);
         } @else {
@@ -46,7 +46,7 @@
             @each $modifier in $is {
                 $selectors: join(
                     $modifiers-list,
-                    selector-append($selectors, '[class*="-#{$modifier}"]'),
+                    selector-append($selectors, '[class*="#{$modifier-glue $modifier}"]'),
                 comma);
             }
         }
@@ -55,7 +55,7 @@
             @each $modifier in $not {
                 $selectors: join(
                     $modifiers-list,
-                    selector-append($selectors, ':not([class*="-#{$modifier}"])'),
+                    selector-append($selectors, ':not([class*="#{$modifier-glue $modifier}"])'),
                 comma);
             }
         }
