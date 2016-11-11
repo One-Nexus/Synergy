@@ -502,6 +502,7 @@ $module: null !default;
 
     #{$selectors} {
         @content;
+        @include module-styles;
     }
 
 }
@@ -517,6 +518,35 @@ $module: null !default;
 @mixin modules($modules, $type: $selector-type) {
     @include module($modules, $type) {
         @content;
+    }
+}
+
+/// Output CSS styles from config
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group Synergy
+///
+/// @param {map} $styles - The CSS styles to output
+@mixin module-styles($styles: if(variable-exists('config'), (map-get($config, 'CSS')), '()')) {
+    @if variable-exists('config') {
+        @each $property, $value in $styles {
+            // the propery is for a modifier
+            @if str-slice($property, 1, 1) == $modifier-glue {
+                @include modifier(str-replace($property, $modifier-glue, '')) {
+                    @include module-styles($value);
+                }
+            } 
+            // the property is for a component
+            @else if str-slice($property, 1, 1) == $component-glue {
+                @include component(str-replace($property, $component-glue, '')) {
+                    @include module-styles($value);
+                }
+            }
+            // the property is regular CSS
+            @else {
+                #{$property}: $value;
+            }
+        }
     }
 }
 /// Create a component based off the main module
@@ -986,9 +1016,15 @@ $module: null !default;
     // Create a unique, random placeholder to store styles
     $placeholder : $value + random(9999);
 
+    $target: if(
+        type-of(option($config, $option)) == 'map',
+        option($config, $option, 'enabled'),
+        option($config, $option)
+    );
+
     // Determine if the option's value is our value of interest
     $enabled: if(
-        option($config, $option, 'enabled') == $value, true, false
+        $target == $value, true, false
     );
 
     @at-root {
