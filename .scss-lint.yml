@@ -26,7 +26,7 @@ linters:
     style: silent
 
   DebugStatement:
-    enabled: true
+    enabled: false
 
   DeclarationOrder:
     enabled: true
