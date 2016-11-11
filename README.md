@@ -30,45 +30,57 @@ For three reasons:
 Using BEM ([example source](http://eu.battle.net/heroes/en/)):
 
 ```css
-panels-list__item panels-list__item--blog panels-list__item--featured panels-list__item--no-summary panels-list__item--image
+.panels-list__item panels-list__item--blog panels-list__item--featured panels-list__item--no-summary panels-list__item--image {...}
 ```
 
 Using Synergy:
 
 ```css
-panels-list_item-blog-featured-noSummary-image
+.panelsList_item-blog-featured-noSummary-image {...}
 ```
 
-Synergy takes advantage of CSS attribute wildcard selectors. By looking for classes which contain certain strings as opposed to looking for specific classes, your markup can be much more flexible, allowing you to chain modifiers, removing the need for any repetition (i.e. no more 'button button--large button--round').
+Using Synergy with original BEM syntax:
+
+```css
+.panels-list__item--blog--featured--no-summary--image {...}
+```
+
+Synergy takes advantage of CSS attribute wildcard selectors. By looking for classes which contain certain strings as opposed to looking for specific classes, your markup can be much more flexible, allowing you to chain modifiers and components, removing the need for any repetition (i.e. no more 'button button--large button--round').
 
 ##### Configurable Modules
 
-Configure your modules without touching the source code. Call the mixin and pass your values to it, leaving the module's source code untouched, allowing you to easily change options and styles.
+Configure your modules without touching the source code. Call the mixin and pass your options to it, leaving the module's source code untouched, allowing you to easily change options and styles.
 
 ```scss
-@mixin header($custom: ()) {
+@mixin buttons($custom: ()) {
     
     // Default module configuration
-    $header: config((
-        'background' : #000000
+    $buttons: config((
+        'padding': 8px,
+        'radius' : 6px
     ), $custom);
     
-    @include module('header') {
-        background: this('background');  
+    @include module('button') {
+        display: inline-block;
+        padding: this('padding');
+        border-radius: this('radius');
     }
 
 }
 
-@include header((
-    'background' : #254554
+@include buttons((
+    'padding': 0.75em,
+    'radius' : 3px
 ));
 ```
 
 ###### CSS Output
 
 ```css
-.header, [class*="header-"] {
-    background: #254554;
+.button, [class*="button-"] {
+    display: inline-block;
+    padding: 0.75em;
+    border-radius: 3px;
 }
 ```
 
@@ -318,8 +330,8 @@ dist/synergy.js
 
 The `module()` mixin is what generates the selectors for your module. The mixin accepts 2 parameters:
 
-* `$modules` - the name of your module(s) [optional]
-* `$type` - this defines how the mixin generates the selectors for your component(s) [optional]
+* `$modules` {string|list} - the name of your module(s) (optional)
+* `$type` {string} - this defines how the mixin generates the selectors for your component(s) ['flex'] (optional)
 
 ```scss
 @include module('header') {
@@ -343,7 +355,7 @@ If `$modules` is not defined, it will look for a `name` value in your module's c
 }
 ```
 
-`$modules` is usually a single value but can also be a list, eg. `(header, footer)`, should you wish to apply styles to more than one module. For such instances, an *alias* mixin of `modules()` is available:
+`$modules` is usually a single value but can also be a list, eg. `('header', 'footer')`, should you wish to apply styles to more than one module. For such instances, an *alias* mixin of `modules()` is available:
 
 ```scss
 @include modules(('header', 'footer')) {
@@ -351,7 +363,7 @@ If `$modules` is not defined, it will look for a `name` value in your module's c
 }
 ```
 
-`$type` can be one of three values: `flex` (default), `chain` and `static`. By default, `flex` is enabled for all componenets. To globally change the default type from `flex` to something else, pass the `$selector-type` variable with the value you desire in your Sass before any modules.
+`$type` can be one of three values: `flex` (default), `chain` and `static`. By default, `flex` is enabled for all componenets. To globally change the default type from `flex` to something else, use the `$selector-type` variable with the value you desire in your Sass before importing Synergy.
 
 ```scss
 // Re-define default selector type
@@ -373,19 +385,29 @@ $selector-type: 'chain';
 
 This is the default value for a module; it creates selectors for both `.module` and `[class*="module-"]`, allowing you to use both the naked module as well as modifiers. Whilst this is the most flexible option, it does mean the generated CSS is slightly greater, which is what the other 2 options are for.
 
-Or if using the default `$type` value of `flex`, you do not need to pass a second parmeter here:
+###### CSS Output
 
-```scss
-@include module('header') {
-	...
+```css
+.header, [class*="header-"] {
+    ...
 }
 ```
+
+> If using the global default `$type` value of `flex`, you do not need to pass a second parmeter here to achieve the `flex` option
 
 ##### Chain
 
 ```scss
 @include module('header', 'chain') {
 	...
+}
+```
+
+###### CSS Output
+
+```css
+[class*="header-"] {
+    ...
 }
 ```
 
@@ -399,21 +421,43 @@ The chain option should be used if you are looking to optimise your CSS output, 
 }
 ```
 
-The static option creates only the naked selector for your module; ie - `.selector`, meaning no modifiers can be used. This option is only available for consistency; it probably makes more sense to just write `.module` instead of using the mixin in this case - I'll let you think about that one.
+###### CSS Output
+
+```css
+.header {
+    ...
+}
+```
+
+The static option creates only the naked selector for your module; ie - `.selector`, meaning no modifiers or components can be used. This option is only available for consistency; it could make more sense to just write `.module` instead of using the mixin in this case - I'll let you think about that one.
 
 ##### Advanced Example
 
 ```scss
 @include modules(('header', 'footer'), 'static') {
-	// apply to both header and footer modules
+	...
 }
 
 @include module('header', 'static') {
-	// apply only to header
+	...
 }
 
-@include module('footer', 'static') {
-	// apply only to footer
+@include module('footer') {
+	...
+}
+```
+
+###### CSS Output
+
+```css
+.header, .footer {
+    ...
+}
+.header {
+    ...
+}
+.footer, [class*="footer-] {
+    ...
 }
 ```
 
@@ -425,13 +469,16 @@ Because of how the selectors are generated, it is not possible to create relatin
 * reversed wording (button-header)
 * underscore (header_button)
 
-To keep things as similar to BEM as possible, Synergy provies an easy way to create relating components using underscores, eg - `header_wrapper`. The `component` mixin accepts a single parameter:
+To keep things as similar to BEM as possible, Synergy provies an easy way to create relating components using underscores, eg - `header_wrapper`. The `component` mixin accepts 2 parameters:
 
-* `$components` - the name of your component(s) [optional]
+* `$components` {string|list} - the name of your component(s) [null] (optional)
+* `$glue` {string} - the glue to chain components to modules ['_'] (required)
 
 ```scss
 @include module('header') {
 	
+    ...
+
 	@include component('wrapper') {
 		...	
 	}	
@@ -443,12 +490,26 @@ To keep things as similar to BEM as possible, Synergy provies an easy way to cre
 <div class="header_wrapper">...</div>
 ```
 
+###### CSS Output
+
+```css
+.header, [class*="header-"] {
+    ...
+}
+[class*="header_wrapper"] {
+    ...
+}
+```
+
 Components work like regular modules, in the sense that you can add modifiers:
 
 ```scss
 @include module('header') {
+
+    ...
 	
 	@include component('wrapper') {
+        ...
 		@include modifier('fullscreen') {
 			...
 		}
@@ -461,10 +522,26 @@ Components work like regular modules, in the sense that you can add modifiers:
 <div class="header_wrapper-fullscreen">...</div>
 ```
 
+###### CSS Output
+
+```css
+.header, [class*="header-"] {
+    ...
+}
+[class*="header_wrapper"] {
+    ...
+}
+[class*="header_wrapper-fullscreen"] {
+    ...
+}
+```
+
 ##### Alias Mixin For Multiple Components
 
 ```scss
 @include module('footer') {
+
+    ...
 	
 	@include components(('nav', 'copyright')) {
 		...	
@@ -478,6 +555,20 @@ Components work like regular modules, in the sense that you can add modifiers:
     <div class="footer_nav">...</div>
     <div class="footer_copyright">...</div>
 </div>
+```
+
+###### CSS Output
+
+```css
+.footer, [class*="footer-"] {
+    ...
+}
+[class*="footer_nav"] {
+    ...
+}
+[class*="footer_copyright"] {
+    ...
+}
 ```
 
 ##### Global Component Styles
@@ -511,46 +602,29 @@ By not passing a parameter to the `component()` mixin, you can apply styles to a
 </div>
 ```
 
-##### Advanced Example
+###### CSS Output
 
-```scss
-@include module('footer') {
-	
-	...
-	
-	@include component('wrapper', 'static') {
-		...	
-	}
-	
-	@include components(('nav', 'copyright'), 'static') {
-		display: inline-block;
-	}
-	
+```css
+[class*="widget_"][class*="-inline"] {
+    ...
 }
-```
-
-```html
-<footer class="footer">
-	<div class="footer_wrapper">
-		<div class="footer_nav">
-			...
-		</div>
-		<div class="footer_copyright">
-			...
-		</div>
-	</div>
-</footer>
+[class*="widget_icon"] {
+    ...
+}
+[class*="widget_header"] {
+    ...
+}
 ```
 
 #### Overwrite
 
 This mixin allows you to overwrite the styles of existing modules, components and modifiers when in context of another module. The `overwrite()` mixin accepts 5 parameters:
 
-* `$modules` - the name of the modules(s) you wish to overwrite [optional]
-* `$type` - as above, this can be either `flex` (default), `chain` or `static` [optional]
-* `$is` - overwrite the module only if it has certain modifiers [optional]
-* `$not` - overwrite the module only if it does not have certain modifiers [optional]
-* `$special` - set a special operator [optional]
+* `$modules` {string|list} - the name of the modules(s) you wish to overwrite (optional)
+* `$type` {string} - as above, this can be either `flex` (default), `chain` or `static` (optional)
+* `$is` {string|list} - overwrite the module only if it has certain modifiers (optional)
+* `$not` {string|list} - overwrite the module only if it does not have certain modifiers (optional)
+* `$special` {string} - set a special operator (optional)
 
 > Leaving `$modules` undefined will instead look for a `name` value of your module's config (see [Advanced Example](#advanced-example-2)).
 
@@ -595,6 +669,35 @@ This mixin allows you to overwrite the styles of existing modules, components an
 </div>	
 ```
 
+###### CSS Output
+
+```css
+.logo, [class*="logo-"], .nav, [class*="nav-"] {
+  color: black;
+}
+
+.logo, [class*="logo-"] {
+  font-size: 1em;
+}
+
+.header .logo, 
+.header [class*="logo-"], 
+.header .nav, 
+.header [class*="nav-"], 
+[class*="header-"] .logo, 
+[class*="header-"] [class*="logo-"], 
+[class*="header-"] .nav, 
+[class*="header-"] [class*="nav-"] {
+  color: white;
+}
+.header .logo, 
+.header [class*="logo-"], 
+[class*="header-"] .logo, 
+[class*="header-"] [class*="logo-"] {
+  font-size: 1.5em;
+}
+```
+
 ##### Special Operators
 
 * `adjacent-sibling` - overwrite a module when it is also an adjacent sibling to the parent module
@@ -613,7 +716,7 @@ This mixin allows you to overwrite the styles of existing modules, components an
 	@include overwrite('logo', $special: 'adjacent-sibling') {
 		color: blue;
 	}
-	
+
 }
 ```
 
@@ -623,6 +726,21 @@ This mixin allows you to overwrite the styles of existing modules, components an
 
 <div class="logo">I'm red!</div>
 <div class="navigation">...</div>
+```
+
+###### CSS Output
+
+```css
+.logo, [class*="logo-"] {
+  color: red;
+}
+
+.navigation + .logo, 
+.navigation + [class*="logo-"], 
+[class*="navigation-"] + .logo, 
+[class*="navigation-"] + [class*="logo-"] {
+  color: blue;
+}
 ```
 
 ##### Advanced Example
@@ -670,13 +788,13 @@ Hopefully by looking between the 2 you get a good idea of how the advanced featu
 
 #### Overwrite-Component
 
-As above, this mixin is used for overwriting styles for an existing component in alternative context. 3 parameters are accepted for the `overwrite-component()` mixin:
+As above, this mixin is used for overwriting styles for an existing component in alternative context. The following parameters are accepted for the `overwrite-component()` mixin:
 
-* `$components` - the name of the component(s) you wish to overwrite [required]
-* `$parent` - the parent of your component [optional]
-* `$is` - overwrite the component only if it has certain modifiers [optional]
-* `$not` - overwrite the component only if it does not have certain modifiers [optional]
-* `$special` - set a special operator [optional]
+* `$components` {string|list} - the name of the component(s) you wish to overwrite (required)
+* `$parent` {string} - the parent of your component (optional)
+* `$is` {string|list} - overwrite the component only if it has certain modifiers (optional)
+* `$not` {string|list} - overwrite the component only if it does not have certain modifiers (optional)
+* `$special` {string} - set a special operator (optional)
 
 > The `$parent` parameter is used if you are including this mixin inside a different module to your component's original parent.
 
@@ -701,6 +819,17 @@ As above, this mixin is used for overwriting styles for an existing component in
 </div>	
 ```
 
+###### CSS Output
+
+```css
+[class*="form_input"] {
+    ...
+}
+[class*="form-"][class*="-large"] [class*="form_input"] {
+    ...
+}
+```
+
 ##### Alias Mixin For Multiple Components
 
 ```scss
@@ -719,6 +848,21 @@ As above, this mixin is used for overwriting styles for an existing component in
 			...
 		}
 	}
+}
+```
+
+###### CSS Output
+
+```css
+[class*="form_input"] {
+    ...
+}
+[class*="form_group"] {
+    ...
+}
+[class*="form-"][class*="-large"] [class*="form_input"], 
+[class*="form-"][class*="-large"] [class*="form_group"] {
+    ...
 }
 ```
 
@@ -748,6 +892,19 @@ As above, this mixin is used for overwriting styles for an existing component in
 <div class="widget">
 	<div class="heading_group">I'm Blue!</div>	
 </div>
+```
+
+###### CSS Output
+
+```css
+[class*="heading_group"] {
+  color: red;
+}
+
+.widget [class*="heading_group"], 
+[class*="widget-"] [class*="heading_group"] {
+  color: blue;
+}
 ```
 
 ##### Special Operators
@@ -785,11 +942,24 @@ As above, this mixin is used for overwriting styles for an existing component in
 </div>
 ```
 
+###### CSS Output
+
+```css
+[class*="widget_title"] {
+  color: red;
+}
+[class*="widget_icon"] + [class*="widget_title"] {
+  color: blue;
+}
+```
+
 #### Modifier
 
-The `modifier()` mixin generates the selector for any modifiers of your module, for example a **small** or **large** modifier. This mixin accepts only 1 paramter:
+The `modifier()` mixin generates the selector for any modifiers for your module, for example a **small** or **large** modifier. This mixin accepts the following paramters:
 
-* `$modifiers` - the name of your modifier(s) [required]
+* `$modifiers` {string|list} - the name of the desired modifier(s) (required)
+* `$special` {string} - set a special operator (optional)
+* `$glue` {string} - the glue to chain components to modules ['_'] (required)
 
 
 ```scss
@@ -814,6 +984,20 @@ The `modifier()` mixin generates the selector for any modifiers of your module, 
 <div class="button-large">Button</div>
 ```
 
+###### CSS Output
+
+```css
+.button, [class*="button-"] {
+    ...
+}
+[class*="button-"][class*="-small"] {
+    font-size: 0.75em;
+}
+[class*="button-"][class*="-large"] {
+    font-size: 1.5em;
+}
+```
+
 The `modifier()` mixin is infinitely nestable allowing you to require more than one modifier for styles to take effect:
 
 ```scss
@@ -836,6 +1020,23 @@ The `modifier()` mixin is infinitely nestable allowing you to require more than 
 
 ```html
 <div class="header-side-left">...</div>
+```
+
+###### CSS Output
+
+```css
+.header, [class*="header-"] {
+    ...
+}
+[class*="header-"][class*="-side"] {
+    position: absolute;
+}
+[class*="header-"][class*="-side"][class*="-left"] {
+    left: 0;
+}
+[class*="header-"][class*="-side"][class*="-right"] {
+    right: 0;
+}
 ```
 
 You can use any number of modifiers on a single element in the HTML, and in any order, for example:
@@ -867,6 +1068,24 @@ You can use any number of modifiers on a single element in the HTML, and in any 
 }
 ```
 
+###### CSS Output
+
+```css
+.button, [class*="button-"] {
+    ...
+}
+[class*="button-"][class*="-buy-now"], 
+[class*="button-"][class*="-add-to-basket"] {
+    text-transform: uppercase;
+}
+[class*="button-"][class*="-buy-now"] {
+    ...
+}
+[class*="button-"][class*="-add-to-basket"] {
+    ...
+}
+```
+
 #### Extend Modifiers
 
 This mixin allows you to extend multiple modifiers into a new, seperate modifer, essentially combining several modifiers into one.
@@ -874,12 +1093,14 @@ This mixin allows you to extend multiple modifiers into a new, seperate modifer,
 ```scss
 @include module('button') {
 
-	@include modifier('round')   {...}
-	@include modifier('large')   {...}
-	@include modifier('success') {...}
+    ...
+
+	@include modifier('round')   {border-radius: 6px}
+	@include modifier('large')   {font-size: 2em}
+	@include modifier('success') {color: green}
 
 	@include modifier('primary') {
-		@include extend('round', 'large', 'success');
+		@include extend(('round', 'large', 'success'))
 	}	
 
 }
@@ -889,11 +1110,31 @@ This mixin allows you to extend multiple modifiers into a new, seperate modifer,
 <div class="button-primary">...</div>
 ```
 
+###### CSS Output
+
+```css
+.button, [class*="button-"] {
+    ...
+}
+[class*="button-"][class*="-round"], 
+[class*="button-"][class*="-primary"] {
+    border-radius: 6px;
+}
+[class*="button-"][class*="-large"], 
+[class*="button-"][class*="-primary"] {
+    font-size: 2em;
+}
+[class*="button-"][class*="-success"], 
+[class*="button-"][class*="-primary"] {
+    color: green;
+}
+```
+
 #### Context
 
 The `context()` mixin allows you to apply styles to your module when certain conditions are met. This mixin accepts 1 parameter:
 
-* `$context` - the name of the predefined condition you wish to be met [required]
+* `$context` - the name of the predefined condition you wish to be met (required)
 
 The following conditions can be passed to the mixin:
 
@@ -927,6 +1168,18 @@ The following conditions can be passed to the mixin:
 }
 ```
 
+###### CSS Output
+
+```css
+[class*="widget_icon"] {
+    color: blue;
+}
+.widget:hover [class*="widget_icon"], 
+[class*="widget-"]:hover [class*="widget_icon"] {
+    color: white;
+}
+```
+
 ### Module Configuration
 
 As outlined in the [overview](#overview) section, Synergy allows you to configure your modules with customizable options.
@@ -935,21 +1188,24 @@ As outlined in the [overview](#overview) section, Synergy allows you to configur
 @mixin header($custom: ()) {
 
 	$header: config((
-		
-		// Options
 		'bg-color' : black,
 		'top'      : 50px
-		
 	), $custom);
 
 	@include module('header') {
-		
-		// Core Styles
 		background-color: this('bg-color');
 		margin-top: this('top');
-		
 	}
 		
+}
+```
+
+###### CSS Output
+
+```css
+.header, [class*="header-"] {
+  background-color: black;
+  margin-top: 50px;
 }
 ```
 
@@ -959,25 +1215,31 @@ For all intents and purposes, there are 2 types of options; bools and non-bools.
 @mixin header($custom: ()) {
 
 	$header: config((
-		
-		// Options
 		'dark' : false,
 		'top'  : 50px
-		
 	), $custom);
 
 	@include module('header') {
 		
-		// Core Styles
 		margin-top: this('top');
 		
-		// Settings
 		@include option('dark') {
 			background-color: black;
 		}
 		
 	}
 		
+}
+```
+
+###### CSS Output
+
+```css
+.header, [class*="header-"] {
+  margin-top: 50px;
+}
+[class*="header-"][class*="-dark"] {
+  background-color: black;
 }
 ```
 
@@ -1022,7 +1284,6 @@ If your option is a bool, you can use the `option()` mixin. The styles added wit
 	$header: config((
 		
 		// Options
-		'extend-options': false,
 		'dark' : false,
 		'top'  : 50px
 		
@@ -1036,7 +1297,32 @@ If your option is a bool, you can use the `option()` mixin. The styles added wit
 }
 ```
 
-Alternatively, since by default adding a setting will also create a modifier for the setting, you can apply the styles by adding the modifier to your HTML tag, regardless of the setting's value:
+You can alternatively pass the bool value to your option like so:
+
+```scss
+@mixin header($custom: ()) {
+
+	$header: config((
+		
+		'dark':(
+            'enabled': false
+        ),
+		'side':(
+            'enabled': left,
+            'background': black
+        ),
+		'top': 50px
+		
+	), $custom);
+	
+    ...
+		
+}
+```
+
+This allows you to pass other options to the setting.
+
+Since by default adding a setting will also create a modifier for the setting, you can apply the styles by adding the modifier to your HTML tag, regardless of the setting's value:
 
 ```html
 <div class="header-dark">
@@ -1063,7 +1349,7 @@ If you are watching your CSS output, you may wish to remove these modifiers (and
 }
 ```
 
-To disable the extension of settings globally by default, pass the `$extend-options` variable and set it to `false`:
+To set this option globally for all modules, use the `$extend-options` variable before importing Synergy:
 
 ```scss
 // Disable creation of modifiers for module settings
@@ -1178,54 +1464,6 @@ The above example is assuming we have a setup where the header's position is con
 * `left: 0;` for a left header
 * `right: 0;` for a right header
 
-#### Nested Options
-
-Taking the above example a step further, let's say we want to pass some child options to the parent option:
-
-```scss
-@mixin header($custom: ()) {
-
-	$header: config((
-		
-		// Options
-		'side'                 : (
-			'enabled'          : false, // left or right
-			'width'            : 350px,
-			'show-y-scrollbar' : false
-		)
-		
-	), $custom);
-	
-	@include module('header') {
-		
-		@include option('side') {
-            ...
-			width: option($header, 'side', 'width');
-            @include value('left') {
-                ...
-            }	
-            @include value('right') {
-                ...
-            }		
-            // apply styles when 'show-y-scrollbar' is 'true'
-			@include value($value: 'show-y-scrollbar') {
-				...
-			}
-		}
-		
-	} // module('header')
-	
-} // @mixin header
-```
-
-Above, the `enabled` value in `side` allows you to use the `value()` mixin just as in the previous example. By passing the `$value` variable to the `value()` mixin, you can specify an alternate child boolean option.
-
-To use non-bool options, the `this()` function is used as normal:
-
-```scss
-width: this('side', 'width');
-```
-
 #### Including Your Module
 
 Our module is now ready to be included; to include the module with the default settings you have created, all that's required is:
@@ -1300,7 +1538,7 @@ width: option($grid, 'breakpoints', 'break-3'); // will return 960px
 As long as your other modules are included after this one, we can now access the breakpoint values using:
 
 ```scss
-width: breakpoint(break-3);
+width: breakpoint('break-3');
 ```
 
 #### Setting Up A Project
@@ -1338,11 +1576,11 @@ _theme.scss
 @mixin typography($custom: ()) {
 
     $typography: config((
-        'colors': (
+        'colors':(
             'primary'   : blue,
             'secondary' : green
         ),
-        'sizes': (
+        'sizes':(
             'small'     : 0.8em,
             'regular'   : 1em,
             'large'     : 1.4em           
@@ -1358,12 +1596,6 @@ _theme.scss
 @function size($size) {
     @return option($typography, 'sizes', $size);
 }
-
-//	color: color(primary);
-//	color: color(secondary);
-//	font-size: size(small);
-//	font-size: size(regular);
-//	font-size: size(large);
 ```
 
 ##### _buttons.scss
@@ -1371,30 +1603,27 @@ _theme.scss
 ```scss
 @mixin buttons($custom: ()) {
 
-    //-------------------------------------------------------------
-    // Config
-    //-------------------------------------------------------------
+    //*************************************************************
+    // Configuration
+    //*************************************************************
 
     $buttons: config((
-
-        // Core Styles
         'line-height'  : 1.4,
         'side-spacing' : 0.5em,
         'background'   : grey,
         'color'        : white,
-        // Modifiers
-        'radius'       : 0.4em
-
+        'round-radius' : 0.4em
     ), $custom);
 
-    //-------------------------------------------------------------
+    //*************************************************************
     // Module
-    //-------------------------------------------------------------
+    //*************************************************************
 
     @include module('button') {
 
-    // Core Styles
-    //-------------------------------------------------------------
+        //*********************************************************
+        // Core Styles
+        //*********************************************************
 
         display: inline-block;
         line-height: this('line-height');
@@ -1402,13 +1631,14 @@ _theme.scss
         background: this('background');
         color: this('color');
 
-    // Modifiers
-    //-------------------------------------------------------------
+        //*********************************************************
+        // Modifiers
+        //*********************************************************
 
         // Patterns
 		
         @include modifier('round') {
-            border-radius: this('radius');
+            border-radius: this('round-radius');
         }
 
         @include modifier('block') {
@@ -1438,22 +1668,12 @@ _theme.scss
         // Semantic Styles
 
         @include modifier('purchase') {
-            @include extend('round', 'primary', 'large');
+            @include extend(('round', 'primary', 'large'));
         }
 
     } // module(button)
 
-} // @mixin buttons
-
-//	<div class="button">...</div>
-//	<div class="button-round">...</div>
-//	<div class="button-block">...</div>
-//	<div class="button-primary">...</div>
-//	<div class="button-secondary">...</div>
-//	<div class="button-small">...</div>
-//	<div class="button-large">...</div>
-//	<div class="button-primary-round-large">...</div>
-//	<div class="button-purchase">...</div>
+}
 ```
 
 ##### _header.scss
@@ -1461,70 +1681,64 @@ _theme.scss
 ```scss
 @mixin header($custom: ()) {
 
-    //-------------------------------------------------------------
-    // Config
-    //-------------------------------------------------------------
+    //*************************************************************
+    // Configuration
+    //*************************************************************
 
     $header: config((
-
         'background' : color('primary'),
         'top'        : 50px,
         'dark'       : false,
         'dark-color' : rgba(black, 0.8),
-        'side'       : false,
-        'side-width' : 100%
-
+        'side'       : (
+            'enabled': false,
+            'width'  : 100%
+        )
     ), $custom);
 
-    //-------------------------------------------------------------
+    //*************************************************************
     // Module
-    //-------------------------------------------------------------
+    //*************************************************************
 
     @include module('header') {
 
-    // Core Styles
-    //-------------------------------------------------------------
+        //*********************************************************
+        // Core Styles
+        //*********************************************************
 
         background: this('background');   
         margin-top: this('top');
 
-    // Settings
-    //-------------------------------------------------------------
+        //*********************************************************
+        // Settings
+        //*********************************************************
 
-        @include setting('dark') {
+        @include option('dark') {
             background: this('dark-color');   
         }
 
-        @include setting('side') {
+        @include option('side') {
             // Core Side-Header Styles
             position: fixed;
             top: 0;
-            width: this('side-width');
+            width: this('side', 'width');
             z-index: 99;
-            @include option('left') {
+            @include value('left') {
                 left: 0;
             }
-            @include option('right') {
+            @include value('right') {
                 right: 0;
             }
         }
 
     } // module('header')
 
-} // @mixin header
-
-
-//	<div class="header">...</div>
-//	<div class="header-dark">...</div>
-//	<div class="header-side-left">...</div>
-//	<div class="header-side-right">...</div>
-//	<div class="header-dark-side-right">...</div>
+}
 ```
 
 ##### _theme.scss
 
 ```scss
-
 @include typography((
 	'colors': (
 		'primary'   : purple,
@@ -1536,9 +1750,68 @@ _theme.scss
 
 @include header((
 	'dark' : true,
-	'top'  : 0
+	'top'  : 0,
+    'side' : (
+        'enabled': 'left'
+    )
 ));
+```
 
+###### CSS Output
+
+```css
+.button, [class*="button-"] {
+  display: inline-block;
+  line-height: 1.4;
+  padding: 0 0.5em;
+  background: grey;
+  color: white;
+}
+[class*="button-"][class*="-round"], 
+[class*="button-"][class*="-primary"], 
+[class*="button-"][class*="-purchase"] {
+  border-radius: 0.4em;
+}
+[class*="button-"][class*="-block"] {
+  display: block;
+}
+[class*="button-"][class*="-primary"], 
+[class*="button-"][class*="-purchase"] {
+  background: purple;
+}
+[class*="button-"][class*="-secondary"] {
+  background: blue;
+}
+[class*="button-"][class*="-small"] {
+  font-size: 0.8em;
+}
+[class*="button-"][class*="-large"], 
+[class*="button-"][class*="-purchase"] {
+  font-size: 1.4em;
+}
+
+.header, [class*="header-"] {
+  background: purple;
+  margin-top: 0;
+}
+.header, [class*="header-"], 
+[class*="header-"][class*="-dark"] {
+  background: rgba(0, 0, 0, 0.8);
+}
+.header, [class*="header-"], 
+[class*="header-"][class*="-side"] {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 99;
+}
+.header, [class*="header-"], 
+[class*="header-"][class*="-side"][class*="-left"] {
+  left: 0;
+}
+[class*="header-"][class*="-side"][class*="-right"] {
+  right: 0;
+}
 ```
 
 Every configurable aspect of your project can now quickly and easily be changed from just one file, whilst retaining a completely modular architecture.
@@ -1547,7 +1820,7 @@ Every configurable aspect of your project can now quickly and easily be changed 
 
 #### Getting Started
 
-So you've decided to see what this whole synergy.js thing is about, great! The first thing you should know is that the man behind the magic here is [@HugoGiraudel](https://github.com/HugoGiraudel) for his project [SassyJSON](https://github.com/HugoGiraudel/SassyJSON). This is what actually outputs your Sass config to JSON format, which is how you interact with your modules in JS. Synergy uses a slightly customized version of SassyJSON [available here](https://github.com/esr360/SassyJSON). SassyJSON comes included with Synergy as a Git submodule. 
+So you've decided to see what this whole synergy.js thing is about, great! The first thing you should know is that the man behind the magic here is [@HugoGiraudel](https://github.com/HugoGiraudel) for his project [SassyJSON](https://github.com/HugoGiraudel/SassyJSON). This is what actually outputs your Sass config to JSON format, which is how you interact with your modules in JS. Synergy uses a slightly customized version of SassyJSON (renamed to Sass-JSON) [available here](https://github.com/esr360/Sass-JSON). Sass-JSON comes included with Synergy as a Git submodule. 
 
 Ensure you have a copy of the forked SassyJSON in your project. If you have installed Synergy as a Git submodule, you can run:
 
@@ -1558,13 +1831,13 @@ git submodule update --init --recursive
 The first thing you need to do is import SassyJSON into your project, *before* Synergy and any Synergy related files:
 
 ```scss
-@import "vendor/SassyJSON/stylesheets/SassyJSON";
-@import "src/scss/synergy"
+@import 'vendor/Sass-JSON/dist/sass-json';
+@import 'src/scss/synergy';
 ```
 
 Then include `synergy.js` in your project, *before* any scripts which use Synergy.
 
-**Key Step:** Next, you need to create an element in your HTML which corresponds to the selector SassyJSON attaches to, which is `#modulesConfigJSON`, so create the following element somewhere in your markup:
+**Key Step:** Next, you need to create an element in your HTML which corresponds to the selector SassyJSON attaches to, which by default is `#modulesConfigJSON`, so create the following element somewhere in your markup:
 
 ```html
 <div id="modulesConfigJSON"></div>
@@ -1584,7 +1857,7 @@ And that's it, you're now ready to start using `synergy.js`!
 
 #### Configuration
 
-To enable JSON output of your modules' configuration, you need to pass the `$to-JSON` variable and set it to `true`. This variable should be passed before any Synergy related code:
+To enable JSON output of your modules' configuration, you need to use the `$to-JSON` variable and set it to `true`. This variable should be passed before any Synergy related code:
 
 ```scss
 // Enable JSON output

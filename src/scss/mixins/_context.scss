@@ -13,7 +13,7 @@
             $selectors: join($selectors, '.#{$module}', comma);
         }
         @if map-get($config, 'selector-type') == 'flex' or map-get($config, 'selector-type') == 'chain' {
-            $selectors: join($selectors, '[class*="#{$module}-"]', comma);
+            $selectors: join($selectors, '[class*="#{$module}#{$modifier-glue}"]', comma);
         }
     }
     @if $context == 'parent-hovered' {
