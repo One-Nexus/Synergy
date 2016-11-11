@@ -29,20 +29,20 @@ For three reasons:
 
 Using BEM ([example source](http://eu.battle.net/heroes/en/)):
 
-```css
-.panels-list__item panels-list__item--blog panels-list__item--featured panels-list__item--no-summary panels-list__item--image {...}
+```
+panels-list__item panels-list__item--blog panels-list__item--featured panels-list__item--no-summary panels-list__item--image
 ```
 
 Using Synergy:
 
-```css
-.panelsList_item-blog-featured-noSummary-image {...}
+```
+panelsList_item-blog-featured-noSummary-image
 ```
 
 Using Synergy with original BEM syntax:
 
-```css
-.panels-list__item--blog--featured--no-summary--image {...}
+```
+panels-list__item--blog--featured--no-summary--image
 ```
 
 Synergy takes advantage of CSS attribute wildcard selectors. By looking for classes which contain certain strings as opposed to looking for specific classes, your markup can be much more flexible, allowing you to chain modifiers and components, removing the need for any repetition (i.e. no more 'button button--large button--round').
