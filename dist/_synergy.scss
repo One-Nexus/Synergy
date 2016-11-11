@@ -528,7 +528,7 @@ $module: null !default;
 ///
 /// @param {map} $styles - The CSS styles to output
 @mixin module-styles($styles: if(variable-exists('config'), (map-get($config, 'CSS')), '()')) {
-    @if variable-exists('config') {
+    @if variable-exists('config') and $styles {
         @each $property, $value in $styles {
             // the propery is for a modifier
             @if str-slice($property, 1, 1) == $modifier-glue {
