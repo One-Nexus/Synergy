@@ -1563,6 +1563,7 @@ If you need to pass styles to a modifer of a module or component, preprend the k
 
 You can target modules and components to an infinite depth:
 
+```scss
 @include buttons((
     ...
     'CSS': (
@@ -1577,6 +1578,7 @@ You can target modules and components to an infinite depth:
         )
     )
 ));
+```
 
 ###### CSS Output
 
