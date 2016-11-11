@@ -1132,7 +1132,7 @@ If you want to use a different string to chain modifiers to modules/components, 
 ###### CSS Output
 
 ```css
-[class*="button--large"] {
+[class*="button--"][class*="--large"] {
     ...
 }
 ```
