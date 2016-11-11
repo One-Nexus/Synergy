@@ -640,7 +640,7 @@ If you want to use a different string to chain components to modules, you can pa
 To globally change the component glue, pass the `$component-glue` variable with before importing Synergy.
 
 ```scss
-// Re-define default selector type
+// Set custom component glue
 $component-glue: '__';
 
 // Import Synergy
@@ -1140,7 +1140,7 @@ If you want to use a different string to chain modifiers to modules/components, 
 To globally change the modifier glue, pass the `$modifier-glue` variable with before importing Synergy.
 
 ```scss
-// Re-define default selector type
+// Set custom modifier glue
 $modifier-glue: '--';
 
 // Import Synergy
