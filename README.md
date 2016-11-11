@@ -317,6 +317,7 @@ dist/synergy.js
 * [Hybrid Options](#hybrid-options)
 * [Nested Options](#nested-options)
 * [Including Your Module](#including-your-module)
+* [Passing Custom CSS to Your Module](#pass-custom-css-to-modules)
 * [Global Configuration](#global-configuration)
 * [Setting Up A Project](#setting-up-a-project)
 
@@ -626,7 +627,7 @@ This mixin allows you to overwrite the styles of existing modules, components an
 * `$not` {string|list} - overwrite the module only if it does not have certain modifiers (optional)
 * `$special` {string} - set a special operator (optional)
 
-> Leaving `$modules` undefined will instead look for a `name` value of your module's config (see [Advanced Example](#advanced-example-2)).
+> Leaving `$modules` undefined will instead look for a `name` value of your module's config (see [Advanced Example](#advanced-example-1)).
 
 ```scss
 @include modules(('logo', 'nav')) {
@@ -749,11 +750,9 @@ This mixin allows you to overwrite the styles of existing modules, components an
 @mixin billboard($custom: ()) {
 
 	$billboard: config((
-        
 		'name'            : 'billboard',
         'selector-type'   : 'chain',
-		'fullscreen'     : false
-        
+		'fullscreen'      : false
 	), $custom) !global;
 
 	@include module {
@@ -1483,6 +1482,118 @@ To include your header with customised options, this is done like so:
 ```
 
 And that's it, you now have a completely custoimzable header which can be modified with extreme ease.
+
+#### Pass Custom CSS to Modules
+
+If you want to pass custom CSS properties to a module, component or modifier, but don't want to add these properties to the source file, you can do this by passing your styles to the `CSS` option when including your module:
+
+```scss
+@include buttons((
+    ...
+    'CSS': (
+        'letter-spacing': -1px,
+        'text-transform': uppercase
+    )
+));
+```
+
+###### CSS Output
+
+```css
+.button, [class*="button-"] {
+    ...
+    letter-spacing: -1px;
+    text-transform: uppercase;
+}
+```
+
+##### Pass CSS to a Component
+
+If you need to pass styles to a component of a module, preprend the key of your property with the component glue (default is '_'):
+
+```scss
+@include buttons((
+    ...
+    'CSS': (
+        '_wrapper': (
+            'overflow': hidden,
+            'margin-bottom': 10px
+        )
+    )
+));
+```
+
+###### CSS Output
+
+```css
+.button, [class*="button-"] {
+    ...
+}
+[class*="button_wrapper"] {
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+```
+
+##### Pass CSS to a Modifier
+
+If you need to pass styles to a modifer of a module or component, preprend the key of your property with the modifier glue (default is '-'):
+
+```scss
+@include buttons((
+    ...
+    'CSS': (
+        '-foo': (
+            'text-transform': uppercase
+        )
+    )
+));
+```
+
+###### CSS Output
+
+```css
+.button, [class*="button-"] {
+    ...
+}
+[class*="button-foo"] {
+    text-transform: uppercase
+}
+```
+
+You can target modules and components to an infinite depth:
+
+@include buttons((
+    ...
+    'CSS': (
+        '_foo': (
+            'content': 'alpha' ,
+            '-bar': (
+                'content': 'beta',
+                '-baz': (
+                    'content': 'gamma'
+                )
+            )
+        )
+    )
+));
+
+###### CSS Output
+
+```css
+.button, [class*="button-"] {
+    ...
+}
+[class*="button_foo"] {
+    content: 'alpha';
+}
+[class*="button_foo-bar"] {
+    content: 'beta';
+}
+[class*="button_foo-bar-baz"] {
+    content: 'gamma';
+}
+```
 
 #### Global Configuration
 
