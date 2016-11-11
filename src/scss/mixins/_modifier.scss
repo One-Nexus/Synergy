@@ -38,9 +38,9 @@
 
         @each $modifier in $modifiers {
             @if $special == 'not' {
-                $modifier-selectors: join($modifier-selectors, '&:not([class*="#{$glue $modifier}"])', comma);
+                $modifier-selectors: join($modifier-selectors, '&:not([class*="#{$glue}#{$modifier}"])', comma);
             } @else {
-                $modifier-selectors: join($modifier-selectors, '&[class*="#{$glue $modifier}"]', comma);
+                $modifier-selectors: join($modifier-selectors, '&[class*="#{$glue}#{$modifier}"]', comma);
             }
         }
 

@@ -39,11 +39,11 @@
         }
         @if $type == 'flex' or $type == 'chain' {
             @if $special == 'adjacent-sibling' {
-                $selectors: join($selectors, '+ [class*="#{$selector $modifier-glue}"]', comma);
+                $selectors: join($selectors, '+ [class*="#{$selector}#{$modifier-glue}"]', comma);
             } @else if $special == 'general-sibling' {
-                $selectors: join($selectors, '~ [class*="#{$selector $modifier-glue}"]', comma);
+                $selectors: join($selectors, '~ [class*="#{$selector}#{$modifier-glue}"]', comma);
             }  @else {
-                $selectors: join($selectors, '[class*="#{$selector $modifier-glue}"]', comma);
+                $selectors: join($selectors, '[class*="#{$selector}#{$modifier-glue}"]', comma);
             }
         }
         @if $is {
@@ -51,7 +51,7 @@
             @each $modifier in $is {
                 $selectors: join(
                     $modifiers-list,
-                    selector-append($selectors, '[class*="#{$modifier-glue $modifier}"]'),
+                    selector-append($selectors, '[class*="#{$modifier-glue}#{$modifier}"]'),
                 comma);
             }
         }
@@ -60,7 +60,7 @@
             @each $modifier in $not {
                 $selectors: join(
                     $modifiers-list,
-                    selector-append($selectors, ':not([class*="#{$modifier-glue $modifier}"])'),
+                    selector-append($selectors, ':not([class*="#{$modifier-glue}#{$modifier}"])'),
                 comma);
             }
         }
