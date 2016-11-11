@@ -1999,20 +1999,13 @@ Every configurable aspect of your project can now quickly and easily be changed 
 
 So you've decided to see what this whole synergy.js thing is about, great! The first thing you should know is that the man behind the magic here is [@HugoGiraudel](https://github.com/HugoGiraudel) for his project [SassyJSON](https://github.com/HugoGiraudel/SassyJSON). This is what actually outputs your Sass config to JSON format, which is how you interact with your modules in JS. Synergy uses a slightly customized version of SassyJSON (renamed to Sass-JSON) [available here](https://github.com/esr360/Sass-JSON). Sass-JSON comes included with Synergy as a Git submodule. 
 
-Ensure you have a copy of the forked SassyJSON in your project. If you have installed Synergy as a Git submodule, you can run:
+Ensure you have a copy of the forked SassyJSON in your project. If you have cloned or installed Synergy as a Git submodule, you can run:
 
 ```
 git submodule update --init --recursive
 ```
 
-The first thing you need to do is import SassyJSON into your project, *before* Synergy and any Synergy related files:
-
-```scss
-@import 'vendor/Sass-JSON/dist/sass-json';
-@import 'src/scss/synergy';
-```
-
-Then include `synergy.js` in your project, *before* any scripts which use Synergy.
+Include `synergy.js` in your project, *before* any scripts which use Synergy.
 
 **Key Step:** Next, you need to create an element in your HTML which corresponds to the selector SassyJSON attaches to, which by default is `#modulesConfigJSON`, so create the following element somewhere in your markup:
 
@@ -2034,7 +2027,7 @@ And that's it, you're now ready to start using `synergy.js`!
 
 #### Configuration
 
-To enable JSON output of your modules' configuration, you need to use the `$to-JSON` variable and set it to `true`. This variable should be passed before any Synergy related code:
+To enable JSON output of your modules' configuration, you need to use the `$to-JSON` variable and set it to `true`. This variable should be passed before Synergy is imported:
 
 ```scss
 // Enable JSON output
@@ -2085,15 +2078,13 @@ If everything is running as expected, once your Sass has been compiled your CSS 
 
 ```css
 #modulesConfigJSON::before {
-    content: '{"header": {"selector-type": "flex", "extend-options": true, "output-json": true, "name": "header", "dark": false}}';
+    content: '{"header": {"name": "header", "dark": false, "height": "70px"}}';
     display: block;
     height: 0;
     overflow: hidden;
     width: 0;
 }
 ```
-
-You may not recognize all the values that are generarted; don't worry, they're just default values for a module. Give the documentation another read if you want to know what they are.
 
 #### Usage
 
