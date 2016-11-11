@@ -16,7 +16,7 @@
 ///     }
 ///
 ///     <div class="button-large">...</div>
-@mixin modifier($modifiers, $special: null, $glue: '-') {
+@mixin modifier($modifiers, $special: null, $glue: $modifier-glue) {
 
     $selectors: &;
 

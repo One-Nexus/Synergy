@@ -451,6 +451,12 @@ $output-json: false !default;
 // Set the default selector type (flex | chain | static)
 $selector-type: 'flex' !default;
 
+// Set the glue to chain modifiers to modules
+$modifier-glue: '-' !default;
+
+// Set the glue to chain components to modules
+$component-glue: '_' !default;
+
 // Extend each module option as a modifier by default?
 $extend-options: true !default;
 
@@ -487,7 +493,7 @@ $module: null !default;
             $selectors: join($selectors, '.#{$module}', comma);
         }
         @if $type == 'flex' or $type == 'chain' {
-            $selectors: join($selectors, '[class*="#{$module}-"]', comma);
+            $selectors: join($selectors, '[class*="#{$module}#{$modifier-glue}"]', comma);
         }
         @if $type == 'data' {
             $selectors: join($selectors, '[data-#{$module}]', comma);
@@ -530,35 +536,27 @@ $module: null !default;
 ///     }
 ///
 ///     <div class="header_wrapper">...</div>
-@mixin component($components: null) {
+@mixin component($components: null, $glue: $component-glue) {
 
-    $selectors: '[class*="#{$module}_"]';
+    $selectors: '[class*="#{$module}#{$glue}"]';
 
     @if $components {
 
         // Get target namespace
         $parents: str-replace(inspect(nth(&, 1)), '.', '');
         $parents: str-replace($parents, '[class*="', '');
-        $parents: str-replace($parents, '-"]', '');
+        $parents: str-replace($parents, '#{$modifier-glue}"]', '');
         $parents: str-replace($parents, '"]', '');
 
         $selectors: ();
 
         @each $component in $components {
-            // Create the naked class selectors
-            $selectors: if(
-                inspect(nth(&, 1)) == '.#{$module}', (
-                    join($selectors, '.#{$module}_#{$component}', comma)
-                ), (
-                    join($selectors, '.#{$parents}_#{$component}', comma)
-                )
-            );
             // Create the attribute wildcard selectors
             $selectors: if(
                 inspect(nth(&, 1)) == '.#{$module}', (
-                    join($selectors, '[class*="#{$module}_#{$component}-"]', comma)
+                    join($selectors, '[class*="#{$module}#{$glue}#{$component}"]', comma)
                 ), (
-                    join($selectors, '[class*="#{$parents}_#{$component}-"]', comma)
+                    join($selectors, '[class*="#{$parents}#{$glue}#{$component}"]', comma)
                 )
             );
         }
@@ -603,7 +601,7 @@ $module: null !default;
 ///     }
 ///
 ///     <div class="button-large">...</div>
-@mixin modifier($modifiers, $special: null, $glue: '-') {
+@mixin modifier($modifiers, $special: null, $glue: $modifier-glue) {
 
     $selectors: &;
 
@@ -692,11 +690,11 @@ $module: null !default;
         }
         @if $type == 'flex' or $type == 'chain' {
             @if $special == 'adjacent-sibling' {
-                $selectors: join($selectors, '+ [class*="#{$selector}-"]', comma);
+                $selectors: join($selectors, '+ [class*="#{$selector}#{$modifier-glue}"]', comma);
             } @else if $special == 'general-sibling' {
-                $selectors: join($selectors, '~ [class*="#{$selector}-"]', comma);
+                $selectors: join($selectors, '~ [class*="#{$selector}#{$modifier-glue}"]', comma);
             }  @else {
-                $selectors: join($selectors, '[class*="#{$selector}-"]', comma);
+                $selectors: join($selectors, '[class*="#{$selector}#{$modifier-glue}"]', comma);
             }
         }
         @if $is {
@@ -704,7 +702,7 @@ $module: null !default;
             @each $modifier in $is {
                 $selectors: join(
                     $modifiers-list,
-                    selector-append($selectors, '[class*="-#{$modifier}"]'),
+                    selector-append($selectors, '[class*="#{$modifier-glue}#{$modifier}"]'),
                 comma);
             }
         }
@@ -713,7 +711,7 @@ $module: null !default;
             @each $modifier in $not {
                 $selectors: join(
                     $modifiers-list,
-                    selector-append($selectors, ':not([class*="-#{$modifier}"])'),
+                    selector-append($selectors, ':not([class*="#{$modifier-glue}#{$modifier}"])'),
                 comma);
             }
         }
@@ -765,7 +763,7 @@ $module: null !default;
     $selectors: ();
 
     @each $component in $components {
-        $selector: #{$module}_#{$component};
+        $selector: #{$module}#{$component-glue}#{$component};
         @if $special == 'adjacent-sibling' {
             $selectors: join($selectors, '+ [class*="#{$selector}"]', comma);
         } @else {
@@ -776,7 +774,7 @@ $module: null !default;
             @each $modifier in $is {
                 $selectors: join(
                     $modifiers-list,
-                    selector-append($selectors, '[class*="-#{$modifier}"]'),
+                    selector-append($selectors, '[class*="#{$modifier-glue}#{$modifier}"]'),
                 comma);
             }
         }
@@ -785,7 +783,7 @@ $module: null !default;
             @each $modifier in $not {
                 $selectors: join(
                     $modifiers-list,
-                    selector-append($selectors, ':not([class*="-#{$modifier}"])'),
+                    selector-append($selectors, ':not([class*="#{$modifier-glue}#{$modifier}"])'),
                 comma);
             }
         }
@@ -846,13 +844,13 @@ $module: null !default;
             $selector: if(
                 $parent, $parent, $module
             );
-            @extend [class*="#{$selector}-"][class*="-#{$modifier}"];
+            @extend [class*="#{$selector}#{$modifier-glue}"][class*="#{$modifier-glue}#{$modifier}"];
         } @else if type-of($modifier) == list {
             $selectors: if(
-                $parent, ('[class*="#{$parent}-"]'), ('[class*="#{$module}-"]')
+                $parent, ('[class*="#{$parent}#{$modifier-glue}"]'), ('[class*="#{$module}#{$modifier-glue}"]')
             );
             @each $item in $modifier {
-                $selectors: join($selectors, '[class*="-#{$item}"]', comma);
+                $selectors: join($selectors, '[class*="#{$modifier-glue}#{$item}"]', comma);
             }
             @extend #{$selectors};
         }
@@ -861,7 +859,7 @@ $module: null !default;
 }
 
 // Alias for extending entire modules
-@mixin _module($module, $modifiers, $core: true) {
+@mixin _module($module, $modifiers: null, $core: true) {
     @include extend($parent: $module, $modifiers: $modifiers, $core: $core);
 }
 /// Apply styles to a component when certain conditions are met
@@ -879,7 +877,7 @@ $module: null !default;
             $selectors: join($selectors, '.#{$module}', comma);
         }
         @if map-get($config, 'selector-type') == 'flex' or map-get($config, 'selector-type') == 'chain' {
-            $selectors: join($selectors, '[class*="#{$module}-"]', comma);
+            $selectors: join($selectors, '[class*="#{$module}#{$modifier-glue}"]', comma);
         }
     }
     @if $context == 'parent-hovered' {

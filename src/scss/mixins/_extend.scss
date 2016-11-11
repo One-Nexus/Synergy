@@ -35,13 +35,13 @@
             $selector: if(
                 $parent, $parent, $module
             );
-            @extend [class*="#{$selector}-"][class*="-#{$modifier}"];
+            @extend [class*="#{$selector}#{$modifier-glue}"][class*="#{$modifier-glue}#{$modifier}"];
         } @else if type-of($modifier) == list {
             $selectors: if(
-                $parent, ('[class*="#{$parent}-"]'), ('[class*="#{$module}-"]')
+                $parent, ('[class*="#{$parent}#{$modifier-glue}"]'), ('[class*="#{$module}#{$modifier-glue}"]')
             );
             @each $item in $modifier {
-                $selectors: join($selectors, '[class*="-#{$item}"]', comma);
+                $selectors: join($selectors, '[class*="#{$modifier-glue}#{$item}"]', comma);
             }
             @extend #{$selectors};
         }
