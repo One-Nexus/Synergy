@@ -2203,6 +2203,16 @@ They key part of the above code is `_modules['grid']['breakpoints'][value]`, whi
 
 ## Changelog
 
+#### Version 3.5.0
+
+Released: 11th November 2016
+
+###### Release Notes
+
+* [#6](https://github.com/esr360/Synergy/issues/6) adding ability to customize module:component:modifier glue
+* [#10](https://github.com/esr360/Synergy/issues/10) adding ability to pass custom CSS when including module
+* general grooming of source code
+
 #### Version 3.4.1
 
 Released: 21st October 2016
@@ -2217,7 +2227,7 @@ Released: 21st October 2016
 
 ###### Release Notes
 
-* removing custom functions and adding Sass-Boost dependency
+* removing custom functions and adding [Sass-Boost](https://github.com/esr360/Sass-Boost) dependency
 * added as npm package
 * added unit tests
 
