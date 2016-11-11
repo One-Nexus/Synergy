@@ -617,6 +617,38 @@ By not passing a parameter to the `component()` mixin, you can apply styles to a
 }
 ```
 
+##### Custom Glue
+
+If you want to use a different string to chain components to modules, you can pass the `$glue` parameter when including the module:
+
+```scss
+@include module('header') {
+    @include component('wrapper', $glue: '__') {
+        ...	
+    }	
+}
+```
+
+###### CSS Output
+
+```css
+[class*="header__wrapper"] {
+    ...
+}
+```
+
+To globally change the component glue, pass the `$component-glue` variable with before importing Synergy.
+
+```scss
+// Re-define default selector type
+$component-glue: '__';
+
+// Import Synergy
+@import "path/to/synergy"
+
+/* Your Modules */
+```
+
 #### Overwrite
 
 This mixin allows you to overwrite the styles of existing modules, components and modifiers when in context of another module. The `overwrite()` mixin accepts 5 parameters:
@@ -1083,6 +1115,38 @@ You can use any number of modifiers on a single element in the HTML, and in any 
 [class*="button-"][class*="-add-to-basket"] {
     ...
 }
+```
+
+##### Custom Glue
+
+If you want to use a different string to chain modifiers to modules/components, you can pass the `$glue` parameter when including the modifier:
+
+```scss
+@include module('button') {
+    @include modifier('large', $glue: '--') {
+        ...	
+    }	
+}
+```
+
+###### CSS Output
+
+```css
+[class*="button--large"] {
+    ...
+}
+```
+
+To globally change the modifier glue, pass the `$modifier-glue` variable with before importing Synergy.
+
+```scss
+// Re-define default selector type
+$modifier-glue: '--';
+
+// Import Synergy
+@import "path/to/synergy"
+
+/* Your Modules */
 ```
 
 #### Extend Modifiers
