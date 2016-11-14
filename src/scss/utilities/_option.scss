@@ -1,20 +1,12 @@
-/// Alias function to map-deep-get()
+/// Return the value of a module's option
 ///
 /// @author [@esr360](http://twitter.com/esr360)
-/// @group Synergy
 /// @access public
 ///
-/// @param {map} $module - the module you are interested in
-/// @param {arglist} $keys - the key you are interested in
+/// @alias map-get-deep
 ///
-/// @todo Why doesn't this work? :(
-///
-///     @function option($map, $keys...) {
-///         @return map-deep-get($map, $keys...);
-///     }
-@function option($module, $keys...) {
-    @each $key in $keys {
-        $module: map-get($module, $key);
-    }
-    @return $module;
+/// @example
+///     option($blockquote, 'icon', 'left')
+@function option($args...) {
+    @return map-get-deep($args...);
 }
