@@ -24,17 +24,10 @@
 ///     @include billboard: ((
 ///         fullscreen : true
 ///     ));
-@mixin option($option) {
+@mixin option($option-path...) {
 
-    $option : $option !global;
-    $value  : map-get($config, $option);
-
-    // Determine if the option is enabled and whether the styles
-    // should be output without the need for a modifier
-    $enabled: if(
-        (type-of($value) == bool and $value != false) or (type-of($value) == map and map-get($value, 'enabled') != false),
-        true, false
-    );
+    $value  : map-get-deep($config, $option-path...);
+    $option : nth($option-path, length($option-path)) !global;
 
     // Create a unique, random placeholder to store styles
     $placeholder : $option + random(9999);
@@ -45,15 +38,36 @@
     }
 
     // Output the styles if the option is enabled
-    @if $enabled {
-        @extend %#{$placeholder};
+    @if _enabled($value) {
+        @at-root {
+            @include overwrite($module) {
+                @extend %#{$placeholder};
+            }
+        }
     }
 
-    // Create a modifier for the option
-    @if $extend-options {
+    // Create a modifier for the option if it is not enabled
+    // by default
+    @if $extend-options and not _enabled($value) {
         @include modifier($option) {
             @extend %#{$placeholder};
         }
     }
 
+}
+
+// Determine if the option is enabled and whether the styles
+// should be output without the need for a modifier
+@function _enabled($value) {
+    // If the value is a map
+    @if type-of($value) == 'map' {
+        // Does the map contain the 'enabled' key?
+        @if map-has-key($value, 'enabled') {
+            @return map-get($value, 'enabled');
+        } @else {
+            @return true;
+        }
+    } @else {
+        @return $value;
+    }
 }
