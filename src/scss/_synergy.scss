@@ -3,6 +3,13 @@
 
 @import 'config';
 
+@import 'utilities/config';
+@import 'utilities/enabled';
+@import 'utilities/option';
+@import 'utilities/setting';
+@import 'utilities/this';
+@import 'utilities/value-enabled';
+
 @import 'mixins/module';
 @import 'mixins/component';
 @import 'mixins/modifier';
@@ -12,8 +19,3 @@
 @import 'mixins/context';
 @import 'mixins/option';
 @import 'mixins/value';
-
-@import 'utilities/config';
-@import 'utilities/option';
-@import 'utilities/setting';
-@import 'utilities/this';
