@@ -38,7 +38,7 @@
     }
 
     // Output the styles if the option is enabled
-    @if _enabled($value) {
+    @if value-enabled($value) {
         @at-root {
             @include overwrite($module) {
                 @extend %#{$placeholder};
@@ -48,35 +48,10 @@
 
     // Create a modifier for the option if it is not enabled
     // by default
-    @if $extend-options and not _enabled($value) {
+    @if $extend-options and not value-enabled($value) {
         @include modifier($option) {
             @extend %#{$placeholder};
         }
     }
 
-}
-
-// Determine if the option is enabled and whether the styles
-// should be output without the need for a modifier
-@function _enabled($value) {
-    // If the value is a map
-    @if type-of($value) == 'map' {
-        // Does the map contain the 'enabled' key?
-        @if map-has-key($value, 'enabled') {
-            @return map-get($value, 'enabled');
-        } @else {
-            @return $value;
-        }
-    } 
-    // If the value is a list
-    @else if type-of($value) == 'list' {
-        // Is the first value a bool?
-        @if type-of(nth($value, 1)) == 'bool' {
-            @return nth($value, 1);
-        } @else {
-            @return $value;
-        }
-    } @else {
-        @return $value;
-    }
 }
