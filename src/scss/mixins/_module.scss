@@ -33,8 +33,15 @@
         }
     }
 
+    $default-modifiers: if(variable-exists('config'),
+        map-get($config, 'modifiers'), false
+    );
+
     #{$selectors} {
         @content;
+        @if $default-modifiers {
+            @include extend(($default-modifiers));
+        }
         @include module-styles;
     }
 
