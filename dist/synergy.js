@@ -44,7 +44,7 @@ function parseJSON(toCamelCase) {
     style = style.content;
     style = removeQuotes(style);
 
-    if(toCamelCase) {
+    if (toCamelCase) {
         style = camelCase(style);
     }
 
