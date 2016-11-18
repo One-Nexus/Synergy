@@ -21,23 +21,15 @@
 /// @access public
 ///
 /// @param {color} $color - the color to test for grayscaleness
-/// @param {string} $string [''] - optional string to provide additional scoping
+/// @param {string} $string [''] - string to provide additional/alternative scoping
 /// @param {string} $namespace ['grey] - the namespace to search $string for
 ///
 /// @return {bool} - whether or not the passed color is grayscale
 @function is-grayscale($color: '', $string: '', $namespace: 'grey') {
-    @if type-of($color) == 'color' {
-        @if grayscale($color) == $color {
-            @return true;
-        } @else {
-            @return false;
-        }
+    @if (type-of($color) == 'color' and grayscale($color) == $color) or (str-index($string, $namespace)) {
+        @return true;
     } @else {
-        @if str-index($string, $namespace) {
-            @return true;
-        } @else {
-            @return false;
-        }
+        @return false;
     }
 }
 /// Replace a value in a list
