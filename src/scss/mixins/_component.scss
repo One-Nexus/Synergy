@@ -33,7 +33,8 @@
             // Create the attribute wildcard selectors
             $selectors: if(
                 inspect(nth(&, 1)) == '.#{$module}', (
-                    join($selectors, '[class*="#{$module}#{$glue}#{$component}"]', comma)
+                    //join($selectors, '[class*="#{$module}#{$glue}#{$component}"]', comma)
+                    join($selectors, '.#{$module}#{$glue}#{$component}, [class*="#{$module}#{$glue}#{$component}-"]', comma)
                 ), (
                     join($selectors, '[class*="#{$parents}#{$glue}#{$component}"]', comma)
                 )

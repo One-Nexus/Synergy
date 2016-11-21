@@ -1,7 +1,6 @@
 /// Create a new module
 ///
 /// @author [@esr360](http://twitter.com/esr360)
-/// @group Synergy
 /// @access public
 ///
 /// @param {string|list} $modules - The module(s) you wish to create
@@ -33,16 +32,11 @@
         }
     }
 
-    $default-modifiers: if(variable-exists('config'),
-        map-get($config, 'modifiers'), false
-    );
-
     #{$selectors} {
         @content;
-        @if $default-modifiers {
-            @include extend(($default-modifiers));
-        }
-        @include module-styles;
+        @include extend-modifiers;
+        @include combine-modifiers;
+        @include module-css;
     }
 
 }
@@ -50,7 +44,6 @@
 /// Alias for module() mixin
 ///
 /// @author [@esr360](http://twitter.com/esr360)
-/// @group Synergy
 /// @access public
 ///
 /// @param {string|list} $modules - The module(s) you wish to create
@@ -61,25 +54,50 @@
     }
 }
 
+/// Combine modifiers into a new, single modifier
+///
+/// @author [@esr360](http://twitter.com/esr360)
+///
+/// @param {map} $styles - The CSS styles to output
+@mixin combine-modifiers($combine: if(variable-exists('config'), (map-get($config, 'combine')), '()')) {
+    @if variable-exists('config') and $combine {
+        @each $new-modifier, $target-modifiers in $combine {
+            @include modifier($new-modifier) {
+                @include extend(($target-modifiers));
+            }
+        }
+    }
+}
+
+/// Extend modifiers into the naked module
+///
+/// @author [@esr360](http://twitter.com/esr360)
+///
+/// @param {map} $styles - The CSS styles to output
+@mixin extend-modifiers($modifiers: if(variable-exists('config'), (map-get($config, 'modifiers')), '()')) {
+    @if variable-exists('config') and $modifiers {
+        @include extend(($modifiers));
+    }
+}
+
 /// Output CSS styles from config
 ///
 /// @author [@esr360](http://twitter.com/esr360)
-/// @group Synergy
 ///
 /// @param {map} $styles - The CSS styles to output
-@mixin module-styles($styles: if(variable-exists('config'), (map-get($config, 'CSS')), '()')) {
+@mixin module-css($styles: if(variable-exists('config'), (map-get($config, 'CSS')), '()')) {
     @if variable-exists('config') and $styles {
         @each $property, $value in $styles {
             // the propery is for a modifier
             @if str-slice($property, 1, 1) == $modifier-glue {
                 @include modifier(str-replace($property, $modifier-glue, '')) {
-                    @include module-styles($value);
+                    @include module-css($value);
                 }
             } 
             // the property is for a component
             @else if str-slice($property, 1, 1) == $component-glue {
                 @include component(str-replace($property, $component-glue, '')) {
-                    @include module-styles($value);
+                    @include module-css($value);
                 }
             }
             // the property is regular CSS
