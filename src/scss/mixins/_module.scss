@@ -17,7 +17,10 @@
     $type: if(variable-exists('config'), (map-get($config, 'selector-type')), $selector-type)
 ) {
 
-    $module: $modules !global;
+    @if not & {
+        $module: $modules !global;
+    }
+
     $selectors: ();
 
     @each $module in $modules {

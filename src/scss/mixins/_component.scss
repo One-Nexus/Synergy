@@ -19,34 +19,45 @@
 
     $selectors: '[class*="#{$module}#{$glue}"]';
 
-    @if $components {
+    // Get target namespace
+    $parents: isolate-module(&);
 
-        // Get target namespace
-        $parents: str-replace(inspect(nth(&, 1)), '.', '');
-        $parents: str-replace($parents, '[class*="', '');
-        $parents: str-replace($parents, '#{$modifier-glue}"]', '');
-        $parents: str-replace($parents, '"]', '');
+    //@debug str-index($parents, $module) == 1;
+    //@debug $parents, $module;
+
+    @if str-index($parents, ' ') and str-index($parents, $module) == 1 {
+        $parents: str-replace($parents, $module, '');
+        $parents: str-replace($parents, ' ', '');
+        @if str-index($parents, '#{$modifier-glue}') == str-length($parents) {
+            $parents: str-slice($parents, 1, (str-length($parents) - 1));
+            @debug str-length($parents), $parents;
+        }
+    }
+
+    //Get the desired module name for the component
+    $module: if(
+        $module == $parents,
+        $module,
+        $parents
+    );
+
+    @debug $module;
+    // to-string(nth(&, 1)) == '.#{$module}'
+
+    @if $components {
 
         $selectors: ();
 
         @each $component in $components {
-            // Create the attribute wildcard selectors
-            $selectors: if(
-                inspect(nth(&, 1)) == '.#{$module}', (
-                    //join($selectors, '[class*="#{$module}#{$glue}#{$component}"]', comma)
-                    join($selectors, '.#{$module}#{$glue}#{$component}, [class*="#{$module}#{$glue}#{$component}-"]', comma)
-                ), (
-                    join($selectors, '[class*="#{$parents}#{$glue}#{$component}"]', comma)
-                )
-            );
+            $selectors: join(
+                $selectors, '.#{$module}#{$glue}#{$component}, [class*="#{$module}#{$glue}#{$component}-"]', 
+            comma);
         }
 
     }
 
-    @at-root {
-        #{$selectors} {
-            @content;
-        }
+    @at-root #{$selectors} {
+        @content;
     }
 
 }
@@ -62,4 +73,15 @@
     @include component($components) {
         @content;
     }
+}
+
+// Function to isolate module name
+@function isolate-module($string) {
+    $string: str-replace(inspect(nth($string, 1)), '.', '');
+    $string: str-replace($string, '[class*="', '');
+    $string: str-replace($string, '#{$modifier-glue}"]', '');
+    $string: str-replace($string, '"]', '');
+    $string: unquote(to-string($string));
+
+    @return $string;
 }
