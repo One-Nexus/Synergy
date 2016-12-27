@@ -51,7 +51,7 @@
             @content;
         }
 
-        @include overwrite($module) {
+        @include module($module) {
 
             // Output the styles if the option is enabled
             @if ($enabled) {

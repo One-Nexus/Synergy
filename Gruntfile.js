@@ -13,9 +13,22 @@ module.exports = function(grunt) {
         concat: {
             scss: {
                 src: [
+                    // vendor
                     'vendor/Sass-Boost/dist/_sass-boost.scss',
                     'vendor/Sass-JSON/dist/_sass-json.scss',
+                    // config
                     'src/scss/_config.scss',
+                    // utilities
+                    'src/scss/utilities/_config.scss',
+                    'src/scss/utilities/_enabled.scss',
+                    'src/scss/utilities/_module-tree.scss',
+                    'src/scss/utilities/_option.scss',
+                    'src/scss/utilities/_remove-components.scss',
+                    'src/scss/utilities/_remove-modifiers.scss',
+                    'src/scss/utilities/_setting.scss',
+                    'src/scss/utilities/_this.scss',
+                    'src/scss/utilities/_value-enabled.scss',
+                    // mixins
                     'src/scss/mixins/_module.scss',
                     'src/scss/mixins/_component.scss',
                     'src/scss/mixins/_modifier.scss',
@@ -24,11 +37,7 @@ module.exports = function(grunt) {
                     'src/scss/mixins/_extend.scss',
                     'src/scss/mixins/_context.scss',
                     'src/scss/mixins/_option.scss',
-                    'src/scss/mixins/_value.scss',
-                    'src/scss/utilities/_config.scss',
-                    'src/scss/utilities/_option.scss',
-                    'src/scss/utilities/_setting.scss',
-                    'src/scss/utilities/_this.scss',
+                    'src/scss/mixins/_value.scss'
                 ],
                 dest: 'dist/_synergy.scss',
             },

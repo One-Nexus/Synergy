@@ -40,7 +40,7 @@
     // Output the styles if the option is enabled
     @if value-enabled($value) {
         @at-root {
-            @include overwrite($module) {
+            @include module($module) {
                 @extend %#{$placeholder};
             }
         }
