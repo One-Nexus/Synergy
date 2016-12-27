@@ -19,30 +19,7 @@
 
     $selectors: '[class*="#{$module}#{$glue}"]';
 
-    // Get target namespace
-    $parents: isolate-module(&);
-
-    //@debug str-index($parents, $module) == 1;
-    //@debug $parents, $module;
-
-    @if str-index($parents, ' ') and str-index($parents, $module) == 1 {
-        $parents: str-replace($parents, $module, '');
-        $parents: str-replace($parents, ' ', '');
-        @if str-index($parents, '#{$modifier-glue}') == str-length($parents) {
-            $parents: str-slice($parents, 1, (str-length($parents) - 1));
-            @debug str-length($parents), $parents;
-        }
-    }
-
-    //Get the desired module name for the component
-    $module: if(
-        $module == $parents,
-        $module,
-        $parents
-    );
-
-    @debug $module;
-    // to-string(nth(&, 1)) == '.#{$module}'
+    $namespace: nth(module-tree(&), length(module-tree(&)));
 
     @if $components {
 
@@ -50,14 +27,54 @@
 
         @each $component in $components {
             $selectors: join(
-                $selectors, '.#{$module}#{$glue}#{$component}, [class*="#{$module}#{$glue}#{$component}-"]', 
+                $selectors, '.#{$namespace}#{$glue}#{$component}, [class*="#{$namespace}#{$glue}#{$component}-"]', 
             comma);
         }
 
     }
 
-    @at-root #{$selectors} {
-        @content;
+    // Generate the parent selectors
+
+    $parents: ();
+
+    @each $selector in & {
+
+        // spoof the selector into a list
+        $selector: str-replace(inspect($selector), ' ', ', ');
+        $selector: selector-parse($selector);
+        
+        // if the last item isn't a modifier, remove it
+        @if not str-index(inspect(nth($selector, length($selector))), '[class*="#{$modifier-glue}') {
+            $selector: list-remove($selector, nth($selector, length($selector)));
+        }
+
+        // convert the selector back into a string
+        @if length($selector) == 1 {
+            $selector: nth($selector, 1);
+        }
+        $selector: str-replace(inspect($selector), ', ', ' ');
+
+        // Re-build the parent selector
+        $parents: append($parents, $selector, comma);
+    }
+
+    // remove duplicate selectors
+    $parents: list-remove-duplicates($parents);
+
+    @if length($parents) == 1 {
+        $parents: nth($parents, 1);
+    }
+
+    @if $parents == '()' {
+        @at-root #{$selectors} {
+            @content;
+        }
+    } @else {
+        @at-root #{$parents} {
+            #{$selectors} {
+                @content;
+            }
+        }
     }
 
 }
@@ -73,15 +90,4 @@
     @include component($components) {
         @content;
     }
-}
-
-// Function to isolate module name
-@function isolate-module($string) {
-    $string: str-replace(inspect(nth($string, 1)), '.', '');
-    $string: str-replace($string, '[class*="', '');
-    $string: str-replace($string, '#{$modifier-glue}"]', '');
-    $string: str-replace($string, '"]', '');
-    $string: unquote(to-string($string));
-
-    @return $string;
 }
