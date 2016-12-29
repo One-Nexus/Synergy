@@ -133,7 +133,7 @@ Inside a file called `_header.scss`
         background: this('background');
         
         @include modifier('noLogo') {
-            @include overwrite('logo') {
+            @include module('logo') {
                 display: none;   
             }    
         }
@@ -178,7 +178,8 @@ To change any values in the configuration, pass them to the mixin:
     display: none;
 }
 
-[class*="header_wrapper"] {
+.header_wrapper
+[class*="header_wrapper-"] {
     width: 90%;   
 }
 
@@ -255,7 +256,7 @@ var headerWrapperWidth = _modules['header']['wrapper-width'] // returns the wrap
 
 ## Installation
 
-Synergy requires **Sass 3.4+**, so as of writing this unfortunately means you cannot use Libsass and must use Ruby Sass.
+> Synergy requires **Sass 3.4+**
 
 ##### Via Git Clone
 
@@ -304,8 +305,6 @@ dist/synergy.js
 * [Module](#module)
 * [Component](#component)
 * [Modifier](#modifier)
-* [Overwrite](#overwrite)
-* [Overwrite-Component](#overwrite-component)
 * [Extend Modifiers](#extend-modifiers)
 * [Context](#context)
 * [Option](#bool-options)
@@ -2108,8 +2107,8 @@ $('.header, [class*="header-"]').doSomething();
 To access a specific option, you can do:
 
 ```js
-_modules['header']['dark']; // returns true or false by default
-_modules['header']['height']; // returns 70px by default
+_modules['app-header']['dark']; // returns true or false by default
+_modules['app-header']['height']; // returns 70px by default
 ```
 
 ##### Custom '_option()' Function

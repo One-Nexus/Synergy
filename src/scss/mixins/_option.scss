@@ -39,11 +39,7 @@
 
     // Output the styles if the option is enabled
     @if value-enabled($value) {
-        @at-root {
-            @include module($module) {
-                @extend %#{$placeholder};
-            }
-        }
+        @extend %#{$placeholder};
     }
 
     // Create a modifier for the option if it is not enabled

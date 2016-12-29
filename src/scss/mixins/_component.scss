@@ -65,7 +65,7 @@
         $parents: nth($parents, 1);
     }
 
-    @if $parents == '()' {
+    @if ($parents == '()') {
         @at-root #{$selectors} {
             @content;
         }

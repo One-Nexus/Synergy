@@ -17,7 +17,9 @@
     $type: if(variable-exists('config'), (map-get($config, 'selector-type')), $selector-type)
 ) {
 
-    @if not & {
+    $nested: &;
+
+    @if not $nested {
         // We are creating a root module, so creare a global variable
         $module: $modules !global;
     }
@@ -38,9 +40,11 @@
 
     #{$selectors} {
         @content;
-        @include extend-modifiers;
-        @include combine-modifiers;
-        @include module-css;
+        @if not $nested {
+            @include extend-modifiers;
+            @include combine-modifiers;
+            @include module-css;
+        }
     }
 
 }

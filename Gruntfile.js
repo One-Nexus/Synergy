@@ -32,8 +32,6 @@ module.exports = function(grunt) {
                     'src/scss/mixins/_module.scss',
                     'src/scss/mixins/_component.scss',
                     'src/scss/mixins/_modifier.scss',
-                    'src/scss/mixins/_overwrite.scss',
-                    'src/scss/mixins/_overwrite-component.scss',
                     'src/scss/mixins/_extend.scss',
                     'src/scss/mixins/_context.scss',
                     'src/scss/mixins/_option.scss',
