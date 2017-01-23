@@ -17,10 +17,18 @@
     $type: if(variable-exists('config'), (map-get($config, 'selector-type')), $selector-type)
 ) {
 
+    // disable any output
+    $disable-output: if(
+        variable-exists('disable-output'), variable-exists('disable-output'), false
+    );
+    @if variable-exists('config') and map-has-key($config, 'disable-output') {
+        $disable-output: map-get($config, 'disable-output');
+    }
+
     $nested: &;
 
     @if not $nested {
-        // We are creating a root module, so creare a global variable
+        // We are creating a root module, so create a global variable
         $module: $modules !global;
     }
 
@@ -38,12 +46,14 @@
         }
     }
 
-    #{$selectors} {
-        @content;
-        @if not $nested {
-            @include extend-modifiers;
-            @include combine-modifiers;
-            @include module-css;
+    @if not $disable-output {
+        #{$selectors} {
+            @content;
+            @if not $nested {
+                @include extend-modifiers;
+                @include combine-modifiers;
+                @include module-css;
+            }
         }
     }
 
