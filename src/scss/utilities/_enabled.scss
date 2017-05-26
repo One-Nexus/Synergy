@@ -5,7 +5,7 @@
 /// @access public
 ///
 /// @param {string|list} $option - the desired option
-/// @returns {*} - $true-value if option enabled, otherwise returns $false-value 
+/// @returns {*} - $true-value if option enabled, otherwise returns $false-value
 @function enabled($option, $true-value, $false-value: '') {
     $breadcrumb: ();
     @each $crumb in $option {

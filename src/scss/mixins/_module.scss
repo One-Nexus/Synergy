@@ -111,7 +111,7 @@
                 @include modifier(str-replace($property, $modifier-glue, '')) {
                     @include module-css($value);
                 }
-            } 
+            }
             // the property is for a component
             @else if str-slice($property, 1, 1) == $component-glue {
                 @include component(str-replace($property, $component-glue, '')) {

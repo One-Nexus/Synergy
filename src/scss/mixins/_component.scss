@@ -26,9 +26,7 @@
         $selectors: ();
 
         @each $component in $components {
-            $selectors: join(
-                $selectors, '.#{$namespace}#{$glue}#{$component}, [class*="#{$namespace}#{$glue}#{$component}-"]', 
-            comma);
+            $selectors: join($selectors, '.#{$namespace}#{$glue}#{$component}, [class*="#{$namespace}#{$glue}#{$component}-"]', comma);
         }
 
     }
@@ -42,7 +40,7 @@
         // spoof the selector into a list
         $selector: str-replace(inspect($selector), ' ', ', ');
         $selector: selector-parse($selector);
-        
+
         // if the last item isn't a modifier, remove it
         @if not str-index(inspect(nth($selector, length($selector))), '[class*="#{$modifier-glue}') {
             $selector: list-remove($selector, nth($selector, length($selector)));

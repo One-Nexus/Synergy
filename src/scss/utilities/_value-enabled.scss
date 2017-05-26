@@ -14,7 +14,7 @@
         } @else {
             @return $value;
         }
-    } 
+    }
     // If the value is a list
     @else if type-of($value) == 'list' {
         // Is the first value a bool?
