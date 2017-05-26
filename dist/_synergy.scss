@@ -326,194 +326,6 @@
 
     @return $string;
 }
-/// Delay the encoding of a literal to JSON to a type-specific method
-///
-/// @author Hugo Giraudel
-/// @access public
-///
-/// @require {function} _json-encode--string
-/// @require {function} _json-encode--number
-/// @require {function} _json-encode--list
-/// @require {function} _json-encode--map
-/// @require {function} _json-encode--null
-/// @require {function} _json-encode--color
-/// @require {function} _json-encode--bool
-///
-/// @param {*} $value - value to be stringified
-///
-/// @throw Unknown type for #{$value} (#{$type}).
-/// @return {string} - JSON encoded string
-@function json-encode($value) {
-    $type: type-of($value);
-
-    @if function-exists('_json-encode--#{$type}') {
-        @return call('_json-encode--#{$type}', $value);
-    }
-
-    @error 'Unknown type for #{$value} (#{$type}).';
-}
-/// Proof quote a value
-///
-/// @author Hugo Giraudel
-/// @access public
-///
-/// @param {*} $value - value to be quoted
-///
-/// @return {string} - quoted value
-@function _proof-quote($value) {
-    $value: to-string($value);
-    @return '"' + $value + '"';
-}
-/// Joins all elements of `$list` with `$glue`
-///
-/// @author Hugo Giraudel
-/// @access public
-///
-/// @param {List} $list - list to cast
-/// @param {String} $glue ('') - value to use as a join string
-///
-/// @return {String} - quoted value
-@function to-string($list, $glue: '', $is-nested: false, $recursive: false) {
-    $result: '';
-
-    @for $i from 1 through length($list) {
-        $e: nth($list, $i);
-        @if type-of($e) == 'list' and $recursive {
-            $result: $result + to-string($e, $glue, $is-nested: true, $recursive: true);
-        } @else {
-            $result: if(
-                $i != length($list) or $is-nested,
-                $result + $e + $glue, $result + $e
-            );
-        }
-    }
-
-    @return $result;
-}
-/// JSON.stringify a value and pass it to the content property of a specified selector
-///
-/// @author Hugo Giraudel
-/// @access public
-///
-/// @require {function} json-encode
-///
-/// @param {*} $value - value to be stringified
-/// @param {string} $selector ['#modulesConfigJSON'] - DOM selector to hold config
-@mixin json-encode($value, $selector: '#modulesConfigJSON') {
-    #{$selector}::before {
-        content: json-encode($value);
-        display: block;
-        height: 0;
-        overflow: hidden;
-        width: 0;
-    }
-}
-/// Encode a bool to JSON
-///
-/// @author Hugo Giraudel
-/// @access private
-///
-/// @param {bool} $bool - bool to be encoded
-///
-/// @return {bool} - encoded bool
-@function _json-encode--bool($boolean) {
-    @return $boolean;
-}
-/// Encode a color to JSON
-///
-/// @author Hugo Giraudel
-/// @access private
-///
-/// @require {function} _proof-quote
-///
-/// @param {color} $color - color to be encoded
-///
-/// @return {string} - encoded color
-@function _json-encode--color($color) {
-    @return _proof-quote($color);
-}
-/// Encode a list to JSON
-///
-/// @author Hugo Giraudel
-/// @access private
-///
-/// @require {function} json-encore
-///
-/// @param {list} $list - list to be encoded
-///
-/// @return {string} - encoded list
-@function _json-encode--list($list) {
-    $str: '';
-
-    @each $item in $list {
-        $str: $str + ', ' + json-encode($item);
-    }
-
-    @return '[' + str-slice($str, 3) + ']';
-}
-/// Encode a map to JSON
-///
-/// @author Hugo Giraudel
-/// @access private
-///
-/// @require {function} _proof-quote
-/// @require {function} json-encode
-///
-/// @param {map} $map - map to be encoded
-///
-/// @return {string} - encoded map
-@function _json-encode--map($map) {
-    $str: '';
-
-    @each $key, $value in $map {
-        $str: $str + ', ' + _proof-quote($key) + ': ' + json-encode($value);
-    }
-
-    @return '{' + str-slice($str, 3) + '}';
-}
-/// Encode `null` to JSON
-///
-/// @author Hugo Giraudel
-/// @access private
-///
-/// @param {null} $null - `null`
-///
-/// @return {string}
-@function _json-encode--null($null) {
-    @return 'null';
-}
-/// Encode a number to JSON
-///
-/// @author Hugo Giraudel
-/// @access private
-///
-/// @require {function} _proof-quote
-///
-/// @param {number} $number - number to be encoded
-///
-/// @return {string} - encoded number
-@function _json-encode--number($number) {
-    @return if(unitless($number), $number, _proof-quote($number));
-}
-/// Encode a string to JSON
-///
-/// @author Hugo Giraudel
-/// @access private
-///
-/// @require {function} _proof-quote
-///
-/// @param {string} $string - string to be encoded
-///
-/// @return {string} - encoded string
-@function _json-encode--string($string) {
-    @return _proof-quote($string);
-}
-// Enable JSON output?
-$to-json: false !default;
-
-// Output config for each module by default?
-$output-json: false !default;
-
 // Set the default selector type (flex | chain | static)
 $selector-type: 'flex' !default;
 
@@ -526,8 +338,8 @@ $component-glue: '_' !default;
 // Extend each module option as a modifier by default?
 $extend-options: true !default;
 
- // The variable which will store all module's configuration (do not edit)
-$_modules: () !default;
+// Include a mixin by importing the file
+$include-now: false !default;
 
 // The variable to hold a single module (do not edit)
 $module: null !default;
@@ -543,27 +355,14 @@ $module: null !default;
 @function config($map-old, $map-new) {
 
     $map-old: map-merge((
-        'selector-type'   : $selector-type,
-        'extend-options'  : $extend-options,
-        'output-json'     : $output-json
+        'selector-type'  : $selector-type,
+        'extend-options' : $extend-options
     ), $map-old);
 
     $map-old: map-merge-deep($map-old, $map-new);
 
     // Store merged map in a variable
     $config: $map-old !global;
-
-    // Output options to JSON
-    @if option($map-old, 'output-json') {
-        // remove superfluous keys from JSON
-        $map-old: map-remove($map-old,
-            'selector-type', 'extend-options', 'output-json'
-        );
-        // add the module to the list of modules
-        $_modules: map-merge-deep(
-            (map-get($map-old, 'name') : ($map-old)), $_modules
-        ) !global;
-    }
 
     // Return merged map
     @return $map-old;
@@ -576,7 +375,7 @@ $module: null !default;
 /// @access public
 ///
 /// @param {string|list} $option - the desired option
-/// @returns {*} - $true-value if option enabled, otherwise returns $false-value 
+/// @returns {*} - $true-value if option enabled, otherwise returns $false-value
 @function enabled($option, $true-value, $false-value: '') {
     $breadcrumb: ();
     @each $crumb in $option {
@@ -733,7 +532,7 @@ $module: null !default;
         } @else {
             @return $value;
         }
-    } 
+    }
     // If the value is a list
     @else if type-of($value) == 'list' {
         // Is the first value a bool?
@@ -765,10 +564,18 @@ $module: null !default;
     $type: if(variable-exists('config'), (map-get($config, 'selector-type')), $selector-type)
 ) {
 
+    // disable any output
+    $disable-output: if(
+        variable-exists('disable-output'), variable-exists('disable-output'), false
+    );
+    @if variable-exists('config') and map-has-key($config, 'disable-output') {
+        $disable-output: map-get($config, 'disable-output');
+    }
+
     $nested: &;
 
     @if not $nested {
-        // We are creating a root module, so creare a global variable
+        // We are creating a root module, so create a global variable
         $module: $modules !global;
     }
 
@@ -786,12 +593,14 @@ $module: null !default;
         }
     }
 
-    #{$selectors} {
-        @content;
-        @if not $nested {
-            @include extend-modifiers;
-            @include combine-modifiers;
-            @include module-css;
+    @if not $disable-output {
+        #{$selectors} {
+            @content;
+            @if not $nested {
+                @include extend-modifiers;
+                @include combine-modifiers;
+                @include module-css;
+            }
         }
     }
 
@@ -849,7 +658,7 @@ $module: null !default;
                 @include modifier(str-replace($property, $modifier-glue, '')) {
                     @include module-css($value);
                 }
-            } 
+            }
             // the property is for a component
             @else if str-slice($property, 1, 1) == $component-glue {
                 @include component(str-replace($property, $component-glue, '')) {
@@ -891,9 +700,7 @@ $module: null !default;
         $selectors: ();
 
         @each $component in $components {
-            $selectors: join(
-                $selectors, '.#{$namespace}#{$glue}#{$component}, [class*="#{$namespace}#{$glue}#{$component}-"]', 
-            comma);
+            $selectors: join($selectors, '.#{$namespace}#{$glue}#{$component}, [class*="#{$namespace}#{$glue}#{$component}-"]', comma);
         }
 
     }
@@ -907,7 +714,7 @@ $module: null !default;
         // spoof the selector into a list
         $selector: str-replace(inspect($selector), ' ', ', ');
         $selector: selector-parse($selector);
-        
+
         // if the last item isn't a modifier, remove it
         @if not str-index(inspect(nth($selector, length($selector))), '[class*="#{$modifier-glue}') {
             $selector: list-remove($selector, nth($selector, length($selector)));
@@ -1070,7 +877,7 @@ $module: null !default;
             @extend #{$selectors};
         }
     }
-    
+
 }
 
 // Alias for extending entire modules
