@@ -20,8 +20,10 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "babel-preset-es2015": "^6.24.1",
     "bower": "^1.7.9",
     "grunt": "^0.4.5",
+    "grunt-babel": "^6.0.0",
     "grunt-contrib-clean": "^0.6.0",
     "grunt-contrib-concat": "^0.5.1",
     "grunt-contrib-copy": "^0.8.1",
@@ -36,6 +38,6 @@
     "sass-true": "^2.1.2"
   },
   "scripts": {
-      "vendor": "git clone https://github.com/esr360/Sass-JSON.git vendor/Sass-JSON && git clone https://github.com/esr360/Sass-Boost.git vendor/Sass-Boost"
+    "vendor": "git clone https://github.com/esr360/Sass-JSON.git vendor/Sass-JSON && git clone https://github.com/esr360/Sass-Boost.git vendor/Sass-Boost"
   }
 }

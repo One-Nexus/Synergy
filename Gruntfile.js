@@ -48,6 +48,18 @@ module.exports = function(grunt) {
             }
         },
 
+        babel: {
+            options: {
+                sourceMap: true,
+                presets: ['es2015']
+            },
+            dist: {
+                files: {
+                    'dist/synergy.js':'dist/synergy.js'
+                }
+            }
+        },
+
         scsslint: {
             options: {
                 configFile: '.scss-lint.yml'
@@ -58,6 +70,9 @@ module.exports = function(grunt) {
         },
 
         jshint: {
+            options: {
+                esversion: 6
+            },
             all: [
                 'Gruntfile.js', 
                 'src/js/**/*.js', 
@@ -104,8 +119,9 @@ module.exports = function(grunt) {
             js: {
                 files: 'src/js/**/*.js',
                 tasks: [
-                    'concat:js', 
+                    'concat:js',
                     'jshint',
+                    'babel',
                     'jsdoc',
                     'notify:js'
                 ],
@@ -148,6 +164,7 @@ module.exports = function(grunt) {
     grunt.registerTask('compile', [
         'clean',
         'concat',
+        'babel',
         'lint',
         'test',
         'docs',
@@ -171,6 +188,7 @@ module.exports = function(grunt) {
         'jsdoc'
     ]);
     
+    grunt.loadNpmTasks('grunt-babel');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-copy');
