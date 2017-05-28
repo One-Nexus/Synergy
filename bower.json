@@ -3,7 +3,6 @@
   "version": "3.5.0",
   "description": "A front-end framework for building modular, configurable and scalable projects.",
   "main": [
-    "src/js/functions/option.js",
     "src/js/synergy.js",
     "src/scss/_synergy.scss"
   ],

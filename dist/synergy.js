@@ -1,75 +1,111 @@
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 /**
  * Synergy Module
  * 
  * @access public
+ * 
  * @param {(String|Object)} els
  * @param {Object} custom
  * @param {Function} callback
  * @param {Object} config
  */
-const $module = function(els, callback, custom, config) {
+var synergy = function synergy(els, callback, custom, config) {
 
-    let block;
+    var block = void 0;
 
-    if (config) {
+    if (typeof els === 'string') {
+        block = els;
+        els = document.querySelectorAll('.' + block + ', [class*="' + block + '-"]');
+    } else if (config) {
         block = config[Object.keys(config)[0]].name;
     }
 
-    if (typeof(els) === 'string') {
-        block = els;
-        els = document.querySelector('.' + els + ', [class*="' + els + '-"]');
-    }
-
     if (els.length) {
-        Array.prototype.forEach.call(els, function(el, index) {
+        els.forEach(function (el) {
             el.setAttribute('data-module', block);
         });
     } else {
         els.setAttribute('data-module', block);
     }
 
-    exports.modifier = function(modifier, el) {
-        if (modifier) {
-            el.className += modifier;
-        } else {
-            return 'i_am_modifier';
-        }
-    };
+    function blockPart(part, type, set, glue) {
+        var element = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : els;
 
-    exports.component = function(component, element = els) {
-        if (component) {
-            const selector = block + '_' + component;
+        if (part) {
+            var namespace = block + glue + part;
 
-            if (element.matches('[class*="' + selector + '"]')) {
-                return true;
+            if (set) {
+                return element.classList.add(namespace);
             }
 
-            let componentExists = element.querySelector('.' + selector + ', [class*="' + selector + '-"]');
+            var selector = void 0;
 
-            if (componentExists) {
-                return componentExists;
+            if (type == 'component') {
+                selector = '.' + namespace + ', [class*="' + namespace + '-"]';
+            } else if (type == 'modifier') {
+                selector = '[class*="' + block + '-"][class*="-' + part + '"]';
             }
 
-            return false;
-        } else {
-            var classes = element.classList['value'].split(' ');
+            if (!element.length) {
+                if (element.matches('[class*="' + glue + part + '"]')) {
+                    return true;
+                }
 
-            classes.forEach(function(value) {
-                let isComponent = value.includes(block + '_');
-                if (isComponent) {
-                    console.log(value.split(block + '_')[1]);
+                var parts = element.querySelectorAll(selector);
+
+                if (parts.length !== 0) {
+                    return parts;
+                }
+
+                return false;
+            }
+
+            return document.querySelectorAll(selector);
+        } else {
+            part = [];
+
+            var classes = element.classList.value.split(' ');
+
+            classes.forEach(function (item) {
+                var isPart = item.includes(block + glue);
+                if (isPart) {
+                    var _parts = item.replace(block + glue, '').split(glue);
+
+                    if (_parts.length === 1) {
+                        _parts = _parts[0];
+                    }
+
+                    part.push(_parts);
                 }
             });
 
-            return element.classList;
+            return part;
         }
+    }
+
+    exports.query = els;
+
+    exports.modifier = function (modifier, set) {
+        var element = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : els;
+
+        return blockPart(modifier, 'modifier', set, '-', element);
     };
 
-    if (config && callback) {
-        const options = Object.assign(config[Object.keys(config)[0]], custom);
+    exports.component = function (component, set) {
+        var element = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : els;
 
-        Array.prototype.forEach.call(els, function(el, index) {
+        return blockPart(component, 'component', set, '_', element);
+    };
+
+    if (callback) {
+        var options = config ? Object.assign(config[Object.keys(config)[0]], custom) : custom;
+
+        Array.prototype.forEach.call(els, function (el, index) {
             return callback(el, options, exports);
         });
     }
@@ -77,8 +113,15 @@ const $module = function(els, callback, custom, config) {
     return exports;
 };
 
-Element.prototype.component = function(component) {
-    return exports.component(component, this);
+exports.default = synergy;
+
+
+Element.prototype.component = function (component, set) {
+    return exports.component(component, set, this);
 };
 
-module.exports = $module;
+Element.prototype.modifier = function (modifier, set) {
+    return exports.modifier(modifier, set, this);
+};
+
+},{}]},{},[1]);

@@ -38,25 +38,16 @@ module.exports = function(grunt) {
                     'src/scss/mixins/_value.scss'
                 ],
                 dest: 'dist/_synergy.scss',
-            },
-            js: {
-                src:[
-                    'src/js/synergy.js',
-                    'src/js/functions/*.js'
-                ],
-                dest: 'dist/synergy.js',
             }
         },
 
-        babel: {
+        browserify: {
             options: {
-                sourceMap: true,
-                presets: ['es2015']
+                transform: [['babelify', { 'presets': ['es2015'] }]]
             },
             dist: {
-                files: {
-                    'dist/synergy.js':'dist/synergy.js'
-                }
+                src: 'src/js/synergy.js',
+                dest: 'dist/synergy.js',
             }
         },
 
@@ -119,9 +110,8 @@ module.exports = function(grunt) {
             js: {
                 files: 'src/js/**/*.js',
                 tasks: [
-                    'concat:js',
                     'jshint',
-                    'babel',
+                    'browserify',
                     'jsdoc',
                     'notify:js'
                 ],
@@ -164,7 +154,7 @@ module.exports = function(grunt) {
     grunt.registerTask('compile', [
         'clean',
         'concat',
-        'babel',
+        'browserify',
         'lint',
         'test',
         'docs',
@@ -189,6 +179,7 @@ module.exports = function(grunt) {
     ]);
     
     grunt.loadNpmTasks('grunt-babel');
+    grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-copy');
