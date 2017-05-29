@@ -256,39 +256,53 @@ var headerWrapperWidth = _modules['header']['wrapper-width'] // returns the wrap
 
 ## Installation
 
-> Synergy requires **Sass 3.4+**
+###### Requirements
 
-##### Via Git Clone
+* Sass 3.4+
 
-```
-git clone --recursive https://github.com/esr360/Synergy.git 
-```
+> Ensure your paths are correct as they may differ from below
 
-##### As Git Submodule
+##### Via NPM
 
 ```
-git submodule add https://github.com/esr360/Synergy.git && git submodule update --init --recursive
+npm install Synergy --save
+```
+
+```css
+@import '../node_modules/Synergy/dist/synergy';
 ```
 
 ##### Via Bower
 
 ```
-bower install Synergy && cd bower_components/Synergy && npm run vendor
+bower install Synergy
 ```
 
-##### Via NPM
+```css
+@import '../bower_components/Synergy/dist/synergy';
+```
+
+##### Via Git Clone
 
 ```
-npm install Synergy
+git clone https://github.com/esr360/Synergy.git
+```
+
+```css
+@import '../Synergy/dist/synergy';
+```
+
+##### As Git Submodule
+
+```
+git submodule add https://github.com/esr360/Synergy.git vendor && npm run vendor
+```
+
+```css
+@import '../vendor/Synergy/dist/synergy';
 ```
 
 ---
-
-After you have installed Synergy, import the following file into your project's main `.scss` file:
-
-```
-dist/_synergy.scss
-```
 
 ##### If using synergy.js
 

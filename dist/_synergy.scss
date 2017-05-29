@@ -304,6 +304,31 @@
 @function map-set($map, $key, $value) {
     @return map-merge($map, ($key: $value));
 }
+/// Multiply one number by the power of another
+///
+/// @author Hugo Giraudel
+/// @access public
+/// @link https://css-tricks.com/snippets/sass/power-function/
+///
+/// @param {number} $number - the number you wish to multiply
+/// @param {number} $exponent - the power by which to multiply
+///
+/// @return {number} - result of $number ^ $exponent
+@function pow($number, $exponent) {
+    $value: 1;
+
+    @if $exponent > 0 {
+        @for $i from 1 through $exponent {
+            $value: $value * $number;
+        }
+    } @else if $exponent < 0 {
+        @for $i from 1 through -$exponent {
+            $value: $value / $number;
+        }
+    }
+
+    @return $value;
+}
 /// Replace `$search` with `$replace` in `$string`
 ///
 /// @author Hugo Giraudel
@@ -325,6 +350,18 @@
     }
 
     @return $string;
+}
+/// Remove the units from a value
+///
+/// @author Hugo Giraudel
+/// @access public
+/// @link https://css-tricks.com/snippets/sass/strip-unit-function/
+///
+/// @param {number} $value - number to remove unit from
+///
+/// @return {number} - Unitless number
+@function strip-unit($value) {
+    @return $value / ($value * 0 + 1);
 }
 // Set the default selector type (flex | chain | static)
 $selector-type: 'flex' !default;
