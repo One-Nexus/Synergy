@@ -1,31 +1,30 @@
 {
   "name": "Synergy",
-  "version": "3.5.0",
-  "description": "A front-end framework for building modular, configurable and scalable projects.",
+  "version": "3.6.0",
+  "description": "A front-end framework for building modular, configurable and scalable components.",
+  "keywords": [
+    "sass",
+    "scss",
+    "OOCSS",
+    "javascript",
+    "modular",
+    "modules",
+    "front-end",
+    "framework",
+    "web"
+  ],
+  "authors": [
+    "(Edmund Reed)[http://twitter.com/esr360] <esr360@live.com>"
+  ],
+  "homepage": "http://esr360.github.io/Synergy/",
   "main": [
     "src/js/synergy.js",
     "src/scss/_synergy.scss"
   ],
-  "keywords": [
-    "css",
-    "sass",
-    "scss",
-    "module",
-    "modular",
-    "components",
-    "scalable",
-    "front-end",
-    "front",
-    "end"
-  ],
-  "homepage": "http://esr360.github.io/Synergy/",
   "ignore": [
     "**/.*",
     ".node_modules",
     "bower.json"
-  ],
-  "authors": [
-    "Edmund Reed <esr360@live.com>"
   ],
   "license": "MIT"
 }
