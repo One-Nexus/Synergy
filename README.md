@@ -273,7 +273,7 @@ npm install Synergy --save
 ##### Via Bower
 
 ```
-bower install Synergy
+bower install Synergy --save
 ```
 
 ```css
@@ -293,7 +293,7 @@ git clone https://github.com/esr360/Synergy.git
 ##### As Git Submodule
 
 ```
-git submodule add https://github.com/esr360/Synergy.git vendor && npm run vendor
+git submodule add https://github.com/esr360/Synergy.git vendor
 ```
 
 ```css
