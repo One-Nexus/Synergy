@@ -14,8 +14,7 @@ module.exports = function(grunt) {
             scss: {
                 src: [
                     // vendor
-                    'vendor/Sass-Boost/dist/_sass-boost.scss',
-                    'vendor/Sass-JSON/dist/_sass-json.scss',
+                    'node_modules/Sass-Boost/dist/_sass-boost.scss',
                     // config
                     'src/scss/_config.scss',
                     // utilities
@@ -38,16 +37,23 @@ module.exports = function(grunt) {
                     'src/scss/mixins/_value.scss'
                 ],
                 dest: 'dist/_synergy.scss',
+            },
+            js: {
+                src:[
+                    'src/js/**/*.js',
+                ],
+                dest: 'dist/synergy.js',
             }
         },
 
-        browserify: {
+        babel: {
             options: {
-                transform: [['babelify', { 'presets': ['es2015'] }]]
+                presets: ['es2015']
             },
             dist: {
-                src: 'src/js/synergy.js',
-                dest: 'dist/synergy.js',
+                files: {
+                    'dist/synergy.js':'dist/synergy.js'
+                }
             }
         },
 
@@ -111,7 +117,8 @@ module.exports = function(grunt) {
                 files: 'src/js/**/*.js',
                 tasks: [
                     'jshint',
-                    'browserify',
+                    'concat:js',
+                    'babel',
                     'jsdoc',
                     'notify:js'
                 ],
@@ -154,7 +161,7 @@ module.exports = function(grunt) {
     grunt.registerTask('compile', [
         'clean',
         'concat',
-        'browserify',
+        'babel',
         'lint',
         'test',
         'docs',
@@ -179,7 +186,6 @@ module.exports = function(grunt) {
     ]);
     
     grunt.loadNpmTasks('grunt-babel');
-    grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-copy');
