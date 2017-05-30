@@ -300,6 +300,16 @@ git submodule add https://github.com/esr360/Synergy.git vendor
 @import '../vendor/Synergy/dist/synergy';
 ```
 
+##### Download
+
+> [Download _synergy.scss](blob/master/dist/_synergy.scss)
+
+```css
+@import 'PATH/TO/synergy';
+```
+
+> [(Optional) Download synergy.js](blob/master/dist/synergy.js)
+
 ---
 
 ##### If using synergy.js
