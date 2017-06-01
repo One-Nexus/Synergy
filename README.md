@@ -23,7 +23,7 @@
 
 For three reasons:
 
-##### Smarter Selectors
+##### 1. Smarter Selectors
 
 Using BEM ([example source](http://eu.battle.net/heroes/en/)):
 
@@ -45,7 +45,7 @@ panels-list__item--blog--featured--no-summary--image
 
 Synergy takes advantage of CSS attribute wildcard selectors. By looking for classes which contain certain strings as opposed to looking for specific classes, your markup can be much more flexible, allowing you to chain modifiers and components, removing the need for any repetition (i.e. no more 'button button--large button--round').
 
-##### Configurable Modules
+##### 2. Configurable Modules
 
 Configure your modules without touching the source code. Call the mixin and pass your options to it, leaving the module's source code untouched, allowing you to easily change options and styles.
 
@@ -82,7 +82,7 @@ Configure your modules without touching the source code. Call the mixin and pass
 }
 ```
 
-##### Share Configuration with JavaScript
+##### 3. Configuration with JavaScript
 
 Given a folder structure similar to the following:
 
