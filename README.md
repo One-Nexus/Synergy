@@ -114,7 +114,7 @@ Inside `grid.json`:
 
 Inside `_grid.scss`:
 
-```scss
+```css
 @import 'grid.json'; // config is now accessible under the `$grid` variable
 
 $breakpoint_tablet: map-get-deep($grid, 'breakpoints', 'break-3');
