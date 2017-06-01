@@ -82,7 +82,7 @@ Configure your modules without touching the source code. Call the mixin and pass
 }
 ```
 
-##### 3. Configuration with JavaScript
+##### 3. Share Configuration with JavaScript
 
 Given a folder structure similar to the following:
 
