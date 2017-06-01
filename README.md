@@ -17,7 +17,6 @@
 
 > A front-end framework for building modular, configurable and scalable projects.
 
-[View Premium Demo](http://preview.themeforest.net/item/kayzen-multipurpose-html5-template/full_screen_preview/16768920) | 
 [View Sass Documentation](http://esr360.github.io/Synergy/docs/sass)
 
 #### Why Use Synergy?
@@ -83,50 +82,86 @@ Configure your modules without touching the source code. Call the mixin and pass
 }
 ```
 
-##### Pass Configuration to JavaScript
+##### Share Configuration with JavaScript
 
-```scss
-@mixin grid($custom: ()) {
+Given a folder structure similar to the following:
 
-    $grid: config((
-        'breakpoints': (
-            'break-0' : 0px,
-            'break-1' : 460px,
-            'break-2' : 720px,
-            'break-3' : 940px,
-            'break-4' : 1200px,
-            'break-5' : 1400px
-        )
-    ), $custom) !global;
-    
-}
-
-@include grid((
-    'break-3': 1020px
-));
+```
+|-- modules
+|   |-- grid
+|   |   |-- _grid.scss
+|   |   |-- grid.js
+|   |   |-- grid.json
 ```
 
-In your JavaScript:
+Inside `grid.json`:
+
+```json
+{
+    "grid": {
+        "name": "grid",
+        "breakpoints": {
+            "break-0" : "0px",
+            "break-1" : "460px",
+            "break-2" : "720px",
+            "break-3" : "940px",
+            "break-4" : "1200px",
+            "break-5" : "1400px"            
+        }
+    }
+}
+```
+
+Inside `_grid.scss`:
+
+```scss
+@import 'grid.json'; // config is now accessible under the `$grid` variable
+
+$breakpoint_tablet: map-get-deep($grid, 'breakpoints', 'break-3');
+
+@media (min-width: map-get-deep($breakpoint_tablet) {
+    // do something when screen width is at least 940px
+}
+```
+
+Inside `grid.js`:
 
 ```js
-_modules['grid']['breakpoints']['break-3'] // => 1020px
+import config from './grid.json';
+
+const breakpoint_tablet = config[Object.keys(config)[0]].breakpoints['break-3'];
+
+if (window.matchMedia(`(min-width: ${breakpoint_tablet})`).matches) {
+    // do something when screen width is at least 940px
+}
 ```
 
 #### 60 Second Example
 
-Inside a file called `_header.scss`
+Inside `header.json`
+
+```json
+{
+    "header": {
+        "name": "header",
+        "fixed": false,
+        "background": "#000000",
+        "wrapper-width": "960px"
+    }
+}
+```
+
+Inside `_header.scss`
 
 ```scss
+@import 'header.json'; // config is now accessible under the `$header` variable
+
 @mixin header($custom: ()) {
     
-    // Default module configuration
-    $header: config((
-        'fixed'         : false,
-        'background'    : #000000,
-        'wrapper-width' : 960px
-    ), $custom);
+    // Merge default config with custom values
+    $header: config($header, $custom);
     
-    @include module('header') {
+    @include module {
         
         background: this('background');
         
@@ -155,7 +190,7 @@ Wherever you want to output the code, in the same or another file...
 @include header();
 ```
 
-To change any values in the configuration, pass them to the mixin:
+To mutate any values in the configuration (independent of JS), pass them to the mixin:
 
 ```scss
 @include header((
@@ -231,19 +266,21 @@ Or you can set the header to be fixed by passing the option to the mixin when ca
 
 The header will now be fixed even without passing the modifier in the markup.
 
-Now inside your JavaScript you can do the following (assuming you are using `synergy.js`):
+Inside `header.js`
 
 ```js
-// This will test for either the 'fixed' modifier in the markup,
-// or a value of 'true' for the corresponding option in the config
-if (_option('header', 'fixed')) {
-    alert('Header is fixed!');
-}
-```
+import synergy from './path/to/synergy';
+import config from './header.json';
 
-```js
-// Do something to the header module regardless of any modifiers
-$(_header).doSomething();
+function header(els, custom) {
+
+    synergy(els, function(el, options) {
+        const wrapper = this.component('wrapper');
+
+        console.log(wrapper);
+    }, custom, config);
+
+} // header();
 ```
 
 ```js
