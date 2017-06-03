@@ -2,6 +2,10 @@
   "name": "Synergy",
   "version": "3.6.0",
   "description": "A front-end framework for building modular, configurable and scalable components.",
+  "authors": [
+    "(Edmund Reed)[http://twitter.com/esr360] <esr360@live.com>"
+  ],
+  "homepage": "http://esr360.github.io/Synergy/",
   "keywords": [
     "sass",
     "scss",
@@ -13,10 +17,6 @@
     "framework",
     "web"
   ],
-  "authors": [
-    "(Edmund Reed)[http://twitter.com/esr360] <esr360@live.com>"
-  ],
-  "homepage": "http://esr360.github.io/Synergy/",
   "main": [
     "src/js/synergy.js",
     "src/scss/_synergy.scss"

@@ -3,6 +3,9 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 /**
  * Synergy Module
  * 
@@ -13,23 +16,37 @@ Object.defineProperty(exports, "__esModule", {
  * @param {Function} callback
  * @param {Object} config
  */
-var synergy = function synergy(els, callback, custom, config) {
+var synergy = function synergy(els, callback, config, custom) {
 
-    var block = void 0;
+    var block = getBlockName();
 
-    if (typeof els === 'string') {
-        block = els;
-        els = document.querySelectorAll('.' + block + ', [class*="' + block + '-"]');
-    } else if (config) {
-        block = config[Object.keys(config)[0]].name;
+    function getBlockName() {
+        if (typeof els === 'string') {
+            return els;
+        } else if (config && 'name' in config.module) {
+            return config[Object.keys(config)[0]].name;
+        } else if ((typeof els === 'undefined' ? 'undefined' : _typeof(els)) === 'object' && typeof els[1] === 'string') {
+            return els[1];
+        } else if (els instanceof HTMLElement && els.id) {
+            return els.id;
+        }
     }
 
-    if (els.length) {
-        els.forEach(function (el) {
-            el.setAttribute('data-module', block);
-        });
-    } else {
-        els.setAttribute('data-module', block);
+    // Force 'els' into a NodeList || HTMLElement
+    if (typeof els === 'string') {
+        els = document.querySelectorAll('.' + block + ', [class*="' + block + '-"]');
+    } else if ((typeof els === 'undefined' ? 'undefined' : _typeof(els)) === 'object' && (els[0] instanceof NodeList || els[0] instanceof HTMLElement)) {
+        els = els[0];
+    }
+
+    if (els) {
+        if (els instanceof NodeList) {
+            els.forEach(function (el) {
+                el.setAttribute('data-module', block);
+            });
+        } else if (els instanceof HTMLElement) {
+            els.setAttribute('data-module', block);
+        }
     }
 
     function blockPart(part, type, set, glue) {
@@ -83,7 +100,11 @@ var synergy = function synergy(els, callback, custom, config) {
                 }
             });
 
-            return part;
+            if (part.length !== 0) {
+                return part;
+            }
+
+            return false;
         }
     }
 
@@ -113,12 +134,3 @@ var synergy = function synergy(els, callback, custom, config) {
 };
 
 exports.default = synergy;
-
-
-Element.prototype.component = function (component, set) {
-    return exports.component(component, set, this);
-};
-
-Element.prototype.modifier = function (modifier, set) {
-    return exports.modifier(modifier, set, this);
-};

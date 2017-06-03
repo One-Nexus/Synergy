@@ -37,22 +37,17 @@ module.exports = function(grunt) {
                     'src/scss/mixins/_value.scss'
                 ],
                 dest: 'dist/_synergy.scss',
-            },
-            js: {
-                src:[
-                    'src/js/**/*.js',
-                ],
-                dest: 'dist/synergy.js',
             }
         },
 
         babel: {
             options: {
-                presets: ['es2015']
+                presets: ['es2015'],
+                //plugins: ['transform-es2015-modules-amd']
             },
-            dist: {
+            default: {
                 files: {
-                    'dist/synergy.js':'dist/synergy.js'
+                    'dist/synergy.js':'src/js/synergy.js'
                 }
             }
         },
@@ -61,7 +56,7 @@ module.exports = function(grunt) {
             options: {
                 configFile: '.scss-lint.yml'
             },
-            target: [
+            default: [
                 'src/scss/**/*.scss'
             ]
         },
@@ -70,15 +65,28 @@ module.exports = function(grunt) {
             options: {
                 esversion: 6
             },
-            all: [
+            default: [
                 'Gruntfile.js', 
                 'src/js/**/*.js', 
                 'unit-testing/js/**/*.js'
             ]
         },
 
-        mochacli: {
-            scss: ['unit-testing/scss/tests.js']
+        mochaTest: {
+            options: {
+                reporter: 'spec'
+            },
+            scss: {
+                src: ['unit-testing/scss/tests.js']
+            },
+            js: {
+                options: {
+                    require: [
+                        'babel-core/register'
+                    ]
+                },
+                src: ['unit-testing/js/tests.js']
+            }
         },
 
         sassdoc: {
@@ -91,7 +99,7 @@ module.exports = function(grunt) {
         },
 
         jsdoc: {
-            dist : {
+            default : {
                 src: 'src/js',
                 options: {
                     destination: 'docs/js'
@@ -117,8 +125,7 @@ module.exports = function(grunt) {
                 files: 'src/js/**/*.js',
                 tasks: [
                     'jshint',
-                    'concat:js',
-                    'babel',
+                    'browserify',
                     'jsdoc',
                     'notify:js'
                 ],
@@ -161,7 +168,6 @@ module.exports = function(grunt) {
     grunt.registerTask('compile', [
         'clean',
         'concat',
-        'babel',
         'lint',
         'test',
         'docs',
@@ -176,7 +182,7 @@ module.exports = function(grunt) {
         
     // Test
     grunt.registerTask('test', [
-        'mochacli:scss'
+        'mochaTest'
     ]);
         
     // Docs
@@ -184,7 +190,7 @@ module.exports = function(grunt) {
         'sassdoc',
         'jsdoc'
     ]);
-    
+
     grunt.loadNpmTasks('grunt-babel');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-concat');
@@ -193,7 +199,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-jsdoc');
-    grunt.loadNpmTasks('grunt-mocha-cli');
+    grunt.loadNpmTasks('grunt-mocha-test');
     grunt.loadNpmTasks('grunt-notify');
     grunt.loadNpmTasks('grunt-sassdoc');
     grunt.loadNpmTasks('grunt-scss-lint');

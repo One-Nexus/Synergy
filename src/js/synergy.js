@@ -8,23 +8,39 @@
  * @param {Function} callback
  * @param {Object} config
  */
-const synergy = function(els, callback, custom, config) {
+const synergy = function(els, callback, config, custom) {
 
-    let block;
+    const block = getBlockName();
 
-    if (typeof els === 'string') {
-        block = els; 
-        els = document.querySelectorAll(`.${block}, [class*="${block}-"]`);
-    } else if (config) {
-        block = config[Object.keys(config)[0]].name;
+    function getBlockName() {
+        if (typeof els === 'string') {
+            return els;
+        } else if (config && 'name' in config.module) {
+            return config[Object.keys(config)[0]].name;
+        } else if (typeof els === 'object' && typeof els[1] === 'string') {
+            return els[1];
+        } else if (els instanceof HTMLElement && els.classList.length === 1) {
+            return els.classList[0].split(/-(.+)/)[0];
+        } else if (els instanceof HTMLElement && els.id) {
+            return els.id;
+        }
     }
 
-    if (els.length) {
-        els.forEach(el => {
-            el.setAttribute('data-module', block);
-        });
-    } else {
-        els.setAttribute('data-module', block);
+    // Force 'els' into a NodeList || HTMLElement
+    if (typeof els === 'string') {
+        els = document.querySelectorAll(`.${block}, [class*="${block}-"]`);
+    } else if (typeof els === 'object' && ((els[0] instanceof NodeList) || (els[0] instanceof HTMLElement))) {
+        els = els[0];
+    }
+
+    if (els) {
+        if (els instanceof NodeList) {
+            els.forEach(el => {
+                el.setAttribute('data-module', block);
+            });
+        } else if (els instanceof HTMLElement) {
+            els.setAttribute('data-module', block);
+        }
     }
 
     function blockPart(part, type, set, glue, element = els) {
@@ -32,7 +48,9 @@ const synergy = function(els, callback, custom, config) {
             const namespace = block + glue + part;
 
             if (set) {
-                return element.classList.add(namespace);
+                element.classList.remove(block);
+                element.classList.add(namespace);
+                return;
             }
 
             let selector;
@@ -61,22 +79,40 @@ const synergy = function(els, callback, custom, config) {
         } else {
             part = [];
 
-            let classes = element.classList.value.split(' ');
+            const classes = element.classList.value.split(' ');
 
             classes.forEach(function(item) {
-                const isPart = item.includes(block + glue);
+                const isPart = item.includes(block) && item.includes(glue);
+
                 if (isPart) {
-                    let parts = item.replace(block + glue, '').split(glue);
+                    if (type === 'component') {
+                        item = item.split('-')[0];
+                        item = item.split(/[_ ]+/).pop();
+                        if (item !== block) {
+                            part.push(item);
+                        }
+                    } else if (type === 'modifier') {
+                        let parts = item.replace(item.split(/-(.+)/)[0], '').split(glue);
 
-                    if (parts.length === 1) {
-                        parts = parts[0];
+                        parts = parts.filter(Boolean);
+
+                        if (parts.length === 1) {
+                            parts = parts[0];
+                            part.push(parts);
+                        } else {
+                            parts.forEach(function(el) {
+                                part.push(el);
+                            });
+                        }
                     }
-
-                    part.push(parts);
                 }
             });
 
-            return part;
+            if (part.length !== 0) {
+                return part;
+            }
+
+            return false;
         }
     }
 
@@ -104,11 +140,3 @@ const synergy = function(els, callback, custom, config) {
 };
 
 export default synergy;
-
-Element.prototype.component = function(component, set) {
-    return exports.component(component, set, this);
-};
-
-Element.prototype.modifier = function(modifier, set) {
-    return exports.modifier(modifier, set, this);
-};

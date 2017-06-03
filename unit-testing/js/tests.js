@@ -1,4 +1,3 @@
-require('../../dist/synergy.js');
+const synergy = require('../../src/js/synergy.js');
 
 require('./synergy.js');
-require('./functions/option.js');
