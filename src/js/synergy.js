@@ -19,10 +19,14 @@ const synergy = function(els, callback, config, custom) {
             return config[Object.keys(config)[0]].name;
         } else if (typeof els === 'object' && typeof els[1] === 'string') {
             return els[1];
-        } else if (els instanceof HTMLElement && els.classList.length === 1) {
-            return els.classList[0].split(/-(.+)/)[0];
-        } else if (els instanceof HTMLElement && els.id) {
-            return els.id;
+        } else if (els instanceof HTMLElement) {
+            if (els.closest('[data-module]')) {
+                return els.closest('[data-module]').getAttribute('data-module');
+            } else if (els.classList.length === 1) {
+                return els.classList[0].split(/-(.+)/)[0];
+            } else if (els.id) {
+                return els.id;
+            }
         }
     }
 
