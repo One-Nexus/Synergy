@@ -18,7 +18,7 @@
 
 > A front-end framework for creating modular, configurable and scalable UI components.
 
-[View Sass Documentation](http://esr360.github.io/Synergy/docs/sass)
+[View SassDoc Documentation](http://esr360.github.io/Synergy/docs/sass)
 
 #### Why Use Synergy?
 
