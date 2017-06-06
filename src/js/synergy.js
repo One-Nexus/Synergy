@@ -15,12 +15,12 @@ const synergy = function(els, callback, config, custom) {
     function getBlockName() {
         if (typeof els === 'string') {
             return els;
-        } else if (config && 'name' in config.module) {
+        } else if (config && config.module && 'name' in config.module) {
             return config[Object.keys(config)[0]].name;
         } else if (typeof els === 'object' && typeof els[1] === 'string') {
             return els[1];
         } else if (els instanceof HTMLElement) {
-            if (els.closest('[data-module]')) {
+            if (typeof Element.prototype.closest !== 'undefined' && els.closest('[data-module]')) {
                 return els.closest('[data-module]').getAttribute('data-module');
             } else if (els.classList.length === 1) {
                 return els.classList[0].split(/-(.+)/)[0];
@@ -120,6 +120,11 @@ const synergy = function(els, callback, config, custom) {
         }
     }
 
+    // Merge default/custom options
+    const options = config ? Object.assign(
+        config[Object.keys(config)[0]], custom
+    ) : custom;
+
     exports.query = els;
 
     exports.modifier = function(modifier, set, element = els) {
@@ -130,11 +135,8 @@ const synergy = function(els, callback, config, custom) {
         return blockPart(component, 'component', set, '_', element);
     };
 
-    if (callback) {
-        const options = config ? Object.assign(
-            config[Object.keys(config)[0]], custom
-        ) : custom;
 
+    if (callback) {
         Array.prototype.forEach.call(els, function(el, index) {
             return callback(el, options, exports);
         });

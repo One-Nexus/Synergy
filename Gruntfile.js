@@ -125,7 +125,6 @@ module.exports = function(grunt) {
                 files: 'src/js/**/*.js',
                 tasks: [
                     'jshint',
-                    'browserify',
                     'jsdoc',
                     'notify:js'
                 ],

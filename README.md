@@ -15,7 +15,7 @@
 
 ## Overview
 
-> A front-end framework for building modular, configurable and scalable projects.
+> A front-end framework for creating modular, configurable and scalable UI components.
 
 [View Sass Documentation](http://esr360.github.io/Synergy/docs/sass)
 
@@ -119,7 +119,7 @@ Inside `_grid.scss`:
 
 $breakpoint_tablet: map-get-deep($grid, 'breakpoints', 'break-3');
 
-@media (min-width: map-get-deep($breakpoint_tablet) {
+@media (min-width: $breakpoint_tablet {
     // do something when screen width is at least 940px
 }
 ```
@@ -129,164 +129,11 @@ Inside `grid.js`:
 ```js
 import config from './grid.json';
 
-const breakpoint_tablet = config[Object.keys(config)[0]].breakpoints['break-3'];
+const breakpoint_tablet = config.grid.breakpoints['break-3'];
 
 if (window.matchMedia(`(min-width: ${breakpoint_tablet})`).matches) {
     // do something when screen width is at least 940px
 }
-```
-
-#### 60 Second Example
-
-Inside `header.json`
-
-```json
-{
-    "header": {
-        "name": "header",
-        "fixed": false,
-        "background": "#000000",
-        "wrapper-width": "960px"
-    }
-}
-```
-
-Inside `_header.scss`
-
-```scss
-@import 'header.json'; // config is now accessible under the `$header` variable
-
-@mixin header($custom: ()) {
-    
-    // Merge default config with custom values
-    $header: config($header, $custom);
-    
-    @include module {
-        
-        background: this('background');
-        
-        @include modifier('noLogo') {
-            @include module('logo') {
-                display: none;   
-            }    
-        }
-        
-        @include component('wrapper') {
-            width: this('wrapper-width'); 
-        }
-        
-        @include option('fixed') {
-            position: fixed;
-        }
-        
-    }
-
-}
-```
-
-Wherever you want to output the code, in the same or another file...
-
-```scss
-@include header();
-```
-
-To mutate any values in the configuration (independent of JS), pass them to the mixin:
-
-```scss
-@include header((
-    'background'    : blue,
-    'wrapper-width' : 90%
-));
-```
-
-###### CSS Output
-
-```css
-.header, [class*="header-"] {
-    background: blue;
-}
-
-[class*="header-"][class*="-noLogo"] .logo,
-[class*="header-"][class*="-noLogo"] [class*="-logo"] {
-    display: none;
-}
-
-.header_wrapper
-[class*="header_wrapper-"] {
-    width: 90%;   
-}
-
-[class*="header-"][class*="-fixed"] {
-    position: fixed;
-}
-```
-
-Your markup for the above module may now look something like the following:
-
-```html
-<div class="header">
-    <div class="header_wrapper">
-        <div class="logo">...</div>
-        ...
-    </div>    
-</div>
-```
-
-If you want to hide the logo, you can add the `noLogo` modifier to the header:
-
-```html
-<div class="header-noLogo">
-    ...   
-</div>
-```
-
-If you want to set the header's position to `fixed`, there are two ways you can do this. Firstly, you can again add the appropriate modifier to the markup:
-
-```html
-<div class="header-fixed">
-    ...   
-</div>
-```
-
-N.B. Modifiers can be chained in any order:
-
-```html
-<div class="header-fixed-noLogo">
-    ...   
-</div>
-```
-
-Or you can set the header to be fixed by passing the option to the mixin when calling it:
-
-```scss
-@include header((
-    'fixed' : true
-));
-```
-
-The header will now be fixed even without passing the modifier in the markup.
-
-Inside `header.js`
-
-```js
-import synergy from './path/to/synergy';
-import config from './header.json';
-
-function header(els, custom) {
-
-    synergy(els, function(el, options) {
-        const wrapper = this.component('wrapper');
-
-        console.log(wrapper);
-    }, custom, config);
-
-} // header();
-```
-
-```js
-var headerFixed = _modules['header']['fixed'] // returns true or false
-var headerBackground = _modules['header']['background'] // returns the background value
-var headerWrapperWidth = _modules['header']['wrapper-width'] // returns the wrapper-width value
 ```
 
 ## Installation
@@ -294,6 +141,9 @@ var headerWrapperWidth = _modules['header']['wrapper-width'] // returns the wrap
 ###### Requirements
 
 * Sass 3.4+
+* [Sass JSON Vars](https://github.com/vigetlabs/sass-json-vars)<sup>[1]</sup>
+
+<sup>[1]</sup><small>This is only required if you intend on using JSON files to store configuration.</small>
 
 > Ensure your paths are correct as they may differ from below
 
@@ -349,7 +199,7 @@ git submodule add https://github.com/esr360/Synergy.git vendor
 
 ---
 
-##### If using synergy.js
+##### If using synergy.js/JSON config
 
 Include the following file on your page before you attempt to load any Synergy related scripts:
 
@@ -357,7 +207,7 @@ Include the following file on your page before you attempt to load any Synergy r
 dist/synergy.js
 ```
 
-## Advanced Documentation
+## Advanced Documentation - Sass
 
 ### Mixins
 
@@ -706,341 +556,6 @@ $component-glue: '__';
 @import "path/to/synergy"
 
 /* Your Modules */
-```
-
-#### Overwrite
-
-This mixin allows you to overwrite the styles of existing modules, components and modifiers when in context of another module. The `overwrite()` mixin accepts 5 parameters:
-
-* `$modules` {string|list} - the name of the modules(s) you wish to overwrite (optional)
-* `$type` {string} - as above, this can be either `flex` (default), `chain` or `static` (optional)
-* `$is` {string|list} - overwrite the module only if it has certain modifiers (optional)
-* `$not` {string|list} - overwrite the module only if it does not have certain modifiers (optional)
-* `$special` {string} - set a special operator (optional)
-
-> Leaving `$modules` undefined will instead look for a `name` value of your module's config (see [Advanced Example](#advanced-example-1)).
-
-```scss
-@include modules(('logo', 'nav')) {
-	color: black;	
-}
-
-@include module('logo') {
-	font-size: 1em;	
-}
-
-@include module('header') {
-	
-	@include overwrite(('logo', 'nav')) {
-		color: white;
-	}
-
-	@include overwrite('logo') {
-		font-size: 1.5em;
-	}
-	
-}
-```
-
-```html
-<div>
-	<div class="logo">
-		I'm black and 1em
-	</div>
-	<div class="nav">
-		I'm black
-	</div>
-</div>
-<div class="header">
-	<div class="logo">
-		Now I'm white and 1.5em
-	</div>
-	<div class="nav">
-		Now I'm white
-	</div>
-</div>	
-```
-
-###### CSS Output
-
-```css
-.logo, [class*="logo-"], .nav, [class*="nav-"] {
-  color: black;
-}
-
-.logo, [class*="logo-"] {
-  font-size: 1em;
-}
-
-.header .logo, 
-.header [class*="logo-"], 
-.header .nav, 
-.header [class*="nav-"], 
-[class*="header-"] .logo, 
-[class*="header-"] [class*="logo-"], 
-[class*="header-"] .nav, 
-[class*="header-"] [class*="nav-"] {
-  color: white;
-}
-.header .logo, 
-.header [class*="logo-"], 
-[class*="header-"] .logo, 
-[class*="header-"] [class*="logo-"] {
-  font-size: 1.5em;
-}
-```
-
-##### Special Operators
-
-* `adjacent-sibling` - overwrite a module when it is also an adjacent sibling to the parent module
-* `general-sibling` - overwrite a module when it is also a general sibling to the parent module
-* `at-root` - Instead of being treated as nested inside the parent module, overwrite the core module styles
-
-###### Example
-
-```scss
-@include module('logo') {
-	color: red;
-}
-	
-@include module('navigation') {
-
-	@include overwrite('logo', $special: 'adjacent-sibling') {
-		color: blue;
-	}
-
-}
-```
-
-```html
-<div class="navigation">...</div>
-<div class="logo">I'm blue!</div>
-
-<div class="logo">I'm red!</div>
-<div class="navigation">...</div>
-```
-
-###### CSS Output
-
-```css
-.logo, [class*="logo-"] {
-  color: red;
-}
-
-.navigation + .logo, 
-.navigation + [class*="logo-"], 
-[class*="navigation-"] + .logo, 
-[class*="navigation-"] + [class*="logo-"] {
-  color: blue;
-}
-```
-
-##### Advanced Example
-
-```scss
-@mixin billboard($custom: ()) {
-
-	$billboard: config((
-		'name'            : 'billboard',
-        'selector-type'   : 'chain',
-		'fullscreen'      : false
-	), $custom) !global;
-
-	@include module {
-        
-        ...
-        
-		// If website has "top-bar" and top-bar is "fixed" and header is "absolute"
-        @include overwrite('top-bar', $is: 'fixed', $special: 'at-root') {
-            @include overwrite('header', $is: 'absolute', $special: 'adjacent-sibling') {
-                @include overwrite($is: 'fullscreen', $special: 'adjacent-sibling') {
-                    margin-top: option($top-bar, 'height');
-                }
-            }
-        }
-        
-        ...
-	
-	} // module
-	
-} // @mixin billboard
-```
-
-You're probably curious as to what the hell is going on here. Let's take a look at the computed selector:
-
-```css
-[class*="top-bar-"][class*="-fixed"] + [class*="header-"][class*="-absolute"] + [class*="billboard-"][class*="-fullscreen"] {
-    ...
-}
-```
-
-Hopefully by looking between the 2 you get a good idea of how the advanced features of this mixin work.
-
-#### Overwrite-Component
-
-As above, this mixin is used for overwriting styles for an existing component in alternative context. The following parameters are accepted for the `overwrite-component()` mixin:
-
-* `$components` {string|list} - the name of the component(s) you wish to overwrite (required)
-* `$parent` {string} - the parent of your component (optional)
-* `$is` {string|list} - overwrite the component only if it has certain modifiers (optional)
-* `$not` {string|list} - overwrite the component only if it does not have certain modifiers (optional)
-* `$special` {string} - set a special operator (optional)
-
-> The `$parent` parameter is used if you are including this mixin inside a different module to your component's original parent.
-
-```scss
-@include module('form') {
-
-	@include component('input') {
-		...
-	}
-
-	@include modifier('large') {
-		@include overwrite-component('input') {
-			...
-		}
-	}
-}
-```
-
-```html
-<div class="form-large">
-	<input class="form_input" type="text" />
-</div>	
-```
-
-###### CSS Output
-
-```css
-[class*="form_input"] {
-    ...
-}
-[class*="form-"][class*="-large"] [class*="form_input"] {
-    ...
-}
-```
-
-##### Alias Mixin For Multiple Components
-
-```scss
-@include module('form') {
-
-	@include component('input') {
-		...
-	}
-	
-	@include component('group') {
-		...
-	}
-
-	@include modifier('large') {
-		@include overwrite-components(('input', 'group')) {
-			...
-		}
-	}
-}
-```
-
-###### CSS Output
-
-```css
-[class*="form_input"] {
-    ...
-}
-[class*="form_group"] {
-    ...
-}
-[class*="form-"][class*="-large"] [class*="form_input"], 
-[class*="form-"][class*="-large"] [class*="form_group"] {
-    ...
-}
-```
-
-##### Using Inside a Different Component
-
-```scss
-@include module('heading') {
-	
-	@include component('group') {
-		color: red;
-	}	
-	
-}
-
-@include module('widget') {
-
-	@include overwrite-component('group', $parent: 'heading') {
-		color: blue;
-	}
-	
-}
-```
-
-```html
-<div class="heading_group">I'm Red!</div>	
-
-<div class="widget">
-	<div class="heading_group">I'm Blue!</div>	
-</div>
-```
-
-###### CSS Output
-
-```css
-[class*="heading_group"] {
-  color: red;
-}
-
-.widget [class*="heading_group"], 
-[class*="widget-"] [class*="heading_group"] {
-  color: blue;
-}
-```
-
-##### Special Operators
-
-* `adjacent-sibling` - overwrite a component when it is also an adjacent sibling
-* _more comming soon..._
-
-###### Adjacent Sibling
-
-```scss
-@include module('widget') {
-
-	@include component('title') {
-		color: red;
-	}
-	
-	@include component('icon') {
-		@include overwrite-component('title', $special: 'adjacent-sibling') {
-			color: blue;
-		}
-	}
-	
-}
-```
-
-```html
-<div class="widget">
-	<div class="widget_icon">...</div>
-	<div class="widget_title">I'm Blue!</div>
-</div>
-
-<div class="widget">
-	<div class="widget_title">I'm Red!</div>
-	<div class="widget_icon">...</div>
-</div>
-```
-
-###### CSS Output
-
-```css
-[class*="widget_title"] {
-  color: red;
-}
-[class*="widget_icon"] + [class*="widget_title"] {
-  color: blue;
-}
 ```
 
 #### Modifier
@@ -2056,145 +1571,7 @@ Every configurable aspect of your project can now quickly and easily be changed 
 
 #### Getting Started
 
-So you've decided to see what this whole synergy.js thing is about, great! The first thing you should know is that the man behind the magic here is [@HugoGiraudel](https://github.com/HugoGiraudel) for his project [SassyJSON](https://github.com/HugoGiraudel/SassyJSON). This is what actually outputs your Sass config to JSON format, which is how you interact with your modules in JS. Synergy uses a slightly customized version of SassyJSON (renamed to Sass-JSON) [available here](https://github.com/esr360/Sass-JSON). Sass-JSON comes included with Synergy as a Git submodule. 
-
-Ensure you have a copy of the forked SassyJSON in your project. If you have cloned or installed Synergy as a Git submodule, you can run:
-
-```
-git submodule update --init --recursive
-```
-
-Include `synergy.js` in your project, *before* any scripts which use Synergy.
-
-**Key Step:** Next, you need to create an element in your HTML which corresponds to the selector SassyJSON attaches to, which by default is `#modulesConfigJSON`, so create the following element somewhere in your markup:
-
-```html
-<div id="modulesConfigJSON"></div>
-```
-
-This is what ties all of your configuration together between the HTML, CSS and JS. Finally, in your project's main Sass file at the end of everything (or rather, at the end of all Synergy related files), add the following code:
-
-```scss
-@if variable-exists('to-JSON') and $to-JSON {
-	@include json-encode($_modules);
-}
-```
-
-This function will output your configuration as JSON in your project's CSS file, which is how the JS will interact with it.
-
-And that's it, you're now ready to start using `synergy.js`!
-
 #### Configuration
-
-To enable JSON output of your modules' configuration, you need to use the `$to-JSON` variable and set it to `true`. This variable should be passed before Synergy is imported:
-
-```scss
-// Enable JSON output
-$to-JSON : true;
-
-// Import Synergy
-@import "path/to/synergy"
-
-/* Your Modules */
-```
-
-By default, output to JSON is enabled on a per-module basis by passing `name` and `output-json` options to your module's config:
-
-```scss
-@mixin header($custom: ()) {
-
-	$header: config((
-		
-		// Options
-		'name'        : 'header',
-		'output-json' : true,
-        'dark'        : false,
-        'height'      : 70px
-		
-	), $custom);
-
-	...
-		
-} // @mixin header
-```
-
-If you want all your modules to output their configuation to JSON by default, you can pass the `$output-json` variable and set it to `true`:
-
-```scss
-// Enable JSON output
-$to-JSON : true;
-
-// Output JSON by default for each module
-$output-json: true;
-
-// Import Synergy
-@import "path/to/synergy"
-
-/* Your Modules */
-```
-
-If everything is running as expected, once your Sass has been compiled your CSS should now contain the configuration for your modules as JSON. It should look something like this:
-
-```css
-#modulesConfigJSON::before {
-    content: '{"header": {"name": "header", "dark": false, "height": "70px"}}';
-    display: block;
-    height: 0;
-    overflow: hidden;
-    width: 0;
-}
-```
-
-#### Usage
-
-> Whilst synergy.js doesn't require jQuery, for simplicity the below examples assume Synergy is used in a jQuery environment
-
-It is now possible to access your module like so:
-
-```js
-$(_header).doSomething();
-```
-
-Which is just a shorthand for:
-
-```js
-$('.header, [class*="header-"]').doSomething();
-```
-
-> If your module is named something like `app-header`, this would be camelCased and you would need to use `$(_appHeader)`
-
-To access a specific option, you can do:
-
-```js
-_modules['app-header']['dark']; // returns true or false by default
-_modules['app-header']['height']; // returns 70px by default
-```
-
-##### Custom '_option()' Function
-
-Synergy.js comes with a custom `_option()` function for usage on boolean options. The function will return `true` if either the option itself is set to `true`, or if your element has a `modifier` of the option name:
-
-```scss
-@include header((
-	'dark' : true
-));
-```
-
-Or ...
-
-```html
-<div class="header-dark">
-    ...
-</div>
-```
-
-Using a simple `if` statement you can now conditionally run JavaScript based off your module's option:
-
-```js
-if(_option('header', 'dark')) {
-    ...
-}
-```
 
 ##### Media Query Based Example
 
@@ -2247,7 +1624,6 @@ They key part of the above code is `_modules['grid']['breakpoints'][value]`, whi
 ## Credits & Notes
 
 * [Sassy Maps](https://github.com/at-import/sassy-maps)
-* [SassyJSON](https://github.com/HugoGiraudel/SassyJSON)
 * [Advanced Sass List Functions](http://hugogiraudel.com/2013/08/08/advanced-sass-list-functions/)
 * [Bringing Configuration Objects To Sass](http://hugogiraudel.com/2014/05/05/bringing-configuration-objects-to-sass/)
 
