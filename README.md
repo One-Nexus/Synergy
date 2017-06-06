@@ -10,7 +10,8 @@
 
 * [Overview](#overview)
 * [Installation](#installation)
-* [Advanced Documentation](#advanced-documentation)
+* [Documentation - Sass](#documentation-sass)
+* [Documentation - JS](#documentation-js)
 * [Changelog](#changelog)
 
 ## Overview
@@ -143,7 +144,7 @@ if (window.matchMedia(`(min-width: ${breakpoint_tablet})`).matches) {
 * Sass 3.4+
 * [Sass JSON Vars](https://github.com/vigetlabs/sass-json-vars)<sup>[1]</sup>
 
-<sup>[1]</sup><small>This is only required if you intend on using JSON files to store configuration.</small>
+<sup>[1]</sup>This is only required if you intend on using JSON files to store configuration.
 
 > Ensure your paths are correct as they may differ from below
 
@@ -207,7 +208,7 @@ Include the following file on your page before you attempt to load any Synergy r
 dist/synergy.js
 ```
 
-## Advanced Documentation - Sass
+## Documentation - Sass
 
 ### Mixins
 
@@ -1567,11 +1568,11 @@ _theme.scss
 
 Every configurable aspect of your project can now quickly and easily be changed from just one file, whilst retaining a completely modular architecture.
 
-### synergy.js
+## Documentation - JS
 
-#### Getting Started
+### Getting Started
 
-#### Configuration
+### Configuration
 
 ##### Media Query Based Example
 
