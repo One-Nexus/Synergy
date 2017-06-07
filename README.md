@@ -141,8 +141,9 @@ if (window.matchMedia(`(min-width: ${breakpoint_tablet})`).matches) {
 
 ###### Requirements
 
-* Sass 3.4+
+* [Sass 3.4+](http://sass-lang.com/install)
 * [Sass JSON Vars](https://github.com/vigetlabs/sass-json-vars)<sup>[1]</sup>
+* [Node.js](https://nodejs.org/en/)<sup>[1]</sup>
 
 <sup>[1]</sup>This is only required if you intend on using JSON files to store configuration.
 
