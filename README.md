@@ -10,9 +10,9 @@
 
 * [Overview](#overview)
 * [Installation](#installation)
-* [Documentation - Sass](#documentation--sass)
-* [Documentation - JS](#documentation--js)
-* [Creating a Theme](#documentation--js)
+* [Documentation - Sass](#documentation---sass)
+* [Documentation - JS](#documentation---js)
+* [Creating a Theme](#creating-a-theme)
 * [Changelog](#changelog)
 
 ## Overview
