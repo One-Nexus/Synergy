@@ -1770,7 +1770,7 @@ The `synergy()` function accepts 4 parameters:
 
 * `els` {String|NodeList|HTMLElement} - The element(s) to call the function on
 * `callback` {function} - The function to call on each element in `els`
-* `config` {Object} - Defalut confiuration to use for the function
+* `config` {Object} - Default confiuration to use for the function
 * `custom` {Object} - Custom configuration to use when calling the function
 
 ```js
