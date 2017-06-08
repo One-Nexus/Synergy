@@ -135,7 +135,6 @@ const synergy = function(els, callback, config, custom) {
         return blockPart(component, 'component', set, '_', element);
     };
 
-
     if (callback) {
         Array.prototype.forEach.call(els, function(el, index) {
             return callback(el, options, exports);
