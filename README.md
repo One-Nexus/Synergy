@@ -1732,7 +1732,7 @@ export function header(els, custom) {
         }
 
         if (el.modifier('noLogo')) {
-            console.log('header has the "noLogo" modifier);
+            console.log('header has the "noLogo" modifier');
         }
 
         wrapper.doSomething();
