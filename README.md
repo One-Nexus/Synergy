@@ -19,6 +19,8 @@
 
 > A front-end framework for creating modular, configurable and scalable UI components.
 
+Synergy is predominantly Sass framework but also has an optional JS add-on.
+
 [View SassDoc Documentation](http://esr360.github.io/Synergy/docs/sass)
 
 #### Why Use Synergy?
@@ -213,6 +215,12 @@ git submodule add https://github.com/esr360/Synergy.git vendor
 
 ##### If using synergy.js/JSON config
 
+Install the [Sass JSON Vars](https://github.com/vigetlabs/sass-json-vars) Ruby Gem:
+
+```
+gem install sass-json-vars
+```
+
 Require/import the Synergy module into your project's JS (the below assumes you have installed Synergy using either NPM or Yarn):
 
 ```js
@@ -225,11 +233,44 @@ Or:
 var Synergy = require('synergy');
 ```
 
-> N.B you will need a module bundler like [Webpack](https://babeljs.io/) in order to require/import modules
+> N.B you will need a module bundler like [Webpack](https://babeljs.io/) in order to require/import modules.
+
+You will also need to configure your Sass compiler to use [Sass JSON Vars](https://github.com/vigetlabs/sass-json-vars) as the importer:
+
+###### CLI
+
+sass /PATH/TO/app.scss -r sass-json-vars
+
+###### Grunt
+
+> N.B Synergy requires Ruby Sass, so if using Grunt you should use the [grunt-contrib-sass](https://github.com/gruntjs/grunt-contrib-sass) compiler.
+
+```js
+sass: {
+    dist: {
+        options: {
+            require: 'sass-json-vars'
+        },
+        files: {...}
+    }
+}
+```
+
+###### Gulp
+
+> N.B Synergy requires Ruby Sass, so if using Gulp you should use the [Gulp Ruby Sass](https://github.com/sindresorhus/gulp-ruby-sass) compiler.
+
+```js
+gulp.task('sass', function () {
+ return gulp.src('/PATH/TO/app.scss ')
+   .pipe(sass({require: 'sass-json-vars'}).on('error', sass.logError))
+   .pipe(gulp.dest('./css'));
+});
+```
 
 ## Documentation - Sass
 
-* [60 Second Example](#TODO)
+* [60 Second Example](#60-second-example)
 
 ### Mixins
 
@@ -1709,9 +1750,9 @@ Every configurable aspect of your project can now quickly and easily be changed 
 
 ## Documentation - JS
 
-* [60 Second Example](#TODO)
-* [Parameters](#TODO)
-* [Methods](#TODO)
+* [60 Second Example](#60-second-example-1)
+* [Parameters](#parameters)
+* [Methods](#methods)
 
 #### 60 Second Example
 
@@ -1814,7 +1855,7 @@ This returns a merged object of the objects retreived by the original `config` a
 
 ##### Paramater - `exports`
 
-This returns the available [exports](#TODO) of th Synergy module (currently ['component'](#TODO) and ['modifier'](#TODO)).
+This returns the available [exports](#methods) of the Synergy module (currently ['modifier'](#method---modifiermodifier-set and ['component'](#method---componentcomponent-set)).
 
 ##### Examples
 
