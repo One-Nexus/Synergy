@@ -10,8 +10,9 @@
 
 * [Overview](#overview)
 * [Installation](#installation)
-* [Documentation - Sass](#documentation-sass)
-* [Documentation - JS](#documentation-js)
+* [Documentation - Sass](#documentation--sass)
+* [Documentation - JS](#documentation--js)
+* [Documentation - Creating a Theme](#documentation--js)
 * [Changelog](#changelog)
 
 ## Overview
@@ -1708,13 +1709,139 @@ Every configurable aspect of your project can now quickly and easily be changed 
 
 ## Documentation - JS
 
-### `Synergy([Where][What][{How}])`;
+#### 60 Second Example
+Inside `header.js`
+
+```js
+import synergy from './path/to/synergy';
+
+export function header(els, custom) {
+
+    const defaults = {
+        fixed: false,
+        background: '#000000',
+        wrapper-width : '960px'
+    }
+
+    synergy(els, function(el, options) {
+        const wrapper = el.component('wrapper');
+        const fixed = options.fixed || el.modifier('fixed');
+
+        if (fixed) {
+            console.log('header is fixed');
+        }
+
+        if (el.modifier('noLogo')) {
+            console.log('header has the "noLogo" modifier);
+        }
+
+        wrapper.doSomething();
+    }, defaults, custom);
+
+}
+```
+
+Call the function on the header element:
+
+```html
+<div class="header" id="header"></div>
+```
+
+```js
+// Any of the following would work - continue reading to learn more
+header(document.getElementByID('header'));
+header(document.querySelectorAll('.header'));
+header('header');
+```
+
+To modify the default options, pass them to the function with the new value:
+
+```js
+header('header', {
+    fixed: true
+});
+```
 
 ### Getting Started
 
-### Configuration
+#### `Synergy([Where](What){How}{?})`
 
-##### Media Query Based Example
+The `synergy()` function accepts 4 parameters:
+
+* `els` {String|NodeList|HTMLElement} - The element(s) to call the function on
+* `callback` {function} - The function to call on each element in `els`
+* `config` {Object} - Defalut confiuration to use for the function
+* `custom` {Object} - Custom configuration to use when calling the function
+
+```js
+synergy(els, callback, config, custom);
+```
+
+#### Parameter - `els`
+
+The `els` parameter is either a single HTML Element or a NodeList. If a NodeList is passed, the callback function will iterate on each element in the NodeList.
+
+##### Examples
+
+```html
+<div class="foo" id="bar">...</div>
+```
+
+The below examples would all target the above HTML element.
+
+```js
+synergy(document.getElementByID('bar'), function() {...});
+synergy(document.querySelectorAll('.foo'), function() {...});
+synergy('foo', function() {...});
+synergy('bar', function() {...});
+```
+
+#### Parameter - `callback`
+
+The callback parameter is a callback function with 3 paramaters available: `function(el, options, exports)`
+
+##### Paramater - `el`
+
+This will be a single HTML Element - if you passed a NodeList to the main function the callback will iterate through each element, accessed by this parameter.
+
+##### Paramater - `options`
+
+This returns a merged object of the objects retreived by the original `config` and `custom` parameters.
+
+##### Paramater - `exports`
+
+This returns the available [exports](#TODO) of th Synergy module (currently ['component'](#TODO) and ['modifier'](#TODO)).
+
+##### Examples
+
+```html
+<div class="foo-buzz" id="bar">...</div>
+```
+
+```js
+const defaults = {
+    foo: 'fizz',
+    bar: 2
+};
+
+synergy('foo', function(el, options, exports) {
+
+    console.log(options.foo); // returns 'qux'
+    console.log(options.bar); // returns 2
+    console.log(el.modifier('buzz')); // returns true
+
+}, defaults, {foo: 'qux'});
+```
+
+#### Parameter - `config`
+
+This is a JavaScript object containing any default configuration to use for the callback, which will get merged with the `custom` object.
+
+#### Parameter - `custom`
+
+This is a JavaScript object containing any default configuration to use for the callback, which will get merged with the `config` object.
+
+#### Media Query Based Example
 
 A popular, practical example of how to use this might be to access your style's breakpoint values to conditionally apply scripts.
 
@@ -1761,6 +1888,8 @@ function breakpoint(media, value) {
 ```
 
 They key part of the above code is `_modules['grid']['breakpoints'][value]`, which fetches the value from the JSON.
+
+## Documentation - Creating a Theme
 
 ## Credits & Notes
 
