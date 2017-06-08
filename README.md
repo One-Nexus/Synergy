@@ -90,7 +90,7 @@ Configure your modules without touching the source code. Call the mixin and pass
 
 Given a folder structure similar to the following:
 
-```
+```js
 |-- modules
 |   |-- grid
 |   |   |-- _grid.scss
