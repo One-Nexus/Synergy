@@ -12,7 +12,7 @@
 * [Installation](#installation)
 * [Documentation - Sass](#documentation--sass)
 * [Documentation - JS](#documentation--js)
-* [Documentation - Creating a Theme](#documentation--js)
+* [Creating a Theme](#documentation--js)
 * [Changelog](#changelog)
 
 ## Overview
@@ -1889,7 +1889,7 @@ function breakpoint(media, value) {
 
 They key part of the above code is `_modules['grid']['breakpoints'][value]`, which fetches the value from the JSON.
 
-## Documentation - Creating a Theme
+## Creating a Theme
 
 ## Credits & Notes
 
