@@ -100,7 +100,6 @@ Inside `grid.json`:
 ```json
 {
     "grid": {
-        "name": "grid",
         "breakpoints": {
             "break-0" : "0px",
             "break-1" : "460px",
@@ -115,12 +114,12 @@ Inside `grid.json`:
 
 Inside `_grid.scss`:
 
-```sass
+```scss
 @import 'grid.json'; // config is now accessible under the `$grid` variable
 
 $breakpoint_tablet: map-get-deep($grid, 'breakpoints', 'break-3');
 
-@media (min-width: $breakpoint_tablet {
+@media (min-width: $breakpoint_tablet) {
     // do something when screen width is at least 940px
 }
 ```
@@ -145,9 +144,19 @@ if (window.matchMedia(`(min-width: ${breakpoint_tablet})`).matches) {
 * [Sass JSON Vars](https://github.com/vigetlabs/sass-json-vars)<sup>[1]</sup>
 * [Node.js](https://nodejs.org/en/)<sup>[1]</sup>
 
-<sup>[1]</sup>This is only required if you intend on using JSON files to store configuration.
+<sup>[1]</sup>This is only required if you intend on using JSON files to store configuration (i.e. you wish to share config between JS and Sass).
 
 > Ensure your paths are correct as they may differ from below
+
+##### Via Yarn
+
+```
+yarn add Synergy
+```
+
+```css
+@import '../node_modules/Synergy/dist/synergy';
+```
 
 ##### Via NPM
 
@@ -203,13 +212,23 @@ git submodule add https://github.com/esr360/Synergy.git vendor
 
 ##### If using synergy.js/JSON config
 
-Include the following file on your page before you attempt to load any Synergy related scripts:
+Require/import the Synergy module into your project's JS (the below assumes you have installed Synergy using either NPM or Yarn):
 
+```js
+import Synergy from 'synergy';
 ```
-dist/synergy.js
+
+Or:
+
+```js
+var Synergy = require('synergy');
 ```
+
+> N.B you will need a module bundler like [Webpack](https://babeljs.io/) in order to require/import modules
 
 ## Documentation - Sass
+
+* [60 Second Example](#TODO)
 
 ### Mixins
 
@@ -232,11 +251,129 @@ dist/synergy.js
 * [Global Configuration](#global-configuration)
 * [Setting Up A Project](#setting-up-a-project)
 
-### synergy.js
+#### 60 Second Example
 
-* [Getting Started](#getting-started)
-* [Configuration](#configuration)
-* [Usage](#usage)
+Inside `_header.scss`
+
+```scss
+@mixin header($custom: ()) {
+    // Merge default config with custom values
+    $header: config((
+        'name'          : 'header',
+        'fixed'         : false,
+        'background'    : #000000,
+        'wrapper-width' : 960px
+    ), $custom);
+    
+    @include module {
+        
+        background: this('background');
+        
+        @include modifier('noLogo') {
+            @include module('logo') {
+                display: none;   
+            }    
+        }
+        
+        @include component('wrapper') {
+            width: this('wrapper-width'); 
+        }
+        
+        @include option('fixed') {
+            position: fixed;
+        }
+        
+    }
+}
+```
+
+Wherever you want to output the CSS, in the same or another file...
+
+```scss
+@include header();
+```
+
+To modify the default options, pass them to the mixin with the new value:
+
+```scss
+@include header((
+    'background'    : blue,
+    'wrapper-width' : 90%
+));
+```
+
+###### CSS Output
+
+```css
+.header, [class*="header-"] {
+    background: blue;
+}
+
+[class*="header-"][class*="-noLogo"] .logo,
+[class*="header-"][class*="-noLogo"] [class*="-logo"] {
+    display: none;
+}
+
+.header_wrapper
+[class*="header_wrapper-"] {
+    width: 90%;   
+}
+
+[class*="header-"][class*="-fixed"] {
+    position: fixed;
+}
+```
+
+Your markup for the above module may now look something like the following:
+
+```html
+<div class="header">
+    <div class="header_wrapper">
+        <div class="logo">...</div>
+        ...
+    </div>    
+</div>
+```
+
+If you want to hide the logo, you can add the `noLogo` modifier to the header:
+
+```html
+<div class="header-noLogo">
+    ...   
+</div>
+```
+
+If you want to set the header's position to `fixed`, there are two ways you can do this. Firstly, you can again add the appropriate modifier to the markup:
+
+```html
+<div class="header-fixed">
+    ...   
+</div>
+```
+
+N.B. Modifiers can be chained in any order:
+
+```html
+<div class="header-fixed-noLogo">
+    ...   
+</div>
+```
+
+Or you can set the header to be fixed (without the need of a modifier) by passing the option to the mixin when calling it:
+
+```scss
+@include header((
+    'fixed' : true
+));
+```
+
+Then just:
+
+```html
+<div class="header">
+    ...
+</div>
+```
 
 #### Module
 
@@ -1570,6 +1707,8 @@ _theme.scss
 Every configurable aspect of your project can now quickly and easily be changed from just one file, whilst retaining a completely modular architecture.
 
 ## Documentation - JS
+
+### `Synergy([Where][What][{How}])`;
 
 ### Getting Started
 
