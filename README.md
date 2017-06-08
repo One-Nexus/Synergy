@@ -1709,7 +1709,12 @@ Every configurable aspect of your project can now quickly and easily be changed 
 
 ## Documentation - JS
 
+* [60 Second Example](#TODO)
+* [Parameters](#TODO)
+* [Methods](#TODO)
+
 #### 60 Second Example
+
 Inside `header.js`
 
 ```js
@@ -1762,7 +1767,7 @@ header('header', {
 });
 ```
 
-### Getting Started
+### Parameters
 
 #### `Synergy([Where](What){How}{?})`
 
@@ -1787,13 +1792,12 @@ The `els` parameter is either a single HTML Element or a NodeList. If a NodeList
 <div class="foo" id="bar">...</div>
 ```
 
-The below examples would all target the above HTML element.
+The below examples would all target the above HTML element:
 
 ```js
 synergy(document.getElementByID('bar'), function() {...});
 synergy(document.querySelectorAll('.foo'), function() {...});
 synergy('foo', function() {...});
-synergy('bar', function() {...});
 ```
 
 #### Parameter - `callback`
@@ -1828,6 +1832,7 @@ synergy('foo', function(el, options, exports) {
 
     console.log(options.foo); // returns 'qux'
     console.log(options.bar); // returns 2
+    console.log(el.id); // returns 'bar'
     console.log(el.modifier('buzz')); // returns true
 
 }, defaults, {foo: 'qux'});
@@ -1840,6 +1845,64 @@ This is a JavaScript object containing any default configuration to use for the 
 #### Parameter - `custom`
 
 This is a JavaScript object containing any default configuration to use for the callback, which will get merged with the `config` object.
+
+### Methods
+
+#### Method - `modifier(modifier, set)`
+
+##### Parameter - `modifier`
+
+String - the modifier of interest
+
+##### Parameter - `set`
+
+If this parameter is passed as a truthy value, the method will set a new modifier instead of returning the existance of one.
+
+##### Examples
+
+```html
+<div class="foo-fizz-buzz">...</div>
+```
+
+```js
+synergy('foo').modifier('fizz'); // returns true
+synergy('foo').modifier('buzz'); // returns true
+synergy('foo').modifier('qux'); // returns false
+synergy('foo').modifier(); // returns ['fizz', 'buzz']
+synergy('foo').modifier('baz', true); // sets new modifier of 'baz'
+```
+
+#### Method - `component(component, set)`
+
+##### Parameter - `modifier`
+
+String - the component of interest
+
+##### Parameter - `set`
+
+If this parameter is passed as a truthy value, the method will set a new component on the selected element instead of returning the existance of one.
+
+##### Examples
+
+```html
+<div id="foo">
+    <div class="foo_fizz" id="fooFizz"></div>
+    <div class="foo_buzz" id="fooBuzz">...</div>
+</div>
+```
+
+```js
+const el_1 = document.getElementByID('foo');
+const el_2 = document.getElementByID('fooFizz');
+
+synergy(el_1).component('fizz'); // returns HTML Element
+synergy(el_1).component('buzz'); // returns HTML Element
+synergy(el_1).component('qux'); // returns false
+synergy(el_2).component(); // returns ['fizz']
+synergy(el_1).component('baz', true); // sets new component of 'baz'
+```
+
+## Creating a Theme
 
 #### Media Query Based Example
 
@@ -1888,8 +1951,6 @@ function breakpoint(media, value) {
 ```
 
 They key part of the above code is `_modules['grid']['breakpoints'][value]`, which fetches the value from the JSON.
-
-## Creating a Theme
 
 ## Credits & Notes
 
