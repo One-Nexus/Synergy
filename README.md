@@ -522,6 +522,27 @@ The chain option should be used if you are looking to optimise your CSS output, 
 
 The static option creates only the naked selector for your module; ie - `.selector`, meaning no modifiers or components can be used. This option is only available for consistency; it could make more sense to just write `.module` instead of using the mixin in this case - I'll let you think about that one.
 
+##### Nesting Modules
+
+It is possible to nest modules within one another:
+
+```sass
+@include module('header') {
+    @include module('button') {
+        ...
+    }
+}
+```
+
+###### CSS Output
+
+```css
+.header .button, .header [class*='button-'],
+[class*='header-'] .button, [class*='header-'] [class*='button-'] {
+    ...
+}
+```
+
 ##### Advanced Example
 
 ```sass
@@ -738,6 +759,28 @@ $component-glue: '__';
 
 // Modules
 ...
+
+```
+##### Nesting Components
+
+It is possible to nest components within one another:
+
+```sass
+@include module('header') {
+    @include component('user') {
+        @include component('profile') {
+            ...
+        }
+    }
+}
+```
+
+###### CSS Output
+
+```css
+.header_user_profile, [class*='header_user_profile-'] {
+    ...
+}
 ```
 
 #### Modifier
@@ -914,6 +957,12 @@ $modifier-glue: '--';
 
 This mixin allows you to extend multiple modifiers into a new, seperate modifer, essentially combining several modifiers into one.
 
+The extend mixin takes the following parameters:
+
+* `$modifiers` {string|list} $modifiers [null] - The modifiers which you wish to combine
+* `$parent` string} $parent [null] - The target parent module if not the current one
+* `$core` {bool} $core [false] - Extend the core '.module' styles?
+
 ```sass
 @include module('button') {
 
@@ -951,6 +1000,67 @@ This mixin allows you to extend multiple modifiers into a new, seperate modifer,
 [class*="button-"][class*="-success"], 
 [class*="button-"][class*="-primary"] {
     color: green;
+}
+```
+
+##### Use within another module
+
+```sass
+@include module('list') {
+
+    ...
+
+    @include modifier('reset') {
+        list-style: none;
+        margin-left: 0;
+    }   
+}
+
+@include module('tabs') {
+
+    ...
+
+    @include component('nav') {
+        @include extend($parent: 'list', $modifiers: 'reset');
+    }
+}
+```
+
+###### CSS Output
+
+```css
+.list, [class*='list-'] {
+    ...
+}
+
+[class*='list-'][class*='-reset'],
+.tabs_nav, [class*='tabs_nav-'] {
+    list-style: none;
+    margin-left: 0;
+}
+
+.tabs, [class*='tabs-'] {
+    ...
+}
+```
+
+This only extends the list's modifier, in order to extend the core styles as well, the `$core` paramater should be passed as `true`:
+
+```sass
+@include module('tabs') {
+    @include component('nav') {
+        @include extend($parent: 'list', $modifiers: 'reset', $core: true);
+    }
+}
+```
+
+For usages like the above, an alias mixin of `_module()` is available. This is to provide a more semantic way of achieving the above task, allowing you to pass the `$parents` parameter, which is normally the second parameter, as the first, and also has a default `$core` value of `true`:
+
+```sass
+@include module('tabs') {
+    @include component('nav') {
+        @include _module('list', 'reset');
+    }
 }
 ```
 
