@@ -1669,6 +1669,493 @@ synergy(el_1).component('baz', true); // sets new component of 'baz'
 
 ## Creating a Theme
 
+All JavaScript for this example will be written in ES6 using imports and exports. The project will consit of 4 modules and 1 theme. The complete folder structure will be as follows:
+
+```
+|-- modules
+|   |-- buttons
+|   |   |-- _buttons.scss
+|   |-- grid
+|   |   |-- _grid.scss
+|   |   |-- grid.js
+|   |   |-- grid.json
+|   |-- header
+|   |   |-- _header.scss
+|   |   |-- header.js
+|   |   |-- header.json
+|   |-- typography
+|   |   |-- _typography.scss
+|-- themes
+|   |-- Buzz
+|   |   |-- buzz.scss
+|   |   |-- buzz.js
+|   |   |-- buzz.json
+|-- app.scss
+|-- app.js
+```
+
+The goal is to be able to configure all modules via `themes/Buzz/buzz.json`. From the above structure it can be seen that not all modules have a `.json` file, which is where a module's default configuration is stored. This is only required if access to the configuration is required in both the app's JavaScript and Sass realms. Otherwise, the default configuration can be contained within the module's `.scss` file.
+
+##### Inside app.scss
+
+Firstly, Synergy is imported, followed by each module.
+
+```scss
+// Synergy
+@import 'src/scss/synergy';
+
+// Modules
+@import 'modules/typography/typography';
+@import 'modules/buttons/buttons';
+@import 'modules/grid/grid';
+@import 'modules/header/header';
+```
+
+##### Inside app.js
+
+```js
+import synergy from 'synergy';
+
+import { grid } from './modules/grid/grid';
+import { header } from './modules/header/header';
+
+const config = {};
+
+export { config, synergy, grid, header }
+```
+
+##### Inside buzz.scss
+
+The first thing to do is import the app. Then the theme's config is imported (which, thanks to Sass Json Vars, will be accessible via the `$app` variable) and each module is included to output the CSS in-line with the config from `buzz.json` (the [`custom()`](#TODO) function seen below retreives the module's custom config from the `$app` variable).
+
+```scss
+@import '../../app';
+@import './buzz.json';
+
+@include typography(custom('typography'));
+
+@include buttons(custom('typography'));
+
+@include grid(custom('typography'));
+
+@include header(custom('typography'));
+```
+
+##### Inside buzz.js
+
+The theme's config is imported as well as the `app.js` exports. Each module's main function is called, passing the values from `buzz.json` as parameters.
+
+```js
+import * as app from '../../app';
+import config from './buzz.json';
+
+app.grid('grid', config.grid);
+
+app.header('header', config.header);
+```
+
+##### Inside buzz.json
+
+Each module must live under the parent `app` object. This is where custom config will be passed to each module later on (when this file is imported into a Sass file, the values will be accessible from the `$app` variable).
+
+```json
+{
+    "app": {
+        "typography": {},
+        "buttons": {},
+        "grid": {},
+        "header": {},
+    }
+}
+```
+
+##### Typography Module
+
+###### Inside _typography.scss
+
+Because we don't need to access these values in the JavaScript, the default configuration for this module will be stored in this file.
+
+```scss
+@mixin typography($custom: ()) {
+
+    $typography: config((
+        'colors':(
+            'primary'   : blue,
+            'secondary' : green
+        ),
+        'sizes':(
+            'small'     : 0.8em,
+            'regular'   : 1em,
+            'large'     : 1.4em           
+        )
+    ), $custom) !global;
+
+} // @mixin typography
+
+@function color($color) {
+    @return option($typography, 'colors', $color);
+}
+
+@function size($size) {
+    @return option($typography, 'sizes', $size);
+}
+```
+
+##### Buttons Module
+
+###### Inside _buttons.scss
+
+Because we don't need to access these values in the JavaScript, the default configuration for this module will be stored in this file.
+
+```scss
+@mixin buttons($custom: ()) {
+
+    $buttons: config((
+        'line-height'  : 1.4,
+        'side-spacing' : 0.5em,
+        'background'   : grey,
+        'color'        : white,
+        'round-radius' : 0.4em
+    ), $custom);
+
+    @include module('button') {
+
+        // Core Styles
+        //*********************************************************
+
+        display: inline-block;
+        line-height: this('line-height');
+        padding: 0 this('side-spacing');
+        background: this('background');
+        color: this('color');
+
+        // Modifiers
+        //*********************************************************
+
+        // Patterns
+		
+        @include modifier('round') {
+            border-radius: this('round-radius');
+        }
+
+        @include modifier('block') {
+            display: block;
+        }
+
+        // Colors
+
+        @include modifier('primary') {
+            background: color('primary');
+        }
+
+        @include modifier('secondary') {
+            background: color('secondary');
+        }
+
+        // Sizes
+
+        @include modifier('small') {
+            font-size: size('small'); 
+        }
+
+        @include modifier('large') {
+            font-size: size('large'); 
+        }
+
+        // Semantic Styles
+
+        @include modifier('purchase') {
+            @include extend(('round', 'primary', 'large'));
+        }
+
+    } // module(button)
+
+}
+```
+
+##### Grid Module
+
+###### Inside grid.json
+
+```json
+{
+    "grid": {
+        "name": "grid",
+        "breakpoints": {
+            "break-0" : "0px",
+            "break-1" : "460px",
+            "break-2" : "720px",
+            "break-3" : "940px",
+            "break-4" : "1200px",
+            "break-5" : "1400px"            
+        }
+    }
+}
+```
+
+###### Inside _grid.scss
+
+Perhaps in a real project this file may serve more purpose, but for this example it's only use is to globally expose the breakpoint values to other modules.
+
+```scss
+@import '../../modules/grid/grid.json'; // path is relative to `themes/Buzz/`
+// Default config is now accessible via the $grid variable
+
+@mixin grid($custom: ()) {
+    $grid: config($grid, $custom) !global;
+}
+
+@function breakpoint($breakpoint) {
+    @return map-get-deep($grid, 'breakpoints', $breakpoint);
+}
+```
+
+This now means other modules can access the theme's breakpoint values via the `breakpoint()` function defined above:
+
+```scss
+@media (min-width: breakpoint('break-3')) {
+    ...
+}
+```
+
+###### Inside grid.js
+
+And likewise for the corresponding JavaScript file, there is little more going on than merging the default config with custom values and exposng the new breakpoint values to be used by other modules.
+
+```js
+import * as app from '../../app';
+import defaults from './grid.json';
+
+export function grid(els, custom) {
+    app.config.grid = Object.assign(defaults.grid, custom);
+};
+```
+
+This now means other modules can access the theme's breakpoint values:
+
+```scss
+import * as app from '../../app';
+
+const breakpoint_tablet = app.config.grid.breakpoints['break-3'];
+```
+
+##### Header Module
+
+###### Inside header.json
+
+This is where the default configuration for the header module will be stored.
+
+> Notice how we can use the earlier defined color() function from the typography module as a value
+
+```json
+{
+    "header" {
+        "name": "header",
+        "background" : "color('primary')",
+        "top": "50px",
+        "disable-top" "break-5",
+        "dark": false,
+        "dark-color": "rgba(black, 0.8)",
+        "side": {
+            "enabled": false,
+            "width": "100%"
+        }
+    }
+}
+```
+
+###### Inside _header.scss
+
+```scss
+@import '../../modules/header/header.json'; // path is relative to `themes/Buzz/`
+// Default config is now accessible via the $header variable
+
+@mixin header($custom: ()) {
+
+    $header: config($header, $custom);
+
+    // Module
+    //*************************************************************
+
+    @include module() {
+
+        // Core Styles
+        //*********************************************************
+
+        background: this('background');
+
+        @media (max-width: this('disable-top')) { 
+            margin-top: this('top');
+        }
+
+        // Settings
+        //*********************************************************
+
+        @include option('dark') {
+            background: this('dark-color');   
+        }
+
+        @include option('side') {
+            @media (min-width: breakpoint('break-3')) {
+                // Core Side-Header Styles
+                position: fixed;
+                top: 0;
+                width: this('side', 'width');
+                z-index: 99;
+                @include value('left') {
+                    left: 0;
+                }
+                @include value('right') {
+                    right: 0;
+                }
+            }
+        }
+
+    } // module('header')
+
+}
+```
+
+###### Inside header.js
+
+This example doesn't really provide any UI effects for the header, it's just to demonstrate how to set up the JS file for a module, and how to access and export the config.
+
+```js
+import * as app from '../../app';
+import defaults from './header.json';
+
+export function header(els, custom) {
+
+    app.synergy(els, function(header, options) {
+        const offest = options.top
+
+        if (options.side.enabled) {
+            console.log('Side header is enabled');
+        }
+
+        if (options.dark) {
+            console.log('Header is dark');
+        }
+
+        if (app.synergy(header).modifier('dark')) {
+            console.log('header element has "dark" modifier');
+        }
+
+    }, defaults, custom);
+
+    app.config.accordions = Object.assign(
+        defaults.accordions, custom
+    );
+
+};
+```
+
+##### Returning to buzz.json
+
+With all the files setup, `buzz.scss` and `buzz.js` can be sent to their respective compilers/transpilers to be (pre)processed. Each module will have their default values. In order to pass custom configuration to the theme, the values are passed to `buzz.json`:
+
+```json
+{
+    "app": {
+        "typography": {
+            "colors": {
+                "primary": "purple",
+                "secondary": "blue"
+            }
+        },
+        "buttons": {
+            "line-height": "24px"
+        },
+        "grid": {
+            "breakpoints": {
+                "break-3": "980px",
+                "break-6": "1860px"
+            }
+        },
+        "header": {
+            "dark": true,
+            "top": "20px",
+            "disable-top": "break-6",
+            "side": {
+                "enabled": "left"
+            }
+        }
+    }
+}
+```
+
+The values are merged recursively, meaning you only have to re-define the values you are changing.
+
+##### CSS Output
+
+Passing buzz.scss through our Sass compiler yields the following CSS:
+
+```css
+.button, [class*="button-"] {
+    display: inline-block;
+    line-height: 24px;
+    padding: 0 0.5em;
+    background: grey;
+    color: white;
+}
+[class*="button-"][class*="-round"], 
+[class*="button-"][class*="-primary"], 
+[class*="button-"][class*="-purchase"] {
+    border-radius: 0.4em;
+}
+[class*="button-"][class*="-block"] {
+    display: block;
+}
+[class*="button-"][class*="-primary"], 
+[class*="button-"][class*="-purchase"] {
+    background: purple;
+}
+[class*="button-"][class*="-secondary"] {
+    background: blue;
+}
+[class*="button-"][class*="-small"] {
+    font-size: 0.8em;
+}
+[class*="button-"][class*="-large"], 
+[class*="button-"][class*="-purchase"] {
+    font-size: 1.4em;
+}
+
+.header, [class*="header-"] {
+    background: purple;
+}
+
+@media (max-width: 1860px) {
+    .header, [class*="header-"] {
+        margin-top: 0;
+    }
+}
+
+.header, [class*="header-"], 
+[class*="header-"][class*="-dark"] {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+@media (min-width: 980px) {
+    .header, [class*="header-"], 
+    [class*="header-"][class*="-side"] {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 99;
+    }
+    .header, [class*="header-"], 
+    [class*="header-"][class*="-side"][class*="-left"] {
+        left: 0;
+    }
+    [class*="header-"][class*="-side"][class*="-right"] {
+        right: 0;
+    }
+}
+```
+
+Every configurable aspect of your project can now quickly and easily be changed from just one file, whilst retaining a completely modular architecture.
+
 #### Media Query Based Example
 
 A popular, practical example of how to use this might be to access your style's breakpoint values to conditionally apply scripts.
