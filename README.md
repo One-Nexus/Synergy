@@ -346,21 +346,19 @@ To modify the default options, pass them to the mixin with the new value:
 ###### CSS Output
 
 ```css
-.header, [class*="header-"] {
+.header,
+[class*='header-'] {
     background: blue;
 }
-
-[class*="header-"][class*="-noLogo"] .logo,
-[class*="header-"][class*="-noLogo"] [class*="-logo"] {
+[class*='header-'][class*='-noLogo'] .logo,
+[class*='header-'][class*='-noLogo'] [class*='logo-'] {
     display: none;
 }
-
-.header_wrapper
-[class*="header_wrapper-"] {
-    width: 90%;   
+.header_wrapper,
+[class*='header_wrapper-'] {
+    width: 90%;
 }
-
-[class*="header-"][class*="-fixed"] {
+[class*='header-'][class*='-fixed'] {
     position: fixed;
 }
 ```
@@ -418,6 +416,8 @@ Then just:
 
 #### Module
 
+> [View Real Example](https://git.io/vHMq4) | [View SassDocs](http://esr360.github.io/Synergy/docs/sass/#synergy-mixin-module)
+
 The `module()` mixin is what generates the selectors for your module. The mixin accepts 2 parameters:
 
 * `$modules` {string|list} - the name of your module(s) (optional)
@@ -453,16 +453,17 @@ If `$modules` is not defined, it will look for a `name` value in your module's c
 }
 ```
 
-`$type` can be one of three values: `flex` (default), `chain` and `static`. By default, `flex` is enabled for all componenets. To globally change the default type from `flex` to something else, use the `$selector-type` variable with the value you desire in your Sass before importing Synergy.
+`$type` can be one of three values: `flex` (default), `chain` or `static`. By default, `flex` is enabled for all componenets. To globally change the default type from `flex` to something else, pass your specified value to the `$selector-type` variable before importing Synergy.
 
 ```sass
 // Re-define default selector type
 $selector-type: 'chain';
 
 // Import Synergy
-@import "path/to/synergy"
+@import 'path/to/synergy'
 
-/* Your Modules */
+// Modules
+...
 ```
 
 ##### Flex

@@ -40,18 +40,6 @@ module.exports = function(grunt) {
             }
         },
 
-        babel: {
-            options: {
-                presets: ['es2015'],
-                //plugins: ['transform-es2015-modules-amd']
-            },
-            default: {
-                files: {
-                    'dist/synergy.js':'src/js/synergy.js'
-                }
-            }
-        },
-
         scsslint: {
             options: {
                 configFile: '.scss-lint.yml'
