@@ -1933,7 +1933,7 @@ export function grid(els, custom) {
 
 This now means other modules can access the theme's breakpoint values:
 
-```scss
+```js
 import * as app from '../../app';
 
 const breakpoint_tablet = app.config.grid.breakpoints['break-3'];
