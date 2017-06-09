@@ -425,7 +425,7 @@ The `module()` mixin is what generates the selectors for your module. The mixin 
 
 ```sass
 @include module('header') {
-	...
+    ...
 }
 ```
 
@@ -449,7 +449,7 @@ If `$modules` is not defined, it will look for a `name` value in your module's c
 
 ```sass
 @include modules(('header', 'footer')) {
-	...
+    ...
 }
 ```
 
@@ -470,7 +470,7 @@ $selector-type: 'chain';
 
 ```sass
 @include module('header', 'flex') {
-	...
+    ...
 }
 ```
 
@@ -490,7 +490,7 @@ This is the default value for a module; it creates selectors for both `.module` 
 
 ```sass
 @include module('header', 'chain') {
-	...
+    ...
 }
 ```
 
@@ -508,7 +508,7 @@ The chain option should be used if you are looking to optimise your CSS output, 
 
 ```sass
 @include module('header', 'static') {
-	...
+    ...
 }
 ```
 
@@ -526,15 +526,15 @@ The static option creates only the naked selector for your module; ie - `.select
 
 ```sass
 @include modules(('header', 'footer'), 'static') {
-	...
+    ...
 }
 
 @include module('header', 'static') {
-	...
+    ...
 }
 
 @include module('footer') {
-	...
+    ...
 }
 ```
 
@@ -569,13 +569,13 @@ To keep things as similar to BEM as possible, Synergy provies an easy way to cre
 
 ```sass
 @include module('header') {
-	
+    
     ...
 
-	@include component('wrapper') {
-		...	
-	}	
-	
+    @include component('wrapper') {
+        ...    
+    }    
+    
 }
 ```
 
@@ -600,14 +600,14 @@ Components work like regular modules, in the sense that you can add modifiers:
 @include module('header') {
 
     ...
-	
-	@include component('wrapper') {
+    
+    @include component('wrapper') {
         ...
-		@include modifier('fullscreen') {
-			...
-		}
-	}
-		
+        @include modifier('fullscreen') {
+            ...
+        }
+    }
+        
 }
 ```
 
@@ -635,11 +635,11 @@ Components work like regular modules, in the sense that you can add modifiers:
 @include module('footer') {
 
     ...
-	
-	@include components(('nav', 'copyright')) {
-		...	
-	}	
-	
+    
+    @include components(('nav', 'copyright')) {
+        ...    
+    }    
+    
 }
 ```
 
@@ -669,27 +669,27 @@ By not passing a parameter to the `component()` mixin, you can apply styles to a
 ```sass
 @include module('widget') {
 
-	@include component {
-		@include modifier('inline') {
-			...
-		}	
-	}
-	
-	@include component('icon') {
-		...
-	}
-	
-	@include component('header') {
-		...
-	}
-	
+    @include component {
+        @include modifier('inline') {
+            ...
+        }    
+    }
+    
+    @include component('icon') {
+        ...
+    }
+    
+    @include component('header') {
+        ...
+    }
+    
 }
 ```
 
 ```html
 <div class="widget">
-	<div class="widget_icon-inline">...</div>
-	<div class="widget_header-inline">...</div>
+    <div class="widget_icon-inline">...</div>
+    <div class="widget_header-inline">...</div>
 </div>
 ```
 
@@ -714,8 +714,8 @@ If you want to use a different string to chain components to modules, you can pa
 ```sass
 @include module('header') {
     @include component('wrapper', $glue: '__') {
-        ...	
-    }	
+        ...    
+    }    
 }
 ```
 
@@ -753,17 +753,17 @@ The `modifier()` mixin generates the selector for any modifiers for your module,
 
 ```sass
 @include module('button') {
-	
-	...
-	
-	@include modifier('small') {
-		font-size: 0.75em;
-	}
-	
-	@include modifier('large') {
-		font-size: 1.5em;
-	}
-	
+    
+    ...
+    
+    @include modifier('small') {
+        font-size: 0.75em;
+    }
+    
+    @include modifier('large') {
+        font-size: 1.5em;
+    }
+    
 }
 ```
 
@@ -791,19 +791,19 @@ The `modifier()` mixin is infinitely nestable allowing you to require more than 
 
 ```sass
 @include module('header') {
-	
-	...
-	
-	@include modifier('side') {
+    
+    ...
+    
+    @include modifier('side') {
         position: absolute;
-		@include modifier('left') {
+        @include modifier('left') {
             left: 0;
         }
-		@include modifier('right') {
+        @include modifier('right') {
             right: 0;
         }
-	}
-	
+    }
+    
 }
 ```
 
@@ -839,21 +839,21 @@ You can use any number of modifiers on a single element in the HTML, and in any 
 
 ```sass
 @include module('button') {
-	
-	...
-	
-	@include modifiers(('buy-now', 'add-to-basket')) {
-		text-transform: uppercase;
-	}
-	
-	@include modifier('buy-now') {
-		...
-	}
-	
-	@include modifier('add-to-basket') {
-		...
-	}
-	
+    
+    ...
+    
+    @include modifiers(('buy-now', 'add-to-basket')) {
+        text-transform: uppercase;
+    }
+    
+    @include modifier('buy-now') {
+        ...
+    }
+    
+    @include modifier('add-to-basket') {
+        ...
+    }
+    
 }
 ```
 
@@ -882,8 +882,8 @@ If you want to use a different string to chain modifiers to modules/components, 
 ```sass
 @include module('button') {
     @include modifier('large', $glue: '--') {
-        ...	
-    }	
+        ...    
+    }    
 }
 ```
 
@@ -919,13 +919,13 @@ This mixin allows you to extend multiple modifiers into a new, seperate modifer,
 
     ...
 
-	@include modifier('round')   {border-radius: 6px}
-	@include modifier('large')   {font-size: 2em}
-	@include modifier('success') {color: green}
+    @include modifier('round')   {border-radius: 6px}
+    @include modifier('large')   {font-size: 2em}
+    @include modifier('success') {color: green}
 
-	@include modifier('primary') {
-		@include extend(('round', 'large', 'success'))
-	}	
+    @include modifier('primary') {
+        @include extend(('round', 'large', 'success'))
+    }    
 
 }
 ```
@@ -972,12 +972,12 @@ The following conditions can be passed to the mixin:
 ```sass
 @include module('widget') {
 
-	@include component('icon') {
-		color: blue;
-		@include context('parent-hovered') {
-			color: white;
-		}	
-	}
+    @include component('icon') {
+        color: blue;
+        @include context('parent-hovered') {
+            color: white;
+        }    
+    }
 
 }
 ```
@@ -1003,16 +1003,16 @@ As outlined in the [overview](#overview) section, Synergy allows you to configur
 ```sass
 @mixin header($custom: ()) {
 
-	$header: config((
-		'bg-color' : black,
-		'top'      : 50px
-	), $custom);
+    $header: config((
+        'bg-color' : black,
+        'top'      : 50px
+    ), $custom);
 
-	@include module('header') {
-		background-color: this('bg-color');
-		margin-top: this('top');
-	}
-		
+    @include module('header') {
+        background-color: this('bg-color');
+        margin-top: this('top');
+    }
+        
 }
 ```
 
@@ -1030,21 +1030,21 @@ For all intents and purposes, there are 2 types of options; bools and non-bools.
 ```sass
 @mixin header($custom: ()) {
 
-	$header: config((
-		'dark' : false,
-		'top'  : 50px
-	), $custom);
+    $header: config((
+        'dark' : false,
+        'top'  : 50px
+    ), $custom);
 
-	@include module('header') {
-		
-		margin-top: this('top');
-		
-		@include option('dark') {
-			background-color: black;
-		}
-		
-	}
-		
+    @include module('header') {
+        
+        margin-top: this('top');
+        
+        @include option('dark') {
+            background-color: black;
+        }
+        
+    }
+        
 }
 ```
 
@@ -1064,29 +1064,29 @@ Your configuration can be infinitely nested, like so:
 ```sass
 @mixin global($custom: ()) {
 
-	$global: config((
-		
-		// Options
-		'typography': (
-			'sizes': (
-				'size-1'      : 1em,
-				'size-2'      : 1.2em,
-				'size-3'      : 1.6em
-			),
-			'colors': (
-				'primary'     : red,
-				'secondary'   : blue,
+    $global: config((
+        
+        // Options
+        'typography': (
+            'sizes': (
+                'size-1'      : 1em,
+                'size-2'      : 1.2em,
+                'size-3'      : 1.6em
+            ),
+            'colors': (
+                'primary'     : red,
+                'secondary'   : blue,
                 'validation'  : (
                     'valid'   : #19d36d,
                     'invalid' : #d32828
                 )
-			)
-		)
-		
-	), $custom) !global;
-	
-	...
-		
+            )
+        )
+        
+    ), $custom) !global;
+    
+    ...
+        
 }
 ```
 
@@ -1099,16 +1099,16 @@ If your option is a bool, you can use the `option()` mixin. The styles added wit
 ```sass
 @mixin header($custom: ()) {
 
-	$header: config((
-		'dark' : false,
-		'top'  : 50px
-	), $custom);
-	
+    $header: config((
+        'dark' : false,
+        'top'  : 50px
+    ), $custom);
+    
     // styles will be applied if 'dark' is set to 'true'
-	@include option('dark') {
+    @include option('dark') {
         ...   
     }
-		
+        
 }
 ```
 
@@ -1117,19 +1117,19 @@ You can alternatively pass the bool value to your option like so:
 ```sass
 @mixin header($custom: ()) {
 
-	$header: config((
-		'dark':(
+    $header: config((
+        'dark':(
             'enabled': false
         ),
-		'side':(
+        'side':(
             'enabled': left,
             'background': black
         ),
-		'top': 50px
-	), $custom);
-	
+        'top': 50px
+    ), $custom);
+    
     ...
-		
+        
 }
 ```
 
@@ -1139,7 +1139,7 @@ Since by default adding a setting will also create a modifier for the setting, y
 
 ```html
 <div class="header-dark">
-	...
+    ...
 </div>
 ```
 
@@ -1148,14 +1148,14 @@ If you are watching your CSS output, you may wish to remove these modifiers (and
 ```sass
 @mixin header($custom: ()) {
 
-	$header: config((
-		'extend-options': false,
-		'dark' : false,
-		'top'  : 50px
-	), $custom);
-	
-	...
-		
+    $header: config((
+        'extend-options': false,
+        'dark' : false,
+        'top'  : 50px
+    ), $custom);
+    
+    ...
+        
 }
 ```
 
@@ -1195,24 +1195,24 @@ In some cases, you may require a hybrid of the above 2 options. You may have a s
 ```sass
 @mixin header($custom: ()) {
 
-	$header: config((
-		'side' : false // left or right
-	), $custom);
-	
-	@include module('header') {
-		
-		@include option('side') {
-			// core side header styles
-			@include value('left') {
-				// left side styles
-			}
-			@include value('right') {
-				// right side styles
-			}
-		}
-		
-	} // module('header')
-		
+    $header: config((
+        'side' : false // left or right
+    ), $custom);
+    
+    @include module('header') {
+        
+        @include option('side') {
+            // core side header styles
+            @include value('left') {
+                // left side styles
+            }
+            @include value('right') {
+                // right side styles
+            }
+        }
+        
+    } // module('header')
+        
 } // @mixin header
 ```
 
@@ -1290,20 +1290,20 @@ In some circumstances, we can achieve the same thing without having to use the `
 ```sass
 @mixin header($custom: ()) {
 
-	$header: config((
-		'side' : left;
-	), $custom);
-	
-	@include module('header') {
-		
-		@include option('side') {
-			// Side-Header Styles
-			...
-			#{this('side')}: 0; // left: 0;
-		}
-		
-	} // module('header')
-	
+    $header: config((
+        'side' : left;
+    ), $custom);
+    
+    @include module('header') {
+        
+        @include option('side') {
+            // Side-Header Styles
+            ...
+            #{this('side')}: 0; // left: 0;
+        }
+        
+    } // module('header')
+    
 } // @mixin header
 ```
 
@@ -1324,9 +1324,9 @@ To include your header with customised options, this is done like so:
 
 ```sass
 @include header((
-	'dark' : true,
-	'side' : left,
-	'top'  : 0
+    'dark' : true,
+    'side' : left,
+    'top'  : 0
 ));
 ```
 
@@ -1450,18 +1450,18 @@ What if you want to create a module whose options can be accessed by other modul
 
 ```sass
 @mixin grid($custom: ()) {
-	
-	$grid: ((
-		'breakpoints': ((
-			'break-1': 420px,
-			'break-2': 740px,
-			'break-3': 960px,
-			'break-4': 1200px
-		));
-	), $custom);
-	
-	...
-	
+    
+    $grid: ((
+        'breakpoints': ((
+            'break-1': 420px,
+            'break-2': 740px,
+            'break-3': 960px,
+            'break-4': 1200px
+        ));
+    ), $custom);
+    
+    ...
+    
 } // @mixin grid
 ```
 
@@ -1469,23 +1469,23 @@ This is entirely possible, and requires the addition of the `!global` flag:
 
 ```sass
 @mixin grid($custom: ()) {
-	
-	$grid: ((
-		'breakpoints': ((
-			'break-1': 420px,
-			'break-2': 740px,
-			'break-3': 960px,
-			'break-4': 1200px
-		));
-	), $custom) !global;
-	
-	...
-	
+    
+    $grid: ((
+        'breakpoints': ((
+            'break-1': 420px,
+            'break-2': 740px,
+            'break-3': 960px,
+            'break-4': 1200px
+        ));
+    ), $custom) !global;
+    
+    ...
+    
 } // @mixin grid
 
 // Mixin to easily access breakpoints map
 @function breakpoint($breakpoint) {
-	@return option($grid, 'breakpoints', $breakpoint);
+    @return option($grid, 'breakpoints', $breakpoint);
 }
 ```
 
@@ -1862,7 +1862,7 @@ Because we don't need to access these values in the JavaScript, the default conf
         //*********************************************************
 
         // Patterns
-		
+        
         @include modifier('round') {
             border-radius: this('round-radius');
         }
@@ -2193,24 +2193,24 @@ Consider the following `grid` module:
 ```sass
 
 @mixin grid($custom: ()) {
-	
-	$grid: config((
+    
+    $grid: config((
         // Options
-		'name'              : 'grid',
-		'output-json'       : true,
+        'name'              : 'grid',
+        'output-json'       : true,
         // Breakpoints
-		'breakpoints': (
-			'break-0'       : 0px,
-			'break-1'       : 460px,
-			'break-2'       : 720px,
-			'break-3'       : 940px,
-			'break-4'       : 1200px,
-			'break-5'       : 1400px
-		)
-	), $custom) !global;
+        'breakpoints': (
+            'break-0'       : 0px,
+            'break-1'       : 460px,
+            'break-2'       : 720px,
+            'break-3'       : 940px,
+            'break-4'       : 1200px,
+            'break-5'       : 1400px
+        )
+    ), $custom) !global;
     
     ...
-	
+    
 } // @mixin grid
 ```
 
@@ -2226,7 +2226,7 @@ This can be achieved with the following code:
 
 ```js
 function breakpoint(media, value) {
-	return window.matchMedia('(' + media + ':' + _modules['grid']['breakpoints'][value] + ')').matches;
+    return window.matchMedia('(' + media + ':' + _modules['grid']['breakpoints'][value] + ')').matches;
 }
 ```
 
