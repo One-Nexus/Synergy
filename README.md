@@ -416,7 +416,7 @@ Then just:
 
 #### Module
 
-> [View Real Example](https://git.io/vHMq4) | [View SassDocs](http://esr360.github.io/Synergy/docs/sass/#synergy-mixin-module)
+> [View Real Example](#TODO) | [View SassDocs](http://esr360.github.io/Synergy/docs/sass/#synergy-mixin-module)
 
 The `module()` mixin is what generates the selectors for your module. The mixin accepts 2 parameters:
 
@@ -547,14 +547,16 @@ The static option creates only the naked selector for your module; ie - `.select
 .header {
     ...
 }
-.footer, [class*="footer-] {
+.footer, [class*="footer-"] {
     ...
 }
 ```
 
 #### Component
 
-Because of how the selectors are generated, it is not possible to create relating modules which begin with the same namespace. For example, if you have a `header` module with the default `$type` of `flex`, any classes which contain `header-` will receive the core header styles, so if you were to create a `header-button` element, this would inherit the `header` styles. There are several options to get around this, including:
+> [View Real Example](#TODO) | [View SassDocs](http://esr360.github.io/Synergy/docs/sass/#synergy-mixin-component)
+
+Because of how the selectors are generated, it is not possible to create relating modules which begin with the same namespace. For example, if you have a `header` module with the default `$type` of `flex`, any classes which contain `header-` will receive the core header styles, so if you were to create a `header-button` element, this would inherit the `header` styles, as you are telling Synergy you want a *header* module with a *button* modifier. There are several options to get around this, including:
 
 * camelCase (headerButton)
 * reversed wording (button-header)
@@ -587,7 +589,7 @@ To keep things as similar to BEM as possible, Synergy provies an easy way to cre
 .header, [class*="header-"] {
     ...
 }
-[class*="header_wrapper"] {
+.header_wrapper, [class*="header_wrapper-"] {
     ...
 }
 ```
@@ -616,13 +618,13 @@ Components work like regular modules, in the sense that you can add modifiers:
 ###### CSS Output
 
 ```css
-.header, [class*="header-"] {
+.header, [class*='header-'] {
     ...
 }
-[class*="header_wrapper"] {
+.header_wrapper, [class*='header_wrapper-'] {
     ...
 }
-[class*="header_wrapper-fullscreen"] {
+[class*='header_wrapper-'][class*='-fullscreen'] {
     ...
 }
 ```
@@ -651,13 +653,11 @@ Components work like regular modules, in the sense that you can add modifiers:
 ###### CSS Output
 
 ```css
-.footer, [class*="footer-"] {
+.footer, [class*='footer-'] {
     ...
 }
-[class*="footer_nav"] {
-    ...
-}
-[class*="footer_copyright"] {
+.footer_nav, [class*='footer_nav-'],
+.footer_copyright, [class*='footer_copyright-'] {
     ...
 }
 ```
@@ -696,14 +696,14 @@ By not passing a parameter to the `component()` mixin, you can apply styles to a
 ###### CSS Output
 
 ```css
-[class*="widget_"][class*="-inline"] {
-    ...
+[class*='widget_'][class*='-inline'] {
+    content: 'foo';
 }
-[class*="widget_icon"] {
-    ...
+.widget_icon, [class*='widget_icon-'] {
+    content: 'foo';
 }
-[class*="widget_header"] {
-    ...
+.widget_header, [class*='widget_header-'] {
+    content: 'foo';
 }
 ```
 
@@ -722,7 +722,7 @@ If you want to use a different string to chain components to modules, you can pa
 ###### CSS Output
 
 ```css
-[class*="header__wrapper"] {
+.header__wrapper, [class*='header__wrapper-'] {
     ...
 }
 ```
@@ -736,10 +736,13 @@ $component-glue: '__';
 // Import Synergy
 @import "path/to/synergy"
 
-/* Your Modules */
+// Modules
+...
 ```
 
 #### Modifier
+
+> [View Real Example](#TODO) | [View SassDocs](http://esr360.github.io/Synergy/docs/sass/#synergy-mixin-modifier)
 
 The `modifier()` mixin generates the selector for any modifiers for your module, for example a **small** or **large** modifier. This mixin accepts the following paramters:
 
@@ -901,10 +904,13 @@ $modifier-glue: '--';
 // Import Synergy
 @import "path/to/synergy"
 
-/* Your Modules */
+// Modules
+...
 ```
 
 #### Extend Modifiers
+
+> [View Real Example](#TODO) | [View SassDocs](http://esr360.github.io/Synergy/docs/sass/#synergy-mixin-extend)
 
 This mixin allows you to extend multiple modifiers into a new, seperate modifer, essentially combining several modifiers into one.
 
@@ -950,6 +956,8 @@ This mixin allows you to extend multiple modifiers into a new, seperate modifer,
 
 #### Context
 
+> [View Real Example](#TODO) | [View SassDocs](http://esr360.github.io/Synergy/docs/sass/#synergy-mixin-extend)
+
 The `context()` mixin allows you to apply styles to your module when certain conditions are met. This mixin accepts 1 parameter:
 
 * `$context` - the name of the predefined condition you wish to be met (required)
@@ -970,18 +978,6 @@ The following conditions can be passed to the mixin:
 			color: white;
 		}	
 	}
-	
-//	This is equivilent to:
-//
-//	@include component('icon') {
-//		color: blue;
-//	}
-//
-//	&:hover {
-//		@include overwrite-component('icon') {
-//			color: white;
-//		}
-//	}
 
 }
 ```
@@ -989,11 +985,13 @@ The following conditions can be passed to the mixin:
 ###### CSS Output
 
 ```css
-[class*="widget_icon"] {
+.widget_icon, [class*='widget_icon-'] {
     color: blue;
 }
-.widget:hover [class*="widget_icon"], 
-[class*="widget-"]:hover [class*="widget_icon"] {
+.widget:hover .widget_icon,
+.widget:hover [class*='widget_icon-'],
+[class*='widget-']:hover .widget_icon,
+[class*='widget-']:hover [class*='widget_icon-'] {
     color: white;
 }
 ```
@@ -1021,9 +1019,9 @@ As outlined in the [overview](#overview) section, Synergy allows you to configur
 ###### CSS Output
 
 ```css
-.header, [class*="header-"] {
-  background-color: black;
-  margin-top: 50px;
+.header, [class*='header-'] {
+    background-color: black;
+    margin-top: 50px;
 }
 ```
 
@@ -1053,11 +1051,11 @@ For all intents and purposes, there are 2 types of options; bools and non-bools.
 ###### CSS Output
 
 ```css
-.header, [class*="header-"] {
-  margin-top: 50px;
+.header, [class*='header-'] {
+    margin-top: 50px;
 }
-[class*="header-"][class*="-dark"] {
-  background-color: black;
+[class*='header-'][class*='-dark'] {
+    background-color: black;
 }
 ```
 
@@ -1094,17 +1092,16 @@ Your configuration can be infinitely nested, like so:
 
 #### Bool Options
 
+> [View Real Example](#TODO) | [View SassDocs](http://esr360.github.io/Synergy/docs/sass/#synergy-mixin-option)
+
 If your option is a bool, you can use the `option()` mixin. The styles added within this mixin will automatically be applied to the module if the option is set to **true**. 
 
 ```sass
 @mixin header($custom: ()) {
 
 	$header: config((
-		
-		// Options
 		'dark' : false,
 		'top'  : 50px
-		
 	), $custom);
 	
     // styles will be applied if 'dark' is set to 'true'
@@ -1121,7 +1118,6 @@ You can alternatively pass the bool value to your option like so:
 @mixin header($custom: ()) {
 
 	$header: config((
-		
 		'dark':(
             'enabled': false
         ),
@@ -1130,7 +1126,6 @@ You can alternatively pass the bool value to your option like so:
             'background': black
         ),
 		'top': 50px
-		
 	), $custom);
 	
     ...
@@ -1154,12 +1149,9 @@ If you are watching your CSS output, you may wish to remove these modifiers (and
 @mixin header($custom: ()) {
 
 	$header: config((
-		
-		// Options
 		'extend-options': false,
 		'dark' : false,
 		'top'  : 50px
-		
 	), $custom);
 	
 	...
@@ -1176,10 +1168,13 @@ $extend-options : false;
 // Import Synergy
 @import "path/to/synergy"
 
-/* Your Modules */
+// Your Modules
+...
 ```
 
 #### Non-Bool Options
+
+> [View Real Example](#TODO) | [View SassDocs](http://esr360.github.io/Synergy/docs/sass/#synergy-mixin-value)
 
 If your option is a CSS property, to call the option in your module the `this()` *function* is used, like so:
 
@@ -1201,10 +1196,7 @@ In some cases, you may require a hybrid of the above 2 options. You may have a s
 @mixin header($custom: ()) {
 
 	$header: config((
-		
-		// Options
-		'side' : false; // left or right
-		
+		'side' : false // left or right
 	), $custom);
 	
 	@include module('header') {
@@ -1222,6 +1214,47 @@ In some cases, you may require a hybrid of the above 2 options. You may have a s
 	} // module('header')
 		
 } // @mixin header
+```
+
+```
+@include header();
+```
+
+###### CSS Output
+
+```css
+[class*='header-'][class*='-side'] {
+    ...
+}
+[class*='header-'][class*='-side'][class*='-left'] {
+    ...
+}
+[class*='header-'][class*='-side'][class*='-right'] {
+    ...
+}
+```
+
+And setting the value to `left`:
+
+```
+@include header((
+    'side': left
+));
+```
+
+###### CSS Output
+
+```css
+.header, [class*='header-'] {
+    ...
+}
+.header, [class*='header-'],
+[class*='header-'][class*='-side'][class*='-left'] {
+    ...
+}
+[class*='header-'][class*='-side'][class*='-right'] {
+    ...
+}
 ```
 
 The above example inserts an optional set of styles if `side` is set to anything other than **false**. Depending on the value of your option, we can choose to include additional styles by using the `value()` mixin. Again, by default these options are extended as modifiers so you can use them regardless of the setting's value:
@@ -1258,15 +1291,12 @@ In some circumstances, we can achieve the same thing without having to use the `
 @mixin header($custom: ()) {
 
 	$header: config((
-		
-		// Options
 		'side' : left;
-		
 	), $custom);
 	
 	@include module('header') {
 		
-		@include setting('side') {
+		@include option('side') {
 			// Side-Header Styles
 			...
 			#{this('side')}: 0; // left: 0;
@@ -1299,8 +1329,6 @@ To include your header with customised options, this is done like so:
 	'top'  : 0
 ));
 ```
-
-And that's it, you now have a completely custoimzable header which can be modified with extreme ease.
 
 #### Pass Custom CSS to Modules
 
@@ -1348,7 +1376,7 @@ If you need to pass styles to a component of a module, preprend the key of your 
 .button, [class*="button-"] {
     ...
 }
-[class*="button_wrapper"] {
+.button_wrapper, [class*="button_wrapper-"] {
     overflow: hidden;
     margin-bottom: 10px;
 }
@@ -1375,8 +1403,8 @@ If you need to pass styles to a modifer of a module or component, preprend the k
 .button, [class*="button-"] {
     ...
 }
-[class*="button-foo"] {
-    text-transform: uppercase
+[class*='button-'][class*='-foo'] {
+    text-transform: uppercase;
 }
 ```
 
@@ -1405,13 +1433,13 @@ You can target modules and components to an infinite depth:
 .button, [class*="button-"] {
     ...
 }
-[class*="button_foo"] {
+.button_foo, [class*='button_foo-'] {
     content: 'alpha';
 }
-[class*="button_foo-bar"] {
+[class*='button_foo-'][class*='-bar'] {
     content: 'beta';
 }
-[class*="button_foo-bar-baz"] {
+[class*='button_foo-'][class*='-bar'][class*='-baz'] {
     content: 'gamma';
 }
 ```
@@ -2041,7 +2069,6 @@ export function header(els, custom) {
         if (app.synergy(header).modifier('dark')) {
             console.log('header element has "dark" modifier');
         }
-
     }, defaults, custom);
 
     app.config.accordions = Object.assign(
