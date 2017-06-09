@@ -2342,6 +2342,8 @@ function breakpoint(media, value) {
 
 They key part of the above code is `_modules['grid']['breakpoints'][value]`, which fetches the value from the JSON.
 
+## Development
+
 ## Credits & Notes
 
 * [Sassy Maps](https://github.com/at-import/sassy-maps)
