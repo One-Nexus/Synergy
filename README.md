@@ -19,7 +19,7 @@
 
 > A front-end framework for creating modular, configurable and scalable UI components.
 
-Synergy is predominantly a Sass framework but also has an optional JS add-on.
+Synergy is predominantly a Sass framework but also has an optional JavaScript add-on.
 
 [View SassDoc Documentation](http://esr360.github.io/Synergy/docs/sass)
 
@@ -51,7 +51,7 @@ Synergy takes advantage of CSS attribute wildcard selectors. By looking for clas
 
 ##### 2. Configurable Modules
 
-Configure your modules without touching the source code. Call the mixin and pass your options to it, leaving the module's source code untouched, allowing you to easily change options and styles.
+Configure your modules without touching the source code. Call the Sass mixin and pass your options to it, leaving the module's source code untouched, allowing you to easily change options and styles.
 
 ```scss
 @mixin buttons($custom: ()) {
@@ -117,7 +117,7 @@ Inside `grid.json`:
 
 Inside `_grid.scss`:
 
-```scss
+```sass
 @import 'grid.json'; // config is now accessible under the `$grid` variable
 
 $breakpoint_tablet: map-get-deep($grid, 'breakpoints', 'break-3');
