@@ -1,5 +1,15 @@
 ## Changelog
 
+### Version 3.5.0
+
+Released: 11th November 2016
+
+###### Release Notes
+
+* [#6](https://github.com/esr360/Synergy/issues/6) adding ability to customize module:component:modifier glue
+* [#10](https://github.com/esr360/Synergy/issues/10) adding ability to pass custom CSS when including module
+* general grooming of source code
+
 ### Version 3.4.1
 
 Released: 21st October 2016

@@ -2350,12 +2350,25 @@ They key part of the above code is `_modules['grid']['breakpoints'][value]`, whi
 
 ## Changelog
 
-### Version 3.5.0
+### Version 3.6.0
 
-Released: 11th November 2016
+Released: 11th June 2017
 
 ###### Release Notes
 
-* [#6](https://github.com/esr360/Synergy/issues/6) adding ability to customize module:component:modifier glue
-* [#10](https://github.com/esr360/Synergy/issues/10) adding ability to pass custom CSS when including module
-* general grooming of source code
+* Synergy JS module rewritten in ES6
+* Removing Sass-JSON as dependency, replacing with Sass-JSON-Vars
+* Updating Sass-Boost dependency
+* Dependences now node modules instead of git submodules
+* Improving options mixin
+* Adding value-enabled() utility function
+* Adding enabled() utility function
+* Allow modules to have default modifiers
+* Allow extending of modifiers when including module
+* Allow combining of modifiers when including module
+* Allow module output to be disabled
+* Removing `overwrite()` mixin
+* Removing `overwrite-component()` mixin
+* `module()` mixin is now nestable
+* `component()` mixin is now nestable
+* Adding JavaScript unit tests
