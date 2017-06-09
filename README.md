@@ -1953,7 +1953,7 @@ This is where the default configuration for the header module will be stored.
         "name": "header",
         "background" : "color('primary')",
         "top": "50px",
-        "disable-top" "break-5",
+        "disable-top": "break-5",
         "dark": false,
         "dark-color": "rgba(black, 0.8)",
         "side": {
