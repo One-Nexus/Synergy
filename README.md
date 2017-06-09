@@ -1216,7 +1216,7 @@ In some cases, you may require a hybrid of the above 2 options. You may have a s
 } // @mixin header
 ```
 
-```
+```sass
 @include header();
 ```
 
