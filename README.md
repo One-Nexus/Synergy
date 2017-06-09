@@ -2336,7 +2336,7 @@ This can be achieved with the following code:
 
 ```js
 function breakpoint(media, value) {
-    return window.matchMedia('(' + media + ':' + _modules['grid']['breakpoints'][value] + ')').matches;
+    return window.matchMedia(`(${media}: ${app.config.grid.breakpoints[value]})`).matches;
 }
 ```
 
