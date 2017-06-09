@@ -1696,7 +1696,7 @@ All JavaScript for this example will be written in ES6 using imports and exports
 
 The goal is to be able to configure all modules via `themes/Buzz/buzz.json`. From the above structure it can be seen that not all modules have a `.json` file, which is where a module's default configuration is stored. This is only required if access to the configuration is required in both the app's JavaScript and Sass realms. Otherwise, the default configuration can be contained within the module's `.scss` file.
 
-### Inside app.scss
+#### Inside app.scss
 
 Firstly, Synergy is imported, followed by each module.
 
@@ -1711,7 +1711,7 @@ Firstly, Synergy is imported, followed by each module.
 @import 'modules/header/header';
 ```
 
-### Inside app.js
+#### Inside app.js
 
 ```js
 import synergy from 'synergy';
@@ -1724,7 +1724,7 @@ const config = {};
 export { config, synergy, grid, header }
 ```
 
-### Inside buzz.scss
+#### Inside themes/Buzz/buzz.scss
 
 The first thing to do is import the app. Then the theme's config is imported (which, thanks to Sass Json Vars, will be accessible via the `$app` variable) and each module is included to output the CSS in-line with the config from `buzz.json` (the [`custom()`](#TODO) function seen below retreives the module's custom config from the `$app` variable).
 
@@ -1741,7 +1741,7 @@ The first thing to do is import the app. Then the theme's config is imported (wh
 @include header(custom('typography'));
 ```
 
-### Inside buzz.js
+#### Inside themes/Buzz/buzz.js
 
 The theme's config is imported as well as the `app.js` exports. Each module's main function is called, passing the values from `buzz.json` as parameters.
 
@@ -1754,7 +1754,7 @@ app.grid('grid', config.grid);
 app.header('header', config.header);
 ```
 
-### Inside buzz.json
+#### Inside themes/Buzz/buzz.json
 
 Each module must live under the parent `app` object. This is where custom config will be passed to each module later on (when this file is imported into a Sass file, the values will be accessible from the `$app` variable).
 
