@@ -53,7 +53,7 @@ Synergy takes advantage of CSS attribute wildcard selectors. By looking for clas
 
 Configure your modules without touching the source code. Call the Sass mixin and pass your options to it, leaving the module's source code untouched, allowing you to easily change options and styles.
 
-```scss
+```sass
 @mixin buttons($custom: ()) {
     
     // Default module configuration
@@ -296,7 +296,7 @@ gulp.task('sass', function () {
 
 Inside `_header.scss`
 
-```scss
+```sass
 @mixin header($custom: ()) {
     // Merge default config with custom values
     $header: config((
@@ -330,13 +330,13 @@ Inside `_header.scss`
 
 Wherever you want to output the CSS, in the same or another file...
 
-```scss
+```sass
 @include header();
 ```
 
 To modify the default options, pass them to the mixin with the new value:
 
-```scss
+```sass
 @include header((
     'background'    : blue,
     'wrapper-width' : 90%
@@ -402,7 +402,7 @@ N.B. Modifiers can be chained in any order:
 
 Or you can set the header to be fixed (without the need of a modifier) by passing the option to the mixin when calling it:
 
-```scss
+```sass
 @include header((
     'fixed' : true
 ));
@@ -423,7 +423,7 @@ The `module()` mixin is what generates the selectors for your module. The mixin 
 * `$modules` {string|list} - the name of your module(s) (optional)
 * `$type` {string} - this defines how the mixin generates the selectors for your component(s) ['flex'] (optional)
 
-```scss
+```sass
 @include module('header') {
 	...
 }
@@ -431,7 +431,7 @@ The `module()` mixin is what generates the selectors for your module. The mixin 
 
 If `$modules` is not defined, it will look for a `name` value in your module's config. This is an alternative way of using the `module()` mixin:
 
-```scss
+```sass
 @mixin header($custom: ()) {
     
     $header: config((
@@ -447,7 +447,7 @@ If `$modules` is not defined, it will look for a `name` value in your module's c
 
 `$modules` is usually a single value but can also be a list, eg. `('header', 'footer')`, should you wish to apply styles to more than one module. For such instances, an *alias* mixin of `modules()` is available:
 
-```scss
+```sass
 @include modules(('header', 'footer')) {
 	...
 }
@@ -455,7 +455,7 @@ If `$modules` is not defined, it will look for a `name` value in your module's c
 
 `$type` can be one of three values: `flex` (default), `chain` and `static`. By default, `flex` is enabled for all componenets. To globally change the default type from `flex` to something else, use the `$selector-type` variable with the value you desire in your Sass before importing Synergy.
 
-```scss
+```sass
 // Re-define default selector type
 $selector-type: 'chain';
 
@@ -467,7 +467,7 @@ $selector-type: 'chain';
 
 ##### Flex
 
-```scss
+```sass
 @include module('header', 'flex') {
 	...
 }
@@ -487,7 +487,7 @@ This is the default value for a module; it creates selectors for both `.module` 
 
 ##### Chain
 
-```scss
+```sass
 @include module('header', 'chain') {
 	...
 }
@@ -505,7 +505,7 @@ The chain option should be used if you are looking to optimise your CSS output, 
 
 ##### Static
 
-```scss
+```sass
 @include module('header', 'static') {
 	...
 }
@@ -523,7 +523,7 @@ The static option creates only the naked selector for your module; ie - `.select
 
 ##### Advanced Example
 
-```scss
+```sass
 @include modules(('header', 'footer'), 'static') {
 	...
 }
@@ -564,7 +564,7 @@ To keep things as similar to BEM as possible, Synergy provies an easy way to cre
 * `$components` {string|list} - the name of your component(s) [null] (optional)
 * `$glue` {string} - the glue to chain components to modules ['_'] (required)
 
-```scss
+```sass
 @include module('header') {
 	
     ...
@@ -593,7 +593,7 @@ To keep things as similar to BEM as possible, Synergy provies an easy way to cre
 
 Components work like regular modules, in the sense that you can add modifiers:
 
-```scss
+```sass
 @include module('header') {
 
     ...
@@ -628,7 +628,7 @@ Components work like regular modules, in the sense that you can add modifiers:
 
 ##### Alias Mixin For Multiple Components
 
-```scss
+```sass
 @include module('footer') {
 
     ...
@@ -665,7 +665,7 @@ Components work like regular modules, in the sense that you can add modifiers:
 
 By not passing a parameter to the `component()` mixin, you can apply styles to all components of the parent module:
 
-```scss
+```sass
 @include module('widget') {
 
 	@include component {
@@ -710,7 +710,7 @@ By not passing a parameter to the `component()` mixin, you can apply styles to a
 
 If you want to use a different string to chain components to modules, you can pass the `$glue` parameter when including the module:
 
-```scss
+```sass
 @include module('header') {
     @include component('wrapper', $glue: '__') {
         ...	
@@ -728,7 +728,7 @@ If you want to use a different string to chain components to modules, you can pa
 
 To globally change the component glue, pass the `$component-glue` variable with before importing Synergy.
 
-```scss
+```sass
 // Set custom component glue
 $component-glue: '__';
 
@@ -747,7 +747,7 @@ The `modifier()` mixin generates the selector for any modifiers for your module,
 * `$glue` {string} - the glue to chain components to modules ['_'] (required)
 
 
-```scss
+```sass
 @include module('button') {
 	
 	...
@@ -785,7 +785,7 @@ The `modifier()` mixin generates the selector for any modifiers for your module,
 
 The `modifier()` mixin is infinitely nestable allowing you to require more than one modifier for styles to take effect:
 
-```scss
+```sass
 @include module('header') {
 	
 	...
@@ -833,7 +833,7 @@ You can use any number of modifiers on a single element in the HTML, and in any 
 
 ##### Alias Mixin For Multiple Modifiers
 
-```scss
+```sass
 @include module('button') {
 	
 	...
@@ -875,7 +875,7 @@ You can use any number of modifiers on a single element in the HTML, and in any 
 
 If you want to use a different string to chain modifiers to modules/components, you can pass the `$glue` parameter when including the modifier:
 
-```scss
+```sass
 @include module('button') {
     @include modifier('large', $glue: '--') {
         ...	
@@ -893,7 +893,7 @@ If you want to use a different string to chain modifiers to modules/components, 
 
 To globally change the modifier glue, pass the `$modifier-glue` variable with before importing Synergy.
 
-```scss
+```sass
 // Set custom modifier glue
 $modifier-glue: '--';
 
@@ -907,7 +907,7 @@ $modifier-glue: '--';
 
 This mixin allows you to extend multiple modifiers into a new, seperate modifer, essentially combining several modifiers into one.
 
-```scss
+```sass
 @include module('button') {
 
     ...
@@ -960,7 +960,7 @@ The following conditions can be passed to the mixin:
 
 ##### Parent-Hovered
 
-```scss
+```sass
 @include module('widget') {
 
 	@include component('icon') {
@@ -1001,7 +1001,7 @@ The following conditions can be passed to the mixin:
 
 As outlined in the [overview](#overview) section, Synergy allows you to configure your modules with customizable options.
 
-```scss
+```sass
 @mixin header($custom: ()) {
 
 	$header: config((
@@ -1028,7 +1028,7 @@ As outlined in the [overview](#overview) section, Synergy allows you to configur
 
 For all intents and purposes, there are 2 types of options; bools and non-bools. A bool option is one whose value determines whether or not some code should be applied. A non-bool option is one whose value is used as a value for a CSS property. In the below example there is one of each.
 
-```scss
+```sass
 @mixin header($custom: ()) {
 
 	$header: config((
@@ -1062,7 +1062,7 @@ For all intents and purposes, there are 2 types of options; bools and non-bools.
 
 Your configuration can be infinitely nested, like so:
 
-```scss
+```sass
 @mixin global($custom: ()) {
 
 	$global: config((
@@ -1095,7 +1095,7 @@ Your configuration can be infinitely nested, like so:
 
 If your option is a bool, you can use the `option()` mixin. The styles added within this mixin will automatically be applied to the module if the option is set to **true**. 
 
-```scss
+```sass
 @mixin header($custom: ()) {
 
 	$header: config((
@@ -1116,7 +1116,7 @@ If your option is a bool, you can use the `option()` mixin. The styles added wit
 
 You can alternatively pass the bool value to your option like so:
 
-```scss
+```sass
 @mixin header($custom: ()) {
 
 	$header: config((
@@ -1149,7 +1149,7 @@ Since by default adding a setting will also create a modifier for the setting, y
 
 If you are watching your CSS output, you may wish to remove these modifiers (and related selectors) from the generated styles and only use them conditionally. To do so, you can pass the `extend-options` option to your module's config, and set it to **false**:
 
-```scss
+```sass
 @mixin header($custom: ()) {
 
 	$header: config((
@@ -1168,7 +1168,7 @@ If you are watching your CSS output, you may wish to remove these modifiers (and
 
 To set this option globally for all modules, use the `$extend-options` variable before importing Synergy:
 
-```scss
+```sass
 // Disable creation of modifiers for module settings
 $extend-options : false;
 
@@ -1182,13 +1182,13 @@ $extend-options : false;
 
 If your option is a CSS property, to call the option in your module the `this()` *function* is used, like so:
 
-```scss
+```sass
 margin-top: this('top');
 ```
 
 which will generate:
 
-```scss
+```sass
 margin-top: 50px;
 ```
 
@@ -1196,7 +1196,7 @@ margin-top: 50px;
 
 In some cases, you may require a hybrid of the above 2 options. You may have a set of styles you wish to use conditionally, and you may wish for these styles to vary depending on the value passed. Let's look at the following example - imagine your website has a side header, and you want to easily change whether it appears on the left or right hand side:
 
-```scss
+```sass
 @mixin header($custom: ()) {
 
 	$header: config((
@@ -1253,7 +1253,7 @@ And just to reiterate, with the `side` option set to either left or right in the
 
 In some circumstances, we can achieve the same thing without having to use the `option()` mixin. Consider the above example; "left" and "right" are both also CSS properties, so we can pass the setting's value as a CSS property:
 
-```scss
+```sass
 @mixin header($custom: ()) {
 
 	$header: config((
@@ -1285,13 +1285,13 @@ The above example is assuming we have a setup where the header's position is con
 
 Our module is now ready to be included; to include the module with the default settings you have created, all that's required is:
 
-```scss
+```sass
 @include header;
 ```
 
 To include your header with customised options, this is done like so:
 
-```scss
+```sass
 @include header((
 	'dark' : true,
 	'side' : left,
@@ -1305,7 +1305,7 @@ And that's it, you now have a completely custoimzable header which can be modifi
 
 If you want to pass custom CSS properties to a module, component or modifier, but don't want to add these properties to the source file, you can do this by passing your styles to the `CSS` option when including your module:
 
-```scss
+```sass
 @include buttons((
     ...
     'CSS': (
@@ -1329,7 +1329,7 @@ If you want to pass custom CSS properties to a module, component or modifier, bu
 
 If you need to pass styles to a component of a module, preprend the key of your property with the component glue (default is '_'):
 
-```scss
+```sass
 @include buttons((
     ...
     'CSS': (
@@ -1357,7 +1357,7 @@ If you need to pass styles to a component of a module, preprend the key of your 
 
 If you need to pass styles to a modifer of a module or component, preprend the key of your property with the modifier glue (default is '-'):
 
-```scss
+```sass
 @include buttons((
     ...
     'CSS': (
@@ -1381,7 +1381,7 @@ If you need to pass styles to a modifer of a module or component, preprend the k
 
 You can target modules and components to an infinite depth:
 
-```scss
+```sass
 @include buttons((
     ...
     'CSS': (
@@ -1419,7 +1419,7 @@ You can target modules and components to an infinite depth:
 
 What if you want to create a module whose options can be accessed by other modules? For example, say you have a module for your grid system and have configured some breakpoint values - you then may wish to access these values from throughout your project:
 
-```scss
+```sass
 @mixin grid($custom: ()) {
 	
 	$grid: ((
@@ -1438,7 +1438,7 @@ What if you want to create a module whose options can be accessed by other modul
 
 This is entirely possible, and requires the addition of the `!global` flag:
 
-```scss
+```sass
 @mixin grid($custom: ()) {
 	
 	$grid: ((
@@ -1462,13 +1462,13 @@ This is entirely possible, and requires the addition of the `!global` flag:
 
 The `option()` function is used to get values from another module's configuration, like so:
 
-```scss
+```sass
 width: option($grid, 'breakpoints', 'break-3'); // will return 960px
 ```
 
 As long as your other modules are included after this one, we can now access the breakpoint values using:
 
-```scss
+```sass
 width: breakpoint('break-3');
 ```
 
@@ -1700,7 +1700,7 @@ The goal is to be able to configure all modules via `themes/Buzz/buzz.json`. Fro
 
 Firstly, Synergy is imported, followed by each module.
 
-```scss
+```sass
 // Synergy
 @import 'src/scss/synergy';
 
@@ -1728,7 +1728,7 @@ export { config, synergy, grid, header }
 
 The first thing to do is import the app. Then the theme's config is imported (which, thanks to Sass Json Vars, will be accessible via the `$app` variable) and each module is included to output the CSS based off the config from `buzz.json` (the [`custom()`](#TODO) function seen below retreives the module's custom config from the `$app` variable).
 
-```scss
+```sass
 @import '../../app';
 @import './buzz.json';
 
@@ -1775,7 +1775,7 @@ Each module must live under the parent `app` object. This is where custom config
 
 Because we don't need to access these values in the JavaScript, the default configuration for this module will be stored in this file.
 
-```scss
+```sass
 @mixin typography($custom: ()) {
 
     $typography: config((
@@ -1807,7 +1807,7 @@ Because we don't need to access these values in the JavaScript, the default conf
 
 Because we don't need to access these values in the JavaScript, the default configuration for this module will be stored in this file.
 
-```scss
+```sass
 @mixin buttons($custom: ()) {
 
     $buttons: config((
@@ -1897,7 +1897,7 @@ Because we don't need to access these values in the JavaScript, the default conf
 
 Perhaps in a real project this file may serve more purpose, but for this example it's only use is to globally expose the breakpoint values to other modules.
 
-```scss
+```sass
 @import '../../modules/grid/grid.json'; // path is relative to `themes/Buzz/`
 // Default config is now accessible via the $grid variable
 
@@ -1912,7 +1912,7 @@ Perhaps in a real project this file may serve more purpose, but for this example
 
 This now means other modules can access the theme's breakpoint values via the `breakpoint()` function defined above:
 
-```scss
+```sass
 @media (min-width: breakpoint('break-3')) {
     ...
 }
@@ -1966,7 +1966,7 @@ This is where the default configuration for the header module will be stored.
 
 #### Inside _header.scss
 
-```scss
+```sass
 @import '../../modules/header/header.json'; // path is relative to `themes/Buzz/`
 // Default config is now accessible via the $header variable
 
@@ -2162,7 +2162,7 @@ A popular, practical example of how to use this might be to access your style's 
 
 Consider the following `grid` module:
 
-```scss
+```sass
 
 @mixin grid($custom: ()) {
 	
