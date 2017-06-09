@@ -1236,7 +1236,7 @@ In some cases, you may require a hybrid of the above 2 options. You may have a s
 
 And setting the value to `left`:
 
-```
+```sass
 @include header((
     'side': left
 ));
