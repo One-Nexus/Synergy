@@ -1949,7 +1949,7 @@ This is where the default configuration for the header module will be stored.
 
 ```json
 {
-    "header" {
+    "header": {
         "name": "header",
         "background" : "color('primary')",
         "top": "50px",
