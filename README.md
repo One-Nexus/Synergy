@@ -1696,7 +1696,7 @@ All JavaScript for this example will be written in ES6 using imports and exports
 
 The goal is to be able to configure all modules via `themes/Buzz/buzz.json`. From the above structure it can be seen that not all modules have a `.json` file, which is where a module's default configuration is stored. This is only required if access to the configuration is required in both the app's JavaScript and Sass realms. Otherwise, the default configuration can be contained within the module's `.scss` file.
 
-##### Inside app.scss
+### Inside app.scss
 
 Firstly, Synergy is imported, followed by each module.
 
@@ -1711,7 +1711,7 @@ Firstly, Synergy is imported, followed by each module.
 @import 'modules/header/header';
 ```
 
-##### Inside app.js
+### Inside app.js
 
 ```js
 import synergy from 'synergy';
@@ -1724,7 +1724,7 @@ const config = {};
 export { config, synergy, grid, header }
 ```
 
-##### Inside buzz.scss
+### Inside buzz.scss
 
 The first thing to do is import the app. Then the theme's config is imported (which, thanks to Sass Json Vars, will be accessible via the `$app` variable) and each module is included to output the CSS in-line with the config from `buzz.json` (the [`custom()`](#TODO) function seen below retreives the module's custom config from the `$app` variable).
 
@@ -1741,7 +1741,7 @@ The first thing to do is import the app. Then the theme's config is imported (wh
 @include header(custom('typography'));
 ```
 
-##### Inside buzz.js
+### Inside buzz.js
 
 The theme's config is imported as well as the `app.js` exports. Each module's main function is called, passing the values from `buzz.json` as parameters.
 
@@ -1754,7 +1754,7 @@ app.grid('grid', config.grid);
 app.header('header', config.header);
 ```
 
-##### Inside buzz.json
+### Inside buzz.json
 
 Each module must live under the parent `app` object. This is where custom config will be passed to each module later on (when this file is imported into a Sass file, the values will be accessible from the `$app` variable).
 
@@ -1769,9 +1769,9 @@ Each module must live under the parent `app` object. This is where custom config
 }
 ```
 
-##### Typography Module
+### Typography Module
 
-###### Inside _typography.scss
+#### Inside _typography.scss
 
 Because we don't need to access these values in the JavaScript, the default configuration for this module will be stored in this file.
 
@@ -1801,9 +1801,9 @@ Because we don't need to access these values in the JavaScript, the default conf
 }
 ```
 
-##### Buttons Module
+### Buttons Module
 
-###### Inside _buttons.scss
+#### Inside _buttons.scss
 
 Because we don't need to access these values in the JavaScript, the default configuration for this module will be stored in this file.
 
@@ -1873,9 +1873,9 @@ Because we don't need to access these values in the JavaScript, the default conf
 }
 ```
 
-##### Grid Module
+### Grid Module
 
-###### Inside grid.json
+#### Inside grid.json
 
 ```json
 {
@@ -1893,7 +1893,7 @@ Because we don't need to access these values in the JavaScript, the default conf
 }
 ```
 
-###### Inside _grid.scss
+#### Inside _grid.scss
 
 Perhaps in a real project this file may serve more purpose, but for this example it's only use is to globally expose the breakpoint values to other modules.
 
@@ -1918,7 +1918,7 @@ This now means other modules can access the theme's breakpoint values via the `b
 }
 ```
 
-###### Inside grid.js
+#### Inside grid.js
 
 And likewise for the corresponding JavaScript file, there is little more going on than merging the default config with custom values and exposng the new breakpoint values to be used by other modules.
 
@@ -1939,9 +1939,9 @@ import * as app from '../../app';
 const breakpoint_tablet = app.config.grid.breakpoints['break-3'];
 ```
 
-##### Header Module
+### Header Module
 
-###### Inside header.json
+#### Inside header.json
 
 This is where the default configuration for the header module will be stored.
 
@@ -1964,7 +1964,7 @@ This is where the default configuration for the header module will be stored.
 }
 ```
 
-###### Inside _header.scss
+#### Inside _header.scss
 
 ```scss
 @import '../../modules/header/header.json'; // path is relative to `themes/Buzz/`
@@ -2016,7 +2016,7 @@ This is where the default configuration for the header module will be stored.
 }
 ```
 
-###### Inside header.js
+#### Inside header.js
 
 This example doesn't really provide any UI effects for the header, it's just to demonstrate how to set up the JS file for a module, and how to access and export the config.
 
@@ -2050,7 +2050,7 @@ export function header(els, custom) {
 };
 ```
 
-##### Returning to buzz.json
+### Returning to buzz.json
 
 With all the files setup, `buzz.scss` and `buzz.js` can be sent to their respective compilers/transpilers to be (pre)processed. Each module will have their default values. In order to pass custom configuration to the theme, the values are passed to `buzz.json`:
 
@@ -2086,7 +2086,7 @@ With all the files setup, `buzz.scss` and `buzz.js` can be sent to their respect
 
 The values are merged recursively, meaning you only have to re-define the values you are changing.
 
-##### CSS Output
+### CSS Output
 
 Passing buzz.scss through our Sass compiler yields the following CSS:
 
