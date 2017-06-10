@@ -2125,7 +2125,7 @@ function breakpoint(media, value) {
     return window.matchMedia(`(${media}: ${app.config.grid.breakpoints[value]})`).matches;
 }
 
-if (breakpoint('min-width', 'break-3)) {
+if (breakpoint('min-width', 'break-3')) {
     ...
 }
 ```
