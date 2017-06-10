@@ -1057,6 +1057,25 @@ This only extends the list's modifier, in order to extend the core styles as wel
 }
 ```
 
+###### CSS Output
+
+```css
+.list, .tabs_nav,
+[class*='tabs_nav-'], [class*='list-'] {
+    ...
+}
+
+[class*='list-'][class*='-reset'],
+.tabs_nav, [class*='tabs_nav-'] {
+    list-style: none;
+    margin-left: 0;
+}
+
+.tabs, [class*='tabs-'] {
+    ...
+}
+```
+
 For usages like the above, an alias mixin of `_module()` is available. This is to provide a more semantic way of achieving the above task, allowing you to pass the `$parents` parameter, which is normally the second parameter, as the first, and also has a default `$core` value of `true`:
 
 ```sass
@@ -1066,6 +1085,8 @@ For usages like the above, an alias mixin of `_module()` is available. This is t
     }
 }
 ```
+
+> [View Real Example](https://git.io/vHDMU)
 
 #### Context
 
