@@ -2429,8 +2429,8 @@ Released: 11th June 2017
 * Updating Sass-Boost dependency
 * Dependences now node modules instead of git submodules
 * Improving options mixin
-* Adding value-enabled() utility function
-* Adding enabled() utility function
+* Adding `value-enabled()` utility function
+* Adding `enabled()` utility function
 * Allow modules to have default modifiers
 * Allow extending of modifiers when including module
 * Allow combining of modifiers when including module
