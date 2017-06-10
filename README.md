@@ -239,7 +239,9 @@ You will also need to configure your Sass compiler to use [Sass JSON Vars](https
 
 ###### CLI
 
+```
 sass /PATH/TO/app.scss -r sass-json-vars
+```
 
 ###### Grunt
 
