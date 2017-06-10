@@ -2118,6 +2118,18 @@ import * as app from '../../app';
 const breakpoint_tablet = app.config.grid.breakpoints['break-3'];
 ```
 
+Allowing you to do things like:
+
+```js
+function breakpoint(media, value) {
+    return window.matchMedia(`(${media}: ${app.config.grid.breakpoints[value]})`).matches;
+}
+
+if (breakpoint('min-width', 'break-3)) {
+    ...
+}
+```
+
 ### Header Module
 
 #### Inside header.json
