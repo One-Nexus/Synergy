@@ -2347,6 +2347,17 @@ They key part of the above code is `_modules['grid']['breakpoints'][value]`, whi
 
 ## Development
 
+##### Requirements
+
+* Ruby Sass 3.4+
+* Nods.js 6+
+
+##### Development Tools
+
+* Grunt
+* Babel
+* Mocha
+
 To develop Synergy for either contributing or personal purposes, following the following recommendations:
 
 #### Either Fork or Clone the Repo
