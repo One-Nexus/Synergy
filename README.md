@@ -2349,26 +2349,26 @@ They key part of the above code is `_modules['grid']['breakpoints'][value]`, whi
 
 To develop Synergy for either contributing or personal purposes, following the following recommendations:
 
-### Either Fork or Clone the Repo
+#### Either Fork or Clone the Repo
 
 ```bash
 git clone https://github.com/esr360/Synergy.git
 ```
 
-### Install Node Modules
+#### Install Node Modules
 
 ```bash
 # cd Synergy/
 npm install
 ```
 
-### Install Grunt
+#### Install Grunt
 
 ```bash
 npm install -g grunt-cli
 ```
 
-### Install Sass JSON Vars
+#### Install Sass JSON Vars
 
 ```bash
 gem install sass-json-vars
