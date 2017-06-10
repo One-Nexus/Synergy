@@ -2358,7 +2358,7 @@ They key part of the above code is `_modules['grid']['breakpoints'][value]`, whi
 * Babel
 * Mocha
 
-To develop Synergy for either contributing or personal purposes, following the following recommendations:
+To develop Synergy for either contributing or personal purposes, follow these recommendations:
 
 #### Either Fork or Clone the Repo
 
