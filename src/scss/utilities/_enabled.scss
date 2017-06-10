@@ -1,0 +1,19 @@
+/// Return a CSS property if the passed option is enabled
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group Synergy
+/// @access public
+///
+/// @param {string|list} $option - the desired option
+/// @returns {*} - $true-value if option enabled, otherwise returns $false-value
+@function enabled($option, $true-value, $false-value: '') {
+    $breadcrumb: ();
+    @each $crumb in $option {
+        $breadcrumb: join($breadcrumb, $crumb, comma);
+    }
+    @if value-enabled(map-get-deep($config, $breadcrumb...)) {
+        @return $true-value;
+    } @else {
+        @return $false-value;
+    }
+}

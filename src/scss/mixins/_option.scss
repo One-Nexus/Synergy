@@ -10,11 +10,11 @@
 ///     @mixin billboard($custom: ()) {
 ///
 ///         $billboard: config((
-///             full-screen : false
+///             fullscreen : false
 ///         ), $custom);
 ///
 ///         @include module('billboard') {
-///             @include option('full-screen') {
+///             @include option('fullscreen') {
 ///                 ...
 ///             }
 ///         }
@@ -22,19 +22,32 @@
 ///     }
 ///
 ///     @include billboard: ((
-///         full-screen : true
+///         fullscreen : true
 ///     ));
-@mixin option($option) {
-    $option: $option !global;
-    $enabled: if(
-        (type-of(map-get($config, $option)) == bool and map-get($config, $option) != false) or
-        (type-of(map-get($config, $option)) == map and map-get(map-get($config, $option), 'enabled') != false),
-        true, false
-    );
-    @if $enabled {
-        @include extend($option);
-    }
-    @include modifier($option) {
+@mixin option($option-path...) {
+
+    $value  : map-get-deep($config, $option-path...);
+    $option : nth($option-path, length($option-path)) !global;
+
+    // Create a unique, random placeholder to store styles
+    $placeholder : $option + random(9999);
+
+    // Store the styles in the placeholder
+    @at-root %#{$placeholder} {
         @content;
     }
+
+    // Output the styles if the option is enabled
+    @if value-enabled($value) {
+        @extend %#{$placeholder};
+    }
+
+    // Create a modifier for the option if it is not enabled
+    // by default
+    @if $extend-options and not value-enabled($value) {
+        @include modifier($option) {
+            @extend %#{$placeholder};
+        }
+    }
+
 }

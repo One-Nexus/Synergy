@@ -1,0 +1,23 @@
+/// Create a namespace tree from a passed selector
+///
+/// @author [@esr360](http://twitter.com/esr360)
+///
+/// @param {list} $selectors - The selector from which to create the module tree
+@function module-tree($selector) {
+    $parent-module: $module;
+
+    // Remove any modifers
+    $selectors: remove-modifiers($selector);
+
+    // Remove any junk characters
+    $selectors: str-replace($selectors, '.', '');
+    $selectors: str-replace($selectors, '[class*="', '');
+    $selectors: str-replace($selectors, '"]', '');
+    $selectors: str-replace($selectors, '#{$modifier-glue}', '');
+
+    // Spoof our modules into a list
+    $selectors: str-replace($selectors, ' ', ', ');
+    $selectors: selector-parse($selectors);
+
+    @return $selectors;
+}

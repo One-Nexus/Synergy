@@ -16,12 +16,12 @@
 ///     }
 ///
 ///     <div class="button-large">...</div>
-@mixin modifier($modifiers, $special: null, $glue: '-') {
-    
+@mixin modifier($modifiers, $special: null, $glue: $modifier-glue) {
+
     $selectors: &;
-    
+
     @if str-index(inspect(&), '.#{$module}') {
-        @if (variable-exists('config') and map-get($config, 'selector-type') == 'flex') 
+        @if (variable-exists('config') and map-get($config, 'selector-type') == 'flex')
         or (not variable-exists('config') and $selector-type == 'flex') {
             $selectors: ();
             @for $i from 1 through length(&) {
@@ -31,19 +31,23 @@
             }
         }
     }
-    
+
     @at-root #{$selectors} {
+
         $modifier-selectors: ();
+
         @each $modifier in $modifiers {
-            @if $special == "not" {
+            @if $special == 'not' {
                 $modifier-selectors: join($modifier-selectors, '&:not([class*="#{$glue}#{$modifier}"])', comma);
             } @else {
                 $modifier-selectors: join($modifier-selectors, '&[class*="#{$glue}#{$modifier}"]', comma);
             }
         }
+
         #{$modifier-selectors} {
             @content;
         }
+
     }
 
 } // modifier()

@@ -28,18 +28,45 @@
 ///     @include header: ((
 ///         side : left
 ///     ));
-@mixin value($setting: 'enabled', $value: true) {
-    $modifier: if(
-        $setting == 'enabled', $value, $setting
+@mixin value($value) {
+
+    // Create a unique, random placeholder to store styles
+    $placeholder : $value + random(9999);
+
+    $target: if(
+        type-of(option($config, $option)) == 'map',
+        option($config, $option, 'enabled'),
+        option($config, $option)
     );
-    @if (option($config, $option, $setting) == $value) {	
-        @if $setting == 'enabled' {
-            @include extend($value);
-        } @else {
-            @include extend($setting);
+
+    // Determine if the option's value is our value of interest
+    $enabled: if(
+        $target == $value, true, false
+    );
+
+    @at-root {
+
+        // Store the styles in the placeholder
+        %#{$placeholder} {
+            @content;
         }
+
+        @include module($module) {
+
+            // Output the styles if the option is enabled
+            @if ($enabled) {
+                @extend %#{$placeholder};
+            }
+
+            // Create a modifier for the option
+            @include modifier($option) {
+                @include modifier($value) {
+                    @extend %#{$placeholder};
+                }
+            }
+
+        }
+
     }
-    @include modifier($modifier) {	
-        @content;
-    }
+
 }

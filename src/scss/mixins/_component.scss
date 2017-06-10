@@ -15,46 +15,65 @@
 ///     }
 ///
 ///     <div class="header_wrapper">...</div>
-@mixin component($components: null) {
-    
-    $selectors: '[class*="#{$module}_"]';
-    
+@mixin component($components: null, $glue: $component-glue) {
+
+    $selectors: '[class*="#{$module}#{$glue}"]';
+
+    $namespace: nth(module-tree(&), length(module-tree(&)));
+
     @if $components {
-        
-        // Get target namespace
-        $parents: str-replace(inspect(nth(&, 1)), '.', '');
-        $parents: str-replace($parents, '[class*="', '');
-        $parents: str-replace($parents, '-"]', '');
-        $parents: str-replace($parents, '"]', '');
-        
+
         $selectors: ();
-            
-        @each $component in $components {           
-            // Create the naked class selectors   
-            $selectors: if(
-                nth(&, 1) + unquote('') == '.#{$module}', (
-                    join($selectors, '.#{$module}_#{$component}', comma)
-                ), (
-                    join($selectors, '.#{$parents}_#{$component}', comma)
-                )
-            );         
-            // Create the attribute wildcard selectors      
-            $selectors: if(
-                nth(&, 1) + unquote('') == '.#{$module}', (
-                    join($selectors, '[class*="#{$module}_#{$component}-"]', comma)
-                ), (
-                    join($selectors, '[class*="#{$parents}_#{$component}-"]', comma)
-                )
-            );
+
+        @each $component in $components {
+            $selectors: join($selectors, '.#{$namespace}#{$glue}#{$component}, [class*="#{$namespace}#{$glue}#{$component}-"]', comma);
         }
-        
+
     }
-    
-    @at-root {
-        #{$selectors} {
+
+    // Generate the parent selectors
+
+    $parents: ();
+
+    @each $selector in & {
+
+        // spoof the selector into a list
+        $selector: str-replace(inspect($selector), ' ', ', ');
+        $selector: selector-parse($selector);
+
+        // if the last item isn't a modifier, remove it
+        @if not str-index(inspect(nth($selector, length($selector))), '[class*="#{$modifier-glue}') {
+            $selector: list-remove($selector, nth($selector, length($selector)));
+        }
+
+        // convert the selector back into a string
+        @if length($selector) == 1 {
+            $selector: nth($selector, 1);
+        }
+        $selector: str-replace(inspect($selector), ', ', ' ');
+
+        // Re-build the parent selector
+        $parents: append($parents, $selector, comma);
+    }
+
+    // remove duplicate selectors
+    $parents: list-remove-duplicates($parents);
+
+    @if length($parents) == 1 {
+        $parents: nth($parents, 1);
+    }
+
+    @if ($parents == '()') {
+        @at-root #{$selectors} {
             @content;
         }
-    }	
+    } @else {
+        @at-root #{$parents} {
+            #{$selectors} {
+                @content;
+            }
+        }
+    }
 
 }
 

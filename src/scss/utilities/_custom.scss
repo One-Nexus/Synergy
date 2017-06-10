@@ -1,0 +1,11 @@
+/// Used to fetch custom module configuration from a global config
+/// file
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group Synergy
+/// @access public
+///
+/// @param {string} $module - The module for which to find configuration
+@function custom($module) {
+    @return if(variable-exists('app') and map-get($app, $module), map-get($app, $module), ())
+}

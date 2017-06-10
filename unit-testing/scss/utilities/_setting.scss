@@ -1,0 +1,14 @@
+@include test-module('setting') {
+    @include test('get a nested setting from a module`s config') {
+
+        $map: (
+            'foo' : ('bar' : true)
+        );
+
+        $actual   : setting($map, 'foo', 'bar');
+        $expected : true;
+
+        @include assert-equal($actual, $expected, 'should return the expected nested value');
+
+    }
+}

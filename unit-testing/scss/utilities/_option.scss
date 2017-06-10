@@ -1,0 +1,14 @@
+@include test-module('option') {
+    @include test('get a nested option from a module`s config') {
+
+        $map: (
+            'foo' : ('bar' : 'baz')
+        );
+
+        $actual   : option($map, 'foo', 'bar');
+        $expected : 'baz';
+
+        @include assert-equal($actual, $expected, 'should return the expected nested value');
+
+    }
+}

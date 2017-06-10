@@ -1,17 +1,17 @@
-// Enable JSON output?
-$to-JSON : false !default;
-
-// Output config for each module by default?
-$output-JSON : false !default;
-
 // Set the default selector type (flex | chain | static)
-$selector-type : 'flex' !default;
+$selector-type: 'flex' !default;
+
+// Set the glue to chain modifiers to modules
+$modifier-glue: '-' !default;
+
+// Set the glue to chain components to modules
+$component-glue: '_' !default;
 
 // Extend each module option as a modifier by default?
-$extend-options : true !default;
- 
- // The variable which will store all module's configuration (do not edit)
-$_modules : () !default;
+$extend-options: true !default;
+
+// Include a mixin by importing the file
+$include-now: false !default;
 
 // The variable to hold a single module (do not edit)
-$module : null !default;
+$module: null !default;

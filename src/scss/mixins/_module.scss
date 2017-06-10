@@ -1,7 +1,6 @@
 /// Create a new module
 ///
 /// @author [@esr360](http://twitter.com/esr360)
-/// @group Synergy
 /// @access public
 ///
 /// @param {string|list} $modules - The module(s) you wish to create
@@ -14,31 +13,55 @@
 ///
 ///     <div class="header">...</div>
 @mixin module(
-    $modules: if(variable-exists('config'), (map-get($config, 'name')), ''), 
+    $modules: if(variable-exists('config'), (map-get($config, 'name')), ''),
     $type: if(variable-exists('config'), (map-get($config, 'selector-type')), $selector-type)
 ) {
-    $module: $modules !global;
+
+    // disable any output
+    $disable-output: if(
+        variable-exists('disable-output'), variable-exists('disable-output'), false
+    );
+    @if variable-exists('config') and map-has-key($config, 'disable-output') {
+        $disable-output: map-get($config, 'disable-output');
+    }
+
+    $nested: &;
+
+    @if not $nested {
+        // We are creating a root module, so create a global variable
+        $module: $modules !global;
+    }
+
     $selectors: ();
+
     @each $module in $modules {
         @if $type == 'flex' or $type == 'static' {
             $selectors: join($selectors, '.#{$module}', comma);
         }
         @if $type == 'flex' or $type == 'chain' {
-            $selectors: join($selectors, '[class*="#{$module}-"]', comma);
+            $selectors: join($selectors, '[class*="#{$module}#{$modifier-glue}"]', comma);
         }
         @if $type == 'data' {
             $selectors: join($selectors, '[data-#{$module}]', comma);
         }
     }
-    #{$selectors} {
-        @content;
+
+    @if not $disable-output {
+        #{$selectors} {
+            @content;
+            @if not $nested {
+                @include extend-modifiers;
+                @include combine-modifiers;
+                @include module-css;
+            }
+        }
     }
+
 }
 
 /// Alias for module() mixin
 ///
 /// @author [@esr360](http://twitter.com/esr360)
-/// @group Synergy
 /// @access public
 ///
 /// @param {string|list} $modules - The module(s) you wish to create
@@ -46,5 +69,59 @@
 @mixin modules($modules, $type: $selector-type) {
     @include module($modules, $type) {
         @content;
+    }
+}
+
+/// Combine modifiers into a new, single modifier
+///
+/// @author [@esr360](http://twitter.com/esr360)
+///
+/// @param {map} $styles - The CSS styles to output
+@mixin combine-modifiers($combine: if(variable-exists('config'), (map-get($config, 'combine')), '()')) {
+    @if variable-exists('config') and $combine {
+        @each $new-modifier, $target-modifiers in $combine {
+            @include modifier($new-modifier) {
+                @include extend(($target-modifiers));
+            }
+        }
+    }
+}
+
+/// Extend modifiers into the naked module
+///
+/// @author [@esr360](http://twitter.com/esr360)
+///
+/// @param {map} $styles - The CSS styles to output
+@mixin extend-modifiers($modifiers: if(variable-exists('config'), (map-get($config, 'modifiers')), '()')) {
+    @if variable-exists('config') and $modifiers {
+        @include extend(($modifiers));
+    }
+}
+
+/// Output CSS styles from config
+///
+/// @author [@esr360](http://twitter.com/esr360)
+///
+/// @param {map} $styles - The CSS styles to output
+@mixin module-css($styles: if(variable-exists('config'), (map-get($config, 'CSS')), '()')) {
+    @if variable-exists('config') and $styles {
+        @each $property, $value in $styles {
+            // the propery is for a modifier
+            @if str-slice($property, 1, 1) == $modifier-glue {
+                @include modifier(str-replace($property, $modifier-glue, '')) {
+                    @include module-css($value);
+                }
+            }
+            // the property is for a component
+            @else if str-slice($property, 1, 1) == $component-glue {
+                @include component(str-replace($property, $component-glue, '')) {
+                    @include module-css($value);
+                }
+            }
+            // the property is regular CSS
+            @else {
+                #{$property}: $value;
+            }
+        }
     }
 }

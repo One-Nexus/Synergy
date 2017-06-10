@@ -1,24 +1,590 @@
-// Enable JSON output?
-$to-JSON : false !default;
+/// Returns a list of keys to to pass into the map-set-deep() function
+///
+/// @author Sam Richard
+/// @access public
+/// @link https://git.io/vPrlJ
+///
+/// @param $keys
+/// @param $counter
+@function get-keys($keys, $counter) {
+    $return: ();
 
-// Output config for each module by default?
-$output-JSON : false !default;
+    @for $i from 1 to $counter {
+        $return: append($return, nth($keys, $i));
+    }
 
+    @return $return;
+}
+/// Determine if a passed color is grayscale
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @access public
+///
+/// @param {color} $color - the color to test for grayscaleness
+/// @param {string} $string [''] - string to provide additional/alternative scoping
+/// @param {string} $namespace ['grey] - the namespace to search $string for
+///
+/// @return {bool} - whether or not the passed color is grayscale
+@function is-grayscale($color: '', $string: '', $namespace: 'grey') {
+    @if (type-of($color) == 'color' and grayscale($color) == $color) or (str-index($string, $namespace)) {
+        @return true;
+    } @else {
+        @return false;
+    }
+}
+/// Remove duplicate values from a list
+///
+/// @author Hugo Giraudel
+/// @access public
+/// @link https://goo.gl/ZWDbZo
+///
+/// @param {list} $list - the list which you want to remove duplicates from
+/// @param {bool} $recursive [false] - used if the target list is nested
+///
+/// @return {list} - updated list
+@function list-remove-duplicates($list, $recursive: false) {
+    $result: ();
+
+    @each $item in $list {
+        @if not index($result, $item) {
+            @if length($item) > 1 and $recursive {
+                $result: append($result, remove-duplicates($item, $recursive), comma);
+            } @else {
+                $result: append($result, $item, comma);
+            }
+        }
+    }
+
+    @return $result;
+}
+/// Remove a value from a list
+///
+/// @author Hugo Giraudel
+/// @access public
+/// @link https://goo.gl/LFRwQf
+///
+/// @param {list} $list - the list which contains the value you wish to remove
+/// @param {*} value - the value you wish to remove
+/// @param {bool} $recursive [false] - used if the target list is nested
+///
+/// @return {list} - updated list
+@function list-remove($list, $value, $recursive: false) {
+    $result: ();
+
+    @for $i from 1 through length($list) {
+        @if type-of(nth($list, $i)) == list and $recursive {
+            $result: append($result, list-remove(nth($list, $i), $value, $recursive), comma);
+        } @else if nth($list, $i) != $value {
+            $result: append($result, nth($list, $i), comma);
+        }
+    }
+
+    @return $result;
+}
+/// Replace a value in a list
+///
+/// @author Hugo Giraudel
+/// @access public
+/// @link https://goo.gl/NCFTHF
+///
+/// @param {list} $list - the list which contains the value you wish to replace
+/// @param {*} $old-value - the value you wish to replace
+/// @param {*} $new-value - what you wish to replace the old value with
+/// @param {bool} $recursive [false] - used if the target list is nested
+///
+/// @return {list} - updated list
+@function list-replace($list, $old-value, $new-value, $recursive: false) {
+    $result: ();
+
+    @for $i from 1 through length($list) {
+        @if type-of(nth($list, $i)) == list and $recursive {
+            $result: append($result, list-replace(nth($list, $i), $old-value, $new-value, $recursive));
+        } @else {
+            @if nth($list, $i) == $old-value {
+                $result: append($result, $new-value);
+            } @else {
+                $result: append($result, nth($list, $i));
+            }
+        }
+    }
+
+    @return $result;
+}
+/// Reverse a list
+///
+/// @author Hugo Giraudel
+/// @access public
+/// @link http://hugogiraudel.com/2013/08/08/advanced-sass-list-functions/
+///
+/// @param {list }$list - the list which you wish to reverse
+/// @param {bool} $recursive [false] - enable if target list has nested values
+///
+/// @return {list} - reversed list
+@function list-reverse($list, $recursive: false) {
+    $result: ();
+
+    @for $i from length($list) * -1 through -1 {
+        @if type-of(nth($list, abs($i))) == list and $recursive {
+            $result: append($result, list-reverse(nth($list, abs($i)), $recursive));
+        } @else {
+            $result: append($result, nth($list, abs($i)));
+        }
+    }
+
+    @return $result;
+}
+/// Get a value from a nested map
+///
+/// @author Hugo Giraudel
+/// @access public
+/// @link https://www.sitepoint.com/extra-map-functions-sass/
+///
+/// @param {map} $map - map
+/// @param {arglist} $keys - key chain
+///
+/// @return {*} - desired value
+@function map-get-deep($map, $keys...) {
+    @each $key in $keys {
+        $map: map-get($map, $key);
+    }
+    @return $map;
+}
+/// Used to recursively merge (deep merge) two maps
+///
+/// @author Pedr Browne
+/// @access public
+/// @link https://git.io/vPrlX
+///
+/// @param {map} $map-old - The original map
+/// @param {map} $map-new - The new map you wish to merge into the original
+/// @param {bool} $overwrite [true] - Overwrite existing keys
+///
+/// @return {map} - merged map
+@function map-merge-deep($map-old, $map-new, $overwrite: true) {
+
+    // Iterate through each value of the new map
+    @each $key, $new-value in $map-new {
+
+        // Check if that value already exists on the old map
+        @if map-has-key($map-old, $key) {
+            // There is an existing key
+            $old-value: map-get($map-old, $key);
+            @if type-of($new-value) == map and type-of($old-value) == map {
+                // If both are maps, recurse regardless of $overwrite
+                $merged-value: map-merge-deep($old-value, $new-value);
+                $map-old: map-set($map-old, $key, $merged-value);
+            } @else {
+                // Otherwise check $overwrite
+                @if $overwrite {
+                    $map-old: map-set($map-old, $key, $new-value);
+                }
+            }
+        } @else {
+            // There is no existing key to add
+            $map-old: map-set($map-old, $key, $new-value);
+        }
+
+    }
+
+    @return $map-old;
+}
+/// Reverse a map
+///
+/// @author Sean McEmerson
+/// @access public
+/// @link http://git.io/vLfuz
+///
+/// @param {map} $map - the map to be reversed
+///
+/// @return {map} - reversed map
+@function map-reverse($map) {
+    $keys: map-keys($map);
+    $map-reversed: ();
+
+    @for $i from length($keys) through 1 {
+        $map-reversed: map-merge(
+            $map-reversed, (nth($keys, $i): map-get($map, nth($keys, $i)))
+        );
+    }
+
+    $result: $map-reversed;
+
+    @return $result;
+}
+/// Get the value of a unique key from a nested map
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @access public
+///
+/// @param {map} $map - the map which contains the target key
+/// @param {string} $target-key - the key of interest
+/// @param {*} $target-value - optional fallback value if key not found
+///
+/// @return {*} - desired value
+@function map-search($map, $target-key, $target-value: '') {
+    @each $key, $value in $map {
+        // Is this our key?
+        @if $key == $target-key {
+            $target-value: $value;
+        } @else {
+            @if type-of($value) == 'map' {
+                // Does the new map contain our key?
+                @if map-has-key($value, $target-key) {
+                    $target-value: map-get($value, $target-key);
+                } @else {
+                    // if not, recurse the function
+                    $target-value: map-search($value, $target-key, $target-value);
+                }
+            }
+        }
+    }
+    @return $target-value;
+}
+/// Set a nested key in an existing map
+///
+/// @author Sam Richard
+/// @access public
+/// @link https://git.io/vPr80
+///
+/// @param {map} $map - the map which contains the key you wish to set
+/// @param {string|list} $keys - the keychain trail to your desired key
+/// @param {*} $value - the value you wish to set for the key
+///
+/// @return {map} - updated map
+@function map-set-deep($map, $keys, $value) {
+
+    $private-sassy-maps-suppress-warnings: true !global;
+    $length: length($keys);
+    $get-keys: ();
+    $map-level: ();
+
+    @if $length > 1 {
+        $get-keys: get-keys($keys, $length);
+        $map-level: map-get-deep($map, $get-keys);
+    }
+
+    $merge: (nth($keys, $length): $value);
+
+    @if $map-level {
+        $merge: map-merge($map-level, $merge);
+    }
+
+    @for $i from ($length * -1 + 1) through -1 {
+        $j: abs($i);
+        $key: nth($keys, $j);
+        @if $j > 1 {
+            $get-keys: get-keys($keys, $j);
+            $map-level: map-get-deep($map, $get-keys);
+            @if $map-level {
+                $merge: map-merge($map-level, ($key: $merge));
+            } @else {
+                $merge: ($key: $merge);
+            }
+        } @else {
+            $merge: ($key: $merge);
+        }
+    }
+
+    $map: map-merge($map, $merge);
+    $private-sassy-maps-suppress-warnings: false !global;
+
+    @return $map;
+}
+/// Set a key in an existing map
+///
+/// @author Sam Richard
+/// @access public
+/// @link https://git.io/vPr8B
+///
+/// @param {map} $map - the map which contains the key you wish to set
+/// @param {string} $key - the key you wish to set
+/// @param {*} $value - the value you wish to set for the key
+///
+/// @return {map} - updated map
+@function map-set($map, $key, $value) {
+    @return map-merge($map, ($key: $value));
+}
+/// Multiply one number by the power of another
+///
+/// @author Hugo Giraudel
+/// @access public
+/// @link https://css-tricks.com/snippets/sass/power-function/
+///
+/// @param {number} $number - the number you wish to multiply
+/// @param {number} $exponent - the power by which to multiply
+///
+/// @return {number} - result of $number ^ $exponent
+@function pow($number, $exponent) {
+    $value: 1;
+
+    @if $exponent > 0 {
+        @for $i from 1 through $exponent {
+            $value: $value * $number;
+        }
+    } @else if $exponent < 0 {
+        @for $i from 1 through -$exponent {
+            $value: $value / $number;
+        }
+    }
+
+    @return $value;
+}
+/// Replace `$search` with `$replace` in `$string`
+///
+/// @author Hugo Giraudel
+/// @access public
+/// @link https://css-tricks.com/snippets/sass/str-replace-function/
+///
+/// @param {string} $string - initial string
+/// @param {string} $search - substring to replace
+/// @param {string} $replace - new value
+///
+/// @return {string} - updated string
+@function str-replace($string, $search, $replace: '') {
+    $index: str-index($string, $search);
+
+    @if $index {
+        @return str-slice($string, 1, $index - 1) + $replace + str-replace(
+            str-slice($string, $index + str-length($search)), $search, $replace
+        );
+    }
+
+    @return $string;
+}
+/// Remove the units from a value
+///
+/// @author Hugo Giraudel
+/// @access public
+/// @link https://css-tricks.com/snippets/sass/strip-unit-function/
+///
+/// @param {number} $value - number to remove unit from
+///
+/// @return {number} - Unitless number
+@function strip-unit($value) {
+    @return $value / ($value * 0 + 1);
+}
 // Set the default selector type (flex | chain | static)
-$selector-type : 'flex' !default;
+$selector-type: 'flex' !default;
 
-// Extend each option as a modifier by default?
-$extend-options : true !default;
- 
- // The variable which will store all module's configuration (do not edit)
-$_modules : () !default;
+// Set the glue to chain modifiers to modules
+$modifier-glue: '-' !default;
+
+// Set the glue to chain components to modules
+$component-glue: '_' !default;
+
+// Extend each module option as a modifier by default?
+$extend-options: true !default;
+
+// Include a mixin by importing the file
+$include-now: false !default;
 
 // The variable to hold a single module (do not edit)
-$module : null !default;
-/// Create a new module
+$module: null !default;
+/// Used to merge a module's default configuration with any custom
+/// values passed to the module
 ///
 /// @author [@esr360](http://twitter.com/esr360)
 /// @group Synergy
+/// @access public
+///
+/// @param {map} $map-old - The map which will store default configuration
+/// @param {map} $map-new - The map which will hold custom values
+@function config($map-old, $map-new) {
+
+    $map-old: map-merge((
+        'selector-type'  : $selector-type,
+        'extend-options' : $extend-options
+    ), $map-old);
+
+    $map-old: map-merge-deep($map-old, $map-new);
+
+    // Store merged map in a variable
+    $config: $map-old !global;
+
+    // Return merged map
+    @return $map-old;
+
+}
+/// Return a CSS property if the passed option is enabled
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group Synergy
+/// @access public
+///
+/// @param {string|list} $option - the desired option
+/// @returns {*} - $true-value if option enabled, otherwise returns $false-value
+@function enabled($option, $true-value, $false-value: '') {
+    $breadcrumb: ();
+    @each $crumb in $option {
+        $breadcrumb: join($breadcrumb, $crumb, comma);
+    }
+    @if value-enabled(map-get-deep($config, $breadcrumb...)) {
+        @return $true-value;
+    } @else {
+        @return $false-value;
+    }
+}
+/// Create a namespace tree from a passed selector
+///
+/// @author [@esr360](http://twitter.com/esr360)
+///
+/// @param {list} $selectors - The selector from which to create the module tree
+@function module-tree($selector) {
+    $parent-module: $module;
+
+    // Remove any modifers
+    $selectors: remove-modifiers($selector);
+
+    // Remove any junk characters
+    $selectors: str-replace($selectors, '.', '');
+    $selectors: str-replace($selectors, '[class*="', '');
+    $selectors: str-replace($selectors, '"]', '');
+    $selectors: str-replace($selectors, '#{$modifier-glue}', '');
+
+    // Spoof our modules into a list
+    $selectors: str-replace($selectors, ' ', ', ');
+    $selectors: selector-parse($selectors);
+
+    @return $selectors;
+}
+/// Return the value of a module's option
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @access public
+///
+/// @alias map-get-deep
+///
+/// @example
+///     option($blockquote, 'icon', 'left')
+@function option($args...) {
+    @return map-get-deep($args...);
+}
+/// Remove components from a selector
+///
+/// @author [@esr360](http://twitter.com/esr360)
+///
+/// @param {list} $selectors - The selector from which to remove components
+///
+/// @todo potential need to recurse?
+@function remove-components($selector) {
+    // convert selector to a string
+    $selector: inspect(nth($selector, 1));
+
+    $component: '';
+
+    // Find out where the first component starts
+    $component-index: str-index($selector, '#{$component-glue}');
+
+    @if $component-index {
+        // Strip the first part of the selector up until the first component
+        $component: str-slice($selector, $component-index);
+
+        // Find out where the component potentially ends
+        $component-end-1: str-index($component, ' ');
+        // Find out where the component potentially ends
+        $component-end-2: str-index($component, '#{$modifier-glue}"]');
+        // Find out where the component actually ends
+        $component-end: '';
+        @if $component-end-1 and $component-end-2 {
+            $component-end: min($component-end-1, $component-end-2);
+        } @else if $component-end-1 and not $component-end-2 {
+            $component-end: $component-end-1;
+        } @else if not $component-end-1 and $component-end-2 {
+            $component-end: $component-end-2;
+        }
+
+        // Isolate the component
+        $component: str-slice($component, 0, $component-end);
+        // Remove the component from the selector
+        $selector: str-replace($selector, $component, '');
+    }
+
+    @return $selector;
+}
+/// Remove modifiers from a selector
+///
+/// @author [@esr360](http://twitter.com/esr360)
+///
+/// @param {list} $selectors - The selector from which to remove modifiers
+@function remove-modifiers($selector) {
+    // convert selector to a string
+    $selector: inspect(nth($selector, 1));
+
+    $modifier: '';
+
+    // Find out where the first modifier starts
+    $modifier-index: str-index($selector, '"#{$modifier-glue}');
+
+    @if $modifier-index {
+        // Strip the first part of the selector up until the first modifier
+        $modifier: str-slice($selector, $modifier-index);
+        // Find out where the modifier ends
+        $modifier-end: str-index($modifier, '"]');
+        // Isolate the modifier
+        $modifier: str-slice($modifier, 0, $modifier-end);
+        // Remove the modifier from the selector
+        $selector: str-replace($selector, $modifier, '');
+        // Remove junk characters
+        $selector: str-replace($selector, '[class*=]', '');
+        // Recurse the function to eliminate any remainig modifiers
+        $selector: remove-modifiers($selector);
+    }
+
+    @return $selector;
+}
+/// Alias function to option()
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group Synergy
+/// @access public
+///
+/// @param {map} $map
+/// @param {arglist} $keys
+@function setting($map, $keys...) {
+    @return option($map, $keys...);
+}
+/// Get a value from the current module's configuration
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group Synergy
+/// @access public
+///
+/// @param {arglist} $options
+@function this($options...) {
+    @return option($config, $options...)
+}
+/// Determine if a passed value should be considered 'enabled'
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @access public
+///
+/// @param {*} $value - the value to check
+/// @returns {*} - whether or not the option is enabled
+@function value-enabled($value) {
+    // If the value is a map
+    @if type-of($value) == 'map' {
+        // Does the map contain the 'enabled' key?
+        @if map-has-key($value, 'enabled') {
+            @return map-get($value, 'enabled');
+        } @else {
+            @return $value;
+        }
+    }
+    // If the value is a list
+    @else if type-of($value) == 'list' {
+        // Is the first value a bool?
+        @if type-of(nth($value, 1)) == 'bool' {
+            @return nth($value, 1);
+        } @else {
+            @return $value;
+        }
+    } @else {
+        @return $value;
+    }
+}
+/// Create a new module
+///
+/// @author [@esr360](http://twitter.com/esr360)
 /// @access public
 ///
 /// @param {string|list} $modules - The module(s) you wish to create
@@ -31,31 +597,55 @@ $module : null !default;
 ///
 ///     <div class="header">...</div>
 @mixin module(
-    $modules: if(variable-exists('config'), (map-get($config, 'name')), ''), 
+    $modules: if(variable-exists('config'), (map-get($config, 'name')), ''),
     $type: if(variable-exists('config'), (map-get($config, 'selector-type')), $selector-type)
 ) {
-    $module: $modules !global;
+
+    // disable any output
+    $disable-output: if(
+        variable-exists('disable-output'), variable-exists('disable-output'), false
+    );
+    @if variable-exists('config') and map-has-key($config, 'disable-output') {
+        $disable-output: map-get($config, 'disable-output');
+    }
+
+    $nested: &;
+
+    @if not $nested {
+        // We are creating a root module, so create a global variable
+        $module: $modules !global;
+    }
+
     $selectors: ();
+
     @each $module in $modules {
         @if $type == 'flex' or $type == 'static' {
             $selectors: join($selectors, '.#{$module}', comma);
         }
         @if $type == 'flex' or $type == 'chain' {
-            $selectors: join($selectors, '[class*="#{$module}-"]', comma);
+            $selectors: join($selectors, '[class*="#{$module}#{$modifier-glue}"]', comma);
         }
         @if $type == 'data' {
             $selectors: join($selectors, '[data-#{$module}]', comma);
         }
     }
-    #{$selectors} {
-        @content;
+
+    @if not $disable-output {
+        #{$selectors} {
+            @content;
+            @if not $nested {
+                @include extend-modifiers;
+                @include combine-modifiers;
+                @include module-css;
+            }
+        }
     }
+
 }
 
 /// Alias for module() mixin
 ///
 /// @author [@esr360](http://twitter.com/esr360)
-/// @group Synergy
 /// @access public
 ///
 /// @param {string|list} $modules - The module(s) you wish to create
@@ -63,6 +653,60 @@ $module : null !default;
 @mixin modules($modules, $type: $selector-type) {
     @include module($modules, $type) {
         @content;
+    }
+}
+
+/// Combine modifiers into a new, single modifier
+///
+/// @author [@esr360](http://twitter.com/esr360)
+///
+/// @param {map} $styles - The CSS styles to output
+@mixin combine-modifiers($combine: if(variable-exists('config'), (map-get($config, 'combine')), '()')) {
+    @if variable-exists('config') and $combine {
+        @each $new-modifier, $target-modifiers in $combine {
+            @include modifier($new-modifier) {
+                @include extend(($target-modifiers));
+            }
+        }
+    }
+}
+
+/// Extend modifiers into the naked module
+///
+/// @author [@esr360](http://twitter.com/esr360)
+///
+/// @param {map} $styles - The CSS styles to output
+@mixin extend-modifiers($modifiers: if(variable-exists('config'), (map-get($config, 'modifiers')), '()')) {
+    @if variable-exists('config') and $modifiers {
+        @include extend(($modifiers));
+    }
+}
+
+/// Output CSS styles from config
+///
+/// @author [@esr360](http://twitter.com/esr360)
+///
+/// @param {map} $styles - The CSS styles to output
+@mixin module-css($styles: if(variable-exists('config'), (map-get($config, 'CSS')), '()')) {
+    @if variable-exists('config') and $styles {
+        @each $property, $value in $styles {
+            // the propery is for a modifier
+            @if str-slice($property, 1, 1) == $modifier-glue {
+                @include modifier(str-replace($property, $modifier-glue, '')) {
+                    @include module-css($value);
+                }
+            }
+            // the property is for a component
+            @else if str-slice($property, 1, 1) == $component-glue {
+                @include component(str-replace($property, $component-glue, '')) {
+                    @include module-css($value);
+                }
+            }
+            // the property is regular CSS
+            @else {
+                #{$property}: $value;
+            }
+        }
     }
 }
 /// Create a component based off the main module
@@ -74,6 +718,7 @@ $module : null !default;
 /// @param {string|list} $components - The component or components to be used
 ///
 /// @example
+///
 ///     @include module('header') {
 ///         @include component('wrapper') {
 ///             ...
@@ -81,56 +726,77 @@ $module : null !default;
 ///     }
 ///
 ///     <div class="header_wrapper">...</div>
-@mixin component($components: null) {
-    
-    $selectors: '[class*="#{$module}_"]';
-    
+@mixin component($components: null, $glue: $component-glue) {
+
+    $selectors: '[class*="#{$module}#{$glue}"]';
+
+    $namespace: nth(module-tree(&), length(module-tree(&)));
+
     @if $components {
-        
-        // Get target namespace
-        $parents: str-replace(inspect(nth(&, 1)), '.', '');
-        $parents: str-replace($parents, '[class*="', '');
-        $parents: str-replace($parents, '-"]', '');
-        $parents: str-replace($parents, '"]', '');
-        
+
         $selectors: ();
-            
-        @each $component in $components {           
-            // Create the naked class selectors   
-            $selectors: if(
-                nth(&, 1) + unquote('') == '.#{$module}',
-                (
-                    join($selectors, '.#{$module}_#{$component}', comma)
-                ),
-                (
-                    join($selectors, '.#{$parents}_#{$component}', comma)
-                )
-            );         
-            // Create the attribute wildcard selectors      
-            $selectors: if(
-                nth(&, 1) + unquote('') == '.#{$module}',
-                (
-                    join($selectors, '[class*="#{$module}_#{$component}-"]', comma)
-                ),
-                (
-                    join($selectors, '[class*="#{$parents}_#{$component}-"]', comma)
-                )
-            );
+
+        @each $component in $components {
+            $selectors: join($selectors, '.#{$namespace}#{$glue}#{$component}, [class*="#{$namespace}#{$glue}#{$component}-"]', comma);
         }
-        
+
     }
-    
-    @at-root {
-        #{$selectors} {
+
+    // Generate the parent selectors
+
+    $parents: ();
+
+    @each $selector in & {
+
+        // spoof the selector into a list
+        $selector: str-replace(inspect($selector), ' ', ', ');
+        $selector: selector-parse($selector);
+
+        // if the last item isn't a modifier, remove it
+        @if not str-index(inspect(nth($selector, length($selector))), '[class*="#{$modifier-glue}') {
+            $selector: list-remove($selector, nth($selector, length($selector)));
+        }
+
+        // convert the selector back into a string
+        @if length($selector) == 1 {
+            $selector: nth($selector, 1);
+        }
+        $selector: str-replace(inspect($selector), ', ', ' ');
+
+        // Re-build the parent selector
+        $parents: append($parents, $selector, comma);
+    }
+
+    // remove duplicate selectors
+    $parents: list-remove-duplicates($parents);
+
+    @if length($parents) == 1 {
+        $parents: nth($parents, 1);
+    }
+
+    @if ($parents == '()') {
+        @at-root #{$selectors} {
             @content;
         }
-    }	
+    } @else {
+        @at-root #{$parents} {
+            #{$selectors} {
+                @content;
+            }
+        }
+    }
 
 }
 
-// Alias for multiple components
-@mixin components($sub-components) {
-    @include component($sub-components) {
+/// Alias for component() mixin
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group Synergy
+/// @access public
+///
+/// @param {string|list} $components - The component(s) you wish to create
+@mixin components($components) {
+    @include component($components) {
         @content;
     }
 }
@@ -152,12 +818,12 @@ $module : null !default;
 ///     }
 ///
 ///     <div class="button-large">...</div>
-@mixin modifier($modifiers, $special: null, $glue: '-') {
-    
+@mixin modifier($modifiers, $special: null, $glue: $modifier-glue) {
+
     $selectors: &;
-    
+
     @if str-index(inspect(&), '.#{$module}') {
-        @if (variable-exists('config') and map-get($config, 'selector-type') == 'flex') 
+        @if (variable-exists('config') and map-get($config, 'selector-type') == 'flex')
         or (not variable-exists('config') and $selector-type == 'flex') {
             $selectors: ();
             @for $i from 1 through length(&) {
@@ -167,178 +833,40 @@ $module : null !default;
             }
         }
     }
-    
+
     @at-root #{$selectors} {
+
         $modifier-selectors: ();
+
         @each $modifier in $modifiers {
-            @if $special == "not" {
+            @if $special == 'not' {
                 $modifier-selectors: join($modifier-selectors, '&:not([class*="#{$glue}#{$modifier}"])', comma);
             } @else {
                 $modifier-selectors: join($modifier-selectors, '&[class*="#{$glue}#{$modifier}"]', comma);
             }
         }
+
         #{$modifier-selectors} {
             @content;
         }
+
     }
 
 } // modifier()
 
-// Alias for multiple modifiers
+/// Alias for modifier() mixin
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @group Synergy
+/// @access public
+///
+/// @param {string|list} $modifiers - The modifier(s) you wish to create
 @mixin modifiers($modifiers) {
     @include modifier($modifiers) {
         @content;
     }
 }
-/// Overwrite an existing module when in different context, such as 
-/// inside another module
-///
-/// @author [@esr360](http://twitter.com/esr360)
-/// @group Synergy
-/// @access public
-///
-/// @param {string|list} $modules - The module(s) which you wish to overwrite
-/// @param {string|list} $is - Overwrite if moulde is certain modifier(s)
-/// @param {string|list} $not - Overwrite if module is not certain modifier(s)
-/// @param {string} $type - Set what type the module has
-/// @param {string} $special - Pass a special contextual option
-///
-/// @example
-///     @include module('header') {
-///         @include overwrite('logo') {
-///             ...
-///         }
-///     }
-///
-///     <div class="header">
-///         <div class="logo">...</div>
-///     </div>
-@mixin overwrite($modules: map-get($config, 'name'), $type: $selector-type, $is: null, $not: null, $special: null) {
-    $selectors: ();
-    @if $is {
-        $type: 'chain';
-    }
-    @each $module in $modules {
-        $selector: #{$module};
-        @if $type == 'flex' or $type == 'static' {
-            @if $special == 'adjacent-sibling' {
-                $selectors: join($selectors, '+ .#{$selector}', comma);
-            } @else if $special == 'general-sibling' {
-                $selectors: join($selectors, '~ .#{$selector}', comma);
-            } @else {
-                $selectors: join($selectors, '.#{$selector}', comma);
-            }
-        }
-        @if $type == 'flex' or $type == 'chain' {
-            @if $special == 'adjacent-sibling' {
-                $selectors: join($selectors, '+ [class*="#{$selector}-"]', comma);
-            } @else if $special == 'general-sibling' {
-                $selectors: join($selectors, '~ [class*="#{$selector}-"]', comma);
-            }  @else {
-                $selectors: join($selectors, '[class*="#{$selector}-"]', comma);
-            }
-        }
-        @if $is {
-            $modifiers-list: ();
-            @each $modifier in $is {
-                $selectors: join(
-                    $modifiers-list, 
-                    selector-append($selectors,'[class*="-#{$modifier}"]'), 
-                comma);
-            }
-        }
-        @if $not {
-            $modifiers-list: ();
-            @each $modifier in $not {
-                $selectors: join(
-                    $modifiers-list, 
-                    selector-append($selectors,':not([class*="-#{$modifier}"])'), 
-                comma);
-            }
-        }
-    }
-    @if $special == 'at-root' {
-        @at-root #{$selectors} {
-            @content;
-        }
-    } @else {
-        #{$selectors} {
-            @content;
-        }
-    }
-}
-/// Overwrite an existing component when in different context, such as 
-/// inside another module or component
-///
-/// @author [@esr360](http://twitter.com/esr360)
-/// @group Synergy
-/// @access public
-///
-/// @param {string|list} $components - The component(s) which you wish to overwrite
-/// @param {string|list} $is - Overwrite if moulde is certain modifier
-/// @param {string|list} $not - Overwrite if module is not certain modifier
-/// @param {string} $parent - The parent module of the component
-/// @param {string} $special - Pass a special contextual option
-///
-/// @example
-///     @include module('form') {
-///
-///         @include component('input') {
-///             ...
-///         }
-///
-///         @include modifier('html5') {
-///             @include overwrite-component('input') {
-///                 ...
-///             }
-///         }
-///
-///     }
-///
-///     <div class="form-html5">
-///         <input class="form_input" type="text" />
-///     </div>
-@mixin overwrite-component($components, $parent: null, $is: null, $not: null, $special: null) {
-    $module: if($parent != null, $parent, $module);
-    $selectors: ();
-    @each $component in $components {
-        $selector: #{$module}_#{$component};
-        @if $special == 'adjacent-sibling' {
-            $selectors: join($selectors, '+ [class*="#{$selector}"]', comma);
-        } @else {
-            $selectors: join($selectors, '[class*="#{$selector}"]', comma);
-        }
-        @if $is {
-            $modifiers-list: ();
-            @each $modifier in $is {
-                $selectors: join(
-                    $modifiers-list, 
-                    selector-append($selectors,'[class*="-#{$modifier}"]'), 
-                comma);
-            }
-        }
-        @if $not {
-            $modifiers-list: ();
-            @each $modifier in $not {
-                $selectors: join(
-                    $modifiers-list, 
-                    selector-append($selectors,':not([class*="-#{$modifier}"])'), 
-                comma);
-            }
-        }
-    }
-    #{$selectors} {
-        @content;
-    }
-}
-
-// Alias for multiple components
-@mixin overwrite-components($args...) {
-    @include overwrite-component($args...) {
-        @content;
-    }
-}
-/// Extend one or more modifiers of a module to create a new modifier 
+/// Extend one or more modifiers of a module to create a new modifier
 /// combining the ones you pass
 ///
 /// @author [@esr360](http://twitter.com/esr360)
@@ -350,6 +878,7 @@ $module : null !default;
 /// @param {bool} $core [false] - Extend the core '.module' styles?
 ///
 /// @example
+///
 ///     @include module(button) {
 ///
 ///         @include modifier('round')   {...}
@@ -358,39 +887,46 @@ $module : null !default;
 ///
 ///         @include modifier('primary') {
 ///             @include extend(('round', 'large', 'success'));
-///         }	
+///         }
 ///
 ///     }
 ///
 ///     <div class="button-primary">...</div>
 @mixin extend($modifiers: null, $parent: null, $core: false) {
-    @if $core {
-        @extend .#{$parent}
+
+    @if $core or not $modifiers {
+        @extend .#{$parent};
     }
+
     @each $modifier in $modifiers {
-        @if type-of($modifier) == string {
+        @if type-of($modifier) == 'string' {
             $selector: if(
                 $parent, $parent, $module
             );
-            @extend [class*="#{$selector}-"][class*="-#{$modifier}"];
-        } @else if type-of($modifier) == list {
+            @extend [class*="#{$selector}#{$modifier-glue}"][class*="#{$modifier-glue}#{$modifier}"];
+        } @else if type-of($modifier) == 'list' {
             $selectors: if(
-                $parent,
-                ('[class*="#{$parent}-"]'),
-                ('[class*="#{$module}-"]')
+                $parent, ('[class*="#{$parent}#{$modifier-glue}"]'), ('[class*="#{$module}#{$modifier-glue}"]')
             );
             @each $item in $modifier {
-                $selectors: join($selectors, '[class*="-#{$item}"]', comma);
+                $selectors: join($selectors, '[class*="#{$modifier-glue}#{$item}"]', comma);
             }
             @extend #{$selectors};
         }
     }
+
+}
+
+// Alias for extending entire modules
+@mixin _module($module, $modifiers: null, $core: true) {
+    @include extend($parent: $module, $modifiers: $modifiers, $core: $core);
 }
 /// Apply styles to a component when certain conditions are met
 ///
 /// @author [@esr360](http://twitter.com/esr360)
 /// @group Synergy
 /// @access public
+///
 /// @param {string} $context - The context you wish to use
 @mixin context($context) {
     $child-selectors: &;
@@ -400,7 +936,7 @@ $module : null !default;
             $selectors: join($selectors, '.#{$module}', comma);
         }
         @if map-get($config, 'selector-type') == 'flex' or map-get($config, 'selector-type') == 'chain' {
-            $selectors: join($selectors, '[class*="#{$module}-"]', comma);
+            $selectors: join($selectors, '[class*="#{$module}#{$modifier-glue}"]', comma);
         }
     }
     @if $context == 'parent-hovered' {
@@ -427,11 +963,11 @@ $module : null !default;
 ///     @mixin billboard($custom: ()) {
 ///
 ///         $billboard: config((
-///             full-screen : false
+///             fullscreen : false
 ///         ), $custom);
 ///
 ///         @include module('billboard') {
-///             @include option('full-screen') {
+///             @include option('fullscreen') {
 ///                 ...
 ///             }
 ///         }
@@ -439,21 +975,34 @@ $module : null !default;
 ///     }
 ///
 ///     @include billboard: ((
-///         full-screen : true
+///         fullscreen : true
 ///     ));
-@mixin option($option) {
-    $option: $option !global;
-    $enabled: if(
-        (type-of(map-get($config, $option)) == bool and map-get($config, $option) != false) or
-        (type-of(map-get($config, $option)) == map and map-get(map-get($config, $option), 'enabled') != false),
-        true, false
-    );
-    @if $enabled {
-        @include extend($option);
-    }
-    @include modifier($option) {
+@mixin option($option-path...) {
+
+    $value  : map-get-deep($config, $option-path...);
+    $option : nth($option-path, length($option-path)) !global;
+
+    // Create a unique, random placeholder to store styles
+    $placeholder : $option + random(9999);
+
+    // Store the styles in the placeholder
+    @at-root %#{$placeholder} {
         @content;
     }
+
+    // Output the styles if the option is enabled
+    @if value-enabled($value) {
+        @extend %#{$placeholder};
+    }
+
+    // Create a modifier for the option if it is not enabled
+    // by default
+    @if $extend-options and not value-enabled($value) {
+        @include modifier($option) {
+            @extend %#{$placeholder};
+        }
+    }
+
 }
 /// Apply styles when a defined option is a particular value
 ///
@@ -465,6 +1014,7 @@ $module : null !default;
 /// @param $value - The value you wish to apply styles to
 ///
 /// @example
+///
 ///     @mixin header($custom: ()) {
 ///
 ///         $header: config((
@@ -484,177 +1034,45 @@ $module : null !default;
 ///     @include header: ((
 ///         side : left
 ///     ));
-@mixin value($setting: 'enabled', $value: true) {
-    $modifier: if(
-        $setting == 'enabled', $value, $setting
+@mixin value($value) {
+
+    // Create a unique, random placeholder to store styles
+    $placeholder : $value + random(9999);
+
+    $target: if(
+        type-of(option($config, $option)) == 'map',
+        option($config, $option, 'enabled'),
+        option($config, $option)
     );
-    @if (option($config, $option, $setting) == $value) {	
-        @if $setting == 'enabled' {
-            @include extend($value);
-        } @else {
-            @include extend($setting);
+
+    // Determine if the option's value is our value of interest
+    $enabled: if(
+        $target == $value, true, false
+    );
+
+    @at-root {
+
+        // Store the styles in the placeholder
+        %#{$placeholder} {
+            @content;
         }
-    }
-    @include modifier($modifier) {	
-        @content;
-    }
-}
-/// Used to merge a module's default configuration with any custom 
-/// values passed to the module
-/// @author Edmund Reed | @esr360
-/// @group synergy
-/// @access public
-/// @param {map} $map-old - The map which will store default configuration
-/// @param {map} $map-new - The map which will hold custom values
-@function config($map-old, $map-new) {
 
-    $map-old: map-merge((
-        'selector-type'   : $selector-type,
-        'extend-options'  : $extend-options,
-        'output-JSON'     : $output-JSON
-    ), $map-old);
+        @include module($module) {
 
-    $map-old: map-merge-deep($map-old, $map-new);
-
-    // Store merged map in a variable
-    $config: $map-old !global;
-
-    // Output options to JSON
-    @if option($map-old, 'output-JSON') {
-        // remove superfluous keys from JSON
-        $map-old: map-remove($map-old, 
-            'selector-type', 'extend-options', 'output-JSON'
-        );
-        // add the module to the list of modules
-        $_modules: map-merge-deep(
-            (map-get($map-old, 'name') : ($map-old)), $_modules
-        ) !global;
-    }
-
-    // Return merged map
-    @return $map-old;
-
-}
-/// Set a key in an existing map
-/// @author Sam Richard
-/// @group synergy
-/// @param $map
-/// @param $key
-/// @param $value
-@function map-set($map, $key, $value) {
-    @return map-merge($map, ($key: $value));
-}
-/// Set a nested key in an existing map
-/// @author Sam Richard
-/// @group synergy
-/// @param $map
-/// @param $keys
-/// @param $value
-@function map-set-deep($map, $keys, $value) {
-
-    $private-sassy-maps-suppress-warnings: true !global;
-    $length: length($keys);
-    $get-keys: ();
-    $map-level: ();
-
-    @if $length > 1 {
-        $get-keys: get-keys($keys, $length);
-        $map-level: map-get-deep($map, $get-keys);
-    }
-
-    $merge: (nth($keys, $length): $value);
-        
-    @if $map-level {
-        $merge: map-merge($map-level, $merge);
-    }
-
-    @for $i from ($length * -1 + 1) through -1 {
-        $j: abs($i);
-        $key: nth($keys, $j);
-        // @debug $get-keys;
-        @if $j > 1 {
-            $get-keys: get-keys($keys, $j);
-            $map-level: map-get-deep($map, $get-keys);
-            @if $map-level {
-                $merge: map-merge($map-level, ($key: $merge));
+            // Output the styles if the option is enabled
+            @if ($enabled) {
+                @extend %#{$placeholder};
             }
-            @else {
-                $merge: ($key: $merge);
-            }
-        }
-        @else {
-            $merge: ($key: $merge);
-        }
-    }
 
-    $map: map-merge($map, $merge);
-    $private-sassy-maps-suppress-warnings: false !global;
-
-    @return $map;
-
-}
-/// Used to recursively merge (deep merge) two maps
-/// @author Pedr Browne
-/// @group synergy
-/// @param $map-old - The map which will store default configuration
-/// @param $map-new - The map which will hold custom values
-/// @param $overwrite - The map which will hold custom values
-@function map-merge-deep($map-old, $map-new, $overwrite: true) {
-
-    // Iterate through each value of the new map
-    @each $key, $new-value in $map-new {
-        // Check if that value already exists on the old map
-        @if map-has-key($map-old, $key) {
-            // There is an existing key
-            $old-value: map-get($map-old, $key);
-            @if type-of($new-value) == map and type-of($old-value) == map {
-                // If both are maps, recurse regardless of $overwrite
-                $merged-value: map-merge-deep($old-value, $new-value);
-                $map-old: map-set($map-old, $key, $merged-value);	
-            } @else {
-                // Otherwise check $overwrite
-                @if $overwrite{
-                    $map-old: map-set($map-old, $key, $new-value);
+            // Create a modifier for the option
+            @include modifier($option) {
+                @include modifier($value) {
+                    @extend %#{$placeholder};
                 }
             }
-        } @else {
-            // There is no existing key to add
-            $map-old: map-set($map-old, $key, $new-value);
+
         }
+
     }
 
-    @return $map-old;
-
-}
-/// Alias function to map-deep-get()
-/// @author Edmund Reed | @esr360
-/// @group synergy
-/// @param {map} $module - the module you are interested in
-/// @param {arglist} $keys - the key you are interested in
-///
-/// @todo Why doesn't this work? :(
-///
-///     @function option($map, $keys...) {
-///         @return map-deep-get($map, $keys...);
-///     }
-@function option($module, $keys...) {
-    @each $key in $keys {
-        $module: map-get($module, $key);
-    }
-    @return $module;
-}
-/// Alias function to option()
-/// @author Edmund Reed | @esr360
-/// @group synergy
-/// @param $map
-/// @param $keys
-@function setting($map, $keys...) {
-    @return option($map, $keys...);
-}
-/// Get a value from the current module's configuration
-/// @author Edmund Reed | @esr360
-/// @group synergy
-/// @param $options
-@function this($options...) {
-    @return option($config, $options...)
 }
