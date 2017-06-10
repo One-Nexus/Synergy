@@ -384,7 +384,6 @@ $module: null !default;
 /// values passed to the module
 ///
 /// @author [@esr360](http://twitter.com/esr360)
-/// @group Synergy
 /// @access public
 ///
 /// @param {map} $map-old - The map which will store default configuration
@@ -408,7 +407,6 @@ $module: null !default;
 /// Return a CSS property if the passed option is enabled
 ///
 /// @author [@esr360](http://twitter.com/esr360)
-/// @group Synergy
 /// @access public
 ///
 /// @param {string|list} $option - the desired option
@@ -535,7 +533,6 @@ $module: null !default;
 /// Alias function to option()
 ///
 /// @author [@esr360](http://twitter.com/esr360)
-/// @group Synergy
 /// @access public
 ///
 /// @param {map} $map
@@ -546,7 +543,6 @@ $module: null !default;
 /// Get a value from the current module's configuration
 ///
 /// @author [@esr360](http://twitter.com/esr360)
-/// @group Synergy
 /// @access public
 ///
 /// @param {arglist} $options
@@ -712,7 +708,6 @@ $module: null !default;
 /// Create a component based off the main module
 ///
 /// @author [@esr360](http://twitter.com/esr360)
-/// @group Synergy
 /// @access public
 ///
 /// @param {string|list} $components - The component or components to be used
@@ -791,7 +786,6 @@ $module: null !default;
 /// Alias for component() mixin
 ///
 /// @author [@esr360](http://twitter.com/esr360)
-/// @group Synergy
 /// @access public
 ///
 /// @param {string|list} $components - The component(s) you wish to create
@@ -803,7 +797,6 @@ $module: null !default;
 /// Create a modifier for a module
 ///
 /// @author [@esr360](http://twitter.com/esr360)
-/// @group Synergy
 /// @access public
 ///
 /// @param {string|list} $modifiers  - The modifier(s) which you wish to create
@@ -857,7 +850,6 @@ $module: null !default;
 /// Alias for modifier() mixin
 ///
 /// @author [@esr360](http://twitter.com/esr360)
-/// @group Synergy
 /// @access public
 ///
 /// @param {string|list} $modifiers - The modifier(s) you wish to create
@@ -870,7 +862,6 @@ $module: null !default;
 /// combining the ones you pass
 ///
 /// @author [@esr360](http://twitter.com/esr360)
-/// @group Synergy
 /// @access public
 ///
 /// @param {string|list} $modifiers [null] - The modifiers which you wish to combine
@@ -924,7 +915,6 @@ $module: null !default;
 /// Apply styles to a component when certain conditions are met
 ///
 /// @author [@esr360](http://twitter.com/esr360)
-/// @group Synergy
 /// @access public
 ///
 /// @param {string} $context - The context you wish to use
@@ -954,7 +944,6 @@ $module: null !default;
 /// Apply styles to a module if a passed option returns true
 ///
 /// @author [@esr360](http://twitter.com/esr360)
-/// @group Synergy
 /// @access public
 ///
 /// @param {string} $option - The option which you wish to test against
@@ -1007,7 +996,6 @@ $module: null !default;
 /// Apply styles when a defined option is a particular value
 ///
 /// @author [@esr360](http://twitter.com/esr360)
-/// @group Synergy
 /// @access public
 ///
 /// @param $setting - The setting/option you are targetting
