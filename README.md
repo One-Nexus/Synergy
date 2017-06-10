@@ -2385,6 +2385,9 @@ grunt lint
 # Run JS & Scss unit tests
 grunt test
 
+# Generate distribution file (Scss)
+grunt concat
+
 # Generate SassDoc and JSDoc pages
 grunt docs
 
