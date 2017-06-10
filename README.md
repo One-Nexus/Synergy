@@ -419,7 +419,7 @@ Then just:
 
 #### Module
 
-> [View Real Example](#TODO) | [View SassDocs](http://esr360.github.io/Synergy/docs/sass/#synergy-mixin-module)
+> [View Real Example](https://git.io/vHDX7) | [View SassDocs](http://esr360.github.io/Synergy/docs/sass/#undefined-mixin-module)
 
 The `module()` mixin is what generates the selectors for your module. The mixin accepts 2 parameters:
 
@@ -578,7 +578,7 @@ It is possible to nest modules within one another:
 
 #### Component
 
-> [View Real Example](#TODO) | [View SassDocs](http://esr360.github.io/Synergy/docs/sass/#synergy-mixin-component)
+> [View Real Example](https://git.io/vHDX5) | [View SassDocs](http://esr360.github.io/Synergy/docs/sass/#undefined-mixin-component)
 
 Because of how the selectors are generated, it is not possible to create relating modules which begin with the same namespace. For example, if you have a `header` module with the default `$type` of `flex`, any classes which contain `header-` will receive the core header styles, so if you were to create a `header-button` element, this would inherit the `header` styles, as you are telling Synergy you want a *header* module with a *button* modifier. There are several options to get around this, including:
 
@@ -788,7 +788,7 @@ It is possible to nest components within one another:
 
 #### Modifier
 
-> [View Real Example](#TODO) | [View SassDocs](http://esr360.github.io/Synergy/docs/sass/#synergy-mixin-modifier)
+> [View Real Example](https://git.io/vHDXx) | [View SassDocs](http://esr360.github.io/Synergy/docs/sass/#undefined-mixin-modifier)
 
 The `modifier()` mixin generates the selector for any modifiers for your module, for example a **small** or **large** modifier. This mixin accepts the following paramters:
 
@@ -956,7 +956,7 @@ $modifier-glue: '--';
 
 #### Extend Modifiers
 
-> [View Real Example](#TODO) | [View SassDocs](http://esr360.github.io/Synergy/docs/sass/#synergy-mixin-extend)
+> [View Real Example](https://git.io/vHDXh) | [View SassDocs](http://esr360.github.io/Synergy/docs/sass/#undefined-mixin-extend)
 
 This mixin allows you to extend multiple modifiers into a new, seperate modifer, essentially combining several modifiers into one.
 
@@ -1069,7 +1069,7 @@ For usages like the above, an alias mixin of `_module()` is available. This is t
 
 #### Context
 
-> [View Real Example](#TODO) | [View SassDocs](http://esr360.github.io/Synergy/docs/sass/#synergy-mixin-extend)
+> [View Real Example](https://git.io/vHD1v) | [View SassDocs](http://esr360.github.io/Synergy/docs/sass/#undefined-mixin-extend)
 
 The `context()` mixin allows you to apply styles to your module when certain conditions are met. This mixin accepts 1 parameter:
 
@@ -1205,7 +1205,7 @@ Your configuration can be infinitely nested, like so:
 
 #### Bool Options
 
-> [View Real Example](#TODO) | [View SassDocs](http://esr360.github.io/Synergy/docs/sass/#synergy-mixin-option)
+> [View Real Example](https://git.io/vHD1k) | [View SassDocs](http://esr360.github.io/Synergy/docs/sass/#undefined-mixin-option)
 
 If your option is a bool, you can use the `option()` mixin. The styles added within this mixin will automatically be applied to the module if the option is set to **true**. 
 
@@ -1287,7 +1287,7 @@ $extend-options : false;
 
 #### Non-Bool Options
 
-> [View Real Example](#TODO) | [View SassDocs](http://esr360.github.io/Synergy/docs/sass/#synergy-mixin-value)
+> [View Real Example](https://git.io/vHD1O) | [View SassDocs](http://esr360.github.io/Synergy/docs/sass/#undefined-mixin-value)
 
 If your option is a CSS property, to call the option in your module the `this()` *function* is used, like so:
 
@@ -1300,6 +1300,22 @@ which will generate:
 ```sass
 margin-top: 50px;
 ```
+
+If your desired value is nested, such as:
+
+```sass
+'breakpoints': (
+    'break-1': 420px
+    ...
+)
+```
+
+It would be fetched it like this:
+
+```sass
+this('breakpoints', 'break-1');
+```
+
 
 #### Hybrid Options
 
@@ -1868,7 +1884,7 @@ export { config, synergy, grid, header }
 
 #### Inside themes/Buzz/buzz.scss
 
-The first thing to do is import the app. Then the theme's config is imported (which, thanks to Sass Json Vars, will be accessible via the `$app` variable) and each module is included to output the CSS based off the config from `buzz.json` (the [`custom()`](#TODO) function seen below retreives the module's custom config from the `$app` variable).
+The first thing to do is import the app. Then the theme's config is imported (which, thanks to Sass Json Vars, will be accessible via the `$app` variable) and each module is included to output the CSS based off the config from `buzz.json` (the [`custom()`](http://esr360.github.io/Synergy/docs/sass/#undefined-function-custom) function seen below retreives the module's custom config from the `$app` variable).
 
 ```sass
 @import '../../app';
