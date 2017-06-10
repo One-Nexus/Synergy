@@ -13,6 +13,7 @@
 * [Documentation - Sass](#documentation---sass)
 * [Documentation - JS](#documentation---js)
 * [Creating a Theme](#creating-a-theme)
+* [Development](#development)
 * [Changelog](#changelog)
 
 ## Overview
@@ -2345,6 +2346,54 @@ function breakpoint(media, value) {
 They key part of the above code is `_modules['grid']['breakpoints'][value]`, which fetches the value from the JSON.
 
 ## Development
+
+To develop Synergy for either contributing or personal purposes, following the following recommendations:
+
+### Either Fork or Clone the Repo
+
+```bash
+git clone https://github.com/esr360/Synergy.git
+```
+
+### Install Node Modules
+
+```bash
+# cd Synergy/
+npm install
+```
+
+### Install Grunt
+
+```bash
+npm install -g grunt-cli
+```
+
+### Install Sass JSON Vars
+
+```bash
+gem install sass-json-vars
+```
+
+---
+
+You should now be able to use Grunt to run the various development tasks:
+
+```bash
+# Lint JS & Scss files
+grunt lint
+
+# Run JS & Scss unit tests
+grunt test
+
+# Generate SassDoc and JSDoc pages
+grunt docs
+
+# Run all of the above
+grunt compile
+
+# Run `compile` and set up a watch task for JS and Scss files
+grunt
+```
 
 ## Credits & Notes
 
