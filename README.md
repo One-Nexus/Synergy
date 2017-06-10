@@ -2297,54 +2297,6 @@ Passing buzz.scss through our Sass compiler yields the following CSS:
 
 Every configurable aspect of your project can now quickly and easily be changed from just one file, whilst retaining a completely modular architecture.
 
-#### Media Query Based Example
-
-A popular, practical example of how to use this might be to access your style's breakpoint values to conditionally apply scripts.
-
-Consider the following `grid` module:
-
-```sass
-
-@mixin grid($custom: ()) {
-    
-    $grid: config((
-        // Options
-        'name'              : 'grid',
-        'output-json'       : true,
-        // Breakpoints
-        'breakpoints': (
-            'break-0'       : 0px,
-            'break-1'       : 460px,
-            'break-2'       : 720px,
-            'break-3'       : 940px,
-            'break-4'       : 1200px,
-            'break-5'       : 1400px
-        )
-    ), $custom) !global;
-    
-    ...
-    
-} // @mixin grid
-```
-
-Let's create a function which allows us to do this in our JavaScript:
-
-```js
-if(breakpoint('min-width', 'break-3')) {
-    // do something   
-}
-```
-
-This can be achieved with the following code:
-
-```js
-function breakpoint(media, value) {
-    return window.matchMedia(`(${media}: ${app.config.grid.breakpoints[value]})`).matches;
-}
-```
-
-They key part of the above code is `_modules['grid']['breakpoints'][value]`, which fetches the value from the JSON.
-
 ## Development
 
 ##### Requirements
