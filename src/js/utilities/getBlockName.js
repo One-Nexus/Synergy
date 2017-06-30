@@ -3,8 +3,8 @@
  * 
  * @access private
  * 
- * @param {String} query
- * @param {Object} config
+ * @param {String|Object|HTMLElement} query - query to retrieve module name
+ * @param {Object} [config] - object to retrieve module name
  */
 export function getBlockName(query, config) {
     if (typeof query === 'string' && query.match('^[a-zA-Z0-9_-]+$')) {

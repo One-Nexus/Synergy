@@ -3,11 +3,12 @@
  * 
  * @access private
  * 
- * @param {String} part
- * @param {String} type
- * @param {String} operator
- * @param {String} glue
- * @param {HTMLElement} element
+ * @param {String} block - name of the parent block
+ * @param {String} part - name of the component/modifier of interest
+ * @param {('component'|'modifier')} type - the type of part
+ * @param {String} [operator] - use if setting/unsetting part
+ * @param {String} glue - the glue used by the part of interest
+ * @param {HTMLElement} element - the element to run the function on
  */
 export function blockPart(block, part, type, operator, glue, element) {
     if (part) {

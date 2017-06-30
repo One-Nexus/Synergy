@@ -1,4 +1,10 @@
+///****************************************************************
+/// Synergy
+///
+/// @author [@esr360](http://twitter.com/esr360)
+///****************************************************************
 
+// Utilities
 import { getBlockName    } from './utilities/getBlockName';
 import { blockPart       } from './utilities/blockPart';
 import { isValidSelector } from './utilities/isValidSelector';
@@ -8,10 +14,10 @@ import { isValidSelector } from './utilities/isValidSelector';
  * 
  * @access public
  * 
- * @param {(String|Object)} els
- * @param {Object} custom
- * @param {Function} callback
- * @param {Object} config
+ * @param {(String|HTMLElement|NodeList)} [els]
+ * @param {Object} [custom]
+ * @param {Function} [callback]
+ * @param {Object} [config]
  */
 const synergy = function(els, callback, config, custom) {
 

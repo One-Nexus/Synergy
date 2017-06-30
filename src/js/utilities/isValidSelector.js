@@ -3,7 +3,7 @@
  * 
  * @access private
  * 
- * @param {String} selector
+ * @param {String} selector - the selector to test for validity
  */
 export function isValidSelector(selector) {
     var stub = document.createElement('br');
