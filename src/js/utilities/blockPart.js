@@ -1,14 +1,16 @@
 /**
  * Get or set a component or modifier on a block
  * 
- * @access private
- * 
  * @param {String} block - name of the parent block
  * @param {String} part - name of the component/modifier of interest
  * @param {('component'|'modifier')} type - the type of part
- * @param {String} [operator] - use if setting/unsetting part
+ * @param {String} operator - use if setting/unsetting part
  * @param {String} glue - the glue used by the part of interest
  * @param {HTMLElement} element - the element to run the function on
+ * 
+ * @example blockPart('foo', 'bar', '', '--', 'set', document.getElementById('foo')) // adds class of `foo--bar`
+ * @example blockPart('', 'bar', '', '--', '', document.getElementById('foo')) // returns true or false
+ * @example blockPart('foo', 'bar', 'modifier', '--', '', '') // returns NodeList
  */
 export function blockPart(block, part, type, operator, glue, element) {
     if (part) {
@@ -50,7 +52,7 @@ export function blockPart(block, part, type, operator, glue, element) {
 
         const classes = element.classList.value.split(' ');
 
-        classes.forEach(function(item) {
+        classes.forEach(item => {
             const isPart = item.includes(block) && item.includes(glue);
 
             if (isPart) {
@@ -69,9 +71,7 @@ export function blockPart(block, part, type, operator, glue, element) {
                         parts = parts[0];
                         part.push(parts);
                     } else {
-                        parts.forEach(function(el) {
-                            part.push(el);
-                        });
+                        parts.forEach(el => part.push(el));
                     }
                 }
             }

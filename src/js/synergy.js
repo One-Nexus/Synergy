@@ -1,7 +1,5 @@
 ///****************************************************************
 /// Synergy
-///
-/// @author [@esr360](http://twitter.com/esr360)
 ///****************************************************************
 
 // Utilities
@@ -12,12 +10,21 @@ import { isValidSelector } from './utilities/isValidSelector';
 /**
  * Synergy Module
  * 
+ * @author @esr360 <http://twitter.com/esr360>
+ * 
+ * @module Synergy
  * @access public
  * 
- * @param {(String|HTMLElement|NodeList)} [els]
- * @param {Object} [custom]
- * @param {Function} [callback]
- * @param {Object} [config]
+ * @param {(String|HTMLElement|NodeList)} els - Synergy selector to match elements
+ * @param {Function} [callback] - function to call on matched elements
+ * @param {Object} [config] - config to use when calling the function
+ * @param {Object} [custom] - custom config to use in callback
+ * 
+ * @example synergy('foo').query // returns NodeList
+ * @example synergy('#foo').query // returns NodeList
+ * @example synergy(document.getElementById('foo')).query // returns HTMLElement 
+ * @example synergy('foo', el => callback(el)) // pass each found element to `callback()`
+ * @example synergy('foo', (el, options) => callback(el, options), {default}, {custom}) 
  */
 const synergy = function(els, callback, config, custom) {
 
@@ -30,17 +37,17 @@ const synergy = function(els, callback, config, custom) {
         } else {
             els = document.querySelectorAll(`.${block}, [class*="${block}-"]`);
         }
-    } else if (typeof els === 'object' && ((els[0] instanceof NodeList) || (els[0] instanceof HTMLElement))) {
-        els = els[0];
-    } else if (typeof els === 'object' && typeof els[0] === 'string') {
-        els = document.querySelectorAll(`.${els[0]}, [class*="${els[0]}-"]`);
+    } else if (typeof els === 'object') {
+        if ((els[0] instanceof NodeList) || (els[0] instanceof HTMLElement)) {
+            els = els[0];
+        } else if (typeof els[0] === 'string') {
+            els = document.querySelectorAll(`.${els[0]}, [class*="${els[0]}-"]`);
+        }
     }
 
     if (els) {
         if (els instanceof NodeList) {
-            els.forEach(el => {
-                el.setAttribute('data-module', block);
-            });
+            els.forEach(el => el.setAttribute('data-module', block));
         } else if (els instanceof HTMLElement) {
             els.setAttribute('data-module', block);
         }
@@ -51,13 +58,22 @@ const synergy = function(els, callback, config, custom) {
         config[Object.keys(config)[0]], custom
     ) : custom;
 
+    /** Elements found by the Synergy query */
     exports.query = els;
 
-    exports.modifier = function(modifier, operator, element = els) {
+    /**
+     * @param {String} modifier
+     * @param {String} [operator]
+     */
+    exports.modifier = (modifier, operator, element = els) => {
         return blockPart(block, modifier, 'modifier', operator, '-', element);
     };
 
-    exports.component = function(component, operator, element = els) {
+    /**
+     * @param {String} component
+     * @param {String} [operator]
+     */
+    exports.component = (component, operator, element = els) => {
         return blockPart(block, component, 'component', operator, '_', element);
     };
 
@@ -65,9 +81,7 @@ const synergy = function(els, callback, config, custom) {
         if (els instanceof HTMLElement) {
             return callback(els, options, exports);
         } else {
-            Array.prototype.forEach.call(els, function(el, index) {
-                return callback(el, options, exports);
-            });
+            els.forEach(el => callback(el, options, exports));
         }
     }
 

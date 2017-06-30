@@ -88,7 +88,7 @@ module.exports = function(grunt) {
 
         jsdoc: {
             default : {
-                src: 'src/js',
+                src: ['src/js/**/*.js'],
                 options: {
                     destination: 'docs/js'
                 }
