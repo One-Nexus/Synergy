@@ -137,7 +137,7 @@ describe('Stubbed DOM module', function() {
 
     describe('setting a component', function() {
         beforeEach(function() {
-            synergy(stub).component('foo', true);
+            synergy(stub).component('foo', 'set');
         });
 
         it('returns the correct component', function() {
@@ -151,7 +151,7 @@ describe('Stubbed DOM module', function() {
 
         describe('and setting a modifier', function() {
             beforeEach(function() {
-                synergy(stub).modifier('foo', true);
+                synergy(stub).modifier('foo', 'set');
             });
 
             it('returns the correct modifier', function() {
@@ -165,8 +165,8 @@ describe('Stubbed DOM module', function() {
 
         describe('and setting multiple modifiers', function() {
             beforeEach(function() {
-                synergy(stub).modifier('foo', true);
-                synergy(stub).modifier('bar-qux', true);
+                synergy(stub).modifier('foo', 'set');
+                synergy(stub).modifier('bar-qux', 'set');
             });
             
             it('returns the correct modifiers', function() {
@@ -186,7 +186,7 @@ describe('Stubbed DOM module', function() {
         beforeEach(function() {
             stub.innerHTML = createModuleMarkup();
             stub.childNodes[0].removeAttribute('id');
-            synergy(stub.childNodes[0]).component('nested', true);
+            synergy(stub.childNodes[0]).component('nested', 'set');
         });
 
         it('finds existing component', function() {
@@ -197,7 +197,7 @@ describe('Stubbed DOM module', function() {
 
     describe('setting a modifier', function() {
         beforeEach(function() {
-            synergy(stub).modifier('foo', true);
+            synergy(stub).modifier('foo', 'set');
         });
 
         it('returns the correct modifier', function() {
@@ -212,8 +212,8 @@ describe('Stubbed DOM module', function() {
 
     describe('setting multiple modifiers', function() {
         beforeEach(function() {
-            synergy(stub).modifier('foo', true);
-            synergy(stub).modifier('bar-qux', true);
+            synergy(stub).modifier('foo', 'set');
+            synergy(stub).modifier('bar-qux', 'set');
         });
         
         it('returns the correct modifiers', function() {
