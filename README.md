@@ -22,13 +22,13 @@
 
 Synergy is predominantly a Sass framework but also has an optional JavaScript add-on.
 
-[View SassDoc Documentation](http://esr360.github.io/Synergy/docs/sass)
+[View SassDoc Documentation](http://esr360.github.io/Synergy/docs/sass) | [View JSDoc Documentation](http://esr360.github.io/Synergy/docs/js)
 
-#### Why Use Synergy?
+### Why Use Synergy?
 
 For three reasons:
 
-##### 1. Smarter Selectors
+#### 1. Smarter Selectors
 
 Using BEM ([example source](http://eu.battle.net/heroes/en/)):
 
@@ -50,7 +50,7 @@ panels-list__item--blog--featured--no-summary--image
 
 Synergy takes advantage of CSS attribute wildcard selectors. By looking for classes which contain certain strings as opposed to looking for specific classes, your markup can be much more flexible, allowing you to chain modifiers and components, removing the need for any repetition (i.e. no more 'button button--large button--round').
 
-##### 2. Configurable Modules
+#### 2. Configurable Modules
 
 Configure your modules without touching the source code. Call the Sass mixin and pass your options to it, leaving the module's source code untouched, allowing you to easily change options and styles.
 
@@ -77,7 +77,7 @@ Configure your modules without touching the source code. Call the Sass mixin and
 ));
 ```
 
-###### CSS Output
+##### CSS Output
 
 ```css
 .button, [class*="button-"] {
@@ -87,7 +87,7 @@ Configure your modules without touching the source code. Call the Sass mixin and
 }
 ```
 
-##### 3. Share Configuration with JavaScript
+#### 3. Share Configuration with JavaScript
 
 Given a folder structure similar to the following:
 
@@ -138,6 +138,51 @@ const breakpoint_tablet = config.grid.breakpoints['break-3'];
 if (window.matchMedia(`(min-width: ${breakpoint_tablet})`).matches) {
     // do something when screen width is at least 940px
 }
+```
+
+### module_component-modifier
+
+A module is a UI element which can be comprised of a `.scss` file and optional `.js` and `.json` files, which can be imported into themes and configured by a `theme.json` file or a `theme.scss` file. They can have modifier variants as well as child components which can also have modifiers.
+
+The below pseudocode represents the structure of a module:
+
+```html
+<module class="module-modifier">
+    <component class="module_component-modifier">{content}</component>
+</module
+```
+
+A module will typically resemble the following structure:
+
+```
+|-- modules
+|   |-- modals
+|   |   |-- _modals.scss
+|   |   |-- modals.js
+|   |   |-- modals.json
+|   |   |-- README.md
+```
+
+> _Source_: [One-Nexus/Modals](https://github.com/esr360/One-Nexus/tree/master/assets/modules/elements/modals)
+
+#### Components
+
+A component can be thought of as a "sub-module" of the main parent module. A component is any element wihin a module:
+
+```html
+<div class="modal">
+    <div class="modal_title">Modal Title</div>
+    <div class="modal_content">Modal Content</div>
+    <div class="modal_close">Close Modal</div>
+</div>
+```
+
+#### Modifiers
+
+A modifier can be applied to both modules and components, and allows for variants of the module to be used. There is no limit to the number of modifiers that can be applied to an element.
+
+```html
+<button class="button-round-large">Button</button>
 ```
 
 ## Installation
@@ -1653,9 +1698,12 @@ width: breakpoint('break-3');
 
 ## Documentation - JS
 
+* [Overview](#overview)
 * [60 Second Example](#60-second-example-1)
 * [Parameters](#parameters)
 * [Methods](#methods)
+
+#### Overview
 
 #### 60 Second Example
 
@@ -1699,6 +1747,7 @@ Call the function on the header element:
 ```js
 // Any of the following would work - continue reading to learn more
 header(document.getElementByID('header'));
+header(document.querySelector('#header'));
 header(document.querySelectorAll('.header'));
 header('header');
 ```
