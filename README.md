@@ -165,6 +165,36 @@ A module will typically resemble the following structure:
 
 > _Source_: [One-Nexus/Modals](https://github.com/esr360/One-Nexus/tree/master/assets/modules/elements/modals)
 
+Working with modules:
+
+##### HTML
+
+```html
+<div class="modal">
+
+</div>
+```
+
+##### Sass
+
+> [Read More](#module)
+
+```scss
+@include module('modal') {
+
+}
+```
+
+##### JS
+
+> [Read More](#documentation---js)
+
+```js
+Synergy('modal', modal => {
+
+});
+```
+
 #### Components
 
 A component can be thought of as a "sub-module" of the main parent module. A component is any element wihin a module:
@@ -177,12 +207,80 @@ A component can be thought of as a "sub-module" of the main parent module. A com
 </div>
 ```
 
+Working with components ([read more](#TODO)):
+
+##### HTML
+
+```html
+<div class="modal">
+    <div class="modal_content">
+
+    </div>
+</div>
+```
+
+##### Sass
+
+> [Read More](#component)
+
+```scss
+@include module('modal') {
+    @include component('content') {
+
+    }
+}
+```
+
+##### JS
+
+> [Read More](#method---componentcomponent-set)
+
+```js
+Synergy('modal', modal => {
+    const content = modal.component('content')[0];
+});
+```
+
 #### Modifiers
 
 A modifier can be applied to both modules and components, and allows for variants of the module to be used. There is no limit to the number of modifiers that can be applied to an element.
 
 ```html
 <button class="button-round-large">Button</button>
+```
+
+Working with modifiers ([read more](#TODO)):
+
+##### HTML
+
+```html
+<div class="modal-large">
+
+</div>
+```
+
+##### Sass
+
+> [Read More](#modifier)
+
+```scss
+@include module('modal') {
+    @include modifier('large') {
+
+    }
+}
+```
+
+##### JS
+
+> [Read More](#method---modifiermodifier-set)
+
+```js
+Synergy('modal', modal => {
+    if (modal.modifier('large')) {
+
+    }
+});
 ```
 
 ## Installation
@@ -279,7 +377,7 @@ Or:
 var Synergy = require('synergy');
 ```
 
-> N.B you will need a module bundler like [Webpack](https://babeljs.io/) in order to require/import modules.
+> N.B you will need a module bundler like [Webpack](https://babeljs.io/) in order to require/import modules
 
 You will also need to configure your Sass compiler to use [Sass JSON Vars](https://github.com/vigetlabs/sass-json-vars) as the importer:
 
@@ -291,7 +389,7 @@ sass /PATH/TO/app.scss -r sass-json-vars
 
 ###### Grunt
 
-> N.B Synergy requires Ruby Sass, so if using Grunt you should use the [grunt-contrib-sass](https://github.com/gruntjs/grunt-contrib-sass) compiler.
+> N.B Synergy requires Ruby Sass, so if using Grunt you should use the [grunt-contrib-sass](https://github.com/gruntjs/grunt-contrib-sass) compiler
 
 ```js
 sass: {
@@ -306,7 +404,7 @@ sass: {
 
 ###### Gulp
 
-> N.B Synergy requires Ruby Sass, so if using Gulp you should use the [Gulp Ruby Sass](https://github.com/sindresorhus/gulp-ruby-sass) compiler.
+> N.B Synergy requires Ruby Sass, so if using Gulp you should use the [Gulp Ruby Sass](https://github.com/sindresorhus/gulp-ruby-sass) compiler
 
 ```js
 gulp.task('sass', function () {
