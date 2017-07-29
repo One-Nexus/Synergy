@@ -353,8 +353,6 @@ git submodule add https://github.com/esr360/Synergy.git vendor
 @import 'PATH/TO/synergy';
 ```
 
-> [(Optional) Download synergy.js](dist/synergy.js)
-
 ---
 
 ##### If using synergy.js/JSON config
