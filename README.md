@@ -18,9 +18,7 @@
 
 ## Overview
 
-> A front-end framework for creating modular, configurable and scalable UI components.
-
-Synergy is predominantly a Sass framework but also has an optional JavaScript add-on.
+> A front-end framework for creating modular, configurable and scalable UI components
 
 [View SassDoc Documentation](http://esr360.github.io/Synergy/docs/sass) | [View JSDoc Documentation](http://esr360.github.io/Synergy/docs/js)
 
@@ -28,7 +26,7 @@ Synergy is predominantly a Sass framework but also has an optional JavaScript ad
 
 For three reasons:
 
-#### 1. Smarter Selectors
+#### 1. Smarter Selectors & Dryer Markup
 
 Using BEM ([example source](http://eu.battle.net/heroes/en/)):
 
@@ -2562,6 +2560,14 @@ grunt
 * [Bringing Configuration Objects To Sass](http://hugogiraudel.com/2014/05/05/bringing-configuration-objects-to-sass/)
 
 ## Changelog
+
+### Version 3.7.0
+
+Released: 30th July 2017
+
+###### Release Notes
+
+* Splitting JS into smaller functions
 
 ### Version 3.6.0
 

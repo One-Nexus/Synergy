@@ -404,6 +404,16 @@ $module: null !default;
     @return $map-old;
 
 }
+/// Used to fetch custom module configuration from a global config
+/// file
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @access public
+///
+/// @param {string} $module - The module for which to find configuration
+@function custom($module) {
+    @return if(variable-exists('app') and map-get($app, $module), map-get($app, $module), ())
+}
 /// Return a CSS property if the passed option is enabled
 ///
 /// @author [@esr360](http://twitter.com/esr360)
@@ -891,17 +901,21 @@ $module: null !default;
 
     @each $modifier in $modifiers {
         @if type-of($modifier) == 'string' {
-            $selector: if(
-                $parent, $parent, $module
-            );
+
+            $selector: if($parent, $parent, $module);
+
             @extend [class*="#{$selector}#{$modifier-glue}"][class*="#{$modifier-glue}#{$modifier}"];
-        } @else if type-of($modifier) == 'list' {
+        }
+        @else if type-of($modifier) == 'list' {
+
             $selectors: if(
                 $parent, ('[class*="#{$parent}#{$modifier-glue}"]'), ('[class*="#{$module}#{$modifier-glue}"]')
             );
+
             @each $item in $modifier {
                 $selectors: join($selectors, '[class*="#{$modifier-glue}#{$item}"]', comma);
             }
+
             @extend #{$selectors};
         }
     }

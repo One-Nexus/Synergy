@@ -35,7 +35,7 @@
             $selector: if($parent, $parent, $module);
 
             @extend [class*="#{$selector}#{$modifier-glue}"][class*="#{$modifier-glue}#{$modifier}"];
-        } 
+        }
         @else if type-of($modifier) == 'list' {
 
             $selectors: if(
