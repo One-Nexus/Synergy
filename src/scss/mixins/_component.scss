@@ -20,8 +20,6 @@
 
     $namespace: nth(module-tree(&), length(module-tree(&)));
 
-    @debug module-tree(&);
-
     @if $components {
 
         $selectors: ();
