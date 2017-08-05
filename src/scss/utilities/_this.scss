@@ -5,5 +5,9 @@
 ///
 /// @param {arglist} $options
 @function this($options...) {
-    @return option($config, $options...)
+    @if not option($config, $options...) {
+        @warn '#{$options} not found in #{$module} config';
+    }
+
+    @return option($config, $options...);
 }
