@@ -9,8 +9,13 @@ import { getModuleName   } from './utilities/getModuleName';
 import { blockPart       } from './utilities/blockPart';
 import { isValidSelector } from './utilities/isValidSelector';
 
+// Block Parts
+import { component } from './utilities/component';
+import { modifier  } from './utilities/modifier';
+
 export {
-    getComponents, getDomNodes, getModuleName, blockPart, isValidSelector
+    getComponents, getDomNodes, getModuleName, blockPart, isValidSelector,
+    component, modifier
 }
 
 /**
@@ -44,6 +49,14 @@ const Synergy = function(els, callback, config, custom) {
             domNodes.setAttribute('data-module', module);
         }
     }
+
+    component({
+        target: domNodes,
+        module: module,
+        components: components,
+        query: 'nav',
+        operator: ''
+    });
 
     // Elements found by the Synergy query
     exports.query = domNodes;
