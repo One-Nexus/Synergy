@@ -3,9 +3,15 @@
 ///****************************************************************
 
 // Utilities
-import { getBlockName    } from './utilities/getBlockName';
+import { getComponents   } from './utilities/getComponents';
+import { getDomNodes     } from './utilities/getDomNodes';
+import { getModuleName   } from './utilities/getModuleName';
 import { blockPart       } from './utilities/blockPart';
 import { isValidSelector } from './utilities/isValidSelector';
+
+export {
+    getComponents, getDomNodes, getModuleName, blockPart, isValidSelector
+}
 
 /**
  * Synergy Module
@@ -19,73 +25,46 @@ import { isValidSelector } from './utilities/isValidSelector';
  * @param {Function} [callback] - function to call on matched elements
  * @param {Object} [config] - config to use when calling the function
  * @param {Object} [custom] - custom config to use in callback
- * 
- * @example synergy('foo').query // returns NodeList
- * @example synergy('#foo').query // returns NodeList
- * @example synergy(document.getElementById('foo')).query // returns HTMLElement 
- * @example synergy('foo', el => callback(el)) // pass each found element to `callback()`
- * @example synergy('foo', (el, options) => callback(el, options), {default}, {custom}) 
  */
-const synergy = function(els, callback, config, custom) {
+const Synergy = function(els, callback, config, custom) {
 
-    const block = getBlockName(els, config);
-
-    // Force 'els' into a NodeList || HTMLElement
-    if (typeof els === 'string') {
-        if (isValidSelector(els) && document.querySelectorAll(els).length) {
-            els = document.querySelectorAll(els);
-        } else {
-            els = document.querySelectorAll(`.${block}, [class*="${block}-"]`);
-        }
-    } else if (typeof els === 'object') {
-        if ((els[0] instanceof NodeList) || (els[0] instanceof HTMLElement)) {
-            els = els[0];
-        } else if (typeof els[0] === 'string') {
-            els = document.querySelectorAll(`.${els[0]}, [class*="${els[0]}-"]`);
-        }
-    }
-
-    if (els) {
-        if (els instanceof NodeList) {
-            els.forEach(el => el.setAttribute('data-module', block));
-        } else if (els instanceof HTMLElement) {
-            els.setAttribute('data-module', block);
-        }
-    }
+    const module     = getModuleName(els, config);
+    const domNodes   = getDomNodes(els, module);
+    const components = getComponents(domNodes, module);
 
     // Merge default/custom options
     const options = config ? Object.assign(
         config[Object.keys(config)[0]], custom
     ) : custom;
 
-    /** Elements found by the Synergy query */
-    exports.query = els;
+    if (domNodes) {
+        if (domNodes instanceof NodeList) {
+            domNodes.forEach(el => el.setAttribute('data-module', module));
+        } else if (domNodes instanceof HTMLElement) {
+            domNodes.setAttribute('data-module', module);
+        }
+    }
 
-    /**
-     * @param {String} modifier
-     * @param {String} [operator]
-     */
-    exports.modifier = (modifier, operator, element = els) => {
-        return blockPart(block, modifier, 'modifier', operator, '-', element);
+    // Elements found by the Synergy query
+    exports.query = domNodes;
+
+    exports.modifier = (modifier, operator, element = domNodes) => {
+        return blockPart(module, modifier, 'modifier', operator, '-', element);
     };
 
-    /**
-     * @param {String} component
-     * @param {String} [operator]
-     */
-    exports.component = (component, operator, element = els) => {
-        return blockPart(block, component, 'component', operator, '_', element);
+    exports.component = (component, operator, element = domNodes) => {
+        return blockPart(module, component, 'component', operator, '_', element);
     };
 
     if (callback) {
-        if (els instanceof HTMLElement) {
-            return callback(els, options, exports);
+        if (domNodes instanceof HTMLElement) {
+            return callback(domNodes, options, exports);
         } else {
-            els.forEach(el => callback(el, options, exports));
+            domNodes.forEach(el => callback(el, options, exports));
         }
     }
 
     return exports;
 };
 
-export default synergy;
+export default Synergy;

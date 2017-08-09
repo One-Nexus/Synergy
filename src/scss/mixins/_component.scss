@@ -71,6 +71,7 @@
         @at-root #{$parents} {
             #{$selectors} {
                 @content;
+                @include component-css($components, $config);
             }
         }
     }
@@ -96,12 +97,20 @@
 /// @param {map} $config - The confing to find and output CSS from
 @mixin component-css($components, $config) {
     @each $component in $components {
+
         @if map-has-key($config, $component) and type-of(map-get($config, $component)) == 'map' {
             @each $property, $value in map-get($config, $component) {
+
                 @if index($css-properties, $property) {
                     #{$property}: $value;
+                } @else {
+                    @include component($property) {
+                        @include component-css($property, map-get($config, $component));
+                    }
                 }
+
             }
         }
+
     }
 }

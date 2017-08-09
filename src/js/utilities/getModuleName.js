@@ -10,7 +10,7 @@
  * @example getBlockName([document.getElementById('.foo'), 'bar']) // returns 'bar'
  * @example getBlockName(document.getElementById('.foo'), {foo: {name: 'bar'}}) // returns 'bar'
  */
-export function getBlockName(query, config) {
+export function getModuleName(query, config) {
     if (typeof query === 'string' && query.match('^[a-zA-Z0-9_-]+$')) {
         return query;
     }
