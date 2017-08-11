@@ -10,22 +10,31 @@ import * as Synergy from '../synergy';
  * @param {*} options.operator
  */
 export function component(options) {
-    if (!Synergy.getComponents) {
-        console.warn('Synergy:component - Synergy is missing `getComponents()`');
-    }
 
-    const namespace;
+    const target = (options.target instanceof HTMLElement) ? options.target : options.target[0];
+    const namespace = Synergy.getModuleName(target) + '_' + options.query;
+    const components = Synergy.getComponents(target, options.module);
     const selector = `.${namespace}, [class*="${namespace}-"]`;
-    const childComponent = options.target.querySelectorAll(selector);
+    const childComponent = target.querySelectorAll(selector);
+
+    const operator = () => {
+        if (options.operator === 'set' || options.operator === 'unset') {
+            return (options.operator === 'set') ? 'add' : 'remove';
+        } else {
+            return options.operator;
+        }
+    }
 
     if (options.query) {
 
-        if (options.operator) {
-            return;
-        }
+        if (target instanceof HTMLElement) {
 
-        if (options.target instanceof HTMLElement) {
-            const components = Synergy.getComponents(options.target, options.module);
+            if (operator()) {
+                return target.classList[operator()](namespace);
+            }
+
+            if (childComponent.length !== 0) return childComponent;
+
             let matchesQuery = false;
 
             components.forEach(component => {
@@ -34,16 +43,9 @@ export function component(options) {
                 });
             });
 
-            return matchesQuery;
+            return matchesQuery || document.querySelectorAll(selector);
         }
-
-        if (childComponent.length !== 0) return childComponent;
-
-        return document.querySelectorAll(selector);
     }
     
-    else {
-
-    }
-
+    return components;
 }

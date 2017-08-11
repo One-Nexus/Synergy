@@ -3,19 +3,21 @@
 ///****************************************************************
 
 // Utilities
+import { getBlockName    } from './utilities/getBlockName';
 import { getComponents   } from './utilities/getComponents';
 import { getDomNodes     } from './utilities/getDomNodes';
+import { getModifiers    } from './utilities/getModifiers';
 import { getModuleName   } from './utilities/getModuleName';
-import { blockPart       } from './utilities/blockPart';
 import { isValidSelector } from './utilities/isValidSelector';
+import { stripModifiers  } from './utilities/stripModifiers';
 
 // Block Parts
 import { component } from './utilities/component';
 import { modifier  } from './utilities/modifier';
 
 export {
-    getComponents, getDomNodes, getModuleName, blockPart, isValidSelector,
-    component, modifier
+    getBlockName, getComponents, getDomNodes, getModifiers, getModuleName, 
+    isValidSelector, stripModifiers, component, modifier
 }
 
 /**
@@ -33,9 +35,10 @@ export {
  */
 const Synergy = function(els, callback, config, custom) {
 
-    const module     = getModuleName(els, config);
-    const domNodes   = getDomNodes(els, module);
-    const components = getComponents(domNodes, module);
+    const moduleName = getModuleName(els, config);
+    const domNodes   = getDomNodes(els, moduleName);
+    const components = getComponents(domNodes, moduleName);
+    const modifiers  = getModifiers(domNodes, moduleName);
 
     // Merge default/custom options
     const options = config ? Object.assign(
@@ -44,29 +47,33 @@ const Synergy = function(els, callback, config, custom) {
 
     if (domNodes) {
         if (domNodes instanceof NodeList) {
-            domNodes.forEach(el => el.setAttribute('data-module', module));
+            domNodes.forEach(el => el.setAttribute('data-module', moduleName));
         } else if (domNodes instanceof HTMLElement) {
-            domNodes.setAttribute('data-module', module);
+            domNodes.setAttribute('data-module', moduleName);
         }
     }
-
-    component({
-        target: domNodes,
-        module: module,
-        components: components,
-        query: 'nav',
-        operator: ''
-    });
 
     // Elements found by the Synergy query
     exports.query = domNodes;
 
-    exports.modifier = (modifier, operator, element = domNodes) => {
-        return blockPart(module, modifier, 'modifier', operator, '-', element);
+    exports.modifier = (query, operator, element = domNodes) => {
+        return modifier({
+            target: element,
+            module: moduleName,
+            modifiers: modifiers,
+            query: query,
+            operator: operator
+        });
     };
 
-    exports.component = (component, operator, element = domNodes) => {
-        return blockPart(module, component, 'component', operator, '_', element);
+    exports.component = (query, operator, element = domNodes) => {
+        return component({
+            target: element,
+            module: moduleName,
+            components: components,
+            query: query,
+            operator: operator
+        });
     };
 
     if (callback) {

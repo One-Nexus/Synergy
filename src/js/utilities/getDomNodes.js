@@ -14,7 +14,7 @@ export function getDomNodes(query, module) {
     let domNodes;
 
     if (typeof query === 'string') {
-        if (Synergy.isValidSelector(query) && document.querySelectorAll(query).length) {
+        if (Synergy.isValidSelector(query) && document.querySelectorAll(query).length && query !== module) {
             domNodes = document.querySelectorAll(query);
         } else {
             domNodes = document.querySelectorAll(`.${module}, [class*="${module}-"]`);
