@@ -46,13 +46,25 @@
         }
     }
 
+    $target: false;
+    
+    @if variable-exists('config') and map-has-key($config, 'target') {
+        $target: map-get($config, 'target');
+    }
+
     @if not $disable-output {
         #{$selectors} {
             @content;
             @if not $nested {
                 @include extend-modifiers;
                 @include combine-modifiers;
-                @include module-css($config);
+                @if $target {
+                    #{$target} {
+                        @include module-css($config);
+                    }
+                } @else {
+                    @include module-css($config);
+                }
             }
         }
     }
@@ -136,11 +148,9 @@
         }
 
         // the property is regular CSS
-        @else {
-            @if index($css-properties, $property) {
-                @if type-of($value) != 'map' {
-                    #{$property}: $value;
-                }
+        @else if index($css-properties, $property) {
+            @if type-of($value) != 'map' {
+                #{$property}: $value;
             }
         }
 
