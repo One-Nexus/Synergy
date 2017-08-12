@@ -29,7 +29,7 @@ export function modifier(options) {
                 else if (options.operator === 'unset') {
                     return toggleModifier(options.module, target, options.query, 'unset');
                 }
-                else {
+                else if (options.operator === 'add' || options.operator === 'remove') {
                     return target.classList[options.operator](namespace);
                 }
             }
@@ -44,7 +44,7 @@ export function modifier(options) {
                 });
             });
 
-            if (matchesQuery) return matchesQuery
+            if (matchesQuery || options.operator == 'isset') return matchesQuery
 
             return (querySelector.length === 0) ? false : querySelector;
         }

@@ -121,6 +121,20 @@
             }
         }
 
+        // the property is for hovered states
+        @else if $property == 'hover' {
+            &:hover {
+                @include module-css($value);
+            }
+        }
+
+        // the property is for active states
+        @else if $property == 'active' {
+            @include modifier('active') {
+                @include module-css($value);
+            }
+        }
+
         // the property is regular CSS
         @else {
             @if index($css-properties, $property) {

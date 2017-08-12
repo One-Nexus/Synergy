@@ -103,7 +103,18 @@
 
                 @if index($css-properties, $property) {
                     #{$property}: $value;
-                } @else {
+                }
+                @else if $property == 'hover' {
+                    &:hover {
+                        @include component-css($property, map-get($config, $component));
+                    }
+                }
+                @else if $property == 'active' {
+                    @include modifier('active') {
+                        @include component-css($property, map-get($config, $component));
+                    }
+                }
+                @else {
                     @include component($property) {
                         @include component-css($property, map-get($config, $component));
                     }
