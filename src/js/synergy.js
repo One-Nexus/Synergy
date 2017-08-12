@@ -11,9 +11,9 @@ import { getModuleName   } from './utilities/getModuleName';
 import { isValidSelector } from './utilities/isValidSelector';
 import { stripModifiers  } from './utilities/stripModifiers';
 
-// Block Parts
-import { component } from './utilities/component';
-import { modifier  } from './utilities/modifier';
+// Tools
+import { component } from './tools/component';
+import { modifier  } from './tools/modifier';
 
 export {
     getBlockName, getComponents, getDomNodes, getModifiers, getModuleName, 

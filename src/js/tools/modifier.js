@@ -12,26 +12,26 @@ import * as Synergy from '../synergy';
 export function modifier(options) {
 
     const target = (options.target instanceof HTMLElement) ? options.target : options.target[0];
-    const namespace = Synergy.getModuleName(target) + '-' + options.query;
+    const namespace = Synergy.getBlockName(target, options.module) + '-' + options.query;
     const modifiers = Synergy.getModifiers(target, options.module);
     const selector = `.${namespace}, [class*="${namespace}-"]`;
     const querySelector = document.querySelectorAll(selector);
     const childComponent = target.querySelectorAll(selector);
 
-    const operator = () => {
-        if (options.operator === 'set' || options.operator === 'unset') {
-            return (options.operator === 'set') ? 'add' : 'remove';
-        } else {
-            return options.operator;
-        }
-    }
-
     if (options.query) {
 
         if (target instanceof HTMLElement) {
 
-            if (operator()) {
-                return target.classList[operator()](namespace);
+            if (options.operator) {
+                if (options.operator === 'set') {
+                    return toggleModifier(options.module, target, options.query, 'set');
+                } 
+                else if (options.operator === 'unset') {
+                    return toggleModifier(options.module, target, options.query, 'unset');
+                }
+                else {
+                    return target.classList[options.operator](namespace);
+                }
             }
 
             if (childComponent.length !== 0) return childComponent;
@@ -51,4 +51,23 @@ export function modifier(options) {
     }
     
     return modifiers;
+}
+
+/**
+ * Toggle a modifier on a module
+ * 
+ * @param {*} moduleName 
+ * @param {*} target 
+ * @param {*} query 
+ * @param {*} operator 
+ */
+function toggleModifier(moduleName, target, query, operator) {
+    return target.classList.forEach(className => {
+        if (className.indexOf(moduleName) === 0) {
+            target.classList.remove(className)
+            target.classList.add(
+                (operator === 'set') ? `${className}-${query}` : className.replace('-' + query, '')
+            );
+        }
+    });
 }
