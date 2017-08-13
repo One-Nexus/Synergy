@@ -10,7 +10,7 @@ export function getComponents(block, module) {
     let components;
 
     if (block instanceof HTMLElement) {
-        block.classList.forEach(className => {
+        Array.prototype.forEach.call(block.classList, className => {
             if (className.indexOf(module) === 0) {
                 components = className.split('_').slice(1);
             }

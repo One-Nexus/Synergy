@@ -47,7 +47,7 @@
     }
 
     $target: false;
-    
+
     @if variable-exists('config') and map-has-key($config, 'target') {
         $target: map-get($config, 'target');
     }
@@ -118,7 +118,7 @@
 @mixin module-css($config) {
 
     @each $property, $value in $config {
-        
+
         // the propery is for a modifier
         @if str-slice($property, 1, 1) == $modifier-glue {
             @include modifier(str-replace($property, $modifier-glue, '')) {

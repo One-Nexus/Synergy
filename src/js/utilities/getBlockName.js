@@ -10,7 +10,7 @@ export function getBlockName(block, module) {
     let blockName;
 
     if (block instanceof HTMLElement) {
-        block.classList.forEach(className => {
+        Array.prototype.forEach.call(block.classList, className => {
             if (className.indexOf(module) === 0) {
                 blockName = Synergy.stripModifiers(className);
             }

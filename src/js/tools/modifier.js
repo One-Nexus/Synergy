@@ -1,7 +1,7 @@
 import * as Synergy from '../synergy';
 
 /**
- * Component
+ * Modifier
  * 
  * @param {*} options.target
  * @param {*} options.module
@@ -16,11 +16,12 @@ export function modifier(options) {
     const modifiers = Synergy.getModifiers(target, options.module);
     const selector = `.${namespace}, [class*="${namespace}-"]`;
     const querySelector = document.querySelectorAll(selector);
-    const childComponent = target.querySelectorAll(selector);
 
     if (options.query) {
 
         if (target instanceof HTMLElement) {
+
+            const childModifier = target.querySelectorAll(selector);
 
             if (options.operator) {
                 if (options.operator === 'set') {
@@ -34,17 +35,23 @@ export function modifier(options) {
                 }
             }
 
-            if (childComponent.length !== 0) return childComponent;
+            if (childModifier.length !== 0) return childModifier;
 
             let matchesQuery = false;
 
-            modifiers.forEach(component => {
-                options.modifiers.forEach(queryComponent => {
-                    if (queryComponent === component) return matchesQuery = true;
+            const query = (modifiers !== options.modifiers) ? [options.query] : options.modifiers;
+
+            modifiers.forEach(modifier => {
+                query.forEach(queryModifier => {
+                    if (queryModifier === modifier) {
+                        matchesQuery = true;
+
+                        return matchesQuery;
+                    }
                 });
             });
 
-            if (matchesQuery || options.operator == 'isset') return matchesQuery
+            if (matchesQuery || options.operator == 'isset') return matchesQuery;
 
             return (querySelector.length === 0) ? false : querySelector;
         }
@@ -62,9 +69,9 @@ export function modifier(options) {
  * @param {*} operator 
  */
 function toggleModifier(moduleName, target, query, operator) {
-    return target.classList.forEach(className => {
+    return Array.prototype.forEach.call(target.classList, className => {
         if (className.indexOf(moduleName) === 0) {
-            target.classList.remove(className)
+            target.classList.remove(className);
             target.classList.add(
                 (operator === 'set') ? `${className}-${query}` : className.replace('-' + query, '')
             );

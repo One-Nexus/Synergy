@@ -1,4 +1,4 @@
-import synergy from '../../src/js/synergy.js';
+import Synergy from '../../src/js/Synergy.js';
 
 const assert = require('assert');
 const jsdom  = require('jsdom-global')();
@@ -10,25 +10,25 @@ function createModule(id, tag = 'div') {
     return document.getElementById(id);
 }
 
-function resetModule(element, module = 'module') {
-    element.className = module;
-    element.id = module;
+function resetModule(element, moduleName = 'module') {
+    element.className = moduleName;
+    element.id = moduleName;
     element.innerHTML = '';
     element.removeAttribute('data-module');
 }
 
-function createModuleMarkup(module = 'module') {
-    return `<div class="${module}" id="${module}"></div>`;
+function createModuleMarkup(moduleName = 'module') {
+    return `<div class="${moduleName}" id="${moduleName}"></div>`;
 }
 
 describe('Synergy function', function() {
     it('should exist', function() {
-        assert.equal(typeof synergy, 'function');
+        assert.equal(typeof Synergy, 'function');
     });
     it('should expose method APIs', function() {
-        assert.equal(typeof synergy().component, 'function');
-        assert.equal(typeof synergy().modifier, 'function');
-        assert.equal(typeof synergy().foo, 'undefined');
+        assert.equal(typeof Synergy().component, 'function');
+        assert.equal(typeof Synergy().modifier, 'function');
+        assert.equal(typeof Synergy().foo, 'undefined');
     });
 });
 
@@ -37,8 +37,8 @@ describe('Stubbed DOM module', function() {
     var stub = createModule('stub');
 
     beforeEach('The application should continue to run given null/nonexistant params', function() {
-        synergy(); // no module
-        synergy('qux'); // no existant module
+        Synergy(); // no module
+        Synergy('qux'); // no existant module
     });
 
     afterEach(function() {
@@ -46,16 +46,16 @@ describe('Stubbed DOM module', function() {
     });
 
     it('should not be a component', function() {
-        assert.equal(synergy(stub).component(), false);
+        assert.equal(Synergy(stub).component(), false);
     });
 
     it('should not be a modifier', function() {
-        assert.equal(synergy(stub).modifier(), false);
+        assert.equal(Synergy(stub).modifier(), false);
     });
     
     describe('when initialised via string', function() {
         beforeEach(function() {
-            synergy('module');
+            Synergy('module');
         });
         it('receives correct data-attribute', function() {
             assert.equal(stub.getAttribute('data-module'), 'module');
@@ -64,7 +64,7 @@ describe('Stubbed DOM module', function() {
     
     describe('when initialised via HTMLElement', function() {
         beforeEach(function() {
-            synergy(stub);
+            Synergy(stub);
         });
         it('receives correct data-attribute', function() {
             assert.equal(stub.getAttribute('data-module'), 'module');
@@ -73,7 +73,7 @@ describe('Stubbed DOM module', function() {
     
     describe('when initialised via HTMLElement with custom block name', function() {
         beforeEach(function() {
-            synergy([stub, 'baz']);
+            Synergy([stub, 'baz']);
         });
         it('receives correct data-attribute', function() {
             assert.equal(stub.getAttribute('data-module'), 'baz');
@@ -82,7 +82,7 @@ describe('Stubbed DOM module', function() {
 
     describe('when initialised via NodeList (and required custom block name)', function() {
         beforeEach(function() {
-            synergy([document.querySelectorAll('.module'), 'module']);
+            Synergy([document.querySelectorAll('.module'), 'module']);
         });
         it('receives correct data-attribute', function() {
             assert.equal(stub.getAttribute('data-module'), 'module');
@@ -91,7 +91,7 @@ describe('Stubbed DOM module', function() {
 
     describe('when initialised via NodeList and passing a callback', function() {
         beforeEach(function() {
-            synergy([document.querySelectorAll('.module'), 'qux'], function(el) {
+            Synergy([document.querySelectorAll('.module'), 'qux'], function(el) {
                 el.classList = 'qux';
             });
         });
@@ -109,7 +109,7 @@ describe('Stubbed DOM module', function() {
         };
 
         beforeEach(function() {
-            synergy('module', function(el, options) {
+            Synergy('module', function(el, options) {
                 el.id = options.foo;
             }, defaults);
         });
@@ -124,7 +124,7 @@ describe('Stubbed DOM module', function() {
             };
 
             beforeEach(function() {
-                synergy('module', function(el, options) {
+                Synergy('module', function(el, options) {
                     el.id = options.foo;
                 }, defaults, custom);
             });
@@ -137,47 +137,47 @@ describe('Stubbed DOM module', function() {
 
     describe('setting a component', function() {
         beforeEach(function() {
-            synergy(stub).component('foo', 'set');
+            Synergy(stub).component('foo', 'set');
         });
 
         it('returns the correct component', function() {
-            assert.equal(synergy(stub).component('foo'), true);
-            assert.equal(synergy(stub).component().length, 1);
+            assert.equal(Synergy(stub).component('foo'), true);
+            assert.equal(Synergy(stub).component().length, 1);
         });
 
         it('identifies null component', function() {
-            assert.equal(synergy(stub).component('bar'), false);
+            assert.equal(Synergy(stub).component('bar'), false);
         });
 
         describe('and setting a modifier', function() {
             beforeEach(function() {
-                synergy(stub).modifier('foo', 'set');
+                Synergy(stub).modifier('foo', 'set');
             });
 
             it('returns the correct modifier', function() {
-                assert.equal(synergy(stub).modifier('foo'), true);
+                assert.equal(Synergy(stub).modifier('foo'), true);
             });
 
             it('identifies null modifier', function() {
-                assert.equal(synergy(stub).modifier('bar'), false);
+                assert.equal(Synergy(stub).modifier('bar'), false);
             });
         });
 
         describe('and setting multiple modifiers', function() {
             beforeEach(function() {
-                synergy(stub).modifier('foo', 'set');
-                synergy(stub).modifier('bar-qux', 'set');
+                Synergy(stub).modifier('foo', 'set');
+                Synergy(stub).modifier('bar-qux', 'set');
             });
             
             it('returns the correct modifiers', function() {
-                assert.equal(synergy(stub).modifier('foo'), true);
-                assert.equal(synergy(stub).modifier('bar'), true);
-                assert.equal(synergy(stub).modifier('qux'), true);
-                assert.equal(synergy(stub).modifier().length, 3);
+                assert.equal(Synergy(stub).modifier('foo'), true);
+                assert.equal(Synergy(stub).modifier('bar'), true);
+                assert.equal(Synergy(stub).modifier('qux'), true);
+                assert.equal(Synergy(stub).modifier().length, 3);
             });
 
             it('identifies null modifier', function() {
-                assert.equal(synergy(stub).modifier('fizz'), false);
+                assert.equal(Synergy(stub).modifier('fizz'), false);
             });
         });
     });
@@ -186,46 +186,46 @@ describe('Stubbed DOM module', function() {
         beforeEach(function() {
             stub.innerHTML = createModuleMarkup();
             stub.childNodes[0].removeAttribute('id');
-            synergy(stub.childNodes[0]).component('nested', 'set');
+            Synergy(stub.childNodes[0]).component('nested', 'set');
         });
 
         it('finds existing component', function() {
-            assert.equal(synergy(stub).component('nested')[0].classList.contains('module_nested'), true);
-            assert.equal(synergy(stub).component('nested')[0].classList.contains('module_foo'), false);
+            assert.equal(Synergy(stub).component('nested')[0].classList.contains('module_nested'), true);
+            assert.equal(Synergy(stub).component('nested')[0].classList.contains('module_foo'), false);
         });
     });
 
     describe('setting a modifier', function() {
         beforeEach(function() {
-            synergy(stub).modifier('foo', 'set');
+            Synergy(stub).modifier('foo', 'set');
         });
 
         it('returns the correct modifier', function() {
-            assert.equal(synergy(stub).modifier('foo'), true);
-            assert.equal(synergy(stub).modifier().length, 1);
+            assert.equal(Synergy(stub).modifier('foo'), true);
+            assert.equal(Synergy(stub).modifier().length, 1);
         });
 
         it('identifies null modifier', function() {
-            assert.equal(synergy(stub).modifier('bar'), false);
+            assert.equal(Synergy(stub).modifier('bar'), false);
         });
     });
 
     describe('setting multiple modifiers', function() {
         beforeEach(function() {
-            synergy(stub).modifier('foo', 'set');
-            synergy(stub).modifier('bar-qux', 'set');
+            Synergy(stub).modifier('foo', 'set');
+            Synergy(stub).modifier('bar-qux', 'set');
         });
         
         it('returns the correct modifiers', function() {
-            assert.equal(synergy(stub).modifier('foo'), true);
-            assert.equal(synergy(stub).modifier('bar'), true);
-            assert.equal(synergy(stub).modifier('qux'), true);
-            assert.equal(synergy(stub).modifier().length, 3);
+            assert.equal(Synergy(stub).modifier('foo'), true);
+            assert.equal(Synergy(stub).modifier('bar'), true);
+            assert.equal(Synergy(stub).modifier('qux'), true);
+            assert.equal(Synergy(stub).modifier().length, 3);
         });
 
         it('identifies null modifier', function() {
-            assert.equal(synergy(stub).modifier('fizz'), false);
-            assert.equal(synergy(stub).modifier('foo-fizz'), false);
+            assert.equal(Synergy(stub).modifier('fizz'), false);
+            assert.equal(Synergy(stub).modifier('foo-fizz'), false);
         });
     });
 

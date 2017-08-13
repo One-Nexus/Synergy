@@ -18,7 +18,7 @@ import { modifier  } from './tools/modifier';
 export {
     getBlockName, getComponents, getDomNodes, getModifiers, getModuleName, 
     isValidSelector, stripModifiers, component, modifier
-}
+};
 
 /**
  * Synergy Module

@@ -15,22 +15,24 @@ export function component(options) {
     const namespace = Synergy.getModuleName(target) + '_' + options.query;
     const components = Synergy.getComponents(target, options.module);
     const selector = `.${namespace}, [class*="${namespace}-"]`;
-    const childComponent = target.querySelectorAll(selector);
-
-    const operator = () => {
-        if (options.operator === 'set' || options.operator === 'unset') {
-            return (options.operator === 'set') ? 'add' : 'remove';
-        } else {
-            return options.operator;
-        }
-    }
+    const querySelector = document.querySelectorAll(selector);
 
     if (options.query) {
 
         if (target instanceof HTMLElement) {
+    
+            const childComponent = target.querySelectorAll(selector);
 
-            if (operator()) {
-                return target.classList[operator()](namespace);
+            if (options.operator) {
+                if (options.operator === 'set') {
+                    return toggleComponent(options.module, target, options.query, 'set');
+                } 
+                else if (options.operator === 'unset') {
+                    return toggleComponent(options.module, target, options.query, 'unset');
+                }
+                else if (options.operator === 'add' || options.operator === 'remove') {
+                    return target.classList[options.operator](namespace);
+                }
             }
 
             if (childComponent.length !== 0) return childComponent;
@@ -38,14 +40,37 @@ export function component(options) {
             let matchesQuery = false;
 
             components.forEach(component => {
-                options.components.forEach(queryComponent => {
-                    if (queryComponent === component) return matchesQuery = true;
-                });
+                if (options.query === component) {
+                    matchesQuery = true;
+
+                    return matchesQuery;
+                }
             });
 
-            return matchesQuery || document.querySelectorAll(selector);
+            if (matchesQuery || options.operator == 'isset') return matchesQuery;
+
+            return (querySelector.length === 0) ? false : querySelector;
         }
     }
     
     return components;
+}
+
+/**
+ * Toggle a component on a module
+ * 
+ * @param {*} moduleName 
+ * @param {*} target 
+ * @param {*} query 
+ * @param {*} operator 
+ */
+function toggleComponent(moduleName, target, query, operator) {
+    return Array.prototype.forEach.call(target.classList, className => {
+        if (className.indexOf(moduleName) === 0) {
+            target.classList.remove(className);
+            target.classList.add(
+                (operator === 'set') ? `${className}_${query}` : className.replace('_' + query, '')
+            );
+        }
+    });
 }

@@ -10,7 +10,7 @@ export function getModifiers(block, module) {
     let modifiers;
 
     if (block instanceof HTMLElement) {
-        block.classList.forEach(className => {
+        Array.prototype.forEach.call(block.classList, className => {
             if (className.indexOf(module) === 0) {
                 modifiers = className.split('-').slice(1);
             }

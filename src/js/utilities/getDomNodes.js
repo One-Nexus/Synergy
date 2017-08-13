@@ -16,13 +16,15 @@ export function getDomNodes(query, module) {
     if (typeof query === 'string') {
         if (Synergy.isValidSelector(query) && document.querySelectorAll(query).length && query !== module) {
             domNodes = document.querySelectorAll(query);
-        } else {
+        }
+        else {
             domNodes = document.querySelectorAll(`.${module}, [class*="${module}-"]`);
         }
     } else if (typeof query === 'object') {
         if ((query[0] instanceof NodeList) || (query[0] instanceof HTMLElement)) {
             domNodes = query[0];
-        } else if (typeof query[0] === 'string') {
+        } 
+        else if (typeof query[0] === 'string') {
             domNodes = document.querySelectorAll(`.${query[0]}, [class*="${query[0]}-"]`);
         }
     }
