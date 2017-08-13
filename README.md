@@ -147,7 +147,7 @@ The below pseudocode represents the structure of a module:
 ```html
 <module class="module-modifier">
     <component class="module_component-modifier">{content}</component>
-</module
+</module>
 ```
 
 A module will typically resemble the following structure:
@@ -345,7 +345,7 @@ git submodule add https://github.com/esr360/Synergy.git vendor
 
 ##### Download
 
-> [Download _synergy.scss](dist/_synergy.scss)
+> [Download _synergy.scss](dist/_Synergy.scss)
 
 ```css
 @import 'PATH/TO/synergy';
@@ -364,13 +364,13 @@ gem install sass-json-vars
 Require/import the Synergy module into your project's JS (the below assumes you have installed Synergy using either NPM or Yarn):
 
 ```js
-import Synergy from 'synergy';
+import Synergy from 'Synergy';
 ```
 
 Or:
 
 ```js
-var Synergy = require('synergy');
+var Synergy = require('Synergy');
 ```
 
 > N.B you will need a module bundler like [Webpack](https://babeljs.io/) in order to require/import modules
@@ -1915,7 +1915,7 @@ The `Synergy()` function accepts 4 parameters:
 * `custom` {Object} - Custom configuration to use when calling the function
 
 ```js
-synergy(els, callback, config, custom);
+Synergy(els, callback, config, custom);
 ```
 
 #### Parameter - `els`
@@ -1931,10 +1931,10 @@ The `els` parameter can either be a single HTML Element, a NodeList, or a string
 The below examples would all target the above HTML element:
 
 ```js
-synergy(document.getElementByID('bar'), function() {...});
-synergy(document.querySelectorAll('.foo'), function() {...});
-synergy('.foo', function() {...});
-synergy('foo', function() {...});
+Synergy(document.getElementByID('bar'), function() {...});
+Synergy(document.querySelectorAll('.foo'), function() {...});
+Synergy('.foo', function() {...});
+Synergy('foo', function() {...});
 ```
 
 #### Parameter - `callback`
@@ -1965,7 +1965,7 @@ const defaults = {
     bar: 2
 };
 
-synergy('foo', function(el, options, exports) {
+Synergy('foo', function(el, options, exports) {
 
     console.log(options.foo); // returns 'qux'
     console.log(options.bar); // returns 2
@@ -2002,12 +2002,12 @@ If this parameter is passed as either `set` or `unset`, the modifier will either
 ```
 
 ```js
-synergy('foo').modifier('fizz'); // returns true
-synergy('foo').modifier('buzz'); // returns true
-synergy('foo').modifier('qux'); // returns false
-synergy('foo').modifier(); // returns ['fizz', 'buzz']
-synergy('foo').modifier('baz', 'set'); // sets new modifier of 'baz'
-synergy('foo').modifier('fizz', 'unset'); // unsets 'fizz' modifier
+Synergy('foo').modifier('fizz'); // returns true
+Synergy('foo').modifier('buzz'); // returns true
+Synergy('foo').modifier('qux'); // returns false
+Synergy('foo').modifier(); // returns ['fizz', 'buzz']
+Synergy('foo').modifier('baz', 'set'); // sets new modifier of 'baz'
+Synergy('foo').modifier('fizz', 'unset'); // unsets 'fizz' modifier
 ```
 
 #### Method - `component(component, operator)`
@@ -2033,12 +2033,12 @@ If this parameter is passed as either `set` or `unset`, the component will eithe
 const el_1 = document.getElementByID('foo');
 const el_2 = document.getElementByID('fooFizz');
 
-synergy(el_1).component('fizz'); // returns HTML Element
-synergy(el_1).component('buzz'); // returns HTML Element
-synergy(el_1).component('qux'); // returns false
-synergy(el_2).component(); // returns ['fizz']
-synergy(el_1).component('baz', 'set'); // sets new component of 'baz'
-synergy(el_1).component('fizz', 'unset'); // unsets 'fizz' component
+Synergy(el_1).component('fizz'); // returns HTML Element
+Synergy(el_1).component('buzz'); // returns HTML Element
+Synergy(el_1).component('qux'); // returns false
+Synergy(el_2).component(); // returns ['fizz']
+Synergy(el_1).component('baz', 'set'); // sets new component of 'baz'
+Synergy(el_1).component('fizz', 'unset'); // unsets 'fizz' component
 ```
 
 ## Creating a Theme
@@ -2088,7 +2088,7 @@ Firstly, Synergy is imported, followed by each module.
 #### Inside app.js
 
 ```js
-import Synergy from 'synergy';
+import Synergy from 'Synergy';
 
 import { grid } from './modules/grid/grid';
 import { header } from './modules/header/header';
@@ -2412,7 +2412,7 @@ import defaults from './header.json';
 
 export function header(els, custom) {
 
-    app.synergy(els, function(header, options) {
+    app.Synergy(els, function(header, options) {
         const offest = options.top
 
         if (options.side.enabled) {
@@ -2423,7 +2423,7 @@ export function header(els, custom) {
             console.log('Header is dark');
         }
 
-        if (app.synergy(header).modifier('dark')) {
+        if (app.Synergy(header).modifier('dark')) {
             console.log('header element has "dark" modifier');
         }
     }, defaults, custom);
