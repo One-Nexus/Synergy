@@ -12,7 +12,7 @@ export function getBlockName(block, module) {
     if (block instanceof HTMLElement) {
         Array.prototype.forEach.call(block.classList, className => {
             if (className.indexOf(module) === 0) {
-                blockName = Synergy.stripModifiers(className);
+                blockName = Synergy.stripModifiers(className, module);
             }
         });
     }
