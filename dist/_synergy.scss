@@ -1739,12 +1739,15 @@ $css-properties: (
             @if not $nested {
                 @include extend-modifiers;
                 @include combine-modifiers;
-                @if $target {
-                    #{$target} {
+                //@debug $modules != map-get($config, 'name'), $modules, map-get($config, 'name');
+                @if $modules == map-get($config, 'name') {
+                    @if $target {
+                        #{$target} {
+                            @include module-css($config);
+                        }
+                    } @else {
                         @include module-css($config);
                     }
-                } @else {
-                    @include module-css($config);
                 }
             }
         }

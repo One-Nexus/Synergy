@@ -35,9 +35,9 @@ export function component(options) {
                 }
             }
 
-            if (childComponent.length !== 0 && !options.target instanceof NodeList) {
-                return childComponent
-            };
+            if (childComponent.length !== 0 && !(options.target instanceof NodeList)) {
+                return childComponent;
+            }
 
             let matchesQuery = false;
 
