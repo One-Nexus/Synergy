@@ -58,8 +58,7 @@
             @if not $nested {
                 @include extend-modifiers;
                 @include combine-modifiers;
-                //@debug $modules != map-get($config, 'name'), $modules, map-get($config, 'name');
-                @if $modules == map-get($config, 'name') {
+                @if $modules == map-get($config, 'name') or $target {
                     @if $target {
                         #{$target} {
                             @include module-css($config);
