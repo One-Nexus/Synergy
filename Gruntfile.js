@@ -19,7 +19,10 @@ module.exports = function(grunt) {
                     'src/scss/_config.scss',
                     // utilities
                     'src/scss/utilities/_config.scss',
+                    'src/scss/utilities/_css-properties.scss',
+                    'src/scss/utilities/_custom.scss',
                     'src/scss/utilities/_enabled.scss',
+                    'src/scss/utilities/_get-styles.scss',
                     'src/scss/utilities/_module-tree.scss',
                     'src/scss/utilities/_option.scss',
                     'src/scss/utilities/_remove-components.scss',
@@ -44,7 +47,7 @@ module.exports = function(grunt) {
             options: {
                 configFile: '.scss-lint.yml'
             },
-            default: [
+            dist: [
                 'src/scss/**/*.scss'
             ]
         },
@@ -53,7 +56,7 @@ module.exports = function(grunt) {
             options: {
                 esversion: 6
             },
-            default: [
+            dist: [
                 'Gruntfile.js', 
                 'src/js/**/*.js', 
                 'unit-testing/js/**/*.js'
@@ -78,7 +81,7 @@ module.exports = function(grunt) {
         },
 
         sassdoc: {
-            default: {
+            dist: {
                 src: 'src/scss',
                 options: {
                     dest: 'docs/sass'
@@ -87,8 +90,8 @@ module.exports = function(grunt) {
         },
 
         jsdoc: {
-            default : {
-                src: 'src/js',
+            dist : {
+                src: ['src/js/**/*.js'],
                 options: {
                     destination: 'docs/js'
                 }

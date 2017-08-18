@@ -11,9 +11,10 @@
 
     // Remove any junk characters
     $selectors: str-replace($selectors, '.', '');
+    $selectors: str-replace($selectors, '[class*="#{$modifier-glue}', '');
     $selectors: str-replace($selectors, '[class*="', '');
+    $selectors: str-replace($selectors, '#{$modifier-glue}"]', '');
     $selectors: str-replace($selectors, '"]', '');
-    $selectors: str-replace($selectors, '#{$modifier-glue}', '');
 
     // Spoof our modules into a list
     $selectors: str-replace($selectors, ' ', ', ');

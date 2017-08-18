@@ -65,11 +65,14 @@
     @if ($parents == '()') {
         @at-root #{$selectors} {
             @content;
+            @include component-css($components, $config);
         }
     } @else {
         @at-root #{$parents} {
             #{$selectors} {
                 @content;
+                // @TODO confirm if below needed
+                // @include component-css($components, $config);
             }
         }
     }
@@ -85,5 +88,41 @@
 @mixin components($components) {
     @include component($components) {
         @content;
+    }
+}
+
+/// Output CSS styles from config
+///
+/// @author [@esr360](http://twitter.com/esr360)
+///
+/// @param {map} $config - The confing to find and output CSS from
+@mixin component-css($components, $config) {
+    @each $component in $components {
+
+        @if map-has-key($config, $component) and type-of(map-get($config, $component)) == 'map' {
+            @each $property, $value in map-get($config, $component) {
+
+                @if index($css-properties, $property) {
+                    #{$property}: $value;
+                }
+                @else if $property == 'hover' {
+                    &:hover {
+                        @include component-css($property, map-get($config, $component));
+                    }
+                }
+                @else if $property == 'active' {
+                    @include modifier('active') {
+                        @include component-css($property, map-get($config, $component));
+                    }
+                }
+                @else {
+                    @include component($property) {
+                        @include component-css($property, map-get($config, $component));
+                    }
+                }
+
+            }
+        }
+
     }
 }

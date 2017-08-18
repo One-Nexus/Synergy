@@ -1,10 +1,18 @@
+///****************************************************************
+/// Synergy - https://github.com/esr360/Synergy
+///
+/// @author [@esr360](http://twitter.com/esr360)
+///****************************************************************
+
 @import '../../node_modules/Sass-Boost/src/sass-boost';
 
 @import 'config';
 
 @import 'utilities/config';
+@import 'utilities/css-properties';
 @import 'utilities/custom';
 @import 'utilities/enabled';
+@import 'utilities/get-styles';
 @import 'utilities/module-tree';
 @import 'utilities/option';
 @import 'utilities/remove-components';

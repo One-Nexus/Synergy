@@ -1,0 +1,15 @@
+/// Get CSS properties and values from a map
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @access public
+///
+/// @param {map} $map - the map from which to retrieve styles
+@mixin get-styles($map) {
+    @each $property, $value in $map {
+        @if type-of($value) != 'map' {
+            @if index($css-properties, $property) {
+                #{$property}: $value;
+            }
+        }
+    }
+}
