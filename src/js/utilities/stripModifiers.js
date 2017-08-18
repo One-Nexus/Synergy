@@ -3,8 +3,6 @@ import * as Synergy from '../synergy';
 /**
  * Strip any modifiers from a block name
  * 
- * @function stripModifiers
- * 
  * @param {String} block
  * @param {String} module
  */

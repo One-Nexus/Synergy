@@ -3,8 +3,6 @@ import * as Synergy from '../synergy';
 /**
  * Modifier
  * 
- * @function modifier
- * 
  * @param {*} options.target
  * @param {*} options.module
  * @param {*} options.modifiers

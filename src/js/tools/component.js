@@ -3,8 +3,6 @@ import * as Synergy from '../synergy';
 /**
  * Component
  * 
- * @function component
- * 
  * @param {*} options.target
  * @param {*} options.module
  * @param {*} options.components
@@ -62,8 +60,6 @@ export function component(options) {
 
 /**
  * Toggle a component on a module
- * 
- * @function toggleComponent
  * 
  * @param {*} moduleName 
  * @param {*} target 

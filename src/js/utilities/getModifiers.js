@@ -3,8 +3,6 @@ import * as Synergy from '../synergy';
 /**
  * Retrieve any modifiers of a Synergy HTML Element
  * 
- * @function getModifiers
- * 
  * @param {*} block
  * @param {String} module
  */

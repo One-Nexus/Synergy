@@ -1,8 +1,6 @@
 /**
  * Attempt to retrieve possible module name from query
  * 
- * @function getModuleName
- * 
  * @param {String|Object|HTMLElement} query - query to retrieve module name
  * @param {Object} [config] - object to retrieve module name
  * 
