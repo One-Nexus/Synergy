@@ -1,3 +1,9 @@
+///****************************************************************
+/// Synergy - https://github.com/esr360/Synergy
+///
+/// @author [@esr360](http://twitter.com/esr360)
+///****************************************************************
+
 import Synergy from '../../src/js/Synergy.js';
 
 const assert = require('assert');

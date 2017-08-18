@@ -1,3 +1,9 @@
+///****************************************************************
+/// Synergy - https://github.com/esr360/Synergy
+///
+/// @author [@esr360](http://twitter.com/esr360)
+///****************************************************************
+
 // Import testing framework
 @import '../../node_modules/sass-true/sass/true';
 
@@ -9,3 +15,5 @@
 @import 'utilities/option';
 @import 'utilities/setting';
 @import 'utilities/this';
+
+@import 'mixins/module';

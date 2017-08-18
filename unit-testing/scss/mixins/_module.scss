@@ -1,0 +1,74 @@
+///****************************************************************
+/// One-Nexus - A toolkit for architecting and constructing 
+/// front-end user-interfaces - https://github.com/esr360/One-Nexus
+///
+/// @author [@esr360](http://twitter.com/esr360)
+///****************************************************************
+
+@include describe('Module') {
+
+    $result: '';
+
+    @include it('Outputs static and chained selectors when only first param is passed') {
+        @include module('foo') {
+            $result: #{&};
+        }
+        @include assert-equal(
+            $result, '.foo, [class*="foo-"]'
+        );
+    }
+
+    @include it('Outputs expected selectors when multiple modules passed') {
+        @include module(('foo', 'bar')) {
+            $result: #{&};
+        }
+        @include assert-equal(
+            $result, '.foo, [class*="foo-"], .bar, [class*="bar-"]'
+        );
+    }
+
+    @include it('Outputs expected selector when `static` type is passed') {
+        @include module('foo', 'static') {
+            $result: #{&};
+        }
+        @include assert-equal(
+            $result, '.foo'
+        );
+    }
+
+    @include it('Outputs expected selectors when `chain` type is passed') {
+        @include module('foo', 'chain') {
+            $result: #{&};
+        }
+        @include assert-equal(
+            $result, '[class*="foo-"]'
+        );
+    }
+
+    @include it('Outputs expected selectors when nested within another module') {
+        @include module('foo') {
+            @include module('bar') {
+                $result: #{&};
+            }
+        }
+        @include assert-equal(
+            $result, '.foo .bar, .foo [class*="bar-"], [class*="foo-"] .bar, [class*="foo-"] [class*="bar-"]'
+        );
+    }
+
+    @include it('Surpresses output when $disable-output is true') {
+        $disable-output: true !global;
+
+        @include assert {
+            @include output {
+                @include module('foo') {
+                    height: 100px;
+                }
+            }
+            @include expect {}
+        }
+
+        $disable-output: false !global;
+    }
+
+}

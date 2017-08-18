@@ -92,9 +92,7 @@ module.exports = function(grunt) {
             },
             js: {
                 options: {
-                    require: [
-                        'babel-core/register'
-                    ]
+                    require: ['babel-core/register']
                 },
                 src: ['unit-testing/js/tests.js']
             }

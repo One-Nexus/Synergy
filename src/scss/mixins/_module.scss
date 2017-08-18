@@ -19,7 +19,7 @@
 
     // disable any output
     $disable-output: if(
-        variable-exists('disable-output'), variable-exists('disable-output'), false
+        variable-exists('disable-output'), $disable-output, false
     );
     @if variable-exists('config') and map-has-key($config, 'disable-output') {
         $disable-output: map-get($config, 'disable-output');
