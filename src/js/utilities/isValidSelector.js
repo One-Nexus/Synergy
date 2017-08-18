@@ -1,6 +1,8 @@
 /**
  * Test the validity (not existance) of a CSS selector
  * 
+ * @function isValidSelector
+ * 
  * @param {String} selector - the selector to test for validity
  * @returns {Bool}
  * 
