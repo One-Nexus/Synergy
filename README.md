@@ -235,6 +235,7 @@ Working with components ([read more](#TODO)):
 
 ```js
 Synergy('modal', modal => {
+    // get this modal's content component
     const content = modal.component('content')[0];
 });
 ```
@@ -276,8 +277,10 @@ Working with modifiers ([read more](#TODO)):
 ```js
 Synergy('modal', modal => {
     if (modal.modifier('large')) {
-
+        // do something if modal has `large` modifier
     }
+    // set modifier of 'foo'
+    modal.modifier('foo', 'set');
 });
 ```
 
@@ -292,16 +295,6 @@ Synergy('modal', modal => {
 <sup>[1]</sup>Required only if you intend on using JSON files to store configuration (i.e. you wish to share config between JS and Sass).
 
 > Ensure your paths are correct as they may differ from below
-
-##### Via Yarn
-
-```
-yarn add Synergy
-```
-
-```css
-@import '../node_modules/Synergy/dist/synergy';
-```
 
 ##### Via NPM
 
@@ -347,13 +340,19 @@ git submodule add https://github.com/esr360/Synergy.git vendor
 
 > [Download _synergy.scss](dist/_Synergy.scss)
 
-```css
+```scss
 @import 'PATH/TO/synergy';
+```
+
+> [Download synergy.min.js](dist/synergy.min.js)
+
+```html
+<script src="PATH/TO/synergy.min.js"></script>
 ```
 
 ---
 
-##### If using synergy.js/JSON config
+##### If sharing configuration between Sass/JS
 
 Install the [Sass JSON Vars](https://github.com/vigetlabs/sass-json-vars) Ruby Gem:
 
@@ -1768,17 +1767,17 @@ You can target modules and components to an infinite depth:
 .button, [class*="button-"] {
     ...
 }
-.buttons_foo, [class*='buttons_foo-'] {
+.button_foo, [class*='button_foo-'] {
     content: 'alpha';
 }
-[class*='buttons_foo-'][class*='-bar'] {
+[class*='button_foo-'][class*='-bar'] {
     content: 'beta';
 }
-[class*='buttons_foo-'][class*='-bar'][class*='-baz'] {
+[class*='button_foo-'][class*='-bar'][class*='-baz'] {
     content: 'gamma';
 }
-[class*='buttons_foo-'][class*='-bar'][class*='-baz'] .buttons_foo_fizz,
-[class*='buttons_foo-'][class*='-bar'][class*='-baz'] [class*='buttons_foo_fizz-'] {
+[class*='button_foo-'][class*='-bar'][class*='-baz'] .buttons_foo_fizz,
+[class*='button_foo-'][class*='-bar'][class*='-baz'] [class*='button_foo_fizz-'] {
     content: 'delta';
 }
 ```
