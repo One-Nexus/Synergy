@@ -5,8 +5,11 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
         
         clean: {
-            dist: {
+            default: {
                 src: 'dist'
+            },
+            dist: {
+                src: 'dist/synergy.js'
             }
         },
                 
@@ -50,6 +53,23 @@ module.exports = function(grunt) {
             dist: [
                 'src/scss/**/*.scss'
             ]
+        },
+
+        browserify: {
+            options: {
+                transform: [['babelify', {presets: ['es2015']}]]
+            },
+            dist: {
+                src: 'src/js/_synergy.js',
+                dest: 'dist/synergy.js'
+            }
+        },
+
+        uglify: {
+            dist: {
+                src: 'dist/synergy.js',
+                dest: 'dist/synergy.min.js'
+            }
         },
 
         jshint: {
@@ -102,9 +122,9 @@ module.exports = function(grunt) {
             scss: {
                 files: 'src/scss/**/*.scss',
                 tasks: [
-                    'concat:scss',
                     'scsslint',
-                    'mochacli:scss',
+                    'mochaTest:scss',
+                    'concat:scss',
                     'sassdoc', 
                     'notify:scss'
                 ],
@@ -116,7 +136,11 @@ module.exports = function(grunt) {
                 files: 'src/js/**/*.js',
                 tasks: [
                     'jshint',
+                    'mochaTest:js',
+                    'browserify',
+                    'uglify',
                     'jsdoc',
+                    'clean:dist',
                     'notify:js'
                 ],
                 options: {
@@ -152,15 +176,18 @@ module.exports = function(grunt) {
     grunt.registerTask('default', [
         'compile',
         'watch',
-    ]); 
+    ]);
         
     // Compile
     grunt.registerTask('compile', [
-        'clean',
-        'concat',
+        'clean:default',
         'lint',
         'test',
+        'browserify',
+        'uglify',
+        'concat',
         'docs',
+        'clean:dist',
         'notify:dist'
     ]);
         
@@ -181,7 +208,7 @@ module.exports = function(grunt) {
         'jsdoc'
     ]);
 
-    grunt.loadNpmTasks('grunt-babel');
+    grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-copy');
