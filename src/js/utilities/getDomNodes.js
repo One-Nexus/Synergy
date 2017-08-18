@@ -3,6 +3,8 @@ import * as Synergy from '../synergy';
 /**
  * Retrieve any components of a Synergy HTML Element
  * 
+ * @function getDomNodes
+ * 
  * @param {*} query
  * @param {String} module
  */

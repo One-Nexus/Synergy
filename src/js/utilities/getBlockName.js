@@ -3,6 +3,8 @@ import * as Synergy from '../synergy';
 /**
  * Get the Synergy block name of an HTMLElement
  * 
+ * @function getBlockName
+ * 
  * @param {*} block
  * @param {String} module
  */

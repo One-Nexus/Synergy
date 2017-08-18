@@ -3,6 +3,8 @@ import * as Synergy from '../synergy';
 /**
  * Modifier
  * 
+ * @function modifier
+ * 
  * @param {*} options.target
  * @param {*} options.module
  * @param {*} options.modifiers
@@ -62,6 +64,8 @@ export function modifier(options) {
 
 /**
  * Toggle a modifier on a module
+ * 
+ * @function toggleModifier
  * 
  * @param {*} moduleName 
  * @param {*} target 
