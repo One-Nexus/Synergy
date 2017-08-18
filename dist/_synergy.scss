@@ -1518,6 +1518,21 @@ $css-properties: (
         @return $false-value;
     }
 }
+/// Get CSS properties and values from a map
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @access public
+///
+/// @param {map} $map - the map from which to retrieve styles
+@mixin get-styles($map) {
+    @each $property, $value in $map {
+        @if type-of($value) != 'map' {
+            @if index($css-properties, $property) {
+                #{$property}: $value;
+            }
+        }
+    }
+}
 /// Create a namespace tree from a passed selector
 ///
 /// @author [@esr360](http://twitter.com/esr360)
@@ -1739,8 +1754,7 @@ $css-properties: (
             @if not $nested {
                 @include extend-modifiers;
                 @include combine-modifiers;
-                //@debug $modules != map-get($config, 'name'), $modules, map-get($config, 'name');
-                @if $modules == map-get($config, 'name') {
+                @if $modules == map-get($config, 'name') or $target {
                     @if $target {
                         #{$target} {
                             @include module-css($config);
