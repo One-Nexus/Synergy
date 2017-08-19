@@ -1,0 +1,21 @@
+/// Output a selector for a module with specified component/modifier
+///
+/// @access public
+///
+/// @param {string|list} $module
+/// @param {string|list} $component
+/// @param {string|list} $modifier
+@function selector($module, $component: null, $modifier: null) {
+    $selector: '';
+
+    @if $component {
+        $selector: '[class*="#{$module}_"][class*="_#{$component}"]';
+    } @else {
+        $selector: '[class*="#{$module}-"]';
+    }
+    @if $modifier {
+        $selector: '#{$selector}[class*="-#{$modifier}"]';
+    }
+
+    @return $selector;
+}
