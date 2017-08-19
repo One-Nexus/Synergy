@@ -5,7 +5,8 @@
 ///
 /// @param {arglist} $options
 @function this($options...) {
-    @if not option($config, $options...) {
+    //@debug option($config, $options...);
+    @if not option($config, $options...) and option($config, $options...) != false {
         @warn '#{$options} not found in #{$module} config';
     }
 
