@@ -1,0 +1,54 @@
+/// Evaluate a configuration value
+///
+/// @access public
+///
+/// @param {string} $func
+@function eval-config($config) {
+
+    @if type-of($config) == 'list' {
+        @return eval-value($config);
+    }
+
+    @else if type-of($config) == 'map' {
+        @each $key, $value in $config {
+            $config: map-set($config, $key, eval-config($value));
+        }
+    }
+
+    @return $config;
+}
+
+
+/// Evaluate a configuration value
+///
+/// @access private
+///
+/// @param {string} $value
+@function eval-value($value) {
+
+    @if type-of($value) == 'list' {
+
+        $func: nth($value, 1);
+        $params: list-remove($value, $func);
+
+        @if type-of($func) == 'string' {
+            @if str-index($func, '#') == 1 {
+                @return call(get-function-name($func), $params...);
+            }
+        }
+
+    }
+
+    @return $value;
+}
+
+/// Derivce function name
+///
+/// @access private
+///
+/// @param {string} $value
+@function get-function-name($function) {
+    $function: str-replace($function, '#', '');
+
+    @return to-lower-case($function);
+}

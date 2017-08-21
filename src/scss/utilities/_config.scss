@@ -4,8 +4,8 @@
 /// @author [@esr360](http://twitter.com/esr360)
 /// @access public
 ///
-/// @param {map} $map-old - The map which will store default configuration
-/// @param {map} $map-new - The map which will hold custom values
+/// @param {map} $map-old - The map which holds default configuration
+/// @param {map} $map-new - The map which holds custom values
 @function config($map-old, $map-new) {
 
     $map-old: map-merge((
@@ -14,6 +14,8 @@
     ), $map-old);
 
     $map-old: map-merge-deep($map-old, $map-new);
+    
+    $map-old: eval-config($map-old);
 
     // Store merged map in a variable
     $config: $map-old !global;

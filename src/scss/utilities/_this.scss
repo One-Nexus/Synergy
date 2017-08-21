@@ -5,10 +5,11 @@
 ///
 /// @param {arglist} $options
 @function this($options...) {
-    //@debug option($config, $options...);
-    @if not option($config, $options...) and option($config, $options...) != false {
+    $value: option($config, $options...);
+
+    @if not $value and $value != false {
         @warn '#{$options} not found in #{$module} config';
     }
 
-    @return option($config, $options...);
+    @return $value;
 }
