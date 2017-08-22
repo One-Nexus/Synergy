@@ -35,7 +35,6 @@
     $parents: ();
 
     @each $selector in & {
-
         // spoof the selector into a list
         $selector: str-replace(inspect($selector), ' ', ', ');
         $selector: selector-parse($selector);

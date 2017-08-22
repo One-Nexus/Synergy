@@ -15,7 +15,7 @@
 
     // Merge default and custom options
     $map-merged: map-merge-deep($map-old, $map-new);
-    
+
     // Evaluate configuration values
     $map-merged: eval-config($map-merged);
 

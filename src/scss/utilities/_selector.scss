@@ -1,10 +1,6 @@
 /// Output a selector for a module with specified component/modifier
 ///
 /// @access public
-///
-/// @param {string|list} $module
-/// @param {string|list} $component
-/// @param {string|list} $modifier
 @function selector($module, $component: null, $modifier: null) {
     $selector: '';
 

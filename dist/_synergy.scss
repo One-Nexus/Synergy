@@ -386,8 +386,8 @@ $module: null !default;
 /// @author [@esr360](http://twitter.com/esr360)
 /// @access public
 ///
-/// @param {map} $map-old - The map which will store default configuration
-/// @param {map} $map-new - The map which will hold custom values
+/// @param {map} $map-old - The map which holds default configuration
+/// @param {map} $map-new - The map which holds custom values
 @function config($map-old, $map-new) {
 
     $map-old: map-merge((
@@ -395,13 +395,17 @@ $module: null !default;
         'extend-options' : $extend-options
     ), $map-old);
 
-    $map-old: map-merge-deep($map-old, $map-new);
+    // Merge default and custom options
+    $map-merged: map-merge-deep($map-old, $map-new);
 
-    // Store merged map in a variable
-    $config: $map-old !global;
+    // Evaluate configuration values
+    $map-merged: eval-config($map-merged);
+
+    // Store config in global variable
+    $config: $map-merged !global;
 
     // Return merged map
-    @return $map-old;
+    @return $map-merged;
 
 }
 $css-properties: (
@@ -1498,7 +1502,7 @@ $css-properties: (
 ///
 /// @param {string} $module - The module for which to find configuration
 @function custom($module) {
-    @return if(variable-exists('app') and map-get($app, $module), map-get($app, $module), ())
+    @return if(variable-exists('app') and map-get($app, $module), map-get($app, $module), ());
 }
 /// Return a CSS property if the passed option is enabled
 ///
@@ -1509,14 +1513,45 @@ $css-properties: (
 /// @returns {*} - $true-value if option enabled, otherwise returns $false-value
 @function enabled($option, $true-value, $false-value: '') {
     $breadcrumb: ();
+
     @each $crumb in $option {
         $breadcrumb: join($breadcrumb, $crumb, comma);
     }
+
     @if value-enabled(map-get-deep($config, $breadcrumb...)) {
         @return $true-value;
     } @else {
         @return $false-value;
     }
+}
+/// Evaluate a configuration value
+///
+/// @access public
+///
+/// @param {string} $func
+@function eval-config($config) {
+
+    @if type-of($config) == 'list' {
+        $func: nth($config, 1);
+        $params: list-remove($config, $func);
+
+        @if type-of($func) == 'string' {
+            @if str-index($func, '#') == 1 {
+                $func: str-replace($func, '#', '');
+                $func: to-lower-case($func);
+
+                @return call($func, $params...);
+            }
+        }
+    }
+
+    @else if type-of($config) == 'map' {
+        @each $key, $value in $config {
+            $config: map-set($config, $key, eval-config($value));
+        }
+    }
+
+    @return $config;
 }
 /// Get CSS properties and values from a map
 ///
@@ -1645,10 +1680,6 @@ $css-properties: (
 /// Output a selector for a module with specified component/modifier
 ///
 /// @access public
-///
-/// @param {string|list} $module
-/// @param {string|list} $component
-/// @param {string|list} $modifier
 @function selector($module, $component: null, $modifier: null) {
     $selector: '';
 
@@ -1680,12 +1711,13 @@ $css-properties: (
 ///
 /// @param {arglist} $options
 @function this($options...) {
-    //@debug option($config, $options...);
-    @if not option($config, $options...) and option($config, $options...) != false {
+    $value: option($config, $options...);
+
+    @if not $value and $value != false {
         @warn '#{$options} not found in #{$module} config';
     }
 
-    @return option($config, $options...);
+    @return $value;
 }
 /// Determine if a passed value should be considered 'enabled'
 ///
@@ -1914,7 +1946,6 @@ $css-properties: (
     $parents: ();
 
     @each $selector in & {
-
         // spoof the selector into a list
         $selector: str-replace(inspect($selector), ' ', ', ');
         $selector: selector-parse($selector);
