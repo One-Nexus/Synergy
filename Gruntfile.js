@@ -25,7 +25,6 @@ module.exports = function(grunt) {
                     'src/scss/utilities/_css-properties.scss',
                     'src/scss/utilities/_custom.scss',
                     'src/scss/utilities/_enabled.scss',
-                    'src/scss/utilities/_eval-config.scss',
                     'src/scss/utilities/_get-styles.scss',
                     'src/scss/utilities/_module-tree.scss',
                     'src/scss/utilities/_option.scss',

@@ -13,5 +13,8 @@ $extend-options: true !default;
 // Include a mixin by importing the file
 $include-now: false !default;
 
+// Custom parser to use for configuration
+$parser: null !default;
+
 // The variable to hold a single module (do not edit)
 $module: null !default;

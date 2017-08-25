@@ -6,7 +6,8 @@
 ///
 /// @param {map} $map-old - The map which holds default configuration
 /// @param {map} $map-new - The map which holds custom values
-@function config($map-old, $map-new) {
+/// @param {string} $parser - Custom parser to use for configuration
+@function config($map-old, $map-new, $parser: $parser) {
 
     $map-old: map-merge((
         'selector-type'  : $selector-type,
@@ -17,7 +18,9 @@
     $map-merged: map-merge-deep($map-old, $map-new);
 
     // Evaluate configuration values
-    $map-merged: eval-config($map-merged);
+    @if ($parser) {
+        $map-merged: call($parser, $map-merged)
+    }
 
     // Store config in global variable
     $config: $map-merged !global;
