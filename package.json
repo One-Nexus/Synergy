@@ -25,7 +25,8 @@
     "url": "https://github.com/esr360/Synergy.git"
   },
   "dependencies": {
-    "Sass-Boost": "^1.1.0"
+    "Sass-Boost": "^1.1.0",
+    "deep-extend": "^0.5.0"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",
