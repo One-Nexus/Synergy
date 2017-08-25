@@ -6,13 +6,13 @@ import * as Synergy from '../synergy';
  * @param {*} block
  * @param {String} module
  */
-export function getComponents(block, module) {
+export function getComponents(block, module, glue) {
     let components;
 
     if (block instanceof HTMLElement) {
         Array.prototype.forEach.call(block.classList, className => {
             if (className.indexOf(module) === 0) {
-                components = className.split('_').slice(1);
+                components = className.split(glue).slice(1);
             }
         });
     }

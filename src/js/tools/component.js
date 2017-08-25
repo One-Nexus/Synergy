@@ -12,9 +12,9 @@ import * as Synergy from '../synergy';
 export function component(options) {
 
     const target = (options.target instanceof HTMLElement) ? options.target : options.target[0];
-    const namespace = Synergy.getModuleName(target) + '_' + options.query;
-    const components = Synergy.getComponents(target, options.module);
-    const selector = `.${namespace}, [class*="${namespace}-"]`;
+    const namespace = Synergy.getModuleName(target) + options.componentGlue + options.query;
+    const components = Synergy.getComponents(target, options.module, options.componentGlue);
+    const selector = `.${namespace}, [class*="${namespace}${options.modifierGlue}"]`;
     const querySelector = document.querySelectorAll(selector);
 
     if (options.query) {
@@ -25,10 +25,10 @@ export function component(options) {
 
             if (options.operator) {
                 if (options.operator === 'set') {
-                    return toggleComponent(options.module, target, options.query, 'set');
+                    return toggleComponent(options.module, target, options.query, 'set', options.componentGlue);
                 } 
                 else if (options.operator === 'unset') {
-                    return toggleComponent(options.module, target, options.query, 'unset');
+                    return toggleComponent(options.module, target, options.query, 'unset', options.componentGlue);
                 }
                 else if (options.operator === 'add' || options.operator === 'remove') {
                     return target.classList[options.operator](namespace);
@@ -66,12 +66,12 @@ export function component(options) {
  * @param {*} query 
  * @param {*} operator 
  */
-function toggleComponent(moduleName, target, query, operator) {
+function toggleComponent(moduleName, target, query, operator, glue) {
     return Array.prototype.forEach.call(target.classList, className => {
         if (className.indexOf(moduleName) === 0) {
             target.classList.remove(className);
             target.classList.add(
-                (operator === 'set') ? `${className}_${query}` : className.replace('_' + query, '')
+                (operator === 'set') ? `${className}${glue}${query}` : className.replace(glue + query, '')
             );
         }
     });

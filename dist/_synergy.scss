@@ -375,8 +375,8 @@ $component-glue: '_' !default;
 // Extend each module option as a modifier by default?
 $extend-options: true !default;
 
-// Include a mixin by importing the file
-$include-now: false !default;
+// Custom parser to use for configuration
+$sass-config-parser: null !default;
 
 // The variable to hold a single module (do not edit)
 $module: null !default;
@@ -388,7 +388,8 @@ $module: null !default;
 ///
 /// @param {map} $map-old - The map which holds default configuration
 /// @param {map} $map-new - The map which holds custom values
-@function config($map-old, $map-new) {
+/// @param {string} $parser - Custom parser to use for configuration
+@function config($map-old, $map-new, $parser: $sass-config-parser) {
 
     $map-old: map-merge((
         'selector-type'  : $selector-type,
@@ -399,7 +400,9 @@ $module: null !default;
     $map-merged: map-merge-deep($map-old, $map-new);
 
     // Evaluate configuration values
-    $map-merged: eval-config($map-merged);
+    @if ($parser) {
+        $map-merged: call($parser, $map-merged);
+    }
 
     // Store config in global variable
     $config: $map-merged !global;
@@ -1494,16 +1497,6 @@ $css-properties: (
     'z-index',
     'zoom'
 ) !default;
-/// Used to fetch custom module configuration from a global config
-/// file
-///
-/// @author [@esr360](http://twitter.com/esr360)
-/// @access public
-///
-/// @param {string} $module - The module for which to find configuration
-@function custom($module) {
-    @return if(variable-exists('app') and map-get($app, $module), map-get($app, $module), ());
-}
 /// Return a CSS property if the passed option is enabled
 ///
 /// @author [@esr360](http://twitter.com/esr360)
@@ -1523,35 +1516,6 @@ $css-properties: (
     } @else {
         @return $false-value;
     }
-}
-/// Evaluate a configuration value
-///
-/// @access public
-///
-/// @param {string} $func
-@function eval-config($config) {
-
-    @if type-of($config) == 'list' {
-        $func: nth($config, 1);
-        $params: list-remove($config, $func);
-
-        @if type-of($func) == 'string' {
-            @if str-index($func, '#') == 1 {
-                $func: str-replace($func, '#', '');
-                $func: to-lower-case($func);
-
-                @return call($func, $params...);
-            }
-        }
-    }
-
-    @else if type-of($config) == 'map' {
-        @each $key, $value in $config {
-            $config: map-set($config, $key, eval-config($value));
-        }
-    }
-
-    @return $config;
 }
 /// Get CSS properties and values from a map
 ///

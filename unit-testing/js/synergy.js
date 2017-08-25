@@ -9,6 +9,13 @@ import Synergy from '../../src/js/Synergy.js';
 const assert = require('assert');
 const jsdom  = require('jsdom-global')();
 
+window.APPUI = {
+    global: {
+        'modifier-glue' : '-',
+        'component-glue': '_'
+    }
+};
+
 function createModule(id, tag = 'div') {
     var stub = document.createElement(tag);
     stub.innerHTML = createModuleMarkup(id);

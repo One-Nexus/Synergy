@@ -4,6 +4,11 @@
 /// @author [@esr360](http://twitter.com/esr360)
 ///****************************************************************
 
+// Export global config
+import * as global from './config.json';
+
+export { global };
+
 // Vendor
 //*****************************************************************
 
@@ -48,10 +53,30 @@ export {
  */
 const Synergy = function(els, callback, config, custom, parser) {
 
+    let componentGlue, modifierGlue;
+
+    // @TODO create getGlue() function
+    if (custom && custom.componentGlue && custom.modifierGlue) {
+        componentGlue = custom.componentGlue.replace(/'/g,'');
+        modifierGlue  = custom.modifierGlue.replace(/'/g,'');
+    }
+    else if (
+        window.APPUI && window.APPUI.global && 
+        window.APPUI.global['component-glue'] && 
+        window.APPUI.global['modifier-glue']
+    ) {
+        componentGlue = window.APPUI.global['component-glue'].replace(/'/g,'');
+        modifierGlue  = window.APPUI.global['modifier-glue'].replace(/'/g,'');
+    }
+    else {
+        componentGlue = global['modifier-glue']  || '_';
+        modifierGlue  = global['component-glue'] || '-';
+    }
+
     const moduleName = getModuleName(els, config);
-    const domNodes   = getDomNodes(els, moduleName);
-    const components = getComponents(domNodes, moduleName);
-    const modifiers  = getModifiers(domNodes, moduleName);
+    const domNodes   = getDomNodes(els, moduleName, modifierGlue);
+    const components = getComponents(domNodes, moduleName, componentGlue);
+    const modifiers  = getModifiers(domNodes, moduleName, modifierGlue);
 
     // Merge default/custom options
     let options = config ? deepextend(
@@ -59,8 +84,10 @@ const Synergy = function(els, callback, config, custom, parser) {
     ) : custom;
 
     // Parse values using custom parser
-    if (parser && typeof parser === 'function') {
+    if (typeof parser === 'function') {
         options = parser(options);
+    } else if (parser && typeof parser.parse === 'function') {
+        options = parser.parse(options);
     }
 
     if (domNodes) {
@@ -80,7 +107,8 @@ const Synergy = function(els, callback, config, custom, parser) {
             module: moduleName,
             modifiers: modifiers,
             query: query,
-            operator: operator
+            operator: operator,
+            glue: modifierGlue
         });
     };
 
@@ -90,7 +118,9 @@ const Synergy = function(els, callback, config, custom, parser) {
             module: moduleName,
             components: components,
             query: query,
-            operator: operator
+            operator: operator,
+            componentGlue: componentGlue,
+            modifierGlue: modifierGlue
         });
     };
 
