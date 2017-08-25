@@ -4,6 +4,16 @@
 /// @author [@esr360](http://twitter.com/esr360)
 ///****************************************************************
 
+// Vendor
+//*****************************************************************
+
+import deepextend from 'deep-extend';
+
+export { deepextend };
+
+// Tools & Utilities
+//*****************************************************************
+
 // Utilities
 import { getBlockName    } from './utilities/getBlockName';
 import { getComponents   } from './utilities/getComponents';
@@ -34,8 +44,9 @@ export {
  * @param {Function} [callback] - function to call on matched elements
  * @param {Object} [config] - config to use when calling the function
  * @param {Object} [custom] - custom config to use in callback
+ * @param {Object} [parser] - custom parser to use for configuration
  */
-const Synergy = function(els, callback, config, custom) {
+const Synergy = function(els, callback, config, custom, parser) {
 
     const moduleName = getModuleName(els, config);
     const domNodes   = getDomNodes(els, moduleName);
@@ -43,9 +54,14 @@ const Synergy = function(els, callback, config, custom) {
     const modifiers  = getModifiers(domNodes, moduleName);
 
     // Merge default/custom options
-    const options = config ? Object.assign(
+    let options = config ? deepextend(
         config[Object.keys(config)[0]], custom
     ) : custom;
+
+    // Parse values using custom parser
+    if (parser && typeof parser === 'function') {
+        options = parser(options);
+    }
 
     if (domNodes) {
         if (domNodes instanceof NodeList) {
