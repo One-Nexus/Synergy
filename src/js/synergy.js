@@ -23,6 +23,7 @@ export { deepextend };
 import { getBlockName    } from './utilities/getBlockName';
 import { getComponents   } from './utilities/getComponents';
 import { getDomNodes     } from './utilities/getDomNodes';
+import { getGlue         } from './utilities/getGlue';
 import { getModifiers    } from './utilities/getModifiers';
 import { getModuleName   } from './utilities/getModuleName';
 import { isValidSelector } from './utilities/isValidSelector';
@@ -33,8 +34,8 @@ import { component } from './tools/component';
 import { modifier  } from './tools/modifier';
 
 export {
-    getBlockName, getComponents, getDomNodes, getModifiers, getModuleName, 
-    isValidSelector, stripModifiers, component, modifier
+    getBlockName, getComponents, getDomNodes, getGlue, getModifiers,
+    getModuleName, isValidSelector, stripModifiers, component, modifier
 };
 
 /**
@@ -53,30 +54,12 @@ export {
  */
 const Synergy = function(els, callback, config, custom, parser) {
 
-    let componentGlue, modifierGlue;
-
-    // @TODO create getGlue() function
-    if (custom && custom.componentGlue && custom.modifierGlue) {
-        componentGlue = custom.componentGlue.replace(/'/g,'');
-        modifierGlue  = custom.modifierGlue.replace(/'/g,'');
-    }
-    else if (
-        window.APPUI && window.APPUI.global && 
-        window.APPUI.global['component-glue'] && 
-        window.APPUI.global['modifier-glue']
-    ) {
-        componentGlue = window.APPUI.global['component-glue'].replace(/'/g,'');
-        modifierGlue  = window.APPUI.global['modifier-glue'].replace(/'/g,'');
-    }
-    else {
-        componentGlue = global['modifier-glue']  || '_';
-        modifierGlue  = global['component-glue'] || '-';
-    }
-
-    const moduleName = getModuleName(els, config);
-    const domNodes   = getDomNodes(els, moduleName, modifierGlue);
-    const components = getComponents(domNodes, moduleName, componentGlue);
-    const modifiers  = getModifiers(domNodes, moduleName, modifierGlue);
+    const componentGlue = getGlue('component', custom);
+    const modifierGlue  = getGlue('modifier', custom);
+    const moduleName    = getModuleName(els, config);
+    const domNodes      = getDomNodes(els, moduleName, modifierGlue);
+    const components    = getComponents(domNodes, moduleName, componentGlue);
+    const modifiers     = getModifiers(domNodes, moduleName, modifierGlue);
 
     // Merge default/custom options
     let options = config ? deepextend(
