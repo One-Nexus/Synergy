@@ -17,6 +17,10 @@
     $type: if(variable-exists('config'), (map-get($config, 'selector-type')), $selector-type)
 ) {
 
+    @if ($module-namespace) {
+        $modules: $module-namespace + $modules;
+    }
+
     // disable any output
     $disable-output: if(
         variable-exists('disable-output'), $disable-output, false

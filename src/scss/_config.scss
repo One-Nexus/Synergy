@@ -1,11 +1,14 @@
-// Set the default selector type (flex | chain | static)
-$selector-type: 'flex' !default;
+// Prepend all selectors with a namespace
+$module-namespace: null !default;
 
 // Set the glue to chain modifiers to modules
 $modifier-glue: '-' !default;
 
 // Set the glue to chain components to modules
 $component-glue: '_' !default;
+
+// Set the default selector type (flex | chain | static)
+$selector-type: 'flex' !default;
 
 // Extend each module option as a modifier by default?
 $extend-options: true !default;

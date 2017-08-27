@@ -25,21 +25,24 @@
 ///     <div class="button-primary">...</div>
 @mixin extend($modifiers: null, $parent: null, $core: false) {
 
+    $namespaced-parent: if($module-namespace and $parent, $module-namespace + $parent, $parent);
+
     @if $core or not $modifiers {
-        @extend .#{$parent};
+        @extend .#{$namespaced-parent};
     }
 
     @each $modifier in $modifiers {
         @if type-of($modifier) == 'string' {
 
-            $selector: if($parent, $parent, $module);
+            $selector: if($parent, $namespaced-parent, $module);
 
             @extend [class*="#{$selector}#{$modifier-glue}"][class*="#{$modifier-glue}#{$modifier}"];
         }
         @else if type-of($modifier) == 'list' {
 
-            $selectors: if(
-                $parent, ('[class*="#{$parent}#{$modifier-glue}"]'), ('[class*="#{$module}#{$modifier-glue}"]')
+            $selectors: if($parent, 
+                ('[class*="#{$namespaced-parent}#{$modifier-glue}"]'), 
+                ('[class*="#{$module}#{$modifier-glue}"]')
             );
 
             @each $item in $modifier {
