@@ -248,7 +248,7 @@ A modifier can be applied to both modules and components, and allows for variant
 <button class="button-round-large">Button</button>
 ```
 
-Working with modifiers ([read more](#TODO)):
+Working with modifiers ([read more](#modifier)):
 
 ##### HTML
 
@@ -559,7 +559,45 @@ Then just:
 
 #### Environment Configuration
 
-#TODO
+> See the [equivilent JavaScript section](#TODO) for reference
+
+Environment configuration is handled by default variables stored in `src/scss/_config.scss`.
+
+##### $module-namespace
+
+Prepend all selectors with a specified namespace
+
+Before:
+
+```css
+.header_wrapper-large {...}
+```
+
+After setting `$module-namespace` to `FIZZ-`:
+
+```css
+.FIZZ-header_wrapper-large {...}
+```
+
+##### $modifier-glue
+
+The glue to use when appending modifiers to a selector
+
+##### $component-glue
+
+The glue to use when appending components to a selector
+
+##### $selector-type
+
+The default selector type to use when creating a module
+
+##### $extend-options
+
+Enabled to create a modifier for each option
+
+##### $sass-config-parser
+
+Placeholder for custom configuration parsers
 
 #### Module
 
@@ -1847,11 +1885,14 @@ width: breakpoint('break-3');
 
 * [Overview](#overview)
 * [60 Second Example](#60-second-example-1)
+* [Environment Configuration](#TODO)
 * [Parameters](#parameters)
 * [Methods](#methods)
 * [Module Configuration](#TODO)
 
 #### Overview
+
+#TODO
 
 #### 60 Second Example
 
@@ -1908,6 +1949,11 @@ header('header', {
     fixed: true
 });
 ```
+
+
+### Environment Configuration
+
+Environment configuration is handled by `src/js/config.json`.
 
 ### Parameters
 
