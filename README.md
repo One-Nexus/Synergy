@@ -205,7 +205,7 @@ A component can be thought of as a "sub-module" of the main parent module. A com
 </div>
 ```
 
-Working with components ([read more](#TODO)):
+Working with components ([read more](#component)):
 
 ##### HTML
 
@@ -412,6 +412,7 @@ gulp.task('sass', function () {
 ## Documentation - Sass
 
 * [60 Second Example](#60-second-example)
+* [Environment Configuration](#global-configuration)
 
 ### Mixins
 
@@ -432,6 +433,7 @@ gulp.task('sass', function () {
 * [Including Your Module](#including-your-module)
 * [Passing Custom CSS to Your Module](#pass-custom-css-to-modules)
 * [Global Configuration](#global-configuration)
+* [JSON Configuration](#json-configuration)
 
 #### 60 Second Example
 
@@ -554,6 +556,10 @@ Then just:
     ...
 </div>
 ```
+
+#### Environment Configuration
+
+#TODO
 
 #### Module
 
@@ -718,13 +724,7 @@ It is possible to nest modules within one another:
 
 > [View Real Example](https://git.io/vHDX5) | [View SassDocs](http://esr360.github.io/Synergy/docs/sass/#undefined-mixin-component)
 
-Because of how the selectors are generated, it is not possible to create relating modules which begin with the same namespace. For example, if you have a `header` module with the default `$type` of `flex`, any classes which contain `header-` will receive the core header styles, so if you were to create a `header-button` element, this would inherit the `header` styles, as you are telling Synergy you want a *header* module with a *button* modifier. There are several options to get around this, including:
-
-* camelCase (headerButton)
-* reversed wording (button-header)
-* underscore (header_button)
-
-To keep things as similar to BEM as possible, Synergy provies an easy way to create relating components using underscores, eg - `header_wrapper`. The `component` mixin accepts 2 parameters:
+The `component` mixin accepts 2 parameters:
 
 * `$components` {string|list} - the name of your component(s) [null] (optional)
 * `$glue` {string} - the glue to chain components to modules ['_'] (required)
@@ -1297,7 +1297,7 @@ As outlined in the [overview](#overview) section, Synergy allows you to configur
 }
 ```
 
-For all intents and purposes, there are 2 types of options; bools and non-bools. A bool option is one whose value determines whether or not some code should be applied. A non-bool option is one whose value is used as a value for a CSS property. In the below example there is one of each.
+For all intents and purposes, there are 2 types of options; bools and non-bools. A bool option is one whose value determines whether or not some styles should be applied. A non-bool option is one whose value is used as a value for a CSS property. In the below example there is one of each.
 
 ```scss
 @mixin header($custom: ()) {
@@ -1839,12 +1839,17 @@ As long as your other modules are included after this one, we can now access the
 width: breakpoint('break-3');
 ```
 
+#### JSON Configuration
+
+#TODO
+
 ## Documentation - JS
 
 * [Overview](#overview)
 * [60 Second Example](#60-second-example-1)
 * [Parameters](#parameters)
 * [Methods](#methods)
+* [Module Configuration](#TODO)
 
 #### Overview
 
@@ -2039,6 +2044,8 @@ Synergy(el_2).component(); // returns ['fizz']
 Synergy(el_1).component('baz', 'set'); // sets new component of 'baz'
 Synergy(el_1).component('fizz', 'unset'); // unsets 'fizz' component
 ```
+
+### Module Configuration
 
 ## Creating a Theme
 
