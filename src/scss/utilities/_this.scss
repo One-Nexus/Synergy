@@ -7,6 +7,10 @@
 @function this($options...) {
     $value: option($config, $options...);
 
+    @if (variable-exists('sass-config-parser') and $sass-config-parser) {
+        $value: call($sass-config-parser, $value);
+    }
+
     @if not $value and $value != false {
         @warn '#{$options} not found in #{$module} config';
     }
