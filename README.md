@@ -1950,7 +1950,6 @@ header('header', {
 });
 ```
 
-
 ### Environment Configuration
 
 Environment configuration is handled by `src/js/config.json`.
