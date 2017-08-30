@@ -20,7 +20,7 @@
 
 [View SassDoc Documentation](http://esr360.github.io/Synergy/docs/sass) | [View JSDoc Documentation](http://esr360.github.io/Synergy/docs/js)
 
-### 60 Second Example
+### Module Example
 
 |-- modules
 |   |-- header
