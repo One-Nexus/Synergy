@@ -22,6 +22,7 @@
 
 ### Module Example
 
+```
 |-- modules
 |   |-- header
 |   |   |-- _header.scss
@@ -34,6 +35,7 @@
 |   |   |-- buzz.json
 |-- _app.scss
 |-- app.js
+```
 
 #### header.json
 
