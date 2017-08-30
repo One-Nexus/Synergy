@@ -6,7 +6,7 @@
 
 [![Synergy](https://raw.githubusercontent.com/esr360/Synergy/gh-pages/logo-small.png "Synergy Logo")](https://github.com/esr360/Synergy)
 
-#### Table of Contents
+#### Wiki Links
 
 * [Overview](#overview)
 * [Installation](#installation)
@@ -20,182 +20,154 @@
 
 [View SassDoc Documentation](http://esr360.github.io/Synergy/docs/sass) | [View JSDoc Documentation](http://esr360.github.io/Synergy/docs/js)
 
-#### 60 Second Example - Sass
+### 60 Second Example
 
-Inside `_header.scss`
+|-- modules
+|   |-- header
+|   |   |-- _header.scss
+|   |   |-- header.js
+|   |   |-- header.json
+|-- themes
+|   |-- Buzz
+|   |   |-- buzz.scss
+|   |   |-- buzz.js
+|   |   |-- buzz.json
+|-- _app.scss
+|-- app.js
+
+#### header.json
+
+Starting with the header module, we'll create all configurable aspects by adding them to `header.json`:
+
+```json
+{
+    "header": {
+        "name": "header",
+        "background": "",
+        "height": "100px",
+        "text-color": "",
+        "link-color": "",
+        "logo": {
+            "height": "50px"
+        },
+        "dark": {
+            "enabled": false,
+            "background": "",
+            "text-color": "",
+            "link-color": ""
+        },
+        "sticky": {
+            "enabled": false,
+            "offset": 0
+        }
+    }
+}
+```
+
+#### _header.scss
+
+Next, inside `_header.scss` we will create the foundation for the `header` CSS - with the goal being to be able to change anything about the header without ever touching this file again (toucing only the above `header.json` file):
 
 ```scss
-@mixin header($custom: ()) {
-    // Merge default config with custom values
-    $header: config((
-        'name'          : 'header',
-        'fixed'         : false,
-        'background'    : #000000,
-        'wrapper-width' : 960px
-    ), $custom);
-    
+@import '../../modules/header/header.json';
+
+@mixin header($custom: custom('header')) {
+
+    $header: config($header, $custom);
+
     @include module {
-        
-        background: this('background');
-        
-        @include modifier('noLogo') {
-            @include module('logo') {
-                display: none;   
-            }    
+
+        color: this('text-color');
+
+        a {
+            color: this('link-color');
         }
-        
-        @include component('wrapper') {
-            width: this('wrapper-width'); 
+
+        @include component('logo') {
+            @include get-styles(this('logo'));
+
+            display: inline-block;
+            vertical-align: middle;
         }
-        
-        @include option('fixed') {
+
+        @include modifier('fixed') {
             position: fixed;
+            width: 100%;
+            top: 0;
         }
-        
+
+        @include option('dark') {
+            @include get-styles(this('dark'));
+
+            color: this('dark', 'text-color');
+
+            a {
+                color: this('dark', 'link-color');
+            }
+        }
+
     }
+
 }
 ```
 
-Wherever you want to output the CSS, in the same or another file...
-
-```scss
-@include header();
-```
-
-To modify the default options, pass them to the mixin with the new value:
-
-```scss
-@include header((
-    'background'    : blue,
-    'wrapper-width' : 90%
-));
-```
-
-###### CSS Output
-
-```css
-.header,
-[class*='header-'] {
-    background: blue;
-}
-[class*='header-'][class*='-noLogo'] .logo,
-[class*='header-'][class*='-noLogo'] [class*='logo-'] {
-    display: none;
-}
-.header_wrapper,
-[class*='header_wrapper-'] {
-    width: 90%;
-}
-[class*='header-'][class*='-fixed'] {
-    position: fixed;
-}
-```
-
-Your markup for the above module may now look something like the following:
-
-```html
-<div class="header">
-    <div class="header_wrapper">
-        <div class="logo">...</div>
-        ...
-    </div>    
-</div>
-```
-
-If you want to hide the logo, you can add the `noLogo` modifier to the header:
-
-```html
-<div class="header-noLogo">
-    ...   
-</div>
-```
-
-If you want to set the header's position to `fixed`, there are two ways you can do this. Firstly, you can again add the appropriate modifier to the markup:
-
-```html
-<div class="header-fixed">
-    ...   
-</div>
-```
-
-N.B. Modifiers can be chained in any order:
-
-```html
-<div class="header-fixed-noLogo">
-    ...   
-</div>
-```
-
-Or you can set the header to be fixed (without the need of a modifier) by passing the option to the mixin when calling it:
-
-```scss
-@include header((
-    'fixed' : true
-));
-```
-
-Then just:
-
-```html
-<div class="header">
-    ...
-</div>
-```
-
-#### 60 Second Example - JavaScript
-
-Inside `header.js`:
+#### header.js
 
 ```js
-import Synergy from './path/to/synergy';
+import * as app from '../../app';
+import defaults from './header.json';
 
-export function header(els, custom) {
+export function header(els = 'header', custom = {}) {
 
-    const defaults = {
-        fixed: false,
-        background: '#000000',
-        wrapper-width : '960px'
-    }
+    custom = app.custom('header', custom);
 
-    Synergy(els, (el, options) => {
-        const wrapper = el.component('wrapper')[0];
-        const fixed = options.fixed || el.modifier('fixed');
+    app.Synergy(els, (header, options) => {
 
-        if (fixed) {
-            console.log('header is fixed');
+        const stickyOffset = options.sticky.offset || header.offsetTop;
+
+        if (options.sticky.enabled || header.modifier('sticky')) {
+            window.addEventListener('load', stickyHeaderHandler);
+            window.addEventListener('scroll', stickyHeaderHandler);
         }
 
-        if (el.modifier('noLogo')) {
-            console.log('header has the "noLogo" modifier');
+        function stickyHeaderHandler() {
+            const operator = (window.scrollY > stickyOffset) ? 'set' : 'unset';
+
+            header.modifier('fixed', operator);
         }
 
-        wrapper.doSomething();
     }, defaults, custom);
-
 }
 ```
 
-Call the function on the header element:
+#### _app.scss
 
-```html
-<div class="header" id="header"></div>
+```scss
+
 ```
 
+#### app.js
+
 ```js
-// Any of the following would work - continue reading to learn more
-header(document.getElementByID('header'));
-header(document.querySelector('#header'));
-header(document.querySelectorAll('.header'));
-header('.header');
-header('header');
+
 ```
 
-To modify the default options, pass them to the function with the new value:
+#### buzz.scss
+
+```scss
+
+```
+
+#### buzz.js
 
 ```js
-header('header', {
-    fixed: true
-});
+
+```
+
+#### buzz.json
+
+```json
+
 ```
 
 ## Changelog
