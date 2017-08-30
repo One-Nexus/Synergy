@@ -142,63 +142,6 @@ Then just:
 </div>
 ```
 
-#### Global Configuration
-
-It is possible to create configuration that can be accessed globally. For example, you may have a `grid` module which has some breakpoint values:
-
-```scss
-@mixin grid($custom: ()) {
-    
-    $grid: ((
-        'breakpoints': ((
-            'break-1': 420px,
-            'break-2': 740px,
-            'break-3': 960px,
-            'break-4': 1200px
-        ));
-    ), $custom);
-    
-    ...
-    
-} // @mixin grid
-```
-
-To access the `$grid` variable in other modules, add the `!global` flag:
-
-```scss
-@mixin grid($custom: ()) {
-    
-    $grid: ((
-        'breakpoints': ((
-            'break-1': 420px,
-            'break-2': 740px,
-            'break-3': 960px,
-            'break-4': 1200px
-        ));
-    ), $custom) !global;
-    
-    ...
-    
-} // @mixin grid
-
-// Mixin to easily access breakpoints map
-@function breakpoint($breakpoint) {
-    @return option($grid, 'breakpoints', $breakpoint);
-}
-```
-
-The `option()` function is used to get values from another module's configuration, like so:
-
-```scss
-width: option($grid, 'breakpoints', 'break-3'); // will return 960px
-```
-
-As long as your other modules are included after this one, we can now access the breakpoint values using:
-
-```scss
-width: breakpoint('break-3');
-```
-
 #### 60 Second Example - JavaScript
 
 Inside `header.js`:
