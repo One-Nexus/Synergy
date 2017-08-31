@@ -1,5 +1,6 @@
 ## TODO
 
+* remove theme from module example
 * look at Global Component Styles docs section
 * document $parser
 * document $namespace

@@ -28,18 +28,15 @@
 |   |   |-- _header.scss
 |   |   |-- header.js
 |   |   |-- header.json
-|-- themes
-|   |-- Buzz
-|   |   |-- buzz.scss
-|   |   |-- buzz.js
-|   |   |-- buzz.json
 |-- _app.scss
 |-- app.js
 ```
 
+> For a detailed analysis of this example, checkout the [Example Uncovered](#TODO) wiki page
+
 #### header.json
 
-Starting with the header module, we'll create all configurable aspects by adding them to `header.json`:
+To start with we'll create all configurable aspects of the module by adding them to `header.json`:
 
 ```json
 {
@@ -50,7 +47,10 @@ Starting with the header module, we'll create all configurable aspects by adding
         "text-color": "",
         "link-color": "",
         "logo": {
-            "height": "50px"
+            "image-path": "",
+            "height": "50px",
+            "width": "200px",
+            "padding": "20px 0"
         },
         "dark": {
             "enabled": false,
@@ -71,11 +71,11 @@ Starting with the header module, we'll create all configurable aspects by adding
 Next, inside `_header.scss` we will create the foundation for the `header` CSS - with the goal being to be able to change anything about the header without ever touching this file again (toucing only the above `header.json` file):
 
 ```scss
-@import '../../modules/header/header.json';
+@import './modules/header/header.json';
 
-@mixin header($custom: custom('header')) {
+@mixin header() {
 
-    $header: config($header, $custom);
+    $config: $header;
 
     @include module {
 
@@ -88,6 +88,8 @@ Next, inside `_header.scss` we will create the foundation for the `header` CSS -
         @include component('logo') {
             @include get-styles(this('logo'));
 
+            background-image: url(this('logo', 'image-path'));
+            background-size: cover;
             display: inline-block;
             vertical-align: middle;
         }
@@ -113,17 +115,17 @@ Next, inside `_header.scss` we will create the foundation for the `header` CSS -
 }
 ```
 
+> For the compiled CSS result checkout the [Example Uncovered](#TODO) page
+
 #### header.js
 
 ```js
-import * as app from '../../app';
-import defaults from './header.json';
+import { Synergy } from '../../app';
+import config from './header.json';
 
-export function header(els = 'header', custom = {}) {
+export function header() {
 
-    custom = app.custom('header', custom);
-
-    app.Synergy(els, (header, options) => {
+    Synergy('header', (header, options) => {
 
         const stickyOffset = options.sticky.offset || header.offsetTop;
 
@@ -138,38 +140,60 @@ export function header(els = 'header', custom = {}) {
             header.modifier('fixed', operator);
         }
 
-    }, defaults, custom);
+    }, config);
+
 }
 ```
 
 #### _app.scss
 
 ```scss
+@import '../node_modules/Synergy/dist/synergy';
 
+@import './modules/header/header';
+
+@include header();
 ```
 
 #### app.js
 
 ```js
+export { default as Synergy } from 'Synergy';
 
+import { header } from './modules/header/header';
+
+header();
 ```
 
-#### buzz.scss
+#### HTML Usage
 
-```scss
+Given the above, we would now be able to use any of the following markup examples:
 
+```html
+<header class="header">
+    <div class="header_logo"></div>
+</header>
 ```
 
-#### buzz.js
-
-```js
-
+```html
+<!-- This is the equivilent of setting `dark.enabled` in `header.json` to `true` -->
+<header class="header-dark">
+    <div class="header_logo"></div>
+</header>
 ```
 
-#### buzz.json
+```html
+<!-- This is the equivilent of setting `sticky.enabled` in `header.json` to `true` -->
+<header class="header-sticky">
+    <div class="header_logo"></div>
+</header>
+```
 
-```json
-
+```html
+<!-- This is the equivilent of setting both `dark.enabled` and `sticky.enabled` in `header.json` to `true` -->
+<header class="header-dark-sticky">
+    <div class="header_logo"></div>
+</header>
 ```
 
 ## Changelog
