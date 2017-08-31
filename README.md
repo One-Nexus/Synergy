@@ -6,6 +6,8 @@
 
 [![Synergy](https://raw.githubusercontent.com/esr360/Synergy/gh-pages/logo-small.png "Synergy Logo")](https://github.com/esr360/Synergy)
 
+> A front-end framework for creating modular, configurable and scalable UI modules
+
 #### Useful Wiki Pages
 
 * [What Is Synergy](https://github.com/esr360/Synergy/wiki/What-Is-Synergy)
@@ -20,8 +22,6 @@
 * [Creating a Theme](https://github.com/esr360/Synergy/wiki/Creating-a-Theme)
 * [Developing Synergy](https://github.com/esr360/Synergy/wiki/Developing-Synergy)
 * [Changelog](https://github.com/esr360/Synergy/wiki/Changelog)
-
-> A front-end framework for creating modular, configurable and scalable UI modules
 
 [View SassDoc Documentation](http://esr360.github.io/Synergy/docs/sass) | [View JSDoc Documentation](http://esr360.github.io/Synergy/docs/js)
 
