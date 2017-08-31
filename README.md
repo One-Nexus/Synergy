@@ -73,7 +73,7 @@ Synergy abstracts a new layer ontop of your UI module's styles and scripts to is
 
 #### _header.scss
 
-Using the Synergy Sass mixins, the foundation for the module's CSS can be written, hard-coding only the core styles for the module - with a goal being to be able to change anything about the header without ever touching this file again (toucing only the above `header.json` file):
+Using the Synergy Sass mixins, the foundation for the module's CSS can be written, hard-coding only the core styles for the module - with a goal of being to be able to change anything about the header without ever touching this file again (toucing only the above `header.json` file):
 
 ```scss
 @import './modules/header/header.json';
@@ -146,6 +146,7 @@ export function header() {
             const operator = (window.scrollY > stickyOffset) ? 'set' : 'unset';
 
             header.modifier('fixed', operator);
+            logo.modifier('small', operator);
         }
 
     }, config);
