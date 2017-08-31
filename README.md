@@ -28,7 +28,7 @@
 |   |   |-- _header.scss
 |   |   |-- header.js
 |   |   |-- header.json
-|-- _app.scss
+|-- app.scss
 |-- app.js
 ```
 
@@ -145,7 +145,7 @@ export function header() {
 }
 ```
 
-#### _app.scss
+#### app.scss
 
 ```scss
 @import '../node_modules/Synergy/dist/synergy';
