@@ -8,16 +8,16 @@
 
 #### Useful Wiki Pages
 
-* [What Is Synergy](wiki/What-Is-Synergy)
-* [Why Use Synergy](wiki/Why-Use-Synergy)
-* [Installation](wiki/Installation)
-* [Getting Started](wiki/Getting-Started)
-* [Project Architecture](wiki/Project-Architecture)
-* [Environment Configuration](wiki/Environment-Configuration)
-* [How To Use](wiki/How-To-Use)
-* [Creating a Theme](wiki/Creating-a-Theme)
-* [Developing Synergy](wiki/Developing-Synergy)
-* [Changelog](#changelog)
+* [What Is Synergy](https://github.com/esr360/Synergy/wiki/What-Is-Synergy)
+* [Why Use Synergy](https://github.com/esr360/Synergy/wiki/Why-Use-Synergy)
+* [Installation](https://github.com/esr360/Synergy/wiki/Installation)
+* [Getting Started](https://github.com/esr360/Synergy/wiki/Getting-Started)
+* [Project Architecture](https://github.com/esr360/Synergy/wiki/Project-Architecture)
+* [Environment Configuration](https://github.com/esr360/Synergy/wiki/Environment-Configuration)
+* [How To Use](https://github.com/esr360/Synergy/wiki/How-To-Use)
+* [Creating a Theme](https://github.com/esr360/Synergy/wiki/Creating-a-Theme)
+* [Developing Synergy](https://github.com/esr360/Synergy/wiki/Developing-Synergy)
+* [Changelog](https://github.com/esr360/Synergy/wiki/Changelog)
 
 > A front-end framework for creating modular, configurable and scalable UI modules
 
