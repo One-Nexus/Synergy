@@ -40,8 +40,8 @@
         }
         @else if type-of($modifier) == 'list' {
 
-            $selectors: if($parent, 
-                ('[class*="#{$namespaced-parent}#{$modifier-glue}"]'), 
+            $selectors: if($parent,
+                ('[class*="#{$namespaced-parent}#{$modifier-glue}"]'),
                 ('[class*="#{$module}#{$modifier-glue}"]')
             );
 

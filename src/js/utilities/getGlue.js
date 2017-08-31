@@ -1,7 +1,7 @@
 /**
  * Get glue
  * 
- * @param {('component'|'modifier)} type
+ * @param {String} type - ['component'|'modifier]
  * @param {Object} custom
  * @param {string} glue
  */
