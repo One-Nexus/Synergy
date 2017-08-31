@@ -16,7 +16,7 @@
 * [Development](#development)
 * [Changelog](#changelog)
 
-> A front-end framework for creating modular, configurable and scalable UI components
+> A front-end framework for creating modular, configurable and scalable UI modules
 
 [View SassDoc Documentation](http://esr360.github.io/Synergy/docs/sass) | [View JSDoc Documentation](http://esr360.github.io/Synergy/docs/js)
 
@@ -198,6 +198,22 @@ Given the above, we would now be able to use any of the following markup example
 
 ## Changelog
 
+### Version 3.8.0
+
+Released: * September 2017
+
+###### Release Notes
+
+* add sass warn message when this('option') doesn't exist
+* fixing issues of module-tree functon stripping hyphens from module name
+* improving how CSS styles are passed to modules
+* processes values in "active" and "hover" entries in config
+* refactoring Synergy.js
+* adding selector() function
+* allow passing of customer parser to parse configuration
+* adding deepextend JS module
+* making component and modifier glue configuable
+
 ### Version 3.7.0
 
 Released: 30th July 2017
@@ -205,26 +221,3 @@ Released: 30th July 2017
 ###### Release Notes
 
 * Splitting JS into smaller functions
-
-### Version 3.6.0
-
-Released: 11th June 2017
-
-###### Release Notes
-
-* Synergy JS module rewritten in ES6
-* Removing Sass-JSON as dependency, replacing with Sass-JSON-Vars
-* Updating Sass-Boost dependency
-* Dependences now node modules instead of git submodules
-* Improving options mixin
-* Adding `value-enabled()` utility function
-* Adding `enabled()` utility function
-* Allow modules to have default modifiers
-* Allow extending of modifiers when including module
-* Allow combining of modifiers when including module
-* Allow module output to be disabled
-* Removing `overwrite()` mixin
-* Removing `overwrite-component()` mixin
-* `module()` mixin is now nestable
-* `component()` mixin is now nestable
-* Adding JavaScript unit tests
