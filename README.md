@@ -15,6 +15,8 @@
 * [Project Architecture](https://github.com/esr360/Synergy/wiki/Project-Architecture)
 * [Environment Configuration](https://github.com/esr360/Synergy/wiki/Environment-Configuration)
 * [How To Use](https://github.com/esr360/Synergy/wiki/How-To-Use)
+* [Sass Mixins](https://github.com/esr360/Synergy/wiki/Sass)
+* [JavaScript](https://github.com/esr360/Synergy/wiki/JavaScript)
 * [Creating a Theme](https://github.com/esr360/Synergy/wiki/Creating-a-Theme)
 * [Developing Synergy](https://github.com/esr360/Synergy/wiki/Developing-Synergy)
 * [Changelog](https://github.com/esr360/Synergy/wiki/Changelog)
