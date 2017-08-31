@@ -22,6 +22,8 @@
 
 ### Module Example
 
+Synergy abstracts a new layer ontop of your UI module's styles and scripts to isolate all configurable aspects in the form of a JSON file.
+
 ```
 |-- modules
 |   |-- header
