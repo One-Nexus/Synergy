@@ -6,14 +6,17 @@
 
 [![Synergy](https://raw.githubusercontent.com/esr360/Synergy/gh-pages/logo-small.png "Synergy Logo")](https://github.com/esr360/Synergy)
 
-#### Wiki Links
+#### Useful Wiki Pages
 
-* [Overview](#overview)
-* [Installation](#installation)
-* [Documentation - Sass](#documentation---sass)
-* [Documentation - JS](#documentation---js)
-* [Creating a Theme](#creating-a-theme)
-* [Development](#development)
+* [What Is Synergy](wiki/What-Is-Synergy)
+* [Why Use Synergy](wiki/Why-Use-Synergy)
+* [Installation](wiki/Installation)
+* [Getting Started](wiki/Getting-Started)
+* [Project Architecture](wiki/Project-Architecture)
+* [Environment Configuration](wiki/Environment-Configuration)
+* [How To Use](wiki/How-To-Use)
+* [Creating a Theme](wiki/Creating-a-Theme)
+* [Developing Synergy](wiki/Developing-Synergy)
 * [Changelog](#changelog)
 
 > A front-end framework for creating modular, configurable and scalable UI modules
@@ -21,8 +24,6 @@
 [View SassDoc Documentation](http://esr360.github.io/Synergy/docs/sass) | [View JSDoc Documentation](http://esr360.github.io/Synergy/docs/js)
 
 ### Module Example
-
-Synergy abstracts a new layer ontop of your UI module's styles and scripts to isolate all configurable aspects in the form of a JSON file.
 
 ```
 |-- modules
@@ -38,7 +39,7 @@ Synergy abstracts a new layer ontop of your UI module's styles and scripts to is
 
 #### header.json
 
-To start with we'll create all configurable aspects of the module by adding them to `header.json`:
+Synergy abstracts a new layer ontop of your UI module's styles and scripts to isolate all configurable aspects in the form of a JSON file:
 
 ```json
 {
@@ -70,7 +71,7 @@ To start with we'll create all configurable aspects of the module by adding them
 
 #### _header.scss
 
-Next, inside `_header.scss` we will create the foundation for the `header` CSS - with the goal being to be able to change anything about the header without ever touching this file again (toucing only the above `header.json` file):
+Using the Synergy Sass mixins, the foundation for the module's CSS can be written, hard-coding only the core styles for the module - with a goal being to be able to change anything about the header without ever touching this file again (toucing only the above `header.json` file):
 
 ```scss
 @import './modules/header/header.json';
@@ -121,6 +122,8 @@ Next, inside `_header.scss` we will create the foundation for the `header` CSS -
 
 #### header.js
 
+Modules, components and modifiers can easily be manipulated using the Synergy function and methods:
+
 ```js
 import { Synergy } from '../../app';
 import config from './header.json';
@@ -130,6 +133,7 @@ export function header() {
     Synergy('header', (header, options) => {
 
         const stickyOffset = options.sticky.offset || header.offsetTop;
+        const logo = header.component('logo')[0];
 
         if (options.sticky.enabled || header.modifier('sticky')) {
             window.addEventListener('load', stickyHeaderHandler);
