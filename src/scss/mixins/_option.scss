@@ -33,6 +33,7 @@
 
     // Store the styles in the placeholder
     @at-root %#{$placeholder} {
+        @include get-styles(this($option));
         @content;
     }
 
