@@ -64,7 +64,9 @@
     @if ($parents == '()') {
         @at-root #{$selectors} {
             @content;
-            @include component-css($components, $config);
+            @if variable-exists('config') {
+                @include component-css($components, $config);
+            }
         }
     } @else {
         @at-root #{$parents} {
@@ -111,6 +113,15 @@
                 }
                 @else if $property == 'active' {
                     @include modifier('active') {
+                        @include component-css($property, map-get($config, $component));
+                    }
+                }
+                @else if str-index($property, $modifier-glue) == 1 {
+                    // removeFirstDash
+                    $modifier: str-replace($property, $property, 'placeholder#{$property}');
+                    $modifier: str-replace($modifier, 'placeholder#{$modifier-glue}', '');
+
+                    @include modifier($modifier) {
                         @include component-css($property, map-get($config, $component));
                     }
                 }
