@@ -414,6 +414,9 @@ $module: null !default;
     @return $map-merged;
 
 }
+/// List of known and valid CSS properties
+///
+/// @type Map
 $css-properties: (
     'accelerator',
     '-wap-accesskey',
@@ -1783,13 +1786,16 @@ $css-properties: (
             @if not $nested {
                 @include extend-modifiers;
                 @include combine-modifiers;
-                @if $modules == map-get($config, 'name') or $target {
-                    @if $target {
-                        #{$target} {
+
+                @if variable-exists('config') {
+                    @if $modules == map-get($config, 'name') or $target {
+                        @if $target {
+                            #{$target} {
+                                @include module-css($config);
+                            }
+                        } @else {
                             @include module-css($config);
                         }
-                    } @else {
-                        @include module-css($config);
                     }
                 }
             }
@@ -1950,7 +1956,9 @@ $css-properties: (
     @if ($parents == '()') {
         @at-root #{$selectors} {
             @content;
-            @include component-css($components, $config);
+            @if variable-exists('config') {
+                @include component-css($components, $config);
+            }
         }
     } @else {
         @at-root #{$parents} {
@@ -1997,6 +2005,15 @@ $css-properties: (
                 }
                 @else if $property == 'active' {
                     @include modifier('active') {
+                        @include component-css($property, map-get($config, $component));
+                    }
+                }
+                @else if str-index($property, $modifier-glue) == 1 {
+                    // removeFirstDash
+                    $modifier: str-replace($property, $property, 'placeholder#{$property}');
+                    $modifier: str-replace($modifier, 'placeholder#{$modifier-glue}', '');
+
+                    @include modifier($modifier) {
                         @include component-css($property, map-get($config, $component));
                     }
                 }
@@ -2200,6 +2217,7 @@ $css-properties: (
 
     // Store the styles in the placeholder
     @at-root %#{$placeholder} {
+        @include get-styles(this($option));
         @content;
     }
 
