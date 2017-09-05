@@ -1,5 +1,7 @@
 ## TODO
 
+* add a way to pass callback sass mixin to essentially allow mixin overrides on onenexus homepage
+* look at ALL readmes and examples when importing/exporting Synergy - is Synergy always available in global scope?
 * look at Global Component Styles docs section
 * document $parser
 * document $namespace

@@ -40,7 +40,7 @@
 
 #### header.json
 
-Synergy abstracts a new layer on-top of your UI module's styles and scripts to isolate all configurable aspects in the form of a JSON file:
+Synergy abstracts a new layer on-top of your UI module's styles and scripts to isolate all potentially configurable aspects in the form of a JSON file:
 
 ```json
 {

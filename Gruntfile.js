@@ -31,6 +31,7 @@ module.exports = function(grunt) {
                     'src/scss/utilities/_remove-modifiers.scss',
                     'src/scss/utilities/_selector.scss',
                     'src/scss/utilities/_setting.scss',
+                    'src/scss/utilities/_strip-glue.scss',
                     'src/scss/utilities/_this.scss',
                     'src/scss/utilities/_value-enabled.scss',
                     // mixins

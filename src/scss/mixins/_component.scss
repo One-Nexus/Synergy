@@ -117,11 +117,7 @@
                     }
                 }
                 @else if str-index($property, $modifier-glue) == 1 {
-                    // removeFirstDash
-                    $modifier: str-replace($property, $property, 'placeholder#{$property}');
-                    $modifier: str-replace($modifier, 'placeholder#{$modifier-glue}', '');
-
-                    @include modifier($modifier) {
+                    @include modifier(strip-glue($property, $modifier-glue)) {
                         @include component-css($property, map-get($config, $component));
                     }
                 }
