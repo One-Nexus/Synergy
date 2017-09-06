@@ -33,7 +33,9 @@
 
     // Store the styles in the placeholder
     @at-root %#{$placeholder} {
-        @include get-styles(this($option));
+        @if type-of(this($option)) == 'map' and not this($option, 'disable-css') {
+            @include get-styles(this($option));
+        }
         @content;
     }
 
