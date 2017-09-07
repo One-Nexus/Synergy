@@ -8,7 +8,7 @@
 
 > A front-end framework for creating modular, configurable and scalable UI modules
 
-#### Useful Wiki Pages
+### Useful Wiki Pages
 
 * [What Is Synergy](https://github.com/esr360/Synergy/wiki/What-Is-Synergy)
 * [Why Use Synergy](https://github.com/esr360/Synergy/wiki/Why-Use-Synergy)
@@ -23,6 +23,45 @@
 * [Developing Synergy](https://github.com/esr360/Synergy/wiki/Developing-Synergy)
 
 [View SassDoc Documentation](http://esr360.github.io/Synergy/docs/sass) | [View JSDoc Documentation](http://esr360.github.io/Synergy/docs/js)
+
+### Quick Look
+
+###### HTML
+
+```html
+<div class="header-fixed">
+    <div class="header_logo">
+        ...
+    </div>
+</div>
+```
+
+###### Sass
+
+```scss
+@include module('header') {
+
+    @include modifier('fixed') {
+        ...
+    }
+
+    @include component('logo') {
+        ...
+    }
+
+}
+```
+
+###### JavaScript
+
+```js
+Synergy('header', function(header) {
+    var fixed = header.modifier('fixed'); // returns Bool
+    var logo = header.component('logo')[0]; // returns HTMLElement
+
+    ...
+});
+```
 
 ### Module Example
 
@@ -40,7 +79,7 @@
 
 #### header.json
 
-Synergy abstracts a new layer on-top of your UI module's styles and scripts to isolate all potentially configurable aspects in the form of a JSON file:
+Synergy allows you to abstract a new layer on-top of your UI module's styles and scripts to isolate all potentially configurable aspects in the form of a JSON file:
 
 ```json
 {
@@ -245,7 +284,7 @@ Released: @TODO September 2017
 * adding selector() function
 * allow passing of customer parser to parse configuration
 * adding deepextend JS module
-* making component and modifier glue configuable
+* making component and modifier glue configurable
 
 ### Version 3.7.0
 
@@ -254,3 +293,5 @@ Released: 30th July 2017
 ###### Release Notes
 
 * Splitting JS into smaller functions
+
+[View complete changelog](https://github.com/esr360/Synergy/wiki/Changelog)
