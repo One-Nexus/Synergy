@@ -111,7 +111,7 @@ Synergy allows you to abstract a new layer on-top of your UI module's styles and
 
 #### _header.scss
 
-Using the Synergy Sass mixins, the foundation for the module's CSS can be written, hard-coding only the core styles for the module - with a goal of being to be able to change anything about the header without ever touching this file again (touching only the above `header.json` file):
+Using the Synergy Sass mixins, the foundation for the module's CSS can be written, hard-coding only the core styles for the module - with the goal being to never have to touch this file again (touching only the above `header.json` file):
 
 > Keys within `header.json` which correspond to CSS properties do not need to be added to `_header.scss`
 
