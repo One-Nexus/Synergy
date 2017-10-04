@@ -4,7 +4,7 @@
 /// @author [@esr360](http://twitter.com/esr360)
 ///****************************************************************
 
-import Synergy from '../../src/js/Synergy.js';
+import Synergy from '../../src/js/synergy.js';
 
 const assert = require('assert');
 const jsdom  = require('jsdom-global')();
