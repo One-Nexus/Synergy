@@ -1674,6 +1674,20 @@ $css-properties: (
 @function setting($map, $keys...) {
     @return option($map, $keys...);
 }
+/// Strip the glue (-, _) from a string
+///
+/// @access public
+///
+/// @param {string} $string
+/// @param {string} $glue
+@function strip-glue($string, $glue) {
+    $placeholder: random(99999);
+
+    $clean-string: str-replace($string, $string, $placeholder + $string);
+    $clean-string: str-replace($clean-string, $placeholder + $glue, '');
+
+    @return $clean-string;
+}
 /// Get a value from the current module's configuration
 ///
 /// @author [@esr360](http://twitter.com/esr360)
@@ -1854,14 +1868,14 @@ $css-properties: (
 
         // the propery is for a modifier
         @if str-slice($property, 1, 1) == $modifier-glue {
-            @include modifier(str-replace($property, $modifier-glue, '')) {
+            @include modifier(strip-glue($property, $modifier-glue)) {
                 @include module-css($value);
             }
         }
 
         // the property is for a component
         @else if str-slice($property, 1, 1) == $component-glue {
-            @include component(str-replace($property, $component-glue, '')) {
+            @include component(strip-glue($property, $component-glue)) {
                 @include module-css($value);
             }
         }
@@ -2009,11 +2023,7 @@ $css-properties: (
                     }
                 }
                 @else if str-index($property, $modifier-glue) == 1 {
-                    // removeFirstDash
-                    $modifier: str-replace($property, $property, 'placeholder#{$property}');
-                    $modifier: str-replace($modifier, 'placeholder#{$modifier-glue}', '');
-
-                    @include modifier($modifier) {
+                    @include modifier(strip-glue($property, $modifier-glue)) {
                         @include component-css($property, map-get($config, $component));
                     }
                 }
@@ -2217,7 +2227,9 @@ $css-properties: (
 
     // Store the styles in the placeholder
     @at-root %#{$placeholder} {
-        @include get-styles(this($option));
+        @if type-of(this($option)) == 'map' and not this($option, 'disable-css') {
+            @include get-styles(this($option));
+        }
         @content;
     }
 
