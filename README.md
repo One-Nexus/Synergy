@@ -272,7 +272,7 @@ Given the above, we would now be able to use any of the following markup example
 
 ### Version 3.8.0
 
-Released: @TODO September 2017
+Released: 4th October 2017
 
 ###### Release Notes
 
