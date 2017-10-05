@@ -34,7 +34,6 @@
     "babel-register": "^6.24.1",
     "babelify": "^7.3.0",
     "grunt": "^0.4.5",
-    "grunt-babel": "^6.0.0",
     "grunt-browserify": "^5.1.0",
     "grunt-contrib-clean": "^0.6.0",
     "grunt-contrib-concat": "^0.5.1",
@@ -51,5 +50,8 @@
     "jsdom-global": "^3.0.2",
     "mocha": "^3.4.2",
     "sass-true": "^3.0.0-beta.1"
+  },
+  "browserify": {
+    "transform": [["babelify", {"presets": ["es2015"]}]]
   }
 }
