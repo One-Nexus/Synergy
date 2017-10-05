@@ -41,6 +41,9 @@
 ```scss
 @include module('header') {
 
+    // Core header styles
+    ...
+
     @include modifier('fixed') {
         ...
     }
@@ -282,7 +285,7 @@ Released: 4th October 2017
 * processes values in "active" and "hover" entries in config
 * refactoring Synergy.js
 * adding selector() function
-* allow passing of customer parser to parse configuration
+* allow passing of custom parser to parse configuration
 * adding deepextend JS module
 * making component and modifier glue configurable
 
