@@ -273,6 +273,14 @@ Given the above, we would now be able to use any of the following markup example
 
 ## Changelog
 
+### Version 3.8.1
+
+Released: 6th October 2017
+
+###### Release Notes
+
+* Fixing issue with `this()` function error warning
+
 ### Version 3.8.0
 
 Released: 4th October 2017
@@ -288,13 +296,5 @@ Released: 4th October 2017
 * allow passing of custom parser to parse configuration
 * adding deepextend JS module
 * making component and modifier glue configurable
-
-### Version 3.7.0
-
-Released: 30th July 2017
-
-###### Release Notes
-
-* Splitting JS into smaller functions
 
 [View complete changelog](https://github.com/esr360/Synergy/wiki/Changelog)
