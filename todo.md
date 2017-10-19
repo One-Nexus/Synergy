@@ -2,6 +2,8 @@
 
 ## FRIDGE
 
+* add parsing of options from url query param e.g. ?billboard:fullscreen=true
+
 ## FREEZER
 
 * create "when" content e.g @include when('component', $is: 'moddifierA', $is-not: 'modifierB') - look to module example   in readme.md
