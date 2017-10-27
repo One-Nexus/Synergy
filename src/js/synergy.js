@@ -20,22 +20,30 @@ export { deepextend };
 //*****************************************************************
 
 // Utilities
-import { getBlockName    } from './utilities/getBlockName';
-import { getComponents   } from './utilities/getComponents';
-import { getDomNodes     } from './utilities/getDomNodes';
-import { getGlue         } from './utilities/getGlue';
-import { getModifiers    } from './utilities/getModifiers';
-import { getModuleName   } from './utilities/getModuleName';
-import { isValidSelector } from './utilities/isValidSelector';
-import { stripModifiers  } from './utilities/stripModifiers';
+import {
+    getBlockName,
+    getComponents,
+    getDomNodes,
+    getGlue,
+    getModifiers,
+    getModuleName,
+    isValidSelector,
+    stripModifiers
+} from './utilities';
 
 // Tools
-import { component } from './tools/component';
-import { modifier  } from './tools/modifier';
+import { component, modifier } from './tools';
 
 export {
-    getBlockName, getComponents, getDomNodes, getGlue, getModifiers,
-    getModuleName, isValidSelector, stripModifiers, component, modifier
+    getBlockName,
+    getComponents,
+    getDomNodes,
+    getGlue,
+    getModifiers,
+    getModuleName,
+    isValidSelector,
+    stripModifiers,
+    component, modifier
 };
 
 /**
@@ -52,7 +60,7 @@ export {
  * @param {Object} [custom] - custom config to use in callback
  * @param {Object} [parser] - custom parser to use for configuration
  */
-const Synergy = function(els, callback, config, custom, parser) {
+export default function Synergy(els, callback, config, custom, parser) {
 
     const componentGlue = getGlue('component', custom);
     const modifierGlue  = getGlue('modifier', custom);
@@ -84,28 +92,24 @@ const Synergy = function(els, callback, config, custom, parser) {
     // Elements found by the Synergy query
     exports.query = domNodes;
 
-    exports.modifier = (query, operator, element = domNodes) => {
-        return modifier({
-            target: element,
-            module: moduleName,
-            modifiers: modifiers,
-            query: query,
-            operator: operator,
-            glue: modifierGlue
-        });
-    };
+    exports.modifier = (query, operator, element = domNodes) => modifier({
+        target: element,
+        module: moduleName,
+        modifiers: modifiers,
+        query: query,
+        operator: operator,
+        glue: modifierGlue
+    });
 
-    exports.component = (query, operator, element = domNodes) => {
-        return component({
-            target: element,
-            module: moduleName,
-            components: components,
-            query: query,
-            operator: operator,
-            componentGlue: componentGlue,
-            modifierGlue: modifierGlue
-        });
-    };
+    exports.component = (query, operator, element = domNodes) => component({
+        target: element,
+        module: moduleName,
+        components: components,
+        query: query,
+        operator: operator,
+        componentGlue: componentGlue,
+        modifierGlue: modifierGlue
+    });
 
     if (callback) {
         if (domNodes instanceof HTMLElement) {
@@ -117,5 +121,3 @@ const Synergy = function(els, callback, config, custom, parser) {
 
     return exports;
 };
-
-export default Synergy;
