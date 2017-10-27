@@ -43,7 +43,8 @@ export {
     getModuleName,
     isValidSelector,
     stripModifiers,
-    component, modifier
+    component,
+    modifier
 };
 
 /**
