@@ -81,13 +81,11 @@ export default function Synergy(els, callback, config, custom, parser) {
         options = parser.parse(options);
     }
 
-    if (domNodes) {
-        if (domNodes instanceof NodeList) {
-            domNodes.forEach(el => el.setAttribute('data-module', moduleName));
-        } else if (domNodes instanceof HTMLElement) {
-            domNodes.setAttribute('data-module', moduleName);
-        }
-    }
+  if (domNodes instanceof NodeList) {
+    domNodes.forEach(el => el.setAttribute('data-module', moduleName));
+  } else if (domNodes instanceof HTMLElement) {
+    domNodes.setAttribute('data-module', moduleName);
+  }
 
     // Elements found by the Synergy query
     exports.query = domNodes;
