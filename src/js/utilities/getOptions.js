@@ -1,4 +1,4 @@
-import deepextend from 'deep-extend'
+import deepextend from 'deep-extend';
 
 /**
  * getOptions
