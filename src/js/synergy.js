@@ -12,9 +12,7 @@ export { global };
 // Vendor
 //*****************************************************************
 
-import deepextend from 'deep-extend';
-
-export { deepextend };
+export { default as deepextend } from 'deep-extend';
 
 // Tools & Utilities
 //*****************************************************************
@@ -28,7 +26,9 @@ import {
     getModifiers,
     getModuleName,
     isValidSelector,
-    stripModifiers
+    stripModifiers,
+    getOptions,
+    setDomNodeAttributes
 } from './utilities';
 
 // Tools
@@ -68,13 +68,9 @@ export default function Synergy(els, callback, config, custom, parser) {
     const domNodes      = getDomNodes(els, module, modifierGlue);
     const components    = getComponents(domNodes, module, componentGlue);
     const modifiers     = getModifiers(domNodes, module, modifierGlue);
-    const options       = Synergy._getOptions({ config, parser, custom });
+    const options       = getOptions({ config, parser, custom });
 
-    if (domNodes instanceof NodeList) {
-      domNodes.forEach(el => el.setAttribute('data-module', module));
-    } else if (domNodes instanceof HTMLElement) {
-      domNodes.setAttribute('data-module', module);
-    }
+    setDomNodeAttributes({ domNodes, module });
 
     // Elements found by the Synergy query
     exports.query = domNodes;
@@ -108,30 +104,3 @@ export default function Synergy(els, callback, config, custom, parser) {
 
     return exports;
 }
-
-/**
- * Synergy._getOptions
- *
- * Merge default/custom options
- *
- * @access private
- *
- * @param {Object} [config] - config to use when calling the function
- * @param {Object} [custom] - custom config to use in callback
- * @param {Object} [parser] - custom parser to use for configuration
- * @returns {*}
- */
-Synergy._getOptions = ({ config = {}, parser, custom = {} } = {}) => {
-  const configKey = Object.keys(config)[0];
-  const extendedConfig = configKey ? deepextend(config[configKey], custom) : custom;
-
-  if (typeof parser === 'function') {
-    return parser(extendedConfig);
-  }
-
-  if (parser && typeof parser.parse === 'function') {
-    return parser.parse(extendedConfig);
-  }
-
-  return extendedConfig;
-};

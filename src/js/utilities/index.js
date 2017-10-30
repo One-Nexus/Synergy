@@ -6,3 +6,5 @@ export { getModifiers } from './getModifiers';
 export { getModuleName } from './getModuleName';
 export { isValidSelector } from './isValidSelector';
 export { stripModifiers } from './stripModifiers';
+export { getOptions } from './getOptions';
+export { setDomNodeAttributes } from './setDomNodeAttributes';
