@@ -11,6 +11,7 @@ import deepextend from 'deep-extend';
  * @returns {*}
  */
 export function getOptions ({ config = {}, parser, custom = {} } = {}) {
+
   const configKey = Object.keys(config)[0];
   const extendedConfig = configKey ? deepextend(config[configKey], custom) : custom;
 

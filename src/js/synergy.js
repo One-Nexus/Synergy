@@ -62,6 +62,7 @@ export {
  * @param {Object} [parser] - custom parser to use for configuration
  */
 export default function Synergy(els, callback, config, custom, parser) {
+
     const componentGlue = getGlue('component', custom);
     const modifierGlue  = getGlue('modifier', custom);
     const module        = getModuleName(els, config);
