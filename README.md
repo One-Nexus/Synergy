@@ -36,11 +36,6 @@ import { Module, Component } from 'Synergy';
 // Default configuration
 import defaults from './accordions.json';
 
-const panels = [
-    {title: 'foo', content: 'bar'},
-    {title: 'fizz', content: 'buzz'},
-];
-
 const Accordion = ({name = defaults.accordions.name, panels, modifiers}) => (
     <Module name={name} modifiers={modifiers}>
         {panels.map(({title, content}, index) => (
@@ -52,7 +47,13 @@ const Accordion = ({name = defaults.accordions.name, panels, modifiers}) => (
     </Module>
 );
 
-// Render module
+// Accordion content
+const panels = [
+    {title: 'foo', content: 'bar'},
+    {title: 'fizz', content: 'buzz'},
+];
+
+// Render Accordion
 ReactDOM.render(
     <Accordion panels={panels} modifiers={['foo', 'bar']} />, document.getElementById('react')
 );
