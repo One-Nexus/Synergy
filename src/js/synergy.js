@@ -47,6 +47,12 @@ export {
     modifier
 };
 
+// Components
+//*****************************************************************
+
+export { default as Module } from './components/module.jsx';
+export { default as Component } from './components/component.jsx';
+
 /**
  * Synergy Module
  * 
@@ -71,7 +77,7 @@ export default function Synergy(els, callback, config, custom, parser) {
     const modifiers     = getModifiers(domNodes, module, modifierGlue);
     const options       = getOptions({ config, parser, custom });
 
-    setDomNodeAttributes({ domNodes, module });
+    setDomNodeAttributes({domNodes, module});
 
     // Elements found by the Synergy query
     exports.query = domNodes;
