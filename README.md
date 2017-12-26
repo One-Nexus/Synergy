@@ -24,9 +24,9 @@
 
 [View SassDoc Documentation](http://esr360.github.io/Synergy/docs/sass) | [View JSDoc Documentation](http://esr360.github.io/Synergy/docs/js)
 
----
-_New in version 3.9: Render Synergy modules using React!_
----
+***
+#### New in version 3.9: Render Synergy modules using React!
+***
 
 ```js
 import defaults from './accordions.json';
