@@ -29,6 +29,11 @@
 ***
 
 ```js
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Module, Component } from 'Synergy';
+
+// Default configuration
 import defaults from './accordions.json';
 
 const panels = [
