@@ -24,6 +24,48 @@
 
 [View SassDoc Documentation](http://esr360.github.io/Synergy/docs/sass) | [View JSDoc Documentation](http://esr360.github.io/Synergy/docs/js)
 
+_New in version 3.9: Render Synergy modules using React!_
+
+```js
+import defaults from './accordions.json';
+
+const panels = [
+    {title: 'foo', content: 'bar'},
+    {title: 'fizz', content: 'buzz'},
+];
+
+const Accordion = ({name = defaults.accordions.name, panels, modifiers}) => (
+    <Module name={name} modifiers={modifiers}>
+        {panels.map(({title, content}, index) => (
+            <Component name="panel" key={index}>
+                <Component name="title">{title}</Component>
+                <Component name="content">{content}</Component>
+            </Component>
+        ))}
+    </Module>
+);
+
+// Render module
+ReactDOM.render(
+    <Accordion panels={panels} modifiers={['foo', 'bar']} />, document.getElementById('react')
+);
+```
+
+##### Output:
+
+```html
+<div class="accordion-foo-bar">
+    <div class="accordion_section">
+        <div class="accordion_title">foo</div>
+        <div class="accordion_content">bar</div>
+    </div>
+    <div class="accordion_section">
+        <div class="accordion_title">fizz</div>
+        <div class="accordion_content">buzz</div>
+    </div>
+</div>
+```
+
 ### Quick Look
 
 ###### HTML

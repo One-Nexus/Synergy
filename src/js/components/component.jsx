@@ -3,16 +3,17 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
 /**
- * Render Component component
- * 
- * @access public
+ * Render a Synergy component
  *
- * @param {Object} options
+ * @extends React.Component
  */
 export default class Component extends React.Component {
     render() {
+        const module = this.props.module || this.context.module;
+        const modifiers = this.context.renderModifiers(this.props.modifiers);
+
         return (
-            <div className={`${this.context.module}_${this.props.name}`}>
+            <div className={`${module}_${this.props.name}${modifiers}`}>
                 {this.props.children}
             </div>
         );
@@ -20,5 +21,6 @@ export default class Component extends React.Component {
 }
 
 Component.contextTypes = {
-    module: PropTypes.string
+    module: PropTypes.string,
+    renderModifiers: PropTypes.func
 };
