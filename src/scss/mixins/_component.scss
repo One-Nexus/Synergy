@@ -18,16 +18,17 @@
 
     $selectors: '[class*="#{$module}#{$glue}"]';
 
-    $namespace: nth(module-tree(&), length(module-tree(&)));
+    $this: &;
+    $tree: module-tree($this);
+
+    $namespace: nth($tree, length($tree));
 
     @if $components {
-
         $selectors: ();
 
         @each $component in $components {
             $selectors: join($selectors, '.#{$namespace}#{$glue}#{$component}, [class*="#{$namespace}#{$glue}#{$component}-"]', comma);
         }
-
     }
 
     // Generate the parent selectors

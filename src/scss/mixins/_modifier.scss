@@ -19,34 +19,47 @@
 
     $selectors: &;
 
-    @if str-index(inspect(&), '.#{$module}') {
+    //BEGIN TOMFOOLERY
+    // $selectors: remove-duplicates($selectors, true);
+
+    // @each $selector in $selectors {
+    //     @if str-index(nth($selector, 1), '[class*="#{$module}#{$glue}"]') == 1 and length($selector) > 1 {
+    //         $selectors: nth($selector, length($selector));
+    //     }
+    // }
+    //END TOMFOOLERY
+
+    $this: &;
+
+    @if str-index(inspect($this), '.#{$module}') {
         @if (variable-exists('config') and map-get($config, 'selector-type') == 'flex')
         or (not variable-exists('config') and $selector-type == 'flex') {
             $selectors: ();
-            @for $i from 1 through length(&) {
+
+            @for $i from 1 through length($this) {
                 @if $i % 2 == 0 {
-                    $selectors: append($selectors, nth(&, $i), comma);
+                    $selectors: append($selectors, nth($this, $i), comma);
                 }
             }
         }
     }
 
     @at-root #{$selectors} {
+        $this: &;
 
         $modifier-selectors: ();
 
         @each $modifier in $modifiers {
             @if $special == 'not' {
-                $modifier-selectors: join($modifier-selectors, '&:not([class*="#{$glue}#{$modifier}"])', comma);
+                $modifier-selectors: join($modifier-selectors, '#{$this}:not([class*="#{$glue}#{$modifier}"])', comma);
             } @else {
-                $modifier-selectors: join($modifier-selectors, '&[class*="#{$glue}#{$modifier}"]', comma);
+                $modifier-selectors: join($modifier-selectors, '#{$this}[class*="#{$glue}#{$modifier}"]', comma);
             }
         }
 
-        #{$modifier-selectors} {
+        @at-root #{$modifier-selectors} {
             @content;
         }
-
     }
 
 } // modifier()
