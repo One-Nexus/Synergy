@@ -12,18 +12,17 @@
         $value: call($sass-config-parser, $value);
     }
 
-    // The below code completely fails in node-sass
-    // $this: &;
+    $this: &;
 
-    // @if length($this) > 0 {
-    //     @if str-index(inspect(nth($this, 1)), '%') == 1 {
-    //         $debug: false;
-    //     }
-    // }
+    @if length($this) > 0 {
+        @if str-index(inspect(nth($this, 1)), '%') == 1 {
+            $debug: false;
+        }
+    }
 
-    // @if $debug and not $value and $value != false {
-    //     @warn '#{$options} not found in #{$module} config';
-    // }
+    @if $debug and not $value and $value != false {
+        @warn '#{$options} not found in #{$module} config';
+    }
 
     @return $value;
 }

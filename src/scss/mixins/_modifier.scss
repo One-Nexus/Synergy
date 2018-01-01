@@ -17,23 +17,14 @@
 ///     <div class="button-large">...</div>
 @mixin modifier($modifiers, $special: null, $glue: $modifier-glue) {
 
-    $selectors: &;
-
-    //BEGIN TOMFOOLERY
-    // $selectors: remove-duplicates($selectors, true);
-
-    // @each $selector in $selectors {
-    //     @if str-index(nth($selector, 1), '[class*="#{$module}#{$glue}"]') == 1 and length($selector) > 1 {
-    //         $selectors: nth($selector, length($selector));
-    //     }
-    // }
-    //END TOMFOOLERY
-
     $this: &;
+    $selectors: $this;
+
+    $isLocalFlexType: variable-exists('config') and map-get($config, 'selector-type') == 'flex';
+    $isGlobalFlexType: not variable-exists('config') and $selector-type == 'flex';
 
     @if str-index(inspect($this), '.#{$module}') {
-        @if (variable-exists('config') and map-get($config, 'selector-type') == 'flex')
-        or (not variable-exists('config') and $selector-type == 'flex') {
+        @if $isLocalFlexType or $isGlobalFlexType {
             $selectors: ();
 
             @for $i from 1 through length($this) {
@@ -46,7 +37,6 @@
 
     @at-root #{$selectors} {
         $this: &;
-
         $modifier-selectors: ();
 
         @each $modifier in $modifiers {
