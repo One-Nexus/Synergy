@@ -33,8 +33,11 @@ export default class Module extends React.Component {
     render() {
         const modifiers = this.renderModifiers(this.props.modifiers);
 
+        const classNames = 
+            this.props.name + modifiers + (this.props.className ? ' ' + this.props.className : '');
+
         return (
-            <div className={`${this.props.name}${modifiers}`}>
+            <div className={classNames}>
                 {this.props.children}
             </div>
         );

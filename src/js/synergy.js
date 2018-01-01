@@ -47,7 +47,7 @@ export {
     modifier
 };
 
-// Components
+// React Components
 //*****************************************************************
 
 export { default as Module } from './components/module.jsx';

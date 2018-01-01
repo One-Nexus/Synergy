@@ -12,11 +12,22 @@ export default class Component extends React.Component {
         const module = this.props.module || this.context.module;
         const modifiers = this.context.renderModifiers(this.props.modifiers);
 
-        return (
-            <div className={`${module}_${this.props.name}${modifiers}`}>
-                {this.props.children}
-            </div>
-        );
+        if (this.props.children.type) {
+            if (this.constructor.name === this.props.children.type.name) {
+                const parentKeys = Object.keys(this.props).sort();
+                const childKeys = Object.keys(this.props.children.props).sort();
+
+                if (JSON.stringify(parentKeys) === JSON.stringify(childKeys)) {
+                    return this.props.children;
+                }
+            }
+        } else {
+            return (
+                <div className={`${module}_${this.props.name}${modifiers}`}>
+                    {this.props.children}
+                </div>
+            );
+        }
     }
 }
 
