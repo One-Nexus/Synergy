@@ -12,8 +12,12 @@
         $value: call($sass-config-parser, $value);
     }
 
-    @if str-index(inspect(nth(&, 1)), '%') == 1 {
-        $debug: false;
+    $this: &;
+
+    @if length($this) > 0 {
+        @if str-index(inspect(nth($this, 1)), '%') == 1 {
+            $debug: false;
+        }
     }
 
     @if $debug and not $value and $value != false {

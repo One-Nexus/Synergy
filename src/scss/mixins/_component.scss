@@ -16,23 +16,21 @@
 ///     <div class="header_wrapper">...</div>
 @mixin component($components: null, $glue: $component-glue) {
 
-    $selectors: '[class*="#{$module}#{$glue}"]';
-
-    $namespace: nth(module-tree(&), length(module-tree(&)));
+    $parents   : ();
+    $selectors : '[class*="#{$module}#{$glue}"]';
+    $this      : &;
+    $tree      : module-tree($this);
+    $namespace : nth($tree, length($tree));
 
     @if $components {
-
         $selectors: ();
 
         @each $component in $components {
-            $selectors: join($selectors, '.#{$namespace}#{$glue}#{$component}, [class*="#{$namespace}#{$glue}#{$component}-"]', comma);
+            $selectors: join(
+                $selectors, '.#{$namespace}#{$glue}#{$component}, [class*="#{$namespace}#{$glue}#{$component}-"]', 
+            comma);
         }
-
     }
-
-    // Generate the parent selectors
-
-    $parents: ();
 
     @each $selector in & {
         // spoof the selector into a list
@@ -44,21 +42,27 @@
             $selector: list-remove($selector, nth($selector, length($selector)));
         }
 
-        // convert the selector back into a string
         @if length($selector) == 1 {
             $selector: nth($selector, 1);
         }
+
+        // convert the selector back into a string
         $selector: str-replace(inspect($selector), ', ', ' ');
 
         // Re-build the parent selector
         $parents: append($parents, $selector, comma);
     }
 
-    // remove duplicate selectors
     $parents: list-remove-duplicates($parents);
 
     @if length($parents) == 1 {
         $parents: nth($parents, 1);
+        // BEGIN TOMFOOLERY
+        $parents: str-replace(inspect($parents), ' ', ', ');
+        $parents: selector-parse($parents);
+        $parents: list-remove-duplicates($parents);
+        $parents: str-replace(inspect($parents), ', ', ' ');
+        // END TOMFOOLERY
     }
 
     @if ($parents == '()') {

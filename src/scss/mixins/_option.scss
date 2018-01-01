@@ -41,14 +41,14 @@
 
     // Output the styles if the option is enabled
     @if value-enabled($value) {
-        @extend %#{$placeholder};
+        @content;
     }
 
     // Create a modifier for the option if it is not enabled
     // by default
     @if $extend-options and not value-enabled($value) {
         @include modifier($option) {
-            @extend %#{$placeholder};
+            @content;
         }
     }
 
