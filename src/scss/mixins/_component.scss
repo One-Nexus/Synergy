@@ -27,7 +27,7 @@
 
         @each $component in $components {
             $selectors: join(
-                $selectors, '.#{$namespace}#{$glue}#{$component}, [class*="#{$namespace}#{$glue}#{$component}-"]', 
+                $selectors, '.#{$namespace}#{$glue}#{$component}, [class*="#{$namespace}#{$glue}#{$component}-"]',
             comma);
         }
     }

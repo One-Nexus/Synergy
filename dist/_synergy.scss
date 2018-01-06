@@ -1702,8 +1702,12 @@ $css-properties: (
         $value: call($sass-config-parser, $value);
     }
 
-    @if str-index(inspect(nth(&, 1)), '%') == 1 {
-        $debug: false;
+    $this: &;
+
+    @if length($this) > 0 {
+        @if str-index(inspect(nth($this, 1)), '%') == 1 {
+            $debug: false;
+        }
     }
 
     @if $debug and not $value and $value != false {
@@ -1927,23 +1931,21 @@ $css-properties: (
 ///     <div class="header_wrapper">...</div>
 @mixin component($components: null, $glue: $component-glue) {
 
-    $selectors: '[class*="#{$module}#{$glue}"]';
-
-    $namespace: nth(module-tree(&), length(module-tree(&)));
+    $parents   : ();
+    $selectors : '[class*="#{$module}#{$glue}"]';
+    $this      : &;
+    $tree      : module-tree($this);
+    $namespace : nth($tree, length($tree));
 
     @if $components {
-
         $selectors: ();
 
         @each $component in $components {
-            $selectors: join($selectors, '.#{$namespace}#{$glue}#{$component}, [class*="#{$namespace}#{$glue}#{$component}-"]', comma);
+            $selectors: join(
+                $selectors, '.#{$namespace}#{$glue}#{$component}, [class*="#{$namespace}#{$glue}#{$component}-"]',
+            comma);
         }
-
     }
-
-    // Generate the parent selectors
-
-    $parents: ();
 
     @each $selector in & {
         // spoof the selector into a list
@@ -1955,21 +1957,27 @@ $css-properties: (
             $selector: list-remove($selector, nth($selector, length($selector)));
         }
 
-        // convert the selector back into a string
         @if length($selector) == 1 {
             $selector: nth($selector, 1);
         }
+
+        // convert the selector back into a string
         $selector: str-replace(inspect($selector), ', ', ' ');
 
         // Re-build the parent selector
         $parents: append($parents, $selector, comma);
     }
 
-    // remove duplicate selectors
     $parents: list-remove-duplicates($parents);
 
     @if length($parents) == 1 {
         $parents: nth($parents, 1);
+        // BEGIN TOMFOOLERY
+        $parents: str-replace(inspect($parents), ' ', ', ');
+        $parents: selector-parse($parents);
+        $parents: list-remove-duplicates($parents);
+        $parents: str-replace(inspect($parents), ', ', ' ');
+        // END TOMFOOLERY
     }
 
     @if ($parents == '()') {
@@ -1983,8 +1991,9 @@ $css-properties: (
         @at-root #{$parents} {
             #{$selectors} {
                 @content;
-                // @TODO confirm if below needed
-                // @include component-css($components, $config);
+                @if variable-exists('config') {
+                    @include component-css($components, $config);
+                }
             }
         }
     }
@@ -2062,36 +2071,39 @@ $css-properties: (
 ///     <div class="button-large">...</div>
 @mixin modifier($modifiers, $special: null, $glue: $modifier-glue) {
 
-    $selectors: &;
+    $this: &;
+    $selectors: $this;
 
-    @if str-index(inspect(&), '.#{$module}') {
-        @if (variable-exists('config') and map-get($config, 'selector-type') == 'flex')
-        or (not variable-exists('config') and $selector-type == 'flex') {
+    $is-local-flex-type: variable-exists('config') and map-get($config, 'selector-type') == 'flex';
+    $is-global-flex-type: not variable-exists('config') and $selector-type == 'flex';
+
+    @if str-index(inspect($this), '.#{$module}') {
+        @if $is-local-flex-type or $is-global-flex-type {
             $selectors: ();
-            @for $i from 1 through length(&) {
+
+            @for $i from 1 through length($this) {
                 @if $i % 2 == 0 {
-                    $selectors: append($selectors, nth(&, $i), comma);
+                    $selectors: append($selectors, nth($this, $i), comma);
                 }
             }
         }
     }
 
     @at-root #{$selectors} {
-
+        $this: &;
         $modifier-selectors: ();
 
         @each $modifier in $modifiers {
             @if $special == 'not' {
-                $modifier-selectors: join($modifier-selectors, '&:not([class*="#{$glue}#{$modifier}"])', comma);
+                $modifier-selectors: join($modifier-selectors, '#{$this}:not([class*="#{$glue}#{$modifier}"])', comma);
             } @else {
-                $modifier-selectors: join($modifier-selectors, '&[class*="#{$glue}#{$modifier}"]', comma);
+                $modifier-selectors: join($modifier-selectors, '#{$this}[class*="#{$glue}#{$modifier}"]', comma);
             }
         }
 
-        #{$modifier-selectors} {
+        @at-root #{$modifier-selectors} {
             @content;
         }
-
     }
 
 } // modifier()
@@ -2240,14 +2252,14 @@ $css-properties: (
 
     // Output the styles if the option is enabled
     @if value-enabled($value) {
-        @extend %#{$placeholder};
+        @content;
     }
 
     // Create a modifier for the option if it is not enabled
     // by default
     @if $extend-options and not value-enabled($value) {
         @include modifier($option) {
-            @extend %#{$placeholder};
+            @content;
         }
     }
 
