@@ -76,8 +76,9 @@
         @at-root #{$parents} {
             #{$selectors} {
                 @content;
-                // @TODO confirm if below needed
-                // @include component-css($components, $config);
+                @if variable-exists('config') {
+                    @include component-css($components, $config);
+                }
             }
         }
     }
