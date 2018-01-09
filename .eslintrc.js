@@ -8,9 +8,6 @@ module.exports = {
             modules: true
         }
     },
-    plugins: [
-        'react'
-    ],
     rules: {
         indent: ['error', 4, { SwitchCase: 1 }],
     }
