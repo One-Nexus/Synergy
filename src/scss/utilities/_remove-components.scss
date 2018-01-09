@@ -26,9 +26,11 @@
         $component-end: '';
         @if $component-end-1 and $component-end-2 {
             $component-end: min($component-end-1, $component-end-2);
-        } @else if $component-end-1 and not $component-end-2 {
+        }
+        @else if $component-end-1 and not $component-end-2 {
             $component-end: $component-end-1;
-        } @else if not $component-end-1 and $component-end-2 {
+        }
+        @else if not $component-end-1 and $component-end-2 {
             $component-end: $component-end-2;
         }
 

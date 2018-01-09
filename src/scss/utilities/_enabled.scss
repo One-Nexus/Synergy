@@ -14,7 +14,8 @@
 
     @if value-enabled(map-get-deep($config, $breadcrumb...)) {
         @return $true-value;
-    } @else {
+    }
+    @else {
         @return $false-value;
     }
 }

@@ -6,7 +6,8 @@
 
     @if $component {
         $selector: '[class*="#{$module}_"][class*="_#{$component}"]';
-    } @else {
+    }
+    @else {
         $selector: '[class*="#{$module}-"]';
     }
     @if $modifier {

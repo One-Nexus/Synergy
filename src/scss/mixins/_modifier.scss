@@ -42,7 +42,8 @@
         @each $modifier in $modifiers {
             @if $special == 'not' {
                 $modifier-selectors: join($modifier-selectors, '#{$this}:not([class*="#{$glue}#{$modifier}"])', comma);
-            } @else {
+            }
+            @else {
                 $modifier-selectors: join($modifier-selectors, '#{$this}[class*="#{$glue}#{$modifier}"]', comma);
             }
         }

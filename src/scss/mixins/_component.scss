@@ -26,9 +26,8 @@
         $selectors: ();
 
         @each $component in $components {
-            $selectors: join(
-                $selectors, '.#{$namespace}#{$glue}#{$component}, [class*="#{$namespace}#{$glue}#{$component}-"]',
-            comma);
+            $selector: '.#{$namespace}#{$glue}#{$component}, [class*="#{$namespace}#{$glue}#{$component}-"]';
+            $selectors: join($selectors, $selector, comma);
         }
     }
 
@@ -72,7 +71,8 @@
                 @include component-css($components, $config);
             }
         }
-    } @else {
+    }
+    @else {
         @at-root #{$parents} {
             #{$selectors} {
                 @content;

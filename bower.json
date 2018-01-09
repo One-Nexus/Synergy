@@ -1,7 +1,7 @@
 {
   "name": "Synergy",
-  "version": "3.8.1",
-  "description": "A front-end framework for building modular, configurable and scalable UI modules",
+  "version": "3.9.0",
+  "description": "A front-end framework for building modular, configurable and scalable UI components for the web",
   "authors": [
     "(Edmund Reed)[http://twitter.com/esr360] <esr360@live.com>"
   ],
@@ -15,7 +15,8 @@
     "modules",
     "front-end",
     "framework",
-    "web"
+    "web",
+    "react"
   ],
   "main": [
     "src/js/synergy.js",

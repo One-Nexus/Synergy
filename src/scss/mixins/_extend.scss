@@ -39,11 +39,10 @@
             @extend [class*="#{$selector}#{$modifier-glue}"][class*="#{$modifier-glue}#{$modifier}"];
         }
         @else if type-of($modifier) == 'list' {
+            $namespaced-selector: ('[class*="#{$namespaced-parent}#{$modifier-glue}"]');
+            $module-selector: ('[class*="#{$module}#{$modifier-glue}"]');
 
-            $selectors: if($parent,
-                ('[class*="#{$namespaced-parent}#{$modifier-glue}"]'),
-                ('[class*="#{$module}#{$modifier-glue}"]')
-            );
+            $selectors: if($parent, $namespaced-selector, $module-selector);
 
             @each $item in $modifier {
                 $selectors: join($selectors, '[class*="#{$modifier-glue}#{$item}"]', comma);

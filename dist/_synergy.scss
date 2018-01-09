@@ -1519,7 +1519,8 @@ $css-properties: (
 
     @if value-enabled(map-get-deep($config, $breadcrumb...)) {
         @return $true-value;
-    } @else {
+    }
+    @else {
         @return $false-value;
     }
 }
@@ -1602,9 +1603,11 @@ $css-properties: (
         $component-end: '';
         @if $component-end-1 and $component-end-2 {
             $component-end: min($component-end-1, $component-end-2);
-        } @else if $component-end-1 and not $component-end-2 {
+        }
+        @else if $component-end-1 and not $component-end-2 {
             $component-end: $component-end-1;
-        } @else if not $component-end-1 and $component-end-2 {
+        }
+        @else if not $component-end-1 and $component-end-2 {
             $component-end: $component-end-2;
         }
 
@@ -1655,7 +1658,8 @@ $css-properties: (
 
     @if $component {
         $selector: '[class*="#{$module}_"][class*="_#{$component}"]';
-    } @else {
+    }
+    @else {
         $selector: '[class*="#{$module}-"]';
     }
     @if $modifier {
@@ -1729,7 +1733,8 @@ $css-properties: (
         // Does the map contain the 'enabled' key?
         @if map-has-key($value, 'enabled') {
             @return map-get($value, 'enabled');
-        } @else {
+        }
+        @else {
             @return $value;
         }
     }
@@ -1738,10 +1743,12 @@ $css-properties: (
         // Is the first value a bool?
         @if type-of(nth($value, 1)) == 'bool' {
             @return nth($value, 1);
-        } @else {
+        }
+        @else {
             @return $value;
         }
-    } @else {
+    }
+    @else {
         @return $value;
     }
 }
@@ -1759,19 +1766,14 @@ $css-properties: (
 ///     }
 ///
 ///     <div class="header">...</div>
-@mixin module(
-    $modules: if(variable-exists('config'), (map-get($config, 'name')), ''),
-    $type: if(variable-exists('config'), (map-get($config, 'selector-type')), $selector-type)
-) {
+@mixin module($modules: if(variable-exists('config'), (map-get($config, 'name')), ''), $type: if(variable-exists('config'), (map-get($config, 'selector-type')), $selector-type)) {
 
     @if ($module-namespace) {
         $modules: $module-namespace + $modules;
     }
 
     // disable any output
-    $disable-output: if(
-        variable-exists('disable-output'), $disable-output, false
-    );
+    $disable-output: if(variable-exists('disable-output'), $disable-output, false);
     @if variable-exists('config') and map-has-key($config, 'disable-output') {
         $disable-output: map-get($config, 'disable-output');
     }
@@ -1816,7 +1818,8 @@ $css-properties: (
                             #{$target} {
                                 @include module-css($config);
                             }
-                        } @else {
+                        }
+                        @else {
                             @include module-css($config);
                         }
                     }
@@ -1941,9 +1944,8 @@ $css-properties: (
         $selectors: ();
 
         @each $component in $components {
-            $selectors: join(
-                $selectors, '.#{$namespace}#{$glue}#{$component}, [class*="#{$namespace}#{$glue}#{$component}-"]',
-            comma);
+            $selector: '.#{$namespace}#{$glue}#{$component}, [class*="#{$namespace}#{$glue}#{$component}-"]';
+            $selectors: join($selectors, $selector, comma);
         }
     }
 
@@ -1987,7 +1989,8 @@ $css-properties: (
                 @include component-css($components, $config);
             }
         }
-    } @else {
+    }
+    @else {
         @at-root #{$parents} {
             #{$selectors} {
                 @content;
@@ -2096,7 +2099,8 @@ $css-properties: (
         @each $modifier in $modifiers {
             @if $special == 'not' {
                 $modifier-selectors: join($modifier-selectors, '#{$this}:not([class*="#{$glue}#{$modifier}"])', comma);
-            } @else {
+            }
+            @else {
                 $modifier-selectors: join($modifier-selectors, '#{$this}[class*="#{$glue}#{$modifier}"]', comma);
             }
         }
@@ -2160,11 +2164,10 @@ $css-properties: (
             @extend [class*="#{$selector}#{$modifier-glue}"][class*="#{$modifier-glue}#{$modifier}"];
         }
         @else if type-of($modifier) == 'list' {
+            $namespaced-selector: ('[class*="#{$namespaced-parent}#{$modifier-glue}"]');
+            $module-selector: ('[class*="#{$module}#{$modifier-glue}"]');
 
-            $selectors: if($parent,
-                ('[class*="#{$namespaced-parent}#{$modifier-glue}"]'),
-                ('[class*="#{$module}#{$modifier-glue}"]')
-            );
+            $selectors: if($parent, $namespaced-selector, $module-selector);
 
             @each $item in $modifier {
                 $selectors: join($selectors, '[class*="#{$modifier-glue}#{$item}"]', comma);
@@ -2298,16 +2301,12 @@ $css-properties: (
     // Create a unique, random placeholder to store styles
     $placeholder : $value + random(9999);
 
-    $target: if(
-        type-of(option($config, $option)) == 'map',
-        option($config, $option, 'enabled'),
-        option($config, $option)
-    );
+    $get-option: option($config, $option);
+
+    $target: if(type-of($get-option) == 'map', option($config, $option, 'enabled'), $get-option);
 
     // Determine if the option's value is our value of interest
-    $enabled: if(
-        $target == $value, true, false
-    );
+    $enabled: if($target == $value, true, false);
 
     @at-root {
 

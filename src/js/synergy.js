@@ -4,10 +4,11 @@
 /// @author [@esr360](http://twitter.com/esr360)
 ///****************************************************************
 
-// Export global config
-import * as global from './config.json';
-
-export { global };
+export const global = {
+    'module-namespace': '',
+    'component-glue': '_',
+    'modifier-glue': '-'
+}
 
 // Vendor
 //*****************************************************************
@@ -16,6 +17,12 @@ export { default as deepextend } from 'deep-extend';
 
 // Tools & Utilities
 //*****************************************************************
+
+// Tools
+import { 
+    component, 
+    modifier 
+} from './tools';
 
 // Utilities
 import {
@@ -31,9 +38,6 @@ import {
     setDomNodeAttributes
 } from './utilities';
 
-// Tools
-import { component, modifier } from './tools';
-
 export {
     getBlockName,
     getComponents,
@@ -46,12 +50,6 @@ export {
     component,
     modifier
 };
-
-// React Components
-//*****************************************************************
-
-export { default as Module } from './components/module.jsx';
-export { default as Component } from './components/component.jsx';
 
 /**
  * Synergy Module
@@ -83,22 +81,22 @@ export default function Synergy(els, callback, config, custom, parser) {
     exports.query = domNodes;
 
     exports.modifier = (query, operator, target = domNodes) => modifier({
-      glue: modifierGlue,
-      target,
-      module,
-      modifiers,
-      query,
-      operator
+        glue: modifierGlue,
+        target,
+        module,
+        modifiers,
+        query,
+        operator
     });
 
     exports.component = (query, operator, target = domNodes) => component({
-      target,
-      module,
-      components,
-      query,
-      operator,
-      componentGlue,
-      modifierGlue
+        target,
+        module,
+        components,
+        query,
+        operator,
+        componentGlue,
+        modifierGlue
     });
 
     if (callback) {
@@ -110,4 +108,8 @@ export default function Synergy(els, callback, config, custom, parser) {
     }
 
     return exports;
+}
+
+if (typeof window !== 'undefined' && !window.Synergy) {
+    window.Synergy = Synergy;
 }

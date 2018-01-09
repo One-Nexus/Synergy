@@ -6,7 +6,7 @@
 
 [![Synergy](https://raw.githubusercontent.com/esr360/Synergy/gh-pages/logo-small.png "Synergy Logo")](https://github.com/esr360/Synergy)
 
-> A front-end framework for creating modular, configurable and scalable UI modules
+> A front-end framework for creating modular, configurable and scalable UI components for the web
 
 ### Useful Wiki Pages
 
@@ -25,7 +25,7 @@
 [View SassDoc Documentation](http://esr360.github.io/Synergy/docs/sass) | [View JSDoc Documentation](http://esr360.github.io/Synergy/docs/js)
 
 ***
-#### New in version 3.9: Render Synergy modules using React!
+#### New in version 3.9: Render Synergy modules using React! [Learn More](https://github.com/esr360/Synergy/wiki/Render-Components)
 ***
 
 ```js
@@ -322,6 +322,18 @@ Given the above, we would now be able to use any of the following markup example
 ```
 
 ## Changelog
+
+### Version 3.9.0
+
+Released: -
+
+###### Release Notes
+
+* Now compatible with Node-Sass/Libsass 👯‍♂️
+* Ability to render components with React 😎
+* Replacing Grunt with Webpack 🙏
+* Replacing scss-lint with stylelint
+* General minor improvements
 
 ### Version 3.8.1
 
