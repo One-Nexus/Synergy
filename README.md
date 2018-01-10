@@ -29,7 +29,7 @@
 #### New in version 3.9: Render Synergy modules using React! [Learn More](https://github.com/esr360/Synergy/wiki/Render-Components)
 ***
 
-```js
+```jsx
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Module, Component } from 'Synergy';
@@ -53,7 +53,8 @@ const panels = [
 
 // Render Accordion
 ReactDOM.render(
-    <Accordion panels={panels} modifiers={['foo', 'bar']} />, document.getElementById('react')
+    <Accordion panels={panels} modifiers={['foo', 'bar']} />, 
+    document.getElementById('react')
 );
 ```
 
@@ -74,7 +75,7 @@ ReactDOM.render(
 
 ### Quick Look
 
-Synergy uses a naming convention similar to BEM: __Module_Component-Modifier__, but unlike BEM, no keywords ever need to be repeated in selectors [Read More](#TODO).
+Synergy uses a naming convention similar to BEM: __Module_Component-Modifier__, but unlike BEM, no keywords ever need to be repeated in selectors ([Read More](Sass-Walkthrough)).
 
 ###### HTML
 
@@ -221,7 +222,7 @@ Using the Synergy Sass mixins, the foundation for the module's CSS can be writte
 Modules, components and modifiers can easily be manipulated using the Synergy function and methods:
 
 ```js
-import Synergy from 'Synergy';
+import { Synergy } from 'Synergy';
 import config from './header.json';
 
 export default function header(custom) {
@@ -343,7 +344,7 @@ Released: 10th January 2018
 
 ###### Release Notes
 
-* Now compatible with Node-Sass/Libsass 👯‍♂️
+* Now compatible with Node-Sass/Libsass (hence no longer dependent on Ruby) 👯‍♂️
 * Ability to render components with React 😎
 * Replacing Grunt with Webpack 🙏
 * Replacing scss-lint with stylelint
