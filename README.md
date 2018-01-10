@@ -34,10 +34,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Module, Component } from 'Synergy';
 
-// Default configuration
-import defaults from './accordions.json';
-
-const Accordion = ({name = defaults.accordions.name, panels, modifiers}) => (
+const Accordion = ({name = 'accordion', panels, modifiers}) => (
     <Module name={name} modifiers={modifiers}>
         {panels.map(({title, content}, index) => (
             <Component name="panel" key={index}>
@@ -64,11 +61,11 @@ ReactDOM.render(
 
 ```html
 <div class="accordion-foo-bar">
-    <div class="accordion_section">
+    <div class="accordion_panel">
         <div class="accordion_title">foo</div>
         <div class="accordion_content">bar</div>
     </div>
-    <div class="accordion_section">
+    <div class="accordion_panel">
         <div class="accordion_title">fizz</div>
         <div class="accordion_content">buzz</div>
     </div>
@@ -77,10 +74,12 @@ ReactDOM.render(
 
 ### Quick Look
 
+Synergy uses a naming convention similar to BEM: __Module_Component-Modifier__, but unlike BEM, no keywords ever need to be repeated in selectors [Read More](#TODO).
+
 ###### HTML
 
 ```html
-<div class="header-fixed">
+<div class="header-dark-fixed">
     <div class="header_logo">
         ...
     </div>
@@ -94,6 +93,10 @@ ReactDOM.render(
 
     // Core header styles
     ...
+
+    @include modifier('dark') {
+        ...
+    }
 
     @include modifier('fixed') {
         ...
@@ -110,8 +113,9 @@ ReactDOM.render(
 
 ```js
 Synergy('header', header => {
+    const fixed = header.modifier('dark'); // returns Bool
     const fixed = header.modifier('fixed'); // returns Bool
-    const logo = header.component('logo')[0]; // returns HTMLElement
+    const logo  = header.component('logo')[0]; // returns HTMLElement
 
     ...
 });
@@ -297,6 +301,8 @@ header ({
     }
 });
 ```
+
+> Naturally, since this is JS, passing the `background` param here will not change the header's background, it merely exposes the value to `header.js` - probably not something that would be done in real life but is shown just for completeness
 
 #### HTML Usage
 
