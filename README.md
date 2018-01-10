@@ -18,6 +18,7 @@
 * [Sass Walkthrough](https://github.com/esr360/Synergy/wiki/Sass-Walkthrough)
 * [Sass Mixins](https://github.com/esr360/Synergy/wiki/Sass-Mixins)
 * [JavaScript](https://github.com/esr360/Synergy/wiki/JavaScript)
+* [Render Components Using React](https://github.com/esr360/Synergy/wiki/Render-Components)
 * [Environment Configuration](https://github.com/esr360/Synergy/wiki/Environment-Configuration)
 * [Creating a Theme](https://github.com/esr360/Synergy/wiki/Creating-a-Theme)
 * [Developing Synergy](https://github.com/esr360/Synergy/wiki/Developing-Synergy)
@@ -108,9 +109,9 @@ ReactDOM.render(
 ###### JavaScript
 
 ```js
-Synergy('header', function(header) {
-    var fixed = header.modifier('fixed'); // returns Bool
-    var logo = header.component('logo')[0]; // returns HTMLElement
+Synergy('header', header => {
+    const fixed = header.modifier('fixed'); // returns Bool
+    const logo = header.component('logo')[0]; // returns HTMLElement
 
     ...
 });
@@ -164,12 +165,12 @@ Synergy allows you to abstract a new layer on-top of your UI module's styles and
 
 #### _header.scss
 
-Using the Synergy Sass mixins, the foundation for the module's CSS can be written, hard-coding only the core styles for the module - with the goal being to never have to touch this file again (touching only the above `header.json` file):
+Using the Synergy Sass mixins, the foundation for the module's CSS can be written, hard-coding only the core properties for the module:
 
 > Keys within `header.json` which correspond to CSS properties do not need to be added to `_header.scss`
 
 ```scss
-@import './modules/header/header.json';
+@import 'header.json';
 
 @mixin header($custom: ()) {
 
@@ -216,10 +217,10 @@ Using the Synergy Sass mixins, the foundation for the module's CSS can be writte
 Modules, components and modifiers can easily be manipulated using the Synergy function and methods:
 
 ```js
-import { Synergy } from '../../app';
+import Synergy from 'Synergy';
 import config from './header.json';
 
-export function header(custom) {
+export default function header(custom) {
 
     Synergy('header', (header, options) => {
 
@@ -251,8 +252,15 @@ export function header(custom) {
 @import './modules/header/header';
 
 @include header();
+```
 
-/* Passing custom options
+Or with custom options:
+
+```scss
+@import '../node_modules/Synergy/dist/synergy';
+
+@import './modules/header/header';
+
 @include header ((
     'background': #04E2C1,
     'logo': (
@@ -263,20 +271,21 @@ export function header(custom) {
         'enabled': true
     )
 ));
-*/
 ```
 
 #### app.js
 
 ```js
-import { Synergy } from 'Synergy';
-export { Synergy };
-
-import { header } from './modules/header/header';
+import header from './modules/header/header';
 
 header();
+```
 
-/* Passing custom options
+Or with custom options:
+
+```js
+import header from './modules/header/header';
+
 header ({
     background: '#04E2C1',
     logo: {
@@ -287,7 +296,6 @@ header ({
         enabled: true
     }
 });
-*/
 ```
 
 #### HTML Usage
@@ -301,21 +309,21 @@ Given the above, we would now be able to use any of the following markup example
 ```
 
 ```html
-<!-- This is the equivilent of setting `dark.enabled` to `true` -->
+<!-- This is the equivilent of setting `dark.enabled` to `true` in header.json -->
 <header class="header-dark">
     <div class="header_logo"></div>
 </header>
 ```
 
 ```html
-<!-- This is the equivilent of setting `sticky.enabled` to `true` -->
+<!-- This is the equivilent of setting `sticky.enabled` to `true` in header.json -->
 <header class="header-sticky">
     <div class="header_logo"></div>
 </header>
 ```
 
 ```html
-<!-- This is the equivilent of setting both `dark.enabled` and `sticky.enabled` to `true` -->
+<!-- This is the equivilent of setting both `dark.enabled` and `sticky.enabled` to `true` in header.json -->
 <header class="header-dark-sticky">
     <div class="header_logo"></div>
 </header>
@@ -325,7 +333,7 @@ Given the above, we would now be able to use any of the following markup example
 
 ### Version 3.9.0
 
-Released: -
+Released: 10th January 2018
 
 ###### Release Notes
 

@@ -2,7 +2,7 @@
   "name": "Synergy",
   "version": "3.9.0",
   "description": "A front-end framework for building modular, configurable and scalable UI components for the web",
-  "main": "src/js/synergy.js",
+  "main": "src/index.js",
   "author": "(Edmund Reed)[http://twitter.com/esr360] <esr360@live.com>",
   "homepage": "https://github.com/esr360/Synergy",
   "keywords": [
@@ -40,11 +40,13 @@
     "babel-register": "^6.26.0",
     "concat": "^1.0.3",
     "eslint": "^4.14.0",
+    "jsdoc": "^3.5.5",
     "jsdom": "^11.0.0",
     "jsdom-global": "^3.0.2",
     "mocha": "^3.4.2",
     "node-sass": "^4.7.2",
     "sass-true": "^3.0.0-beta.1",
+    "sassdoc": "^2.5.0",
     "stylelint": "^8.4.0",
     "webpack": "^3.10.0"
   },
@@ -55,8 +57,11 @@
     "test": "npm run test:js && npm run test:scss",
     "test:js": "mocha unit-testing/js/tests.js --require babel-register",
     "test:scss": "mocha unit-testing/scss/tests.js --require babel-register",
+    "docs": "npm run docs:js && npm run docs:sass",
+    "docs:js": "jsdoc src/js -r -d docs/js",
+    "docs:sass": "sassdoc src/scss -d docs/sass",
     "js": "webpack",
     "sass": "node ./build/sass-concat.js",
-    "compile": "npm run lint && npm test && npm run js && npm run sass"
+    "compile": "npm run lint && npm test && npm run docs && npm run js && npm run sass"
   }
 }

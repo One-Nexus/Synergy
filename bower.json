@@ -19,7 +19,7 @@
     "react"
   ],
   "main": [
-    "src/js/synergy.js",
+    "src/index.js",
     "src/scss/_synergy.scss"
   ],
   "ignore": [
