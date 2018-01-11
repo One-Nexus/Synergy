@@ -151,42 +151,26 @@
 }
 /// Used to recursively merge (deep merge) two maps
 ///
-/// @author Pedr Browne
+/// @author Zsolt Pentz
 /// @access public
-/// @link https://git.io/vPrlX
+/// @link https://codepen.io/pentzzsolt/pen/yJkgyW
 ///
 /// @param {map} $map-old - The original map
 /// @param {map} $map-new - The new map you wish to merge into the original
-/// @param {bool} $overwrite [true] - Overwrite existing keys
 ///
 /// @return {map} - merged map
-@function map-merge-deep($map-old, $map-new, $overwrite: true) {
+@function map-merge-deep($parent-map, $child-map) {
+    $result: $parent-map;
 
-    // Iterate through each value of the new map
-    @each $key, $new-value in $map-new {
-
-        // Check if that value already exists on the old map
-        @if map-has-key($map-old, $key) {
-            // There is an existing key
-            $old-value: map-get($map-old, $key);
-            @if type-of($new-value) == map and type-of($old-value) == map {
-                // If both are maps, recurse regardless of $overwrite
-                $merged-value: map-merge-deep($old-value, $new-value);
-                $map-old: map-set($map-old, $key, $merged-value);
-            } @else {
-                // Otherwise check $overwrite
-                @if $overwrite {
-                    $map-old: map-set($map-old, $key, $new-value);
-                }
-            }
+    @each $key, $value in $child-map {
+        @if(type-of(map-get($result, $key)) == map and type-of($value) == map) {
+            $result: map-merge($result, ($key: map-merge-deep(map-get($result, $key), $value)));
         } @else {
-            // There is no existing key to add
-            $map-old: map-set($map-old, $key, $new-value);
+            $result: map-merge($result, ($key: $value));
         }
-
     }
 
-    @return $map-old;
+    @return $result;
 }
 /// Reverse a map
 ///
