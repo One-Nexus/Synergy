@@ -16,7 +16,8 @@ export default function(env) {
         output: {
             path: path.resolve(__dirname, 'dist/'),
             filename: '[name].js',
-            publicPath: '/'
+            publicPath: '/',
+            libraryTarget: (target === 'node') ? 'commonjs2' : 'var'
         },
 
         target,
