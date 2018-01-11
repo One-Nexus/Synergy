@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: utilities/stripModifiers.js</title>
+    <title>JSDoc: Source: utilities/getGlue.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: utilities/stripModifiers.js</h1>
+    <h1 class="page-title">Source: utilities/getGlue.js</h1>
 
     
 
@@ -26,23 +26,27 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import * as Synergy from '../synergy';
-
-/**
- * Strip any modifiers from a block name
+            <pre class="prettyprint source linenums"><code>/**
+ * Get glue
  * 
- * @param {String} block
- * @param {String} module
+ * @param {String} type - ['component'|'modifier]
+ * @param {Object} custom
+ * @param {string} glue
  */
-export function stripModifiers(block, module, glue) {
-    // remove module name from block
-    block = block.replace(module, '');
-    // remove modifiers from block
-    block = block.split(glue)[0];
-    // merge module + remaining block
-    block = module + block;
+export function getGlue(type, custom, glue) {
+    let defaultGlue = (type === 'modifier') ? '-' : '_';
 
-    return block;
+    if (custom &amp;&amp; custom.modifierGlue) {
+        glue  = custom[type + 'Glue'].replace(/'/g,'');
+    }
+    else if (window.APPUI &amp;&amp; window.APPUI.global &amp;&amp; window.APPUI.global[type + '-glue']) {
+        glue  = window.APPUI.global[type + '-glue'].replace(/'/g,'');
+    }
+    else {
+        glue = global[type + '-glue']  || defaultGlue;
+    }
+
+    return glue;
 }</code></pre>
         </article>
     </section>

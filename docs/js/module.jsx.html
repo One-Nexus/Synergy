@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: utilities/stripModifiers.js</title>
+    <title>JSDoc: Source: module.jsx</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: utilities/stripModifiers.js</h1>
+    <h1 class="page-title">Source: module.jsx</h1>
 
     
 
@@ -26,24 +26,56 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import * as Synergy from '../synergy';
+            <pre class="prettyprint source linenums"><code>import React from 'react';
+import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 
 /**
- * Strip any modifiers from a block name
- * 
- * @param {String} block
- * @param {String} module
+ * Render a Synergy module
+ *
+ * @extends React.Component
  */
-export function stripModifiers(block, module, glue) {
-    // remove module name from block
-    block = block.replace(module, '');
-    // remove modifiers from block
-    block = block.split(glue)[0];
-    // merge module + remaining block
-    block = module + block;
+export default class Module extends React.Component {
+    /**
+     * Content to pass to children components
+     */
+    getChildContext() {
+        return { 
+            module: this.props.name,
+            renderModifiers: this.renderModifiers
+        };
+    }
 
-    return block;
-}</code></pre>
+    /**
+     * Render any passed modifiers
+     * 
+     * @param {Array} modifiers 
+     */
+    renderModifiers(modifiers) {
+        return (modifiers) ? ('-' + modifiers).replace(',', '-') : '';
+    }
+
+    /**
+     * Render the module
+     */
+    render() {
+        const modifiers = this.renderModifiers(this.props.modifiers);
+
+        const classNames = 
+            this.props.name + modifiers + (this.props.className ? ' ' + this.props.className : '');
+
+        return (
+            &lt;div className={classNames}>
+                {this.props.children}
+            &lt;/div>
+        );
+    }
+}
+
+Module.childContextTypes = {
+    module: PropTypes.string,
+    renderModifiers: PropTypes.func
+};</code></pre>
         </article>
     </section>
 
