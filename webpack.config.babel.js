@@ -3,17 +3,23 @@ import webpack from 'webpack';
 
 export default function(env) {
 
+    const target = env.target || 'node';
+
+    const entry = (target === 'node') ? {'synergy': './src/index.js'} : {
+        'synergy.web': './src/js/synergy.js',
+        'synergy.web.min': './src/js/synergy.js',
+    };
+
     return {
-        entry: {
-            'synergy': './src/js/synergy.js',
-            'synergy.min': './src/js/synergy.js',
-        },
+        entry,
 
         output: {
             path: path.resolve(__dirname, 'dist/'),
             filename: '[name].js',
             publicPath: '/'
         },
+
+        target,
 
         plugins: [
           new webpack.optimize.UglifyJsPlugin({
@@ -22,7 +28,7 @@ export default function(env) {
           })
         ],
 
-        node: { Buffer: false },
+        node: { Buffer: (target === 'web') ? false : true },
 
         module: {
             loaders: [{

@@ -338,6 +338,14 @@ Given the above, we would now be able to use any of the following markup example
 
 ## Changelog
 
+### Version 3.9.1
+
+Released: 11th January 2018
+
+###### Release Notes
+
+* Exporting transpiled module instead of ES6
+
 ### Version 3.9.0
 
 Released: 10th January 2018
