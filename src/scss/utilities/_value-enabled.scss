@@ -11,7 +11,8 @@
         // Does the map contain the 'enabled' key?
         @if map-has-key($value, 'enabled') {
             @return map-get($value, 'enabled');
-        } @else {
+        }
+        @else {
             @return $value;
         }
     }
@@ -20,10 +21,12 @@
         // Is the first value a bool?
         @if type-of(nth($value, 1)) == 'bool' {
             @return nth($value, 1);
-        } @else {
+        }
+        @else {
             @return $value;
         }
-    } @else {
+    }
+    @else {
         @return $value;
     }
 }

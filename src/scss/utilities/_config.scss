@@ -4,21 +4,28 @@
 /// @author [@esr360](http://twitter.com/esr360)
 /// @access public
 ///
-/// @param {map} $map-old - The map which will store default configuration
-/// @param {map} $map-new - The map which will hold custom values
-@function config($map-old, $map-new) {
+/// @param {map} $map-old - The map which holds default configuration
+/// @param {map} $map-new - The map which holds custom values
+/// @param {string} $parser - Custom parser to use for configuration
+@function config($map-old, $map-new, $parser: $sass-config-parser) {
 
     $map-old: map-merge((
         'selector-type'  : $selector-type,
         'extend-options' : $extend-options
     ), $map-old);
 
-    $map-old: map-merge-deep($map-old, $map-new);
+    // Merge default and custom options
+    $map-merged: map-merge-deep($map-old, $map-new);
 
-    // Store merged map in a variable
-    $config: $map-old !global;
+    // Evaluate configuration values
+    @if ($parser) {
+        $map-merged: call($parser, $map-merged);
+    }
+
+    // Store config in global variable
+    $config: $map-merged !global;
 
     // Return merged map
-    @return $map-old;
+    @return $map-merged;
 
 }

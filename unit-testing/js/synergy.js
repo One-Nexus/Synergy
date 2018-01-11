@@ -1,7 +1,20 @@
-import Synergy from '../../src/js/Synergy.js';
+///****************************************************************
+/// Synergy - https://github.com/esr360/Synergy
+///
+/// @author [@esr360](http://twitter.com/esr360)
+///****************************************************************
+
+import Synergy from '../../src/js/synergy.js';
 
 const assert = require('assert');
 const jsdom  = require('jsdom-global')();
+
+window.APPUI = {
+    global: {
+        'modifier-glue' : '-',
+        'component-glue': '_'
+    }
+};
 
 function createModule(id, tag = 'div') {
     var stub = document.createElement(tag);

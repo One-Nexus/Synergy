@@ -1,12 +1,7 @@
 language: node_js
 node_js:
     - 6
-before_install:
-    - rvm install 2.2.4
-    - gem install sass
-    - gem install scss-lint
-    - npm install -g grunt-cli 
 install: 
     - npm install
 before_script: 
-    - grunt compile
+    - npm run compile

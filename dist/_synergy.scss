@@ -151,42 +151,26 @@
 }
 /// Used to recursively merge (deep merge) two maps
 ///
-/// @author Pedr Browne
+/// @author Zsolt Pentz
 /// @access public
-/// @link https://git.io/vPrlX
+/// @link https://codepen.io/pentzzsolt/pen/yJkgyW
 ///
 /// @param {map} $map-old - The original map
 /// @param {map} $map-new - The new map you wish to merge into the original
-/// @param {bool} $overwrite [true] - Overwrite existing keys
 ///
 /// @return {map} - merged map
-@function map-merge-deep($map-old, $map-new, $overwrite: true) {
+@function map-merge-deep($parent-map, $child-map) {
+    $result: $parent-map;
 
-    // Iterate through each value of the new map
-    @each $key, $new-value in $map-new {
-
-        // Check if that value already exists on the old map
-        @if map-has-key($map-old, $key) {
-            // There is an existing key
-            $old-value: map-get($map-old, $key);
-            @if type-of($new-value) == map and type-of($old-value) == map {
-                // If both are maps, recurse regardless of $overwrite
-                $merged-value: map-merge-deep($old-value, $new-value);
-                $map-old: map-set($map-old, $key, $merged-value);
-            } @else {
-                // Otherwise check $overwrite
-                @if $overwrite {
-                    $map-old: map-set($map-old, $key, $new-value);
-                }
-            }
+    @each $key, $value in $child-map {
+        @if(type-of(map-get($result, $key)) == map and type-of($value) == map) {
+            $result: map-merge($result, ($key: map-merge-deep(map-get($result, $key), $value)));
         } @else {
-            // There is no existing key to add
-            $map-old: map-set($map-old, $key, $new-value);
+            $result: map-merge($result, ($key: $value));
         }
-
     }
 
-    @return $map-old;
+    @return $result;
 }
 /// Reverse a map
 ///
@@ -363,8 +347,8 @@
 @function strip-unit($value) {
     @return $value / ($value * 0 + 1);
 }
-// Set the default selector type (flex | chain | static)
-$selector-type: 'flex' !default;
+// Prepend all selectors with a namespace
+$module-namespace: null !default;
 
 // Set the glue to chain modifiers to modules
 $modifier-glue: '-' !default;
@@ -372,11 +356,14 @@ $modifier-glue: '-' !default;
 // Set the glue to chain components to modules
 $component-glue: '_' !default;
 
+// Set the default selector type (flex | chain | static)
+$selector-type: 'flex' !default;
+
 // Extend each module option as a modifier by default?
 $extend-options: true !default;
 
-// Include a mixin by importing the file
-$include-now: false !default;
+// Custom parser to use for configuration
+$sass-config-parser: null !default;
 
 // The variable to hold a single module (do not edit)
 $module: null !default;
@@ -386,24 +373,34 @@ $module: null !default;
 /// @author [@esr360](http://twitter.com/esr360)
 /// @access public
 ///
-/// @param {map} $map-old - The map which will store default configuration
-/// @param {map} $map-new - The map which will hold custom values
-@function config($map-old, $map-new) {
+/// @param {map} $map-old - The map which holds default configuration
+/// @param {map} $map-new - The map which holds custom values
+/// @param {string} $parser - Custom parser to use for configuration
+@function config($map-old, $map-new, $parser: $sass-config-parser) {
 
     $map-old: map-merge((
         'selector-type'  : $selector-type,
         'extend-options' : $extend-options
     ), $map-old);
 
-    $map-old: map-merge-deep($map-old, $map-new);
+    // Merge default and custom options
+    $map-merged: map-merge-deep($map-old, $map-new);
 
-    // Store merged map in a variable
-    $config: $map-old !global;
+    // Evaluate configuration values
+    @if ($parser) {
+        $map-merged: call($parser, $map-merged);
+    }
+
+    // Store config in global variable
+    $config: $map-merged !global;
 
     // Return merged map
-    @return $map-old;
+    @return $map-merged;
 
 }
+/// List of known and valid CSS properties
+///
+/// @type Map
 $css-properties: (
     'accelerator',
     '-wap-accesskey',
@@ -1490,16 +1487,6 @@ $css-properties: (
     'z-index',
     'zoom'
 ) !default;
-/// Used to fetch custom module configuration from a global config
-/// file
-///
-/// @author [@esr360](http://twitter.com/esr360)
-/// @access public
-///
-/// @param {string} $module - The module for which to find configuration
-@function custom($module) {
-    @return if(variable-exists('app') and map-get($app, $module), map-get($app, $module), ())
-}
 /// Return a CSS property if the passed option is enabled
 ///
 /// @author [@esr360](http://twitter.com/esr360)
@@ -1509,12 +1496,15 @@ $css-properties: (
 /// @returns {*} - $true-value if option enabled, otherwise returns $false-value
 @function enabled($option, $true-value, $false-value: '') {
     $breadcrumb: ();
+
     @each $crumb in $option {
         $breadcrumb: join($breadcrumb, $crumb, comma);
     }
+
     @if value-enabled(map-get-deep($config, $breadcrumb...)) {
         @return $true-value;
-    } @else {
+    }
+    @else {
         @return $false-value;
     }
 }
@@ -1597,9 +1587,11 @@ $css-properties: (
         $component-end: '';
         @if $component-end-1 and $component-end-2 {
             $component-end: min($component-end-1, $component-end-2);
-        } @else if $component-end-1 and not $component-end-2 {
+        }
+        @else if $component-end-1 and not $component-end-2 {
             $component-end: $component-end-1;
-        } @else if not $component-end-1 and $component-end-2 {
+        }
+        @else if not $component-end-1 and $component-end-2 {
             $component-end: $component-end-2;
         }
 
@@ -1642,6 +1634,24 @@ $css-properties: (
 
     @return $selector;
 }
+/// Output a selector for a module with specified component/modifier
+///
+/// @access public
+@function selector($module, $component: null, $modifier: null) {
+    $selector: '';
+
+    @if $component {
+        $selector: '[class*="#{$module}_"][class*="_#{$component}"]';
+    }
+    @else {
+        $selector: '[class*="#{$module}-"]';
+    }
+    @if $modifier {
+        $selector: '#{$selector}[class*="-#{$modifier}"]';
+    }
+
+    @return $selector;
+}
 /// Alias function to option()
 ///
 /// @author [@esr360](http://twitter.com/esr360)
@@ -1652,6 +1662,20 @@ $css-properties: (
 @function setting($map, $keys...) {
     @return option($map, $keys...);
 }
+/// Strip the glue (-, _) from a string
+///
+/// @access public
+///
+/// @param {string} $string
+/// @param {string} $glue
+@function strip-glue($string, $glue) {
+    $placeholder: random(99999);
+
+    $clean-string: str-replace($string, $string, $placeholder + $string);
+    $clean-string: str-replace($clean-string, $placeholder + $glue, '');
+
+    @return $clean-string;
+}
 /// Get a value from the current module's configuration
 ///
 /// @author [@esr360](http://twitter.com/esr360)
@@ -1659,11 +1683,26 @@ $css-properties: (
 ///
 /// @param {arglist} $options
 @function this($options...) {
-    @if not option($config, $options...) {
+    $value: option($config, $options...);
+    $debug: true;
+
+    @if (variable-exists('sass-config-parser') and $sass-config-parser) {
+        $value: call($sass-config-parser, $value);
+    }
+
+    $this: &;
+
+    @if length($this) > 0 {
+        @if str-index(inspect(nth($this, 1)), '%') == 1 {
+            $debug: false;
+        }
+    }
+
+    @if $debug and not $value and $value != false {
         @warn '#{$options} not found in #{$module} config';
     }
 
-    @return option($config, $options...);
+    @return $value;
 }
 /// Determine if a passed value should be considered 'enabled'
 ///
@@ -1678,7 +1717,8 @@ $css-properties: (
         // Does the map contain the 'enabled' key?
         @if map-has-key($value, 'enabled') {
             @return map-get($value, 'enabled');
-        } @else {
+        }
+        @else {
             @return $value;
         }
     }
@@ -1687,10 +1727,12 @@ $css-properties: (
         // Is the first value a bool?
         @if type-of(nth($value, 1)) == 'bool' {
             @return nth($value, 1);
-        } @else {
+        }
+        @else {
             @return $value;
         }
-    } @else {
+    }
+    @else {
         @return $value;
     }
 }
@@ -1708,15 +1750,14 @@ $css-properties: (
 ///     }
 ///
 ///     <div class="header">...</div>
-@mixin module(
-    $modules: if(variable-exists('config'), (map-get($config, 'name')), ''),
-    $type: if(variable-exists('config'), (map-get($config, 'selector-type')), $selector-type)
-) {
+@mixin module($modules: if(variable-exists('config'), (map-get($config, 'name')), ''), $type: if(variable-exists('config'), (map-get($config, 'selector-type')), $selector-type)) {
+
+    @if ($module-namespace) {
+        $modules: $module-namespace + $modules;
+    }
 
     // disable any output
-    $disable-output: if(
-        variable-exists('disable-output'), variable-exists('disable-output'), false
-    );
+    $disable-output: if(variable-exists('disable-output'), $disable-output, false);
     @if variable-exists('config') and map-has-key($config, 'disable-output') {
         $disable-output: map-get($config, 'disable-output');
     }
@@ -1754,13 +1795,17 @@ $css-properties: (
             @if not $nested {
                 @include extend-modifiers;
                 @include combine-modifiers;
-                @if $modules == map-get($config, 'name') or $target {
-                    @if $target {
-                        #{$target} {
+
+                @if variable-exists('config') {
+                    @if $modules == map-get($config, 'name') or $target {
+                        @if $target {
+                            #{$target} {
+                                @include module-css($config);
+                            }
+                        }
+                        @else {
                             @include module-css($config);
                         }
-                    } @else {
-                        @include module-css($config);
                     }
                 }
             }
@@ -1819,14 +1864,14 @@ $css-properties: (
 
         // the propery is for a modifier
         @if str-slice($property, 1, 1) == $modifier-glue {
-            @include modifier(str-replace($property, $modifier-glue, '')) {
+            @include modifier(strip-glue($property, $modifier-glue)) {
                 @include module-css($value);
             }
         }
 
         // the property is for a component
         @else if str-slice($property, 1, 1) == $component-glue {
-            @include component(str-replace($property, $component-glue, '')) {
+            @include component(strip-glue($property, $component-glue)) {
                 @include module-css($value);
             }
         }
@@ -1873,26 +1918,22 @@ $css-properties: (
 ///     <div class="header_wrapper">...</div>
 @mixin component($components: null, $glue: $component-glue) {
 
-    $selectors: '[class*="#{$module}#{$glue}"]';
-
-    $namespace: nth(module-tree(&), length(module-tree(&)));
+    $parents   : ();
+    $selectors : '[class*="#{$module}#{$glue}"]';
+    $this      : &;
+    $tree      : module-tree($this);
+    $namespace : nth($tree, length($tree));
 
     @if $components {
-
         $selectors: ();
 
         @each $component in $components {
-            $selectors: join($selectors, '.#{$namespace}#{$glue}#{$component}, [class*="#{$namespace}#{$glue}#{$component}-"]', comma);
+            $selector: '.#{$namespace}#{$glue}#{$component}, [class*="#{$namespace}#{$glue}#{$component}-"]';
+            $selectors: join($selectors, $selector, comma);
         }
-
     }
 
-    // Generate the parent selectors
-
-    $parents: ();
-
     @each $selector in & {
-
         // spoof the selector into a list
         $selector: str-replace(inspect($selector), ' ', ', ');
         $selector: selector-parse($selector);
@@ -1902,34 +1943,44 @@ $css-properties: (
             $selector: list-remove($selector, nth($selector, length($selector)));
         }
 
-        // convert the selector back into a string
         @if length($selector) == 1 {
             $selector: nth($selector, 1);
         }
+
+        // convert the selector back into a string
         $selector: str-replace(inspect($selector), ', ', ' ');
 
         // Re-build the parent selector
         $parents: append($parents, $selector, comma);
     }
 
-    // remove duplicate selectors
     $parents: list-remove-duplicates($parents);
 
     @if length($parents) == 1 {
         $parents: nth($parents, 1);
+        // BEGIN TOMFOOLERY
+        $parents: str-replace(inspect($parents), ' ', ', ');
+        $parents: selector-parse($parents);
+        $parents: list-remove-duplicates($parents);
+        $parents: str-replace(inspect($parents), ', ', ' ');
+        // END TOMFOOLERY
     }
 
     @if ($parents == '()') {
         @at-root #{$selectors} {
             @content;
-            @include component-css($components, $config);
+            @if variable-exists('config') {
+                @include component-css($components, $config);
+            }
         }
-    } @else {
+    }
+    @else {
         @at-root #{$parents} {
             #{$selectors} {
                 @content;
-                // @TODO confirm if below needed
-                // @include component-css($components, $config);
+                @if variable-exists('config') {
+                    @include component-css($components, $config);
+                }
             }
         }
     }
@@ -1972,6 +2023,11 @@ $css-properties: (
                         @include component-css($property, map-get($config, $component));
                     }
                 }
+                @else if str-index($property, $modifier-glue) == 1 {
+                    @include modifier(strip-glue($property, $modifier-glue)) {
+                        @include component-css($property, map-get($config, $component));
+                    }
+                }
                 @else {
                     @include component($property) {
                         @include component-css($property, map-get($config, $component));
@@ -2002,36 +2058,40 @@ $css-properties: (
 ///     <div class="button-large">...</div>
 @mixin modifier($modifiers, $special: null, $glue: $modifier-glue) {
 
-    $selectors: &;
+    $this: &;
+    $selectors: $this;
 
-    @if str-index(inspect(&), '.#{$module}') {
-        @if (variable-exists('config') and map-get($config, 'selector-type') == 'flex')
-        or (not variable-exists('config') and $selector-type == 'flex') {
+    $is-local-flex-type: variable-exists('config') and map-get($config, 'selector-type') == 'flex';
+    $is-global-flex-type: not variable-exists('config') and $selector-type == 'flex';
+
+    @if str-index(inspect($this), '.#{$module}') {
+        @if $is-local-flex-type or $is-global-flex-type {
             $selectors: ();
-            @for $i from 1 through length(&) {
+
+            @for $i from 1 through length($this) {
                 @if $i % 2 == 0 {
-                    $selectors: append($selectors, nth(&, $i), comma);
+                    $selectors: append($selectors, nth($this, $i), comma);
                 }
             }
         }
     }
 
     @at-root #{$selectors} {
-
+        $this: &;
         $modifier-selectors: ();
 
         @each $modifier in $modifiers {
             @if $special == 'not' {
-                $modifier-selectors: join($modifier-selectors, '&:not([class*="#{$glue}#{$modifier}"])', comma);
-            } @else {
-                $modifier-selectors: join($modifier-selectors, '&[class*="#{$glue}#{$modifier}"]', comma);
+                $modifier-selectors: join($modifier-selectors, '#{$this}:not([class*="#{$glue}#{$modifier}"])', comma);
+            }
+            @else {
+                $modifier-selectors: join($modifier-selectors, '#{$this}[class*="#{$glue}#{$modifier}"]', comma);
             }
         }
 
-        #{$modifier-selectors} {
+        @at-root #{$modifier-selectors} {
             @content;
         }
-
     }
 
 } // modifier()
@@ -2074,22 +2134,24 @@ $css-properties: (
 ///     <div class="button-primary">...</div>
 @mixin extend($modifiers: null, $parent: null, $core: false) {
 
+    $namespaced-parent: if($module-namespace and $parent, $module-namespace + $parent, $parent);
+
     @if $core or not $modifiers {
-        @extend .#{$parent};
+        @extend .#{$namespaced-parent};
     }
 
     @each $modifier in $modifiers {
         @if type-of($modifier) == 'string' {
 
-            $selector: if($parent, $parent, $module);
+            $selector: if($parent, $namespaced-parent, $module);
 
             @extend [class*="#{$selector}#{$modifier-glue}"][class*="#{$modifier-glue}#{$modifier}"];
         }
         @else if type-of($modifier) == 'list' {
+            $namespaced-selector: ('[class*="#{$namespaced-parent}#{$modifier-glue}"]');
+            $module-selector: ('[class*="#{$module}#{$modifier-glue}"]');
 
-            $selectors: if(
-                $parent, ('[class*="#{$parent}#{$modifier-glue}"]'), ('[class*="#{$module}#{$modifier-glue}"]')
-            );
+            $selectors: if($parent, $namespaced-selector, $module-selector);
 
             @each $item in $modifier {
                 $selectors: join($selectors, '[class*="#{$modifier-glue}#{$item}"]', comma);
@@ -2169,19 +2231,22 @@ $css-properties: (
 
     // Store the styles in the placeholder
     @at-root %#{$placeholder} {
+        @if type-of(this($option)) == 'map' and not this($option, 'disable-css') {
+            @include get-styles(this($option));
+        }
         @content;
     }
 
     // Output the styles if the option is enabled
     @if value-enabled($value) {
-        @extend %#{$placeholder};
+        @content;
     }
 
     // Create a modifier for the option if it is not enabled
     // by default
     @if $extend-options and not value-enabled($value) {
         @include modifier($option) {
-            @extend %#{$placeholder};
+            @content;
         }
     }
 
@@ -2220,16 +2285,12 @@ $css-properties: (
     // Create a unique, random placeholder to store styles
     $placeholder : $value + random(9999);
 
-    $target: if(
-        type-of(option($config, $option)) == 'map',
-        option($config, $option, 'enabled'),
-        option($config, $option)
-    );
+    $get-option: option($config, $option);
+
+    $target: if(type-of($get-option) == 'map', option($config, $option, 'enabled'), $get-option);
 
     // Determine if the option's value is our value of interest
-    $enabled: if(
-        $target == $value, true, false
-    );
+    $enabled: if($target == $value, true, false);
 
     @at-root {
 

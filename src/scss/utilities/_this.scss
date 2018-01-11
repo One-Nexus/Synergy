@@ -5,9 +5,24 @@
 ///
 /// @param {arglist} $options
 @function this($options...) {
-    @if not option($config, $options...) {
+    $value: option($config, $options...);
+    $debug: true;
+
+    @if (variable-exists('sass-config-parser') and $sass-config-parser) {
+        $value: call($sass-config-parser, $value);
+    }
+
+    $this: &;
+
+    @if length($this) > 0 {
+        @if str-index(inspect(nth($this, 1)), '%') == 1 {
+            $debug: false;
+        }
+    }
+
+    @if $debug and not $value and $value != false {
         @warn '#{$options} not found in #{$module} config';
     }
 
-    @return option($config, $options...);
+    @return $value;
 }

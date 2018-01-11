@@ -32,16 +32,12 @@
     // Create a unique, random placeholder to store styles
     $placeholder : $value + random(9999);
 
-    $target: if(
-        type-of(option($config, $option)) == 'map',
-        option($config, $option, 'enabled'),
-        option($config, $option)
-    );
+    $get-option: option($config, $option);
+
+    $target: if(type-of($get-option) == 'map', option($config, $option, 'enabled'), $get-option);
 
     // Determine if the option's value is our value of interest
-    $enabled: if(
-        $target == $value, true, false
-    );
+    $enabled: if($target == $value, true, false);
 
     @at-root {
 

@@ -3,12 +3,10 @@ import * as Synergy from '../synergy';
 /**
  * Retrieve any components of a Synergy HTML Element
  * 
- * @function getDomNodes
- * 
  * @param {*} query
  * @param {String} module
  */
-export function getDomNodes(query, module) {
+export function getDomNodes(query, module, modifierGlue) {
     if (!Synergy.isValidSelector) {
         console.warn('Synergy:getDomNodes - Synergy is missing `isValidSelector()`');
     }
@@ -20,14 +18,14 @@ export function getDomNodes(query, module) {
             domNodes = document.querySelectorAll(query);
         }
         else {
-            domNodes = document.querySelectorAll(`.${module}, [class*="${module}-"]`);
+            domNodes = document.querySelectorAll(`.${module}, [class*="${module}${modifierGlue}"]`);
         }
     } else if (typeof query === 'object') {
         if ((query[0] instanceof NodeList) || (query[0] instanceof HTMLElement)) {
             domNodes = query[0];
         } 
         else if (typeof query[0] === 'string') {
-            domNodes = document.querySelectorAll(`.${query[0]}, [class*="${query[0]}-"]`);
+            domNodes = document.querySelectorAll(`.${query[0]}, [class*="${query[0]}${modifierGlue}"]`);
         }
     }
 
