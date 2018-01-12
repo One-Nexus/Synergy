@@ -1929,7 +1929,7 @@ var Module = function (_React$Component) {
     }, {
         key: 'renderModifiers',
         value: function renderModifiers(modifiers) {
-            return modifiers ? ('-' + modifiers).replace(',', '-') : '';
+            return modifiers ? ('-' + modifiers).replace(/,/g, '-') : '';
         }
 
         /**

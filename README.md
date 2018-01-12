@@ -338,6 +338,14 @@ Given the above, we would now be able to use any of the following markup example
 
 ## Changelog
 
+### Version 3.9.2
+
+Released: 13th January 2018
+
+###### Release Notes
+
+* Fixing bug where only first modifier in module.jsx was parsed
+
 ### Version 3.9.1
 
 Released: 11th January 2018
@@ -365,21 +373,3 @@ Released: 6th October 2017
 ###### Release Notes
 
 * Fixing issue with `this()` function error warning
-
-### Version 3.8.0
-
-Released: 4th October 2017
-
-###### Release Notes
-
-* add sass warn message when this('option') doesn't exist
-* fixing issues of module-tree functon stripping hyphens from module name
-* improving how CSS styles are passed to modules
-* processes values in "active" and "hover" entries in config
-* refactoring Synergy.js
-* adding selector() function
-* allow passing of custom parser to parse configuration
-* adding deepextend JS module
-* making component and modifier glue configurable
-
-[View complete changelog](https://github.com/esr360/Synergy/wiki/Changelog)
