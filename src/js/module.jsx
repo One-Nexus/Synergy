@@ -24,7 +24,7 @@ export default class Module extends React.Component {
      * @param {Array} modifiers 
      */
     renderModifiers(modifiers) {
-        return (modifiers) ? ('-' + modifiers).replace(',', '-') : '';
+        return (modifiers) ? ('-' + modifiers).replace(/,/g, '-') : '';
     }
 
     /**
