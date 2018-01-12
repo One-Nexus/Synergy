@@ -12,7 +12,7 @@ export default class Component extends React.Component {
         const module = this.props.module || this.context.module;
         const modifiers = this.context.renderModifiers(this.props.modifiers);
 
-        if (this.props.children.type) {
+        if (this.props.children && this.props.children.type) {
             if (this.constructor.name === this.props.children.type.name) {
                 const parentKeys = Object.keys(this.props).sort();
                 const childKeys = Object.keys(this.props.children.props).sort();
