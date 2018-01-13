@@ -31,15 +31,16 @@ export default class Module extends React.Component {
      * Render the module
      */
     render() {
+        const Tag = this.props.tag || 'div';
         const modifiers = this.renderModifiers(this.props.modifiers);
 
         const classNames = 
             this.props.name + modifiers + (this.props.className ? ' ' + this.props.className : '');
 
         return (
-            <div className={classNames}>
+            <Tag className={classNames}>
                 {this.props.children}
-            </div>
+            </Tag>
         );
     }
 }
