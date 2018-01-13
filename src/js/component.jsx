@@ -12,6 +12,9 @@ export default class Component extends React.Component {
         const module = this.props.module || this.context.module;
         const modifiers = this.context.renderModifiers(this.props.modifiers);
 
+        const classNames = 
+            `${module}_${this.props.name}${modifiers}${this.props.className ? ' ' + this.props.className : ''}`
+
         if (this.props.children && this.props.children.type) {
             if (this.constructor.name === this.props.children.type.name) {
                 const parentKeys = Object.keys(this.props).sort();
@@ -23,7 +26,7 @@ export default class Component extends React.Component {
             }
         } else {
             return (
-                <div className={`${module}_${this.props.name}${modifiers}`}>
+                <div className={classNames} onClick={this.props.onClick}>
                     {this.props.children}
                 </div>
             );
