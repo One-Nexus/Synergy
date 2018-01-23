@@ -19,12 +19,42 @@ export default class Module extends React.Component {
     }
 
     /**
+     * Content to pass to children components
+     */
+    getBlacklistedModifiers() {
+        return (global && global.Synergy) ? global.Synergy.blacklistedModifiers : [];
+    }
+
+    /**
+     * Get modifiers from props
+     */
+    getModifiersFromProps(props, blacklist = this.getBlacklistedModifiers()) {
+        const modifiers = [];
+
+        for (var prop in props) {
+            const [key, value] = [prop, props[prop]];
+
+            if (typeof value === 'boolean' && value) {
+                if (blacklist.indexOf(key) < 0) {
+                    modifiers.push(key);
+                }
+            }
+        }
+
+        return modifiers;
+    }
+
+    /**
      * Render any passed modifiers
      * 
      * @param {Array} modifiers 
      */
     renderModifiers(modifiers) {
-        return (modifiers) ? ('-' + modifiers).replace(/,/g, '-') : '';
+        if (modifiers && typeof modifiers === 'object' && modifiers.length) {
+            return ('-' + modifiers).replace(/,/g, '-');
+        }
+
+        return '';
     }
 
     /**
@@ -32,10 +62,11 @@ export default class Module extends React.Component {
      */
     render() {
         const Tag = this.props.tag || 'div';
-        const modifiers = this.renderModifiers(this.props.modifiers);
-
-        const classNames = 
-            this.props.name + modifiers + (this.props.className ? ' ' + this.props.className : '');
+        const propModifiers = this.renderModifiers(this.getModifiersFromProps(this.props));
+        const passedModifiers = this.renderModifiers(this.props.modifiers);
+        const modifiers = propModifiers + passedModifiers;
+        const classes = this.props.className ? ' ' + this.props.className : '';
+        const classNames = this.props.name + modifiers + classes;
 
         return (
             <Tag className={classNames}>
