@@ -2,6 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
+import getModifiersFromProps from './utilities/getModifiersFromProps';
+import renderModifiers from './utilities/renderModifiers';
+
 /**
  * Render a Synergy component
  *
@@ -10,10 +13,9 @@ import PropTypes from 'prop-types';
 export default class Component extends React.Component {
     render() {
         const module = this.props.module || this.context.module;
-        const modifiers = this.context.renderModifiers(this.props.modifiers);
-
-        const classNames = 
-            `${module}_${this.props.name}${modifiers}${this.props.className ? ' ' + this.props.className : ''}`
+        const modifiers = renderModifiers(this.props.modifiers);
+        const classes = this.props.className ? ' ' + this.props.className : '';
+        const selector = `${module}_${this.props.name + modifiers}${classes}`
 
         if (this.props.children && this.props.children.type) {
             if (this.constructor.name === this.props.children.type.name) {
@@ -26,7 +28,7 @@ export default class Component extends React.Component {
             }
         } else {
             return (
-                <div className={classNames} onClick={this.props.onClick}>
+                <div className={selector} onClick={this.props.onClick}>
                     {this.props.children}
                 </div>
             );
@@ -35,6 +37,28 @@ export default class Component extends React.Component {
 }
 
 Component.contextTypes = {
-    module: PropTypes.string,
-    renderModifiers: PropTypes.func
+    module: PropTypes.string
 };
+
+export class Wrapper extends Component {
+    render() {
+        const namespace = this.props.name || 'wrapper';
+        const module = this.props.module || this.props.children.props.name;
+        const modifiers = renderModifiers(this.props.modifiers);
+        const classes = this.props.className ? ' ' + this.props.className : '';
+
+        return(
+            <div className={`${module}_${namespace + modifiers}${classes}`}>
+                {this.props.children}
+            </div>
+        )
+    }
+}
+
+export class Group extends Component {
+    render() {
+        return(
+            <Wrapper name='group' {...this.props}>{this.props.children}</Wrapper>
+        )
+    }
+}
