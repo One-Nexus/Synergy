@@ -17,8 +17,21 @@
 ///     <div class="button-large">...</div>
 @mixin modifier($modifiers, $special: null, $glue: $modifier-glue) {
 
-    $this: &;
+    // BEGIN TOMFOOLERY https://github.com/sass/libsass/issues/2520
+    $this: ();
+
+    @each $selector in & {
+        $selector: str-replace(inspect($selector), ' ', ', ');
+        $selector: selector-parse($selector);
+        $selector: list-remove-duplicates($selector);
+        $selector: str-replace(inspect($selector), ', ', ' ');
+
+        $this: append($this, $selector, comma);
+    }
+
     $selectors: $this;
+    // END TOMFOOLERY
+    //$selectors: &;
 
     $is-local-flex-type: variable-exists('config') and map-get($config, 'selector-type') == 'flex';
     $is-global-flex-type: not variable-exists('config') and $selector-type == 'flex';
