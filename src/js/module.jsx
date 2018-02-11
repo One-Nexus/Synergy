@@ -38,7 +38,7 @@ export default class Module extends React.Component {
         }
 
         return (
-            <Tag className={classNames}>
+            <Tag id={this.props.id} className={classNames} data-module={this.props.name}>
                 {this.props.children}
             </Tag>
         );
