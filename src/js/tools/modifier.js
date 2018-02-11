@@ -74,6 +74,7 @@ function toggleModifier(moduleName, target, query, operator, glue) {
     return Array.prototype.forEach.call(target.classList, className => {
         if (className.indexOf(moduleName) === 0) {
             target.classList.remove(className);
+
             target.classList.add(
                 (operator === 'set') ? className + glue + query : className.replace(glue + query, '')
             );

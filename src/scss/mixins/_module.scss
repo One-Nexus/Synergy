@@ -12,7 +12,16 @@
 ///     }
 ///
 ///     <div class="header">...</div>
-@mixin module($modules: if(variable-exists('config'), (map-get($config, 'name')), ''), $type: if(variable-exists('config'), (map-get($config, 'selector-type')), $selector-type)) {
+@mixin module(
+    $modules: if(variable-exists('config'), (map-get($config, 'name')), ''), 
+    $type: if(variable-exists('config'), (map-get($config, 'selector-type')), $selector-type)
+) {
+    $content: false;
+
+    @if type-of($modules) == 'map' {
+        $content: $modules;
+        $modules: if(variable-exists('config'), (map-get($config, 'name')), '');
+    }
 
     @if ($module-namespace) {
         $modules: $module-namespace + $modules;
@@ -20,6 +29,7 @@
 
     // disable any output
     $disable-output: if(variable-exists('disable-output'), $disable-output, false);
+
     @if variable-exists('config') and map-has-key($config, 'disable-output') {
         $disable-output: map-get($config, 'disable-output');
     }
@@ -54,6 +64,7 @@
     @if not $disable-output {
         #{$selectors} {
             @content;
+
             @if not $nested {
                 @include extend-modifiers;
                 @include combine-modifiers;
@@ -62,18 +73,17 @@
                     @if $modules == map-get($config, 'name') or $target {
                         @if $target {
                             #{$target} {
-                                @include module-css($config);
+                                @include get-css-from-map($config);
                             }
                         }
                         @else {
-                            @include module-css($config);
+                            @include get-css-from-map($config);
                         }
                     }
                 }
             }
         }
     }
-
 }
 
 /// Alias for module() mixin
@@ -113,52 +123,4 @@
     @if variable-exists('config') and $modifiers {
         @include extend(($modifiers));
     }
-}
-
-/// Output CSS styles from config
-///
-/// @author [@esr360](http://twitter.com/esr360)
-///
-/// @param {map} $config - The confing to find and output CSS from
-@mixin module-css($config) {
-
-    @each $property, $value in $config {
-
-        // the propery is for a modifier
-        @if str-slice($property, 1, 1) == $modifier-glue {
-            @include modifier(strip-glue($property, $modifier-glue)) {
-                @include module-css($value);
-            }
-        }
-
-        // the property is for a component
-        @else if str-slice($property, 1, 1) == $component-glue {
-            @include component(strip-glue($property, $component-glue)) {
-                @include module-css($value);
-            }
-        }
-
-        // the property is for hovered states
-        @else if $property == 'hover' {
-            &:hover {
-                @include module-css($value);
-            }
-        }
-
-        // the property is for active states
-        @else if $property == 'active' {
-            @include modifier('active') {
-                @include module-css($value);
-            }
-        }
-
-        // the property is regular CSS
-        @else if index($css-properties, $property) {
-            @if type-of($value) != 'map' {
-                #{$property}: $value;
-            }
-        }
-
-    }
-
 }

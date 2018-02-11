@@ -1,0 +1,44 @@
+/// Get CSS from Sass map
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @access public
+///
+/// @param {map} $map - The map from which to get CSS
+@mixin get-css-from-map($map, $config: false) {
+    @each $property, $value in $map {
+        // $property defines new Modifier
+        @if str-index($property, 'modifier(') == 1 or str-index($property, $modifier-glue) == 1 {
+            @include modifier(get-param($property)) {
+                @include get-css-from-map($value);
+            }
+        }
+
+        // $property defines new Component
+        @else if str-index($property, 'component(') == 1 or str-index($property, $component-glue) == 1 {
+            @include component(get-param($property)) {
+                @include get-css-from-map($value);
+            }
+        }
+
+        // $property defines :hover styles
+        @else if $property == 'hover' {
+            &:hover {
+                @include get-css-from-map($value);
+            }
+        }
+
+        // $property defines .active styles
+        @else if $property == 'active' {
+            @include modifier('active') {
+                @include get-css-from-map($value);
+            }
+        }
+
+        // $property is a valid CSS property
+        @else if index($css-properties, $property) {
+            @if type-of($value) != 'map' {
+                #{$property}: $value;
+            }
+        }
+    }
+}

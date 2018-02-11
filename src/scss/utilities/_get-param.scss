@@ -1,0 +1,27 @@
+/// Get parmater from config string
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @access public
+///
+/// @param {string} $string - the string from which to retrieve param
+@function get-param($string) {
+    @if str-index($string, 'component("') == 1 {
+        $string: str-replace($string, 'component("', '');
+        $string: str-replace($string, '")', '');
+    }
+
+    @if str-index($string, 'modifier("') == 1  {
+        $string: str-replace($string, 'modifier("', '');
+        $string: str-replace($string, '")', '');
+    }
+
+    @if str-index($string, $component-glue) == 1 {
+        $string: strip-glue($string, $component-glue);
+    }
+
+    @if str-index($string, $modifier-glue) == 1 {
+        $string: strip-glue($string, $modifier-glue);
+    }
+
+    @return $string;
+}

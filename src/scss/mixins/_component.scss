@@ -14,7 +14,7 @@
 ///     }
 ///
 ///     <div class="header_wrapper">...</div>
-@mixin component($components: null, $glue: $component-glue) {
+@mixin component($components: null, $content: (), $glue: $component-glue) {
 
     $parents   : ();
     $selectors : '[class*="#{$module}#{$glue}"]';
@@ -56,7 +56,7 @@
 
     @if length($parents) == 1 {
         $parents: nth($parents, 1);
-        // BEGIN TOMFOOLERY
+        // BEGIN TOMFOOLERY https://github.com/sass/libsass/issues/2520
         $parents: str-replace(inspect($parents), ' ', ', ');
         $parents: selector-parse($parents);
         $parents: list-remove-duplicates($parents);
@@ -67,6 +67,7 @@
     @if ($parents == '()') {
         @at-root #{$selectors} {
             @content;
+
             @if variable-exists('config') {
                 @include component-css($components, $config);
             }
@@ -76,6 +77,15 @@
         @at-root #{$parents} {
             #{$selectors} {
                 @content;
+
+                @if $content {
+                    @include get-css-from-map($content);
+                }
+
+                @if $content != () {
+                    @debug map-get($config, $components), $content;
+                }
+
                 @if variable-exists('config') {
                     @include component-css($components, $config);
                 }
@@ -104,36 +114,8 @@
 /// @param {map} $config - The confing to find and output CSS from
 @mixin component-css($components, $config) {
     @each $component in $components {
-
         @if map-has-key($config, $component) and type-of(map-get($config, $component)) == 'map' {
-            @each $property, $value in map-get($config, $component) {
-
-                @if index($css-properties, $property) {
-                    #{$property}: $value;
-                }
-                @else if $property == 'hover' {
-                    &:hover {
-                        @include component-css($property, map-get($config, $component));
-                    }
-                }
-                @else if $property == 'active' {
-                    @include modifier('active') {
-                        @include component-css($property, map-get($config, $component));
-                    }
-                }
-                @else if str-index($property, $modifier-glue) == 1 {
-                    @include modifier(strip-glue($property, $modifier-glue)) {
-                        @include component-css($property, map-get($config, $component));
-                    }
-                }
-                @else {
-                    @include component($property) {
-                        @include component-css($property, map-get($config, $component));
-                    }
-                }
-
-            }
+            @include get-css-from-map(map-get($config, $component));
         }
-
     }
 }
