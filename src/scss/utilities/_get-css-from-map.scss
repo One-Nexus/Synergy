@@ -4,7 +4,7 @@
 /// @access public
 ///
 /// @param {map} $map - The map from which to get CSS
-@mixin get-css-from-map($map, $config: false) {
+@mixin get-css-from-map($map) {
     @each $property, $value in $map {
         // $property defines new Modifier
         @if str-index($property, 'modifier(') == 1 or str-index($property, $modifier-glue) == 1 {

@@ -78,17 +78,13 @@
             #{$selectors} {
                 @content;
 
-                @if $content {
-                    @include get-css-from-map($content);
-                }
-
                 @if $content != () {
-                    @debug map-get($config, $components), $content;
+                    @each $component in $components {
+                        $content: merge-css-maps($content, map-get($config, $component))
+                    }
                 }
 
-                @if variable-exists('config') {
-                    @include component-css($components, $config);
-                }
+                @include get-css-from-map($content);
             }
         }
     }
