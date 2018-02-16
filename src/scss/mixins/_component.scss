@@ -68,9 +68,12 @@
         @at-root #{$selectors} {
             @content;
 
-            @if variable-exists('config') {
-                @include component-css($components, $config);
+            @each $component in $components {
+                $component: if(map-get($config, $component), map-get($config, $component), ());
+                $content: merge-css-maps($content, $component);
             }
+
+            @include get-css-from-map($content);
         }
     }
     @else {
@@ -78,10 +81,9 @@
             #{$selectors} {
                 @content;
 
-                @if $content != () {
-                    @each $component in $components {
-                        $content: merge-css-maps($content, map-get($config, $component))
-                    }
+                @each $component in $components {
+                    $component: if(map-get($config, $component), map-get($config, $component), ());
+                    $content: merge-css-maps($content, $component);
                 }
 
                 @include get-css-from-map($content);

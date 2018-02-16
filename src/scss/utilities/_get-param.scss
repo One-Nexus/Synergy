@@ -10,16 +10,16 @@
         $string: str-replace($string, '")', '');
     }
 
-    @if str-index($string, 'modifier("') == 1  {
+    @else if str-index($string, 'modifier("') == 1  {
         $string: str-replace($string, 'modifier("', '');
         $string: str-replace($string, '")', '');
     }
 
-    @if str-index($string, $component-glue) == 1 {
+    @else if str-index($string, $component-glue) == 1 {
         $string: strip-glue($string, $component-glue);
     }
 
-    @if str-index($string, $modifier-glue) == 1 {
+    @else if str-index($string, $modifier-glue) == 1 {
         $string: strip-glue($string, $modifier-glue);
     }
 
