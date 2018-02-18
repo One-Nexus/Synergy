@@ -56,12 +56,7 @@
 
     @if length($parents) == 1 {
         $parents: nth($parents, 1);
-        // BEGIN TOMFOOLERY https://github.com/sass/libsass/issues/2520
-        $parents: str-replace(inspect($parents), ' ', ', ');
-        $parents: selector-parse($parents);
-        $parents: list-remove-duplicates($parents);
-        $parents: str-replace(inspect($parents), ', ', ' ');
-        // END TOMFOOLERY
+        $parents: clean-selector($parents); // https://github.com/sass/libsass/issues/2520
     }
 
     @if ($parents == '()') {

@@ -21,11 +21,7 @@
     $this: ();
 
     @each $selector in & {
-        $selector: str-replace(inspect($selector), ' ', ', ');
-        $selector: selector-parse($selector);
-        $selector: list-remove-duplicates($selector);
-        $selector: str-replace(inspect($selector), ', ', ' ');
-
+        $selector: clean-selector($selector);
         $this: append($this, $selector, comma);
     }
 
