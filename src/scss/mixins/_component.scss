@@ -14,13 +14,16 @@
 ///     }
 ///
 ///     <div class="header_wrapper">...</div>
-@mixin component($components: null, $content: (), $glue: $component-glue) {
+@mixin component($components: null, $content: (), $sub-component: false, $glue: $component-glue) {
 
-    $parents   : ();
-    $selectors : '[class*="#{$module}#{$glue}"]';
-    $this      : &;
-    $tree      : module-tree($this);
-    $namespace : nth($tree, length($tree));
+    $parents     : ();
+    $selectors   : '[class*="#{$module}#{$glue}"]';
+    $tree        : module-tree(&);
+    $namespace   : nth($tree, length($tree));
+
+    @if not $sub-component {
+        $namespace: $module;
+    }
 
     @if $components {
         $selectors: ();
@@ -33,8 +36,7 @@
 
     @each $selector in & {
         // spoof the selector into a list
-        $selector: str-replace(inspect($selector), ' ', ', ');
-        $selector: selector-parse($selector);
+        $selector: selector-parse(str-replace(inspect($selector), ' ', ', '));
 
         // if the last item isn't a modifier, remove it
         @if not str-index(inspect(nth($selector, length($selector))), '[class*="#{$modifier-glue}') {
@@ -59,33 +61,64 @@
         $parents: clean-selector($parents); // https://github.com/sass/libsass/issues/2520
     }
 
-    @if ($parents == '()') {
-        @at-root #{$selectors} {
+    $foo: if($parents == '()', #{$selectors}, #{$parents});
+    $bar: if($parents == '()', &, #{$selectors});
+
+    @at-root #{$foo} {
+        #{$bar} {
             @content;
 
             @each $component in $components {
                 $component: if(map-get($config, $component), map-get($config, $component), ());
                 $content: merge-css-maps($content, $component);
             }
-
+        
             @include get-css-from-map($content);
         }
     }
-    @else {
-        @at-root #{$parents} {
-            #{$selectors} {
-                @content;
 
-                @each $component in $components {
-                    $component: if(map-get($config, $component), map-get($config, $component), ());
-                    $content: merge-css-maps($content, $component);
-                }
+    // @if ($parents == '()') {
+    //     @at-root #{$selectors} {
+    //         @include component-content($components, $config, $content) {
+    //             @content;
+    //         }
+    //     }
+    // } @else {
+    //     @at-root #{$parents} {
+    //         #{$selectors} {
+    //             @include component-content($components, $config, $content) {
+    //                 @content;
+    //             }
+    //         }
+    //     }
+    // }
+}
 
-                @include get-css-from-map($content);
-            }
-        }
+/// Content for the `component` mixin
+///
+/// @param {string|list} $components
+/// @param {map} $config
+/// @param {map} $content
+@mixin component-content($components, $config, $content) {
+    @content;
+
+    @each $component in $components {
+        $component: if(map-get($config, $component), map-get($config, $component), ());
+        $content: merge-css-maps($content, $component);
     }
 
+    @include get-css-from-map($content);
+}
+
+/// Alis for `component` mixin with $sub-component: true
+///
+/// @param {string|list} $components
+/// @param {map} $content
+/// @param {string} $glue
+@mixin sub-component($components: null, $content: (), $glue: $component-glue) {
+    @include component($components, $content, true, $glue) {
+        @content;
+    }
 }
 
 /// Alias for component() mixin

@@ -1,0 +1,17 @@
+/// Used to generate selectors for pseudo states
+///
+/// @param {string} $state
+@mixin pseudo-state($state) {
+    &:#{$state} {
+        @include module {
+            @content;
+        }
+    }
+}
+
+/// Alias for `pseudo-state` mixin with $state: 'hover'
+@mixin hover {
+    @include pseudo-state('hover') {
+        @content;
+    }
+}
