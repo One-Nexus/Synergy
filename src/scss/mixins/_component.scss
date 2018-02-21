@@ -58,11 +58,8 @@
         $parents: clean-selector($parents); // https://github.com/sass/libsass/issues/2520
     }
 
-    $alpha: if($parents == '()', $selectors, $parents);
-    $beta: if($parents == '()', &, $selectors);
-
-    @at-root #{$alpha} {
-        #{$beta} {
+    @at-root #{if($parents == '()', $selectors, $parents)} {
+        #{if($parents == '()', &, $selectors)} {
             @content;
 
             @each $component in $components {
