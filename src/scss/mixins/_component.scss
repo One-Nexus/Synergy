@@ -47,11 +47,8 @@
             $selector: nth($selector, 1);
         }
 
-        // convert the selector back into a string
-        $selector: str-replace(inspect($selector), ', ', ' ');
-
         // Re-build the parent selector
-        $parents: append($parents, $selector, comma);
+        $parents: append($parents, str-replace(inspect($selector), ', ', ' '), comma);
     }
 
     $parents: list-remove-duplicates($parents);
@@ -61,11 +58,11 @@
         $parents: clean-selector($parents); // https://github.com/sass/libsass/issues/2520
     }
 
-    $foo: if($parents == '()', #{$selectors}, #{$parents});
-    $bar: if($parents == '()', &, #{$selectors});
+    $alpha: if($parents == '()', $selectors, $parents);
+    $beta: if($parents == '()', &, $selectors);
 
-    @at-root #{$foo} {
-        #{$bar} {
+    @at-root #{$alpha} {
+        #{$beta} {
             @content;
 
             @each $component in $components {
@@ -76,38 +73,6 @@
             @include get-css-from-map($content);
         }
     }
-
-    // @if ($parents == '()') {
-    //     @at-root #{$selectors} {
-    //         @include component-content($components, $config, $content) {
-    //             @content;
-    //         }
-    //     }
-    // } @else {
-    //     @at-root #{$parents} {
-    //         #{$selectors} {
-    //             @include component-content($components, $config, $content) {
-    //                 @content;
-    //             }
-    //         }
-    //     }
-    // }
-}
-
-/// Content for the `component` mixin
-///
-/// @param {string|list} $components
-/// @param {map} $config
-/// @param {map} $content
-@mixin component-content($components, $config, $content) {
-    @content;
-
-    @each $component in $components {
-        $component: if(map-get($config, $component), map-get($config, $component), ());
-        $content: merge-css-maps($content, $component);
-    }
-
-    @include get-css-from-map($content);
 }
 
 /// Alis for `component` mixin with $sub-component: true
@@ -130,18 +95,5 @@
 @mixin components($components) {
     @include component($components) {
         @content;
-    }
-}
-
-/// Output CSS styles from config
-///
-/// @author [@esr360](http://twitter.com/esr360)
-///
-/// @param {map} $config - The confing to find and output CSS from
-@mixin component-css($components, $config) {
-    @each $component in $components {
-        @if map-has-key($config, $component) and type-of(map-get($config, $component)) == 'map' {
-            @include get-css-from-map(map-get($config, $component));
-        }
     }
 }
