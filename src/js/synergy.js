@@ -14,6 +14,7 @@ export const global = {
 //*****************************************************************
 
 export { default as deepextend } from 'deep-extend';
+export {default as getChildrenWithoutSelector } from 'get-children-without-parent-selector';
 
 // Tools & Utilities
 //*****************************************************************

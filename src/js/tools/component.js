@@ -20,8 +20,9 @@ export function component(options) {
     if (options.query) {
 
         if (target instanceof HTMLElement) {
-    
-            const childComponent = target.querySelectorAll(selector);
+            const module = Synergy.getModuleName(target);
+            const moduleSelector = `.${module}, [class*="${module}${options.modifierGlue}"]`;
+            const childComponent = Synergy.getChildrenWithoutSelector(target, selector, moduleSelector);
 
             if (options.operator) {
                 if (options.operator === 'set') {
