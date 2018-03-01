@@ -7,10 +7,6 @@ import * as Synergy from '../synergy';
  * @param {String} module
  */
 export function getDomNodes(query, module, modifierGlue) {
-    if (!Synergy.isValidSelector) {
-        console.warn('Synergy:getDomNodes - Synergy is missing `isValidSelector()`');
-    }
-
     let domNodes;
 
     if (typeof query === 'string') {
@@ -20,8 +16,10 @@ export function getDomNodes(query, module, modifierGlue) {
         else {
             domNodes = document.querySelectorAll(`.${module}, [class*="${module}${modifierGlue}"]`);
         }
-    } else if (typeof query === 'object') {
-        if ((query[0] instanceof NodeList) || (query[0] instanceof HTMLElement)) {
+    } 
+    
+    else if (typeof query === 'object') {
+        if (query[0] instanceof NodeList || query[0] instanceof HTMLElement) {
             domNodes = query[0];
         } 
         else if (typeof query[0] === 'string') {

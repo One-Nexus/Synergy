@@ -16,7 +16,7 @@
     $selectors: str-replace($selectors, '#{$modifier-glue}"]', '');
     $selectors: str-replace($selectors, '"]', '');
 
-    // Spoof our modules into a list
+    // Spoof our selectors into a list
     $selectors: str-replace($selectors, ' ', ', ');
     $selectors: selector-parse($selectors);
 
