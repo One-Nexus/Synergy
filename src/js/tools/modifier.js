@@ -20,8 +20,9 @@ export function modifier(options) {
     if (options.query) {
 
         if (target instanceof HTMLElement) {
-
-            const childModifier = target.querySelectorAll(selector);
+            const module = Synergy.getModuleName(target);
+            const moduleSelector = `.${module}, [class*="${module}${options.glue}"]`;
+            const childModifier = Synergy.getChildrenWithoutSelector(target, selector, moduleSelector);
 
             if (options.operator) {
                 if (options.operator === 'set') {
