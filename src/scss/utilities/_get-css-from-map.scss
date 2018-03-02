@@ -23,7 +23,7 @@
 
             // $property defines :hover styles
             @else if $property == 'hover' {
-                &:hover {
+                @include hover {
                     @include get-css-from-map($value);
                 }
             }

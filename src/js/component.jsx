@@ -28,7 +28,7 @@ export default class Component extends React.Component {
             }
         } else {
             return (
-                <div className={selector} {...this.props}>
+                <div className={selector} onClick={this.props.onClick}>
                     {this.props.children}
                 </div>
             );

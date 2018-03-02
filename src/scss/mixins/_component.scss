@@ -17,6 +17,7 @@
 @mixin component($components: null, $content: (), $sub-component: false, $glue: $component-glue) {
 
     $parents     : ();
+    $this        : &;
     $selectors   : '[class*="#{$module}#{$glue}"]';
     $tree        : module-tree(&);
     $namespace   : nth($tree, length($tree));
@@ -38,8 +39,11 @@
         // spoof the selector into a list
         $selector: selector-parse(str-replace(inspect($selector), ' ', ', '));
 
-        // if the last item isn't a modifier, remove it
-        @if not str-index(inspect(nth($selector, length($selector))), '[class*="#{$modifier-glue}') {
+        $is-modifier: str-index(inspect(nth($selector, length($selector))), '[class*="#{$modifier-glue}');
+        $is-pseudo-state: str-index(inspect(nth($selector, length($selector))), ':');
+
+        // if the last item isn't a modifier or pseudo state, remove it
+        @if not ($is-modifier or $is-pseudo-state) {
             $selector: list-remove($selector, nth($selector, length($selector)));
         }
 
@@ -62,9 +66,11 @@
         #{if($parents == '()', &, $selectors)} {
             @content;
 
-            @each $component in $components {
-                $component: if(map-get($config, $component), map-get($config, $component), ());
-                $content: merge-css-maps($content, $component);
+            @if selector-is-root-module($this) {
+                @each $component in $components {
+                    $component: if(map-get($config, $component), map-get($config, $component), ());
+                    $content: merge-css-maps($content, $component);
+                }
             }
         
             @include get-css-from-map($content);

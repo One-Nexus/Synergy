@@ -3,9 +3,7 @@
 /// @param {string} $state
 @mixin pseudo-state($state) {
     &:#{$state} {
-        @include module {
-            @content;
-        }
+        @content;
     }
 }
 
