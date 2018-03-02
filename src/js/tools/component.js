@@ -10,52 +10,52 @@ import * as Synergy from '../synergy';
  * @param {*} options.operator
  */
 export function component(options) {
-
+    // setup constants
     const target = (options.target instanceof HTMLElement) ? options.target : options.target[0];
     const namespace = Synergy.getModuleName(target) + options.componentGlue + options.query;
     const components = Synergy.getComponents(target, options.module, options.componentGlue);
     const selector = `.${namespace}, [class*="${namespace}${options.modifierGlue}"]`;
     const querySelector = document.querySelectorAll(selector);
+    const moduleSelector = `.${options.module}, [class*="${options.module}${options.modifierGlue}"]`;
+    const childComponent = Synergy.getChildrenWithoutSelector(target, selector, moduleSelector);
 
-    if (options.query) {
-
-        if (target instanceof HTMLElement) {
-            const module = Synergy.getModuleName(target);
-            const moduleSelector = `.${module}, [class*="${module}${options.modifierGlue}"]`;
-            const childComponent = Synergy.getChildrenWithoutSelector(target, selector, moduleSelector);
-
-            if (options.operator) {
-                if (options.operator === 'set') {
-                    return toggleComponent(options.module, target, options.query, 'set', options.componentGlue);
-                } 
-                else if (options.operator === 'unset') {
-                    return toggleComponent(options.module, target, options.query, 'unset', options.componentGlue);
-                }
-                else if (options.operator === 'add' || options.operator === 'remove') {
-                    return target.classList[options.operator](namespace);
-                }
+    if (options.query && target instanceof HTMLElement) {
+        // add/remove a component
+        if (options.operator) {
+            if (options.operator === 'set') {
+                return toggleComponent(options.module, target, options.query, 'set', options.componentGlue);
+            } 
+            else if (options.operator === 'unset') {
+                return toggleComponent(options.module, target, options.query, 'unset', options.componentGlue);
             }
-
-            if (childComponent.length !== 0 && !(options.target instanceof NodeList)) {
-                return childComponent;
+            else if (options.operator === 'add' || options.operator === 'remove') {
+                return target.classList[options.operator](namespace);
             }
-
-            let matchesQuery = false;
-
-            components.forEach(component => {
-                if (options.query === component) {
-                    matchesQuery = true;
-
-                    return matchesQuery;
-                }
-            });
-
-            if (matchesQuery || options.operator == 'isset') return matchesQuery;
-
-            return (querySelector.length === 0) ? false : querySelector;
         }
+
+        // get children components
+        if (childComponent.length !== 0 && !(options.target instanceof NodeList)) {
+            return childComponent;
+        }
+
+        // determine if element is specified component
+        let matchesQuery = false;
+
+        components.forEach(component => {
+            if (options.query === component) {
+                matchesQuery = true;
+
+                return matchesQuery;
+            }
+        });
+
+        if (matchesQuery || options.operator == 'isset') return matchesQuery;
+
+        // get all specified components from document 
+        return (querySelector.length === 0) ? false : querySelector;
     }
     
+    // determine the component name of current element
     return components;
 }
 
@@ -71,6 +71,7 @@ function toggleComponent(moduleName, target, query, operator, glue) {
     return Array.prototype.forEach.call(target.classList, className => {
         if (className.indexOf(moduleName) === 0) {
             target.classList.remove(className);
+
             target.classList.add(
                 (operator === 'set') ? `${className}${glue}${query}` : className.replace(glue + query, '')
             );
