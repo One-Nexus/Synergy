@@ -17,5 +17,10 @@ export function getComponents(block, module, glue) {
         });
     }
 
+    // remove modifiers from components
+    if (components) {
+        components = components.map(component => component.split('-')[0]);
+    }
+
     return components;
 }

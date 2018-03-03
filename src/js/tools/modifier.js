@@ -20,7 +20,7 @@ export function modifier(options) {
     const childModifier = Synergy.getChildrenWithoutSelector(target, selector, moduleSelector);
     const query = (modifiers !== options.modifiers) ? [options.query] : options.modifiers;
 
-    if (options.query && target instanceof HTMLElement) {
+    if ((typeof options.query !== 'undefined') && target instanceof HTMLElement) {
         // add/remove a modifier
         if (options.operator) {
             if (options.operator === 'set') {
@@ -53,7 +53,7 @@ export function modifier(options) {
     }
     
     // get modifiers on element
-    return modifiers;
+    return (modifiers.length > 0) ? modifiers : false;
 }
 
 /**

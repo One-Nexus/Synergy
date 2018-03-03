@@ -41,13 +41,15 @@ export function component(options) {
         // determine if element is specified component
         let matchesQuery = false;
 
-        components.forEach(component => {
-            if (options.query === component) {
-                matchesQuery = true;
+        if (components) {
+            components.forEach(component => {
+                if (options.query === component) {
+                    matchesQuery = true;
 
-                return matchesQuery;
-            }
-        });
+                    return matchesQuery;
+                }
+            });
+        }
 
         if (matchesQuery || options.operator == 'isset') return matchesQuery;
 
