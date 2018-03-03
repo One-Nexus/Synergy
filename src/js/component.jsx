@@ -15,16 +15,18 @@ export default class Component extends React.Component {
         const module = this.props.module || this.context.module;
         const modifiers = renderModifiers(this.props.modifiers);
         const classes = this.props.className ? ' ' + this.props.className : '';
-        const selector = `${module}_${this.props.name + modifiers}${classes}`
+        const selector = `${module}_${this.props.name + modifiers}${classes}`;
 
-        if (this.props.children && this.props.children.type) {
-            if (this.constructor.name === this.props.children.type.name) {
-                const parentKeys = Object.keys(this.props).sort();
-                const childKeys = Object.keys(this.props.children.props).sort();
+        if (
+            this.props.children && 
+            this.props.children.type && 
+            this.constructor.name === this.props.children.type.name
+        ) {
+            const parentKeys = Object.keys(this.props).sort();
+            const childKeys = Object.keys(this.props.children.props).sort();
 
-                if (JSON.stringify(parentKeys) === JSON.stringify(childKeys)) {
-                    return this.props.children;
-                }
+            if (JSON.stringify(parentKeys) === JSON.stringify(childKeys)) {
+                return this.props.children;
             }
         } else {
             return (
