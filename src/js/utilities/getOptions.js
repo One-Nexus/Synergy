@@ -10,7 +10,7 @@ import deepextend from 'deep-extend';
  * @param {Object} [parser] - custom parser to use for configuration
  * @returns {*}
  */
-export function getOptions ({ config = {}, parser, custom = {} } = {}) {
+export function getOptions({config = {}, parser, custom = {}} = {}) {
     const configKey = Object.keys(config)[0];
     const extendedConfig = configKey ? deepextend(config[configKey], custom) : custom;
 

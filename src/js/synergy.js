@@ -74,7 +74,7 @@ export default function Synergy(els, callback, config, custom, parser) {
     const domNodes      = getDomNodes(els, module, modifierGlue);
     const components    = getComponents(domNodes, module, componentGlue);
     const modifiers     = getModifiers(domNodes, module, modifierGlue);
-    const options       = getOptions({ config, parser, custom });
+    const options       = getOptions({config, parser, custom});
 
     if (typeof els === 'string' && els.match(/^[a-zA-Z]*$/)) {
         setDomNodeAttributes({domNodes, module});
