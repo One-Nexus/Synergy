@@ -19,11 +19,17 @@ export function getDomNodes(query, module, modifierGlue) {
     } 
     
     else if (typeof query === 'object') {
-        if (query[0] instanceof NodeList || query[0] instanceof HTMLElement) {
+        if (query instanceof NodeList || query instanceof HTMLElement) {
+            domNodes = query;
+        }
+        else if (query[0] instanceof NodeList || query[0] instanceof HTMLElement) {
             domNodes = query[0];
-        } 
+        }
         else if (typeof query[0] === 'string') {
             domNodes = document.querySelectorAll(`.${query[0]}, [class*="${query[0]}${modifierGlue}"]`);
+        }
+        else {
+            domNodes = document.querySelectorAll(`.${module}, [class*="${module}${modifierGlue}"]`);
         }
     }
 

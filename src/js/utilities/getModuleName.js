@@ -8,6 +8,9 @@ export function getModuleName(query, config, componentGlue) {
     if (typeof query === 'string' && query.match(`^[a-zA-Z0-9_-]+$`)) {
         return query;
     }
+    else if (typeof query === 'object' && 'name' in query) {
+        return query.name;
+    }
     else if (typeof query === 'object' && typeof query[1] === 'string') {
         return query[1];
     }
@@ -17,12 +20,10 @@ export function getModuleName(query, config, componentGlue) {
     else if (query instanceof HTMLElement) {
         if (typeof Element.prototype.closest !== 'undefined' && query.closest('[data-module]')) {
             return query.closest('[data-module]').getAttribute('data-module');
-        } 
-        
+        }
         else if (query.classList.length === 1) {
             return query.classList[0].split(/-(.+)/)[0];
-        } 
-        
+        }
         else if (query.id) {
             return query.id;
         }
