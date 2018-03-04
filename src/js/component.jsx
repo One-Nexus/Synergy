@@ -17,6 +17,17 @@ export default class Component extends React.Component {
         const classes = this.props.className ? ' ' + this.props.className : '';
         const selector = `${module}_${this.props.name + modifiers}${classes}`;
 
+        let onClick = this.props.onClick;
+
+        // dynamically fetch onClick event from window.UI object
+        if (onClick) {
+            if (/^function[^{]+\{\s*\}/m.test(onClick.toString())) {
+                if ('UI' in global && module in global.UI) {
+                    onClick = global.UI[module]()[this.props.onClick.name];
+                }
+            }
+        }
+
         if (
             this.props.children && 
             this.props.children.type && 
@@ -30,7 +41,7 @@ export default class Component extends React.Component {
             }
         } else {
             return (
-                <div className={selector} onClick={this.props.onClick}>
+                <div className={selector} onClick={onClick}>
                     {this.props.children}
                 </div>
             );
