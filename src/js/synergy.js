@@ -102,11 +102,11 @@ export default function Synergy(els, callback, config, custom, parser) {
         modifierGlue
     });
 
-    if (callback) {
-        if (domNodes instanceof HTMLElement) {
-            return callback(domNodes, options, exports);
-        } else {
+    if (callback && typeof domNodes !== 'string') {
+        if (domNodes instanceof NodeList) {
             domNodes.forEach(el => callback(el, options, exports));
+        } else {
+            return callback(domNodes, options, exports);
         }
     }
 

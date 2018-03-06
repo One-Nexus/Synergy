@@ -5,6 +5,9 @@
  * @param {Object} [config] - object to retrieve module name
  */
 export function getModuleName(query, config, componentGlue) {
+    
+    if (query === null) return false;
+
     if (typeof query === 'string' && query.match(`^[a-zA-Z0-9_-]+$`)) {
         return query;
     }

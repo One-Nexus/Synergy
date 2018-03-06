@@ -7,31 +7,25 @@ import * as Synergy from '../synergy';
  * @param {String} module
  */
 export function getDomNodes(query, module, modifierGlue) {
-    let domNodes;
+
+    if (query === null) return false;
+
+    if (query instanceof HTMLElement || query instanceof NodeList ) return query;
 
     if (typeof query === 'string') {
         if (Synergy.isValidSelector(query) && document.querySelectorAll(query).length && query !== module) {
-            domNodes = document.querySelectorAll(query);
+            return document.querySelectorAll(query);
         }
         else {
-            domNodes = document.querySelectorAll(`.${module}, [class*="${module}${modifierGlue}"]`);
-        }
-    } 
-    
-    else if (typeof query === 'object') {
-        if (query instanceof NodeList || query instanceof HTMLElement) {
-            domNodes = query;
-        }
-        else if (query[0] instanceof NodeList || query[0] instanceof HTMLElement) {
-            domNodes = query[0];
-        }
-        else if (typeof query[0] === 'string') {
-            domNodes = document.querySelectorAll(`.${query[0]}, [class*="${query[0]}${modifierGlue}"]`);
-        }
-        else {
-            domNodes = document.querySelectorAll(`.${module}, [class*="${module}${modifierGlue}"]`);
+            return document.querySelectorAll(`.${module}, [class*="${module}${modifierGlue}"]`);
         }
     }
 
-    return domNodes || query;
+    if (query.constructor === Array) return getDomNodes(query[0], query[1], modifierGlue);
+    
+    if (typeof query === 'object') {
+        return document.querySelectorAll(`.${module}, [class*="${module}${modifierGlue}"]`);
+    }
+
+    return query;
 }
