@@ -10,6 +10,8 @@ export function getDomNodes(query, module, modifierGlue) {
 
     if (query === null) return false;
 
+    if (typeof query === 'undefined') return module;
+
     if (query instanceof HTMLElement || query instanceof NodeList ) return query;
 
     if (typeof query === 'string') {
