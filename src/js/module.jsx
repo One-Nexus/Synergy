@@ -29,7 +29,22 @@ export default class Module extends React.Component {
         const propModifiers = renderModifiers(getModifiersFromProps(this.props, CssClassProps(global)));
         const passedModifiers = renderModifiers(this.props.modifiers);
         const modifiers = propModifiers + passedModifiers;
-        const classes = this.props.className ? ' ' + this.props.className : '';
+
+        let classes = this.props.className ? ' ' + this.props.className : '';
+
+        // determine if any passed prop is a module - if so, add it to `classes`
+        if (Synergy.modules) {
+            Object.entries(this.props).forEach(prop => {
+                if (prop[0][0] === prop[0][0].toUpperCase()) {
+                    if (Object.keys(Synergy.modules).includes(prop[0].toLowerCase())) {
+                        const module = prop[0].toLowerCase();
+                        const modifiers = prop[1].constructor === Array ? '-' + prop[1].join('-') : '';
+
+                        classes = classes + ' ' + module + modifiers;
+                    }
+                }
+            });
+        }
 
         let classNames = this.props.name + modifiers + classes;
 
