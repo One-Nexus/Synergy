@@ -23,10 +23,10 @@ export default function(env) {
         target,
 
         plugins: [
-          new webpack.optimize.UglifyJsPlugin({
-            include: /\.min\.js$/,
-            minimize: true
-          })
+            new webpack.optimize.UglifyJsPlugin({
+                include: /\.min\.js$/,
+                minimize: true
+            })
         ],
 
         node: { Buffer: (target === 'web') ? false : true },

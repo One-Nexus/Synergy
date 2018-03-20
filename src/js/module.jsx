@@ -25,7 +25,7 @@ export default class Module extends React.Component {
      * Render the module
      */
     render() {
-        const Tag = this.props.tag || HTMLTags.includes(this.props.name) ? this.props.name : 'div';
+        const Tag = this.props.tag || (HTMLTags.includes(this.props.name) ? this.props.name : 'div');
         const propModifiers = renderModifiers(getModifiersFromProps(this.props, Synergy.CssClassProps));
         const passedModifiers = renderModifiers(this.props.modifiers);
         const modifiers = propModifiers + passedModifiers;
@@ -38,7 +38,16 @@ export default class Module extends React.Component {
                 if (prop[0][0] === prop[0][0].toUpperCase()) {
                     if (Object.keys(Synergy.modules).includes(prop[0].toLowerCase())) {
                         const module = prop[0].toLowerCase();
-                        const modifiers = prop[1].constructor === Array ? '-' + prop[1].join('-') : '';
+
+                        let modifiers;
+
+                        if (prop[1].constructor === Array) {
+                            modifiers = '-' + prop[1].join('-');
+                        } else if (typeof prop[1] === 'string') {
+                            modifiers = '-' + prop[1];
+                        } else {
+                            modifiers = '';
+                        }
 
                         classes = classes + ' ' + module + modifiers;
                     }
@@ -48,9 +57,11 @@ export default class Module extends React.Component {
 
         let classNames = this.props.name + modifiers + classes;
 
-        if (Synergy.CssClassProps) {
-            Synergy.CssClassProps.forEach(prop => classNames = classNames + ' ' + prop);
-        }
+        if (Synergy.CssClassProps) Synergy.CssClassProps.forEach(prop => {
+            if (Object.keys(this.props).includes(prop)) {
+                classNames = classNames + ' ' + prop
+            }
+        });
 
         return (
             <Tag id={this.props.id} className={classNames} data-module={this.props.name}>

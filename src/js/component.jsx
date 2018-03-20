@@ -55,10 +55,26 @@ Component.contextTypes = {
 
 export class Wrapper extends Component {
     render() {
+        let module = this.props.module;
+
+        if (!module) {
+            if (this.props.children.length) {
+                module = this.props.children[0].props.name;
+            } else {
+                module = this.props.children.props.name;
+            }
+        }
+
         const namespace = this.props.name || 'wrapper';
-        const module = this.props.module || this.props.children.props.name;
         const modifiers = renderModifiers(this.props.modifiers);
-        const classes = this.props.className ? ' ' + this.props.className : '';
+
+        let classes = this.props.className ? ' ' + this.props.className : '';
+
+        if (Synergy.CssClassProps) Synergy.CssClassProps.forEach(prop => {
+            if (Object.keys(this.props).includes(prop)) {
+                classes = classes + ' ' + prop
+            }
+        });
 
         return(
             <div className={`${module}_${namespace + modifiers}${classes}`}>
