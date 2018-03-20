@@ -25,7 +25,7 @@ export default class Module extends React.Component {
      * Render the module
      */
     render() {
-        const Tag = HTMLTags.includes(this.props.name) ? this.props.name : this.props.tag || 'div';
+        const Tag = this.props.tag || HTMLTags.includes(this.props.name) ? this.props.name : 'div';
         const propModifiers = renderModifiers(getModifiersFromProps(this.props, Synergy.CssClassProps));
         const passedModifiers = renderModifiers(this.props.modifiers);
         const modifiers = propModifiers + passedModifiers;
