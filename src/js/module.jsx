@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
+import HTMLTags from 'html-tags';
 
 import getModifiersFromProps from './utilities/getModifiersFromProps';
 import renderModifiers from './utilities/renderModifiers';
@@ -24,7 +25,7 @@ export default class Module extends React.Component {
      * Render the module
      */
     render() {
-        const Tag = this.props.tag || 'div';
+        const Tag = HTMLTags.includes(this.props.name) ? this.props.name : this.props.tag || 'div';
         const propModifiers = renderModifiers(getModifiersFromProps(this.props, Synergy.CssClassProps));
         const passedModifiers = renderModifiers(this.props.modifiers);
         const modifiers = propModifiers + passedModifiers;
