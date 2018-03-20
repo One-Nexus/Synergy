@@ -1,21 +1,21 @@
+import { global } from '../synergy';
 /**
  * Get glue
  * 
- * @param {String} type - ['component'|'modifier]
+ * @param {String} type - [{'component'|'modifier'}]
  * @param {Object} custom
  * @param {string} glue
  */
 export function getGlue(type, custom, glue) {
-    let defaultGlue = (type === 'modifier') ? '-' : '_';
 
-    if (custom && custom.modifierGlue) {
-        glue  = custom[type + 'Glue'].replace(/'/g,'');
+    if (custom && custom[type + 'Glue']) {
+        glue = custom[type + 'Glue'].replace(/'/g,'');
     }
-    else if (window.APPUI && window.APPUI.global && window.APPUI.global[type + '-glue']) {
-        glue  = window.APPUI.global[type + '-glue'].replace(/'/g,'');
+    else if (Synergy.config && Synergy.config[type + '-glue']) {
+        glue = Synergy.config[type + '-glue'];
     }
-    else {
-        glue = global[type + '-glue']  || defaultGlue;
+    else if (global && global[type + '-glue']) {
+        glue = global[type + '-glue'];
     }
 
     return glue;

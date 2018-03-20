@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
-import CssClassProps from './utilities/CssClassProps';
 import getModifiersFromProps from './utilities/getModifiersFromProps';
 import renderModifiers from './utilities/renderModifiers';
 
@@ -26,7 +25,7 @@ export default class Module extends React.Component {
      */
     render() {
         const Tag = this.props.tag || 'div';
-        const propModifiers = renderModifiers(getModifiersFromProps(this.props, CssClassProps(global)));
+        const propModifiers = renderModifiers(getModifiersFromProps(this.props, Synergy.CssClassProps));
         const passedModifiers = renderModifiers(this.props.modifiers);
         const modifiers = propModifiers + passedModifiers;
 
@@ -48,8 +47,8 @@ export default class Module extends React.Component {
 
         let classNames = this.props.name + modifiers + classes;
 
-        if (CssClassProps(global)) {
-            CssClassProps(global).forEach(prop => classNames = classNames + ' ' + prop);
+        if (Synergy.CssClassProps) {
+            Synergy.CssClassProps.forEach(prop => classNames = classNames + ' ' + prop);
         }
 
         return (

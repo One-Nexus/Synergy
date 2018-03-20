@@ -19,11 +19,11 @@ export default class Component extends React.Component {
 
         let onClick = this.props.onClick;
 
-        // dynamically fetch onClick event from window.UI object
-        if (onClick) {
+        // dynamically fetch onClick event from window.Synergy object
+        if (onClick && Synergy.modules) {
             if (/^function[^{]+\{\s*\}/m.test(onClick.toString())) {
-                if ('UI' in global && module in global.UI) {
-                    onClick = global.UI[module]()[this.props.onClick.name];
+                if (Synergy.modules[module]) {
+                    onClick = Synergy.modules[module].methods[this.props.onClick.name];
                 }
             }
         }
