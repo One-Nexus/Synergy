@@ -39,14 +39,12 @@ export default class Module extends React.Component {
                     if (Object.keys(Synergy.modules).includes(prop[0].toLowerCase())) {
                         const module = prop[0].toLowerCase();
 
-                        let modifiers;
+                        let modifiers = '';
 
                         if (prop[1].constructor === Array) {
                             modifiers = '-' + prop[1].join('-');
                         } else if (typeof prop[1] === 'string') {
                             modifiers = '-' + prop[1];
-                        } else {
-                            modifiers = '';
                         }
 
                         classes = classes + ' ' + module + modifiers;
