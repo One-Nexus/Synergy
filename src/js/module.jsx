@@ -21,6 +21,18 @@ export default class Module extends React.Component {
         };
     }
 
+    componentWillMount() {
+        this.config = (global.UI && global.UI.config) ? global.UI.config[this.props.name] : null;
+    }
+
+    componentDidMount() {
+        if (Synergy.modules[this.props.name] && Synergy.modules[this.props.name].methods) {
+            if (Synergy.modules[this.props.name].methods.init) {
+                Synergy.modules[this.props.name].methods.init(ReactDOM.findDOMNode(this), this.config);
+            }
+        }
+    }
+
     /**
      * Render the module
      */
@@ -62,7 +74,12 @@ export default class Module extends React.Component {
         });
 
         return (
-            <Tag id={this.props.id} className={classNames} data-module={this.props.name}>
+            <Tag 
+                id={this.props.id} 
+                className={classNames} 
+                data-module={this.props.name} 
+                href={this.props.href}
+            >
                 {this.props.children}
             </Tag>
         );
