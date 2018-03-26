@@ -72,7 +72,7 @@
                     $content: merge-css-maps($content, $component);
                 }
             }
-        
+
             @include get-css-from-map($content);
         }
     }

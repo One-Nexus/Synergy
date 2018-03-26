@@ -7,10 +7,14 @@ const files = [
     // config
     './src/scss/_config.scss',
     // utilities
+    './src/scss/utilities/_clean-selector.scss',
     './src/scss/utilities/_config.scss',
     './src/scss/utilities/_css-properties.scss',
     './src/scss/utilities/_enabled.scss',
+    './src/scss/utilities/_get-css-from-map.scss',
+    './src/scss/utilities/_get-param.scss',
     './src/scss/utilities/_get-styles.scss',
+    './src/scss/utilities/_merge-css-maps.scss',
     './src/scss/utilities/_module-tree.scss',
     './src/scss/utilities/_option.scss',
     './src/scss/utilities/_remove-components.scss',
@@ -27,7 +31,8 @@ const files = [
     './src/scss/mixins/_extend.scss',
     './src/scss/mixins/_context.scss',
     './src/scss/mixins/_option.scss',
-    './src/scss/mixins/_value.scss'
+    './src/scss/mixins/_value.scss',
+    './src/scss/mixins/_pseudo-state.scss'
 ]
 
 concat(files).then(result => {

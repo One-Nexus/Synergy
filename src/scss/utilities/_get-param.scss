@@ -10,7 +10,7 @@
         $string: str-replace($string, '")', '');
     }
 
-    @else if str-index($string, 'modifier("') == 1  {
+    @else if str-index($string, 'modifier("') == 1 {
         $string: str-replace($string, 'modifier("', '');
         $string: str-replace($string, '")', '');
     }

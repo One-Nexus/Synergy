@@ -7,10 +7,10 @@
 
     @if $selector == '.#{$module}, [class*="#{$module}#{$modifier-glue}"]' {
         @return true;
-    } 
+    }
     @if $selector == '.#{$module}' {
         @return true;
-    } 
+    }
     @if $selector == '[class*="#{$module}#{$modifier-glue}"]' {
         @return true;
     }

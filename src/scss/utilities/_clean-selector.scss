@@ -11,5 +11,5 @@
     $selector: list-remove-duplicates($selector);
     $selector: str-replace(inspect($selector), ', ', ' ');
 
-    @return $selector
+    @return $selector;
 }

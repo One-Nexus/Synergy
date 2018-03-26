@@ -5,6 +5,7 @@ export { getGlue } from './getGlue';
 export { getModifiers } from './getModifiers';
 export { getModuleName } from './getModuleName';
 export { isValidSelector } from './isValidSelector';
+export { default as parents } from './parents';
 export { stripModifiers } from './stripModifiers';
 export { getOptions } from './getOptions';
 export { setDomNodeAttributes } from './setDomNodeAttributes';

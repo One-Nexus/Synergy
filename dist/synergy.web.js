@@ -73,7 +73,7 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.modifier = exports.component = exports.stripModifiers = exports.isValidSelector = exports.getModuleName = exports.getModifiers = exports.getGlue = exports.getDomNodes = exports.getComponents = exports.getBlockName = exports.deepextend = exports.global = undefined;
+exports.modifier = exports.component = exports.stripModifiers = exports.isValidSelector = exports.getModuleName = exports.getModifiers = exports.getGlue = exports.getDomNodes = exports.getComponents = exports.getBlockName = exports.getChildrenWithoutSelector = exports.deepextend = exports.global = undefined;
 
 var _deepExtend = __webpack_require__(1);
 
@@ -83,11 +83,20 @@ Object.defineProperty(exports, 'deepextend', {
         return _interopRequireDefault(_deepExtend).default;
     }
 });
+
+var _getChildrenWithoutParentSelector = __webpack_require__(2);
+
+Object.defineProperty(exports, 'getChildrenWithoutSelector', {
+    enumerable: true,
+    get: function get() {
+        return _interopRequireDefault(_getChildrenWithoutParentSelector).default;
+    }
+});
 exports.default = Synergy;
 
-var _tools = __webpack_require__(2);
+var _tools = __webpack_require__(3);
 
-var _utilities = __webpack_require__(5);
+var _utilities = __webpack_require__(6);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -150,7 +159,27 @@ function Synergy(els, callback, config, custom, parser) {
     var modifiers = (0, _utilities.getModifiers)(domNodes, module, modifierGlue);
     var options = (0, _utilities.getOptions)({ config: config, parser: parser, custom: custom });
 
-    (0, _utilities.setDomNodeAttributes)({ domNodes: domNodes, module: module });
+    var isModuleElement = function isModuleElement() {
+        if (domNodes instanceof NodeList) {
+            domNodes.forEach(function (node) {
+                if ((0, _utilities.parents)(node, '[data-module]').length) {
+                    return false;
+                }
+            });
+
+            return true;
+        }
+        if (domNodes instanceof HTMLElement && !(0, _utilities.parents)(domNodes, '[data-module]').length) {
+            return true;
+        }
+        if (typeof els === 'string' && els.match(/^[a-zA-Z]*$/)) {
+            return true;
+        }
+
+        return false;
+    };
+
+    if (isModuleElement()) (0, _utilities.setDomNodeAttributes)({ domNodes: domNodes, module: module });
 
     // Elements found by the Synergy query
     exports.query = domNodes;
@@ -180,13 +209,13 @@ function Synergy(els, callback, config, custom, parser) {
         });
     };
 
-    if (callback) {
-        if (domNodes instanceof HTMLElement) {
-            return callback(domNodes, options, exports);
-        } else {
+    if (callback && typeof domNodes !== 'string') {
+        if (domNodes instanceof NodeList) {
             domNodes.forEach(function (el) {
                 return callback(el, options, exports);
             });
+        } else {
+            return callback(domNodes, options, exports);
         }
     }
 
@@ -356,10 +385,62 @@ var deepExtend = module.exports = function (/*obj_1, [obj_2], [obj_N]*/) {
 
 
 Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = getChildrenWithoutParentSelector;
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function getChildrenWithoutParentSelector(parent, selector) {
+    var exclusionSelector = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+
+    var foundElements = [];
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+        for (var _iterator = parent.children[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var c = _step.value;
+
+            if (null !== exclusionSelector && c.matches(exclusionSelector)) {
+                continue;
+            }
+            if (c.matches(selector)) {
+                foundElements.push(c);
+            }
+            foundElements.push.apply(foundElements, _toConsumableArray(getChildrenWithoutParentSelector(c, selector, exclusionSelector)));
+        }
+    } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+    } finally {
+        try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+                _iterator.return();
+            }
+        } finally {
+            if (_didIteratorError) {
+                throw _iteratorError;
+            }
+        }
+    }
+
+    return foundElements;
+}
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _component = __webpack_require__(3);
+var _component = __webpack_require__(4);
 
 Object.defineProperty(exports, 'component', {
   enumerable: true,
@@ -368,7 +449,7 @@ Object.defineProperty(exports, 'component', {
   }
 });
 
-var _modifier = __webpack_require__(4);
+var _modifier = __webpack_require__(5);
 
 Object.defineProperty(exports, 'modifier', {
   enumerable: true,
@@ -378,7 +459,7 @@ Object.defineProperty(exports, 'modifier', {
 });
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -405,35 +486,36 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  * @param {*} options.operator
  */
 function component(options) {
-
+    // setup constants
     var target = options.target instanceof HTMLElement ? options.target : options.target[0];
     var namespace = Synergy.getModuleName(target) + options.componentGlue + options.query;
     var components = Synergy.getComponents(target, options.module, options.componentGlue);
     var selector = '.' + namespace + ', [class*="' + namespace + options.modifierGlue + '"]';
     var querySelector = document.querySelectorAll(selector);
+    var moduleSelector = '.' + options.module + ', [class*="' + options.module + options.modifierGlue + '"]';
+    var childComponent = Synergy.getChildrenWithoutSelector(target, selector, moduleSelector);
 
-    if (options.query) {
-
-        if (target instanceof HTMLElement) {
-
-            var childComponent = target.querySelectorAll(selector);
-
-            if (options.operator) {
-                if (options.operator === 'set') {
-                    return toggleComponent(options.module, target, options.query, 'set', options.componentGlue);
-                } else if (options.operator === 'unset') {
-                    return toggleComponent(options.module, target, options.query, 'unset', options.componentGlue);
-                } else if (options.operator === 'add' || options.operator === 'remove') {
-                    return target.classList[options.operator](namespace);
-                }
+    if (options.query && target instanceof HTMLElement) {
+        // add/remove a component
+        if (options.operator) {
+            if (options.operator === 'set') {
+                return toggleComponent(options.module, target, options.query, 'set', options.componentGlue);
+            } else if (options.operator === 'unset') {
+                return toggleComponent(options.module, target, options.query, 'unset', options.componentGlue);
+            } else if (options.operator === 'add' || options.operator === 'remove') {
+                return target.classList[options.operator](namespace);
             }
+        }
 
-            if (childComponent.length !== 0 && !(options.target instanceof NodeList)) {
-                return childComponent;
-            }
+        // get children components
+        if (childComponent.length !== 0 && !(options.target instanceof NodeList)) {
+            return childComponent;
+        }
 
-            var matchesQuery = false;
+        // determine if element is specified component
+        var matchesQuery = false;
 
+        if (components) {
             components.forEach(function (component) {
                 if (options.query === component) {
                     matchesQuery = true;
@@ -441,13 +523,15 @@ function component(options) {
                     return matchesQuery;
                 }
             });
-
-            if (matchesQuery || options.operator == 'isset') return matchesQuery;
-
-            return querySelector.length === 0 ? false : querySelector;
         }
+
+        if (matchesQuery || options.operator == 'isset') return matchesQuery;
+
+        // get all specified components from document 
+        return querySelector.length === 0 ? false : querySelector;
     }
 
+    // determine the component name of current element
     return components;
 }
 
@@ -463,13 +547,14 @@ function toggleComponent(moduleName, target, query, operator, glue) {
     return Array.prototype.forEach.call(target.classList, function (className) {
         if (className.indexOf(moduleName) === 0) {
             target.classList.remove(className);
+
             target.classList.add(operator === 'set' ? '' + className + glue + query : className.replace(glue + query, ''));
         }
     });
 }
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -496,52 +581,48 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  * @param {*} options.operator
  */
 function modifier(options) {
-
+    // setup constants
     var target = options.target instanceof HTMLElement ? options.target : options.target[0];
     var namespace = Synergy.getBlockName(target, options.module, options.glue) + options.glue + options.query;
     var modifiers = Synergy.getModifiers(target, options.module, options.glue);
     var selector = '.' + namespace + ', [class*="' + namespace + options.glue + '"]';
     var querySelector = document.querySelectorAll(selector);
+    var moduleSelector = '.' + options.module + ', [class*="' + options.module + options.glue + '"]';
+    var childModifier = Synergy.getChildrenWithoutSelector(target, selector, moduleSelector);
+    var query = modifiers !== options.modifiers ? [options.query] : options.modifiers;
 
-    if (options.query) {
-
-        if (target instanceof HTMLElement) {
-
-            var childModifier = target.querySelectorAll(selector);
-
-            if (options.operator) {
-                if (options.operator === 'set') {
-                    return toggleModifier(options.module, target, options.query, 'set', options.glue);
-                } else if (options.operator === 'unset') {
-                    return toggleModifier(options.module, target, options.query, 'unset', options.glue);
-                } else if (options.operator === 'add' || options.operator === 'remove') {
-                    return target.classList[options.operator](namespace);
-                }
+    if (typeof options.query !== 'undefined' && target instanceof HTMLElement) {
+        // add/remove a modifier
+        if (options.operator) {
+            if (options.operator === 'set') {
+                return toggleModifier(options.module, target, options.query, 'set', options.glue);
+            } else if (options.operator === 'unset') {
+                return toggleModifier(options.module, target, options.query, 'unset', options.glue);
+            } else if (options.operator === 'add' || options.operator === 'remove') {
+                return target.classList[options.operator](namespace);
             }
-
-            if (childModifier.length !== 0) return childModifier;
-
-            var matchesQuery = false;
-
-            var query = modifiers !== options.modifiers ? [options.query] : options.modifiers;
-
-            modifiers.forEach(function (modifier) {
-                query.forEach(function (queryModifier) {
-                    if (queryModifier === modifier) {
-                        matchesQuery = true;
-
-                        return matchesQuery;
-                    }
-                });
-            });
-
-            if (matchesQuery || options.operator == 'isset') return matchesQuery;
-
-            return querySelector.length === 0 ? false : querySelector;
         }
+
+        // get children with modifier
+        if (childModifier.length !== 0) return childModifier;
+
+        // determine if element has modifier
+        var matchesQuery = false;
+
+        modifiers.forEach(function (modifier) {
+            query.forEach(function (queryModifier) {
+                if (queryModifier === modifier) return matchesQuery = true;
+            });
+        });
+
+        if (matchesQuery || options.operator == 'isset') return matchesQuery;
+
+        // get all components with modifier from document 
+        return querySelector.length === 0 ? false : querySelector;
     }
 
-    return modifiers;
+    // get modifiers on element
+    return modifiers.length > 0 ? modifiers : false;
 }
 
 /**
@@ -558,13 +639,14 @@ function toggleModifier(moduleName, target, query, operator, glue) {
     return Array.prototype.forEach.call(target.classList, function (className) {
         if (className.indexOf(moduleName) === 0) {
             target.classList.remove(className);
+
             target.classList.add(operator === 'set' ? className + glue + query : className.replace(glue + query, ''));
         }
     });
 }
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -574,7 +656,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _getBlockName = __webpack_require__(6);
+var _getBlockName = __webpack_require__(7);
 
 Object.defineProperty(exports, 'getBlockName', {
   enumerable: true,
@@ -583,7 +665,7 @@ Object.defineProperty(exports, 'getBlockName', {
   }
 });
 
-var _getComponents = __webpack_require__(7);
+var _getComponents = __webpack_require__(8);
 
 Object.defineProperty(exports, 'getComponents', {
   enumerable: true,
@@ -592,7 +674,7 @@ Object.defineProperty(exports, 'getComponents', {
   }
 });
 
-var _getDomNodes = __webpack_require__(8);
+var _getDomNodes = __webpack_require__(9);
 
 Object.defineProperty(exports, 'getDomNodes', {
   enumerable: true,
@@ -601,7 +683,7 @@ Object.defineProperty(exports, 'getDomNodes', {
   }
 });
 
-var _getGlue = __webpack_require__(9);
+var _getGlue = __webpack_require__(10);
 
 Object.defineProperty(exports, 'getGlue', {
   enumerable: true,
@@ -637,7 +719,16 @@ Object.defineProperty(exports, 'isValidSelector', {
   }
 });
 
-var _stripModifiers = __webpack_require__(14);
+var _parents = __webpack_require__(14);
+
+Object.defineProperty(exports, 'parents', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_parents).default;
+  }
+});
+
+var _stripModifiers = __webpack_require__(15);
 
 Object.defineProperty(exports, 'stripModifiers', {
   enumerable: true,
@@ -646,7 +737,7 @@ Object.defineProperty(exports, 'stripModifiers', {
   }
 });
 
-var _getOptions = __webpack_require__(15);
+var _getOptions = __webpack_require__(16);
 
 Object.defineProperty(exports, 'getOptions', {
   enumerable: true,
@@ -655,7 +746,7 @@ Object.defineProperty(exports, 'getOptions', {
   }
 });
 
-var _setDomNodeAttributes = __webpack_require__(16);
+var _setDomNodeAttributes = __webpack_require__(17);
 
 Object.defineProperty(exports, 'setDomNodeAttributes', {
   enumerable: true,
@@ -664,8 +755,10 @@ Object.defineProperty(exports, 'setDomNodeAttributes', {
   }
 });
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -703,7 +796,7 @@ function getBlockName(block, module, modifierGlue) {
 }
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -737,11 +830,18 @@ function getComponents(block, module, glue) {
         });
     }
 
+    // remove modifiers from components
+    if (components) {
+        components = components.map(function (component) {
+            return component.split('-')[0];
+        });
+    }
+
     return components;
 }
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -768,88 +868,63 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  * @param {String} module
  */
 function getDomNodes(query, module, modifierGlue) {
-    if (!Synergy.isValidSelector) {
-        console.warn('Synergy:getDomNodes - Synergy is missing `isValidSelector()`');
-    }
 
-    var domNodes = void 0;
+    if (query === null) return false;
+
+    if (typeof query === 'undefined') return module;
+
+    if (query instanceof HTMLElement || query instanceof NodeList) return query;
 
     if (typeof query === 'string') {
         if (Synergy.isValidSelector(query) && document.querySelectorAll(query).length && query !== module) {
-            domNodes = document.querySelectorAll(query);
+            return document.querySelectorAll(query);
         } else {
-            domNodes = document.querySelectorAll('.' + module + ', [class*="' + module + modifierGlue + '"]');
-        }
-    } else if ((typeof query === 'undefined' ? 'undefined' : _typeof(query)) === 'object') {
-        if (query[0] instanceof NodeList || query[0] instanceof HTMLElement) {
-            domNodes = query[0];
-        } else if (typeof query[0] === 'string') {
-            domNodes = document.querySelectorAll('.' + query[0] + ', [class*="' + query[0] + modifierGlue + '"]');
+            return document.querySelectorAll('.' + module + ', [class*="' + module + modifierGlue + '"]');
         }
     }
 
-    return domNodes || query;
+    if (query.constructor === Array) return getDomNodes(query[0], query[1], modifierGlue);
+
+    if ((typeof query === 'undefined' ? 'undefined' : _typeof(query)) === 'object') {
+        return document.querySelectorAll('.' + module + ', [class*="' + module + modifierGlue + '"]');
+    }
+
+    return query;
 }
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(global) {
+
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.getGlue = getGlue;
+
+var _synergy = __webpack_require__(0);
+
 /**
  * Get glue
  * 
- * @param {String} type - ['component'|'modifier]
+ * @param {String} type - [{'component'|'modifier'}]
  * @param {Object} custom
  * @param {string} glue
  */
 function getGlue(type, custom, glue) {
-    var defaultGlue = type === 'modifier' ? '-' : '_';
 
-    if (custom && custom.modifierGlue) {
+    if (custom && custom[type + 'Glue']) {
         glue = custom[type + 'Glue'].replace(/'/g, '');
-    } else if (window.APPUI && window.APPUI.global && window.APPUI.global[type + '-glue']) {
-        glue = window.APPUI.global[type + '-glue'].replace(/'/g, '');
-    } else {
-        glue = global[type + '-glue'] || defaultGlue;
+    } else if (typeof Synergy !== 'undefined' && Synergy.config && Synergy.config[type + '-glue']) {
+        glue = Synergy.config[type + '-glue'];
+    } else if (_synergy.global && _synergy.global[type + '-glue']) {
+        glue = _synergy.global[type + '-glue'];
     }
 
     return glue;
 }
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
 
 /***/ }),
 /* 11 */
@@ -910,8 +985,13 @@ exports.getModuleName = getModuleName;
  * @param {Object} [config] - object to retrieve module name
  */
 function getModuleName(query, config, componentGlue) {
+
+    if (query === null) return false;
+
     if (typeof query === 'string' && query.match('^[a-zA-Z0-9_-]+$')) {
         return query;
+    } else if ((typeof query === 'undefined' ? 'undefined' : _typeof(query)) === 'object' && 'name' in query) {
+        return query.name;
     } else if ((typeof query === 'undefined' ? 'undefined' : _typeof(query)) === 'object' && typeof query[1] === 'string') {
         return query[1];
     } else if (config && config[Object.keys(config)[0]].name) {
@@ -969,6 +1049,42 @@ function isValidSelector(selector) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.default = parents;
+/**
+ * Parents
+ * 
+ * @see https://gist.github.com/ziggi/2f15832b57398649ee9b
+ * 
+ * @param {HTMLElement} elem
+ * @param {String} selector
+ */
+function parents(elem, selector) {
+    var elements = [];
+    var ishaveselector = selector !== undefined;
+
+    while ((elem = elem.parentElement) !== null) {
+        if (elem.nodeType !== Node.ELEMENT_NODE) {
+            continue;
+        }
+
+        if (!ishaveselector || elem.matches(selector)) {
+            elements.push(elem);
+        }
+    }
+
+    return elements;
+}
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 exports.stripModifiers = stripModifiers;
 
 var _synergy = __webpack_require__(0);
@@ -995,7 +1111,7 @@ function stripModifiers(block, module, glue) {
 }
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1030,6 +1146,8 @@ function getOptions() {
         _ref$custom = _ref.custom,
         custom = _ref$custom === undefined ? {} : _ref$custom;
 
+    custom = custom instanceof HTMLElement || custom instanceof NodeList ? {} : custom;
+
     var configKey = Object.keys(config)[0];
     var extendedConfig = configKey ? (0, _deepExtend2.default)(config[configKey], custom) : custom;
 
@@ -1045,7 +1163,7 @@ function getOptions() {
 }
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

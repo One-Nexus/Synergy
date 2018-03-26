@@ -34,6 +34,7 @@ import {
     getModifiers,
     getModuleName,
     isValidSelector,
+    parents,
     stripModifiers,
     getOptions,
     setDomNodeAttributes
@@ -76,9 +77,27 @@ export default function Synergy(els, callback, config, custom, parser) {
     const modifiers     = getModifiers(domNodes, module, modifierGlue);
     const options       = getOptions({config, parser, custom});
 
-    if (typeof els === 'string' && els.match(/^[a-zA-Z]*$/)) {
-        setDomNodeAttributes({ domNodes, module });
+    const isModuleElement = () => {
+        if (domNodes instanceof NodeList) {
+            domNodes.forEach(node => {
+                if (parents(node, '[data-module]').length) {
+                    return false;
+                }
+            });
+
+            return true;
+        }
+        if (domNodes instanceof HTMLElement && !parents(domNodes, '[data-module]').length) {
+            return true;
+        }
+        if (typeof els === 'string' && els.match(/^[a-zA-Z]*$/)) {
+            return true;
+        }
+
+        return false;
     }
+
+    if (isModuleElement()) setDomNodeAttributes({ domNodes, module });
 
     // Elements found by the Synergy query
     exports.query = domNodes;

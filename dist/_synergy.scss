@@ -367,6 +367,21 @@ $sass-config-parser: null !default;
 
 // The variable to hold a single module (do not edit)
 $module: null !default;
+/// @TODO move function to Sass-Boost as 'string-remove-duplicates'
+/// Remove duplicate parts from a selector
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @access public
+///
+/// @param {string} $selector - the selecor to clean
+@function clean-selector($selector) {
+    $selector: str-replace(inspect($selector), ' ', ', ');
+    $selector: selector-parse($selector);
+    $selector: list-remove-duplicates($selector);
+    $selector: str-replace(inspect($selector), ', ', ' ');
+
+    @return $selector;
+}
 /// Used to merge a module's default configuration with any custom
 /// values passed to the module
 ///
@@ -1508,6 +1523,79 @@ $css-properties: (
         @return $false-value;
     }
 }
+/// Get CSS from Sass map
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @access public
+///
+/// @param {map} $map - The map from which to get CSS
+@mixin get-css-from-map($map) {
+    @each $property, $value in $map {
+        @if type-of($property) == 'string' {
+            // $property defines new Modifier
+            @if str-index($property, 'modifier(') == 1 or str-index($property, $modifier-glue) == 1 {
+                @include modifier(get-param($property)) {
+                    @include get-css-from-map($value);
+                }
+            }
+
+            // $property defines new Component
+            @else if str-index($property, 'component(') == 1 or str-index($property, $component-glue) == 1 {
+                @include component(get-param($property)) {
+                    @include get-css-from-map($value);
+                }
+            }
+
+            // $property defines :hover styles
+            @else if $property == 'hover' {
+                @include hover {
+                    @include get-css-from-map($value);
+                }
+            }
+
+            // $property defines .active styles
+            @else if $property == 'active' {
+                @include modifier('active') {
+                    @include get-css-from-map($value);
+                }
+            }
+
+            // $property is a valid CSS property
+            @else if index($css-properties, $property) {
+                @if type-of($value) != 'map' {
+                    #{$property}: $value;
+                }
+            }
+        }
+    }
+}
+/// Get parmater from config string
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @access public
+///
+/// @param {string} $string - the string from which to retrieve param
+@function get-param($string) {
+    @if str-index($string, 'component("') == 1 {
+        $string: str-replace($string, 'component("', '');
+        $string: str-replace($string, '")', '');
+    }
+
+    @else if str-index($string, 'modifier("') == 1 {
+        $string: str-replace($string, 'modifier("', '');
+        $string: str-replace($string, '")', '');
+    }
+
+    @else if str-index($string, $component-glue) == 1 {
+        $string: strip-glue($string, $component-glue);
+    }
+
+    @else if str-index($string, $modifier-glue) == 1 {
+        $string: strip-glue($string, $modifier-glue);
+    }
+
+    @return $string;
+}
 /// Get CSS properties and values from a map
 ///
 /// @author [@esr360](http://twitter.com/esr360)
@@ -1522,6 +1610,38 @@ $css-properties: (
             }
         }
     }
+}
+/// Merge maps containing module/component CSS
+///
+/// @author [@esr360](http://twitter.com/esr360)
+/// @access public
+///
+/// @param {string|list} $option - the desired option
+@function merge-css-maps($source, $target) {
+
+    $content: map-merge-deep($source, $target);
+
+    @if str-index(inspect($content), 'null') == null {
+        @each $property, $value in $content {
+            $dup-param: null;
+
+            @if str-index($property, $modifier-glue) == 1 {
+                $dup-param: $property;
+            }
+
+            @each $property, $value in $content {
+                @if str-index($property, 'modifier(') == 1 and $dup-param {
+                    @if get-param($property) == get-param($dup-param) {
+                        $merge-dup-param: map-merge-deep(map-get($content, $property), map-get($content, $dup-param));
+                        $content: map-set($content, $dup-param, $merge-dup-param);
+                        $content: map-remove($content, $property);
+                    }
+                }
+            }
+        }
+    }
+
+    @return $content;
 }
 /// Create a namespace tree from a passed selector
 ///
@@ -1541,7 +1661,7 @@ $css-properties: (
     $selectors: str-replace($selectors, '#{$modifier-glue}"]', '');
     $selectors: str-replace($selectors, '"]', '');
 
-    // Spoof our modules into a list
+    // Spoof our selectors into a list
     $selectors: str-replace($selectors, ' ', ', ');
     $selectors: selector-parse($selectors);
 
@@ -1662,7 +1782,7 @@ $css-properties: (
 @function setting($map, $keys...) {
     @return option($map, $keys...);
 }
-/// Strip the glue (-, _) from a string
+/// Strip the glue (- , _) from a string
 ///
 /// @access public
 ///
@@ -1750,7 +1870,16 @@ $css-properties: (
 ///     }
 ///
 ///     <div class="header">...</div>
-@mixin module($modules: if(variable-exists('config'), (map-get($config, 'name')), ''), $type: if(variable-exists('config'), (map-get($config, 'selector-type')), $selector-type)) {
+@mixin module(
+    $modules: if(variable-exists('config'), (map-get($config, 'name')), ''),
+    $type: if(variable-exists('config'), (map-get($config, 'selector-type')), $selector-type)
+) {
+    $content: false;
+
+    @if type-of($modules) == 'map' {
+        $content: $modules;
+        $modules: if(variable-exists('config'), (map-get($config, 'name')), '');
+    }
 
     @if ($module-namespace) {
         $modules: $module-namespace + $modules;
@@ -1758,6 +1887,7 @@ $css-properties: (
 
     // disable any output
     $disable-output: if(variable-exists('disable-output'), $disable-output, false);
+
     @if variable-exists('config') and map-has-key($config, 'disable-output') {
         $disable-output: map-get($config, 'disable-output');
     }
@@ -1792,6 +1922,7 @@ $css-properties: (
     @if not $disable-output {
         #{$selectors} {
             @content;
+
             @if not $nested {
                 @include extend-modifiers;
                 @include combine-modifiers;
@@ -1800,18 +1931,17 @@ $css-properties: (
                     @if $modules == map-get($config, 'name') or $target {
                         @if $target {
                             #{$target} {
-                                @include module-css($config);
+                                @include get-css-from-map($config);
                             }
                         }
                         @else {
-                            @include module-css($config);
+                            @include get-css-from-map($config);
                         }
                     }
                 }
             }
         }
     }
-
 }
 
 /// Alias for module() mixin
@@ -1852,54 +1982,6 @@ $css-properties: (
         @include extend(($modifiers));
     }
 }
-
-/// Output CSS styles from config
-///
-/// @author [@esr360](http://twitter.com/esr360)
-///
-/// @param {map} $config - The confing to find and output CSS from
-@mixin module-css($config) {
-
-    @each $property, $value in $config {
-
-        // the propery is for a modifier
-        @if str-slice($property, 1, 1) == $modifier-glue {
-            @include modifier(strip-glue($property, $modifier-glue)) {
-                @include module-css($value);
-            }
-        }
-
-        // the property is for a component
-        @else if str-slice($property, 1, 1) == $component-glue {
-            @include component(strip-glue($property, $component-glue)) {
-                @include module-css($value);
-            }
-        }
-
-        // the property is for hovered states
-        @else if $property == 'hover' {
-            &:hover {
-                @include module-css($value);
-            }
-        }
-
-        // the property is for active states
-        @else if $property == 'active' {
-            @include modifier('active') {
-                @include module-css($value);
-            }
-        }
-
-        // the property is regular CSS
-        @else if index($css-properties, $property) {
-            @if type-of($value) != 'map' {
-                #{$property}: $value;
-            }
-        }
-
-    }
-
-}
 /// Create a component based off the main module
 ///
 /// @author [@esr360](http://twitter.com/esr360)
@@ -1916,13 +1998,17 @@ $css-properties: (
 ///     }
 ///
 ///     <div class="header_wrapper">...</div>
-@mixin component($components: null, $glue: $component-glue) {
+@mixin component($components: null, $content: (), $sub-component: false, $glue: $component-glue) {
 
-    $parents   : ();
-    $selectors : '[class*="#{$module}#{$glue}"]';
-    $this      : &;
-    $tree      : module-tree($this);
-    $namespace : nth($tree, length($tree));
+    $parents     : ();
+    $this        : &;
+    $selectors   : '[class*="#{$module}#{$glue}"]';
+    $tree        : module-tree(&);
+    $namespace   : nth($tree, length($tree));
+
+    @if not $sub-component {
+        $namespace: $module;
+    }
 
     @if $components {
         $selectors: ();
@@ -1935,11 +2021,13 @@ $css-properties: (
 
     @each $selector in & {
         // spoof the selector into a list
-        $selector: str-replace(inspect($selector), ' ', ', ');
-        $selector: selector-parse($selector);
+        $selector: selector-parse(str-replace(inspect($selector), ' ', ', '));
 
-        // if the last item isn't a modifier, remove it
-        @if not str-index(inspect(nth($selector, length($selector))), '[class*="#{$modifier-glue}') {
+        $is-modifier: str-index(inspect(nth($selector, length($selector))), '[class*="#{$modifier-glue}');
+        $is-pseudo-state: str-index(inspect(nth($selector, length($selector))), ':');
+
+        // if the last item isn't a modifier or pseudo state, remove it
+        @if not ($is-modifier or $is-pseudo-state) {
             $selector: list-remove($selector, nth($selector, length($selector)));
         }
 
@@ -1947,44 +2035,42 @@ $css-properties: (
             $selector: nth($selector, 1);
         }
 
-        // convert the selector back into a string
-        $selector: str-replace(inspect($selector), ', ', ' ');
-
         // Re-build the parent selector
-        $parents: append($parents, $selector, comma);
+        $parents: append($parents, str-replace(inspect($selector), ', ', ' '), comma);
     }
 
     $parents: list-remove-duplicates($parents);
 
     @if length($parents) == 1 {
         $parents: nth($parents, 1);
-        // BEGIN TOMFOOLERY
-        $parents: str-replace(inspect($parents), ' ', ', ');
-        $parents: selector-parse($parents);
-        $parents: list-remove-duplicates($parents);
-        $parents: str-replace(inspect($parents), ', ', ' ');
-        // END TOMFOOLERY
+        $parents: clean-selector($parents); // https://github.com/sass/libsass/issues/2520
     }
 
-    @if ($parents == '()') {
-        @at-root #{$selectors} {
+    @at-root #{if($parents == '()', $selectors, $parents)} {
+        #{if($parents == '()', &, $selectors)} {
             @content;
-            @if variable-exists('config') {
-                @include component-css($components, $config);
-            }
-        }
-    }
-    @else {
-        @at-root #{$parents} {
-            #{$selectors} {
-                @content;
-                @if variable-exists('config') {
-                    @include component-css($components, $config);
+
+            @if selector-is-root-module($this) {
+                @each $component in $components {
+                    $component: if(map-get($config, $component), map-get($config, $component), ());
+                    $content: merge-css-maps($content, $component);
                 }
             }
+
+            @include get-css-from-map($content);
         }
     }
+}
 
+/// Alis for `component` mixin with $sub-component: true
+///
+/// @param {string|list} $components
+/// @param {map} $content
+/// @param {string} $glue
+@mixin sub-component($components: null, $content: (), $glue: $component-glue) {
+    @include component($components, $content, true, $glue) {
+        @content;
+    }
 }
 
 /// Alias for component() mixin
@@ -1996,47 +2082,6 @@ $css-properties: (
 @mixin components($components) {
     @include component($components) {
         @content;
-    }
-}
-
-/// Output CSS styles from config
-///
-/// @author [@esr360](http://twitter.com/esr360)
-///
-/// @param {map} $config - The confing to find and output CSS from
-@mixin component-css($components, $config) {
-    @each $component in $components {
-
-        @if map-has-key($config, $component) and type-of(map-get($config, $component)) == 'map' {
-            @each $property, $value in map-get($config, $component) {
-
-                @if index($css-properties, $property) {
-                    #{$property}: $value;
-                }
-                @else if $property == 'hover' {
-                    &:hover {
-                        @include component-css($property, map-get($config, $component));
-                    }
-                }
-                @else if $property == 'active' {
-                    @include modifier('active') {
-                        @include component-css($property, map-get($config, $component));
-                    }
-                }
-                @else if str-index($property, $modifier-glue) == 1 {
-                    @include modifier(strip-glue($property, $modifier-glue)) {
-                        @include component-css($property, map-get($config, $component));
-                    }
-                }
-                @else {
-                    @include component($property) {
-                        @include component-css($property, map-get($config, $component));
-                    }
-                }
-
-            }
-        }
-
     }
 }
 /// Create a modifier for a module
@@ -2058,8 +2103,17 @@ $css-properties: (
 ///     <div class="button-large">...</div>
 @mixin modifier($modifiers, $special: null, $glue: $modifier-glue) {
 
-    $this: &;
+    // BEGIN TOMFOOLERY https://github.com/sass/libsass/issues/2520
+    $this: ();
+
+    @each $selector in & {
+        $selector: clean-selector($selector);
+        $this: append($this, $selector, comma);
+    }
+
     $selectors: $this;
+    // END TOMFOOLERY
+    //$selectors: &;
 
     $is-local-flex-type: variable-exists('config') and map-get($config, 'selector-type') == 'flex';
     $is-global-flex-type: not variable-exists('config') and $selector-type == 'flex';
@@ -2317,4 +2371,19 @@ $css-properties: (
 
     }
 
+}
+/// Used to generate selectors for pseudo states
+///
+/// @param {string} $state
+@mixin pseudo-state($state) {
+    &:#{$state} {
+        @content;
+    }
+}
+
+/// Alias for `pseudo-state` mixin with $state: 'hover'
+@mixin hover {
+    @include pseudo-state('hover') {
+        @content;
+    }
 }

@@ -11,7 +11,7 @@ export function getGlue(type, custom, glue) {
     if (custom && custom[type + 'Glue']) {
         glue = custom[type + 'Glue'].replace(/'/g,'');
     }
-    else if (Synergy.config && Synergy.config[type + '-glue']) {
+    else if ((typeof Synergy !== 'undefined') && Synergy.config && Synergy.config[type + '-glue']) {
         glue = Synergy.config[type + '-glue'];
     }
     else if (global && global[type + '-glue']) {
