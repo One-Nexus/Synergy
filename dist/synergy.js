@@ -1253,6 +1253,18 @@ Object.defineProperty(exports, 'Component', {
     return _interopRequireDefault(_component).default;
   }
 });
+Object.defineProperty(exports, 'Wrapper', {
+  enumerable: true,
+  get: function get() {
+    return _component.Wrapper;
+  }
+});
+Object.defineProperty(exports, 'Group', {
+  enumerable: true,
+  get: function get() {
+    return _component.Group;
+  }
+});
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
