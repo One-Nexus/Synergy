@@ -19,6 +19,7 @@ const files = [
     './src/scss/utilities/_option.scss',
     './src/scss/utilities/_remove-components.scss',
     './src/scss/utilities/_remove-modifiers.scss',
+    './src/scss/utilities/_selector-is-root-module.scss',
     './src/scss/utilities/_selector.scss',
     './src/scss/utilities/_setting.scss',
     './src/scss/utilities/_strip-glue.scss',
