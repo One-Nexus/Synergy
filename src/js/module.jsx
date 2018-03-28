@@ -7,42 +7,31 @@ import getModifiersFromProps from './utilities/getModifiersFromProps';
 import renderModifiers from './utilities/renderModifiers';
 
 /**
+ * Construct a Synergy module
+ */
+export class Constructor extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.config = (global.UI && global.UI.config) ? global.UI.config[this.props.name] : null;
+    }
+}
+
+/**
  * Render a Synergy module
  *
  * @extends React.Component
  */
 export default class Module extends React.Component {
-    /**
-     * Content to pass to children components
-     */
-    getChildContext() {
-        return { 
-            module: this.props.name
-        };
-    }
+    constructor(props) {
+        super(props);
 
-    componentWillMount() {
-        this.config = (global.UI && global.UI.config) ? global.UI.config[this.props.name] : null;
-    }
-
-    componentDidMount() {
-        if (Synergy.modules[this.props.name] && Synergy.modules[this.props.name].methods) {
-            if (Synergy.modules[this.props.name].methods.init) {
-                Synergy.modules[this.props.name].methods.init(ReactDOM.findDOMNode(this), this.config);
-            }
-        }
-    }
-
-    /**
-     * Render the module
-     */
-    render() {
-        const Tag = this.props.tag || (HTMLTags.includes(this.props.name) ? this.props.name : 'div');
-        const propModifiers = renderModifiers(getModifiersFromProps(this.props, Synergy.CssClassProps));
-        const passedModifiers = renderModifiers(this.props.modifiers);
-        const modifiers = propModifiers + passedModifiers;
-
-        let classes = this.props.className ? ' ' + this.props.className : '';
+        this.tag = this.props.tag || (HTMLTags.includes(this.props.name) ? this.props.name : 'div');
+        this.propModifiers = renderModifiers(getModifiersFromProps(this.props, Synergy.CssClassProps));
+        this.passedModifiers = renderModifiers(this.props.modifiers);
+        this.modifiers = this.propModifiers + this.passedModifiers;
+        this.classes = this.props.className ? ' ' + this.props.className : '';
+        this.classNames = this.props.name + this.modifiers + this.classes;
 
         // determine if any passed prop is a module - if so, add it to `classes`
         if (Synergy.modules) {
@@ -59,29 +48,52 @@ export default class Module extends React.Component {
                             modifiers = '-' + prop[1];
                         }
 
-                        classes = classes + ' ' + module + modifiers;
+                        this.classes = this.classes + ' ' + module + modifiers;
                     }
                 }
             });
+
+            if (Synergy.CssClassProps) Synergy.CssClassProps.forEach(prop => {
+                if (Object.keys(this.props).includes(prop)) {
+                    this.classNames = this.classNames + ' ' + prop
+                }
+            });
         }
+    }
 
-        let classNames = this.props.name + modifiers + classes;
+    /**
+     * Content to pass to children components
+     */
+    getChildContext() {
+        return { 
+            module: this.props.name
+        };
+    }
 
-        if (Synergy.CssClassProps) Synergy.CssClassProps.forEach(prop => {
-            if (Object.keys(this.props).includes(prop)) {
-                classNames = classNames + ' ' + prop
+    /**
+     * Dynamically fetch and call module `init` method
+     */
+    componentDidMount() {
+        if (Synergy.modules[this.props.name] && Synergy.modules[this.props.name].methods) {
+            if (Synergy.modules[this.props.name].methods.init) {
+                Synergy.modules[this.props.name].methods.init(ReactDOM.findDOMNode(this), this.config);
             }
-        });
+        }
+    }
 
+    /**
+     * Render the module
+     */
+    render() {
         return (
-            <Tag 
-                id={this.props.id} 
-                className={classNames} 
-                data-module={this.props.name} 
+            <this.tag
+                id={this.props.id}
+                className={this.classNames}
+                data-module={this.props.name}
                 href={this.props.href}
             >
                 {this.props.children}
-            </Tag>
+            </this.tag>
         );
     }
 }
