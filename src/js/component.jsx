@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
+import getParam from './utilities/getParam';
 import getModifiersFromProps from './utilities/getModifiersFromProps';
 import renderModifiers from './utilities/renderModifiers';
 
@@ -15,17 +16,40 @@ export default class Component extends React.Component {
     constructor(props, context) {
         super(props, context);
 
+        this.config = context.config;
         this.module = this.props.module || context.module;
         this.modifiers = renderModifiers(this.props.modifiers);
         this.classes = this.props.className ? ' ' + this.props.className : '';
         this.selector = `${this.module}_${this.props.name + this.modifiers}${this.classes}`;
-        this.onClick = this.props.onClick;
+        
+        this.getEventHandlers([
+            this.props, this.config[this.props.name] ? this.config[this.props.name] : {}
+        ]);
+    }
 
-        // dynamically fetch onClick event from global.Synergy object
-        if (this.onClick && Synergy.modules) {
-            if (/^function[^{]+\{\s*\}/m.test(this.onClick.toString())) {
-                if (Synergy.modules[this.module]) {
-                    this.onClick = Synergy.modules[this.module].methods[this.props.onClick.name];
+    getEventHandlers(properties) {
+        this.eventHandlers = this.eventHandlers || {};
+
+        if (properties.constructor === Array) {
+            properties.forEach(group => this.getEventHandlers(group));
+        } else for (var key in properties) {
+            const value = properties[key];
+
+            if (key.indexOf('event') === 0 || key.indexOf('[') === 0) {
+                this.eventHandlers[getParam(key)] = Synergy.modules[this.module].methods[value];
+            }
+
+            if (Object.keys(window).includes(key.toLowerCase())) {
+                if (value.name) {
+                    this.eventHandlers[key] = value;
+                } else {
+                    this.eventHandlers[key] = Synergy.modules[this.module].methods[value];
+                }
+            }
+
+            if (key.indexOf('modifier') === 0 || key.indexOf('-') === 0) {
+                if (this.props.modifiers.includes(getParam(key))) {
+                    this.getEventHandlers(value);
                 }
             }
         }
@@ -49,7 +73,7 @@ export default class Component extends React.Component {
             }
         } else {
             return (
-                <div className={this.selector} onClick={this.onClick}>
+                <div {...this.eventHandlers} className={this.selector}>
                     {this.props.children}
                 </div>
             );
@@ -58,7 +82,8 @@ export default class Component extends React.Component {
 }
 
 Component.contextTypes = {
-    module: PropTypes.string
+    module: PropTypes.string,
+    config: PropTypes.object
 };
 
 export class Wrapper extends Component {

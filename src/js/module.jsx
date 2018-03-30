@@ -10,10 +10,15 @@ import renderModifiers from './utilities/renderModifiers';
  * Construct a Synergy module
  */
 export class Constructor extends React.Component {
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
 
         this.config = (global.UI && global.UI.config) ? global.UI.config[this.props.name] : null;
+        this.methods = this.config ? (this.config.methods || []) : [];
+
+        this.methods.forEach(method => {
+            this[method] = Synergy.modules[this.props.name].methods[method];
+        });
     }
 }
 
@@ -23,8 +28,9 @@ export class Constructor extends React.Component {
  * @extends React.Component
  */
 export default class Module extends React.Component {
-    constructor(props) {
-        super(props);
+
+    constructor(props, context) {
+        super(props, context);
 
         this.tag = this.props.tag || (HTMLTags.includes(this.props.name) ? this.props.name : 'div');
         this.propModifiers = renderModifiers(getModifiersFromProps(this.props, Synergy.CssClassProps));
@@ -33,8 +39,8 @@ export default class Module extends React.Component {
         this.classes = this.props.className ? ' ' + this.props.className : '';
         this.classNames = this.props.name + this.modifiers + this.classes;
 
-        // determine if any passed prop is a module - if so, add it to `classes`
         if (Synergy.modules) {
+            // determine if any passed prop is a module - if so, add it to `classes`
             Object.entries(this.props).forEach(prop => {
                 if (prop[0][0] === prop[0][0].toUpperCase()) {
                     if (Object.keys(Synergy.modules).includes(prop[0].toLowerCase())) {
@@ -66,12 +72,12 @@ export default class Module extends React.Component {
      */
     getChildContext() {
         return { 
-            module: this.props.name
+            module: this.props.name,
+            config: (global.UI && global.UI.config) ? global.UI.config[this.props.name] : null
         };
     }
 
     /**
-     * Dynamically fetch and call module `init` method
      */
     componentDidMount() {
         if (Synergy.modules[this.props.name] && Synergy.modules[this.props.name].methods) {
@@ -99,5 +105,6 @@ export default class Module extends React.Component {
 }
 
 Module.childContextTypes = {
-    module: PropTypes.string
+    module: PropTypes.string,
+    config: PropTypes.object
 };
