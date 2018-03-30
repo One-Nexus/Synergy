@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
+import HTMLTags from 'html-tags';
+import HtmlAttributes from 'html-element-attributes';
 
 import getParam from './utilities/getParam';
 import getModifiersFromProps from './utilities/getModifiersFromProps';
@@ -16,15 +18,32 @@ export default class Component extends React.Component {
     constructor(props, context) {
         super(props, context);
 
-        this.config = context.config;
+        this.config = context.config || {};
+        this.tag = this.props.tag || (HTMLTags.includes(this.props.name) ? this.props.name : 'div');
         this.module = this.props.module || context.module;
         this.modifiers = renderModifiers(this.props.modifiers);
         this.classes = this.props.className ? ' ' + this.props.className : '';
         this.selector = `${this.module}_${this.props.name + this.modifiers}${this.classes}`;
-        
+
+        this.getHtmlAttributes(this.props);
+
         this.getEventHandlers([
             this.props, this.config[this.props.name] ? this.config[this.props.name] : {}
         ]);
+    }
+
+    getHtmlAttributes(properties) {
+        this.HtmlAttributes = this.HtmlAttributes || {};
+
+        for (var key in properties) {
+            const value = properties[key];
+
+            if (HtmlAttributes[this.tag].includes(key) && key !== 'name') {
+                this.HtmlAttributes[key] = value;
+            }
+
+            if (key === 'elementName') this.HtmlAttributes.name = value;
+        }
     }
 
     getEventHandlers(properties) {
@@ -40,15 +59,18 @@ export default class Component extends React.Component {
             }
 
             if (Object.keys(window).includes(key.toLowerCase())) {
-                if (value.name) {
+                if (typeof value === 'function') {
                     this.eventHandlers[key] = value;
                 } else {
-                    this.eventHandlers[key] = Synergy.modules[this.module].methods[value];
+                    //@TODO be smarter here, don't hardcode any properties
+                    if (key !== 'name') {
+                        this.eventHandlers[key] = Synergy.modules[this.module].methods[value];
+                    }
                 }
             }
 
             if (key.indexOf('modifier') === 0 || key.indexOf('-') === 0) {
-                if (this.props.modifiers.includes(getParam(key))) {
+                if (this.props.modifiers && this.props.modifiers.includes(getParam(key))) {
                     this.getEventHandlers(value);
                 }
             }
@@ -73,9 +95,9 @@ export default class Component extends React.Component {
             }
         } else {
             return (
-                <div {...this.eventHandlers} className={this.selector}>
+                <this.tag {...this.HtmlAttributes} {...this.eventHandlers} className={this.selector}>
                     {this.props.children}
-                </div>
+                </this.tag>
             );
         }
     }
