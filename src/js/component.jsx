@@ -95,7 +95,7 @@ export default class Component extends React.Component {
             }
         } else {
             return (
-                <this.tag {...this.HtmlAttributes} {...this.eventHandlers} className={this.selector}>
+                <this.tag {...this.HtmlAttributes} {...this.eventHandlers} id={this.props.id} className={this.selector}>
                     {this.props.children}
                 </this.tag>
             );
