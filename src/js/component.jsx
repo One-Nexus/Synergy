@@ -25,25 +25,9 @@ export default class Component extends React.Component {
         this.classes = this.props.className ? ' ' + this.props.className : '';
         this.selector = `${this.module}_${this.props.name + this.modifiers}${this.classes}`;
 
-        this.getHtmlAttributes(this.props);
-
         this.getEventHandlers([
             this.props, this.config[this.props.name] ? this.config[this.props.name] : {}
         ]);
-    }
-
-    getHtmlAttributes(properties) {
-        this.HtmlAttributes = this.HtmlAttributes || {};
-
-        for (var key in properties) {
-            const value = properties[key];
-
-            if (HtmlAttributes[this.tag].includes(key) && key !== 'name') {
-                this.HtmlAttributes[key] = value;
-            }
-
-            if (key === 'elementName') this.HtmlAttributes.name = value;
-        }
     }
 
     getEventHandlers(properties) {
@@ -85,6 +69,20 @@ export default class Component extends React.Component {
         }
     }
 
+    getHtmlProps(props) {
+        let HtmlProps = {};
+
+        for (let prop in props) {
+            if (prop === 'elementname') {
+                HtmlProps['name'] = props[prop];
+            } else {
+                HtmlProps[prop] = props[prop];
+            }
+        };
+
+        return HtmlProps;
+    }
+
     render() {
         if (this.isNested()) {
             const parentKeys = Object.keys(this.props).sort();
@@ -95,7 +93,7 @@ export default class Component extends React.Component {
             }
         } else {
             return (
-                <this.tag {...this.HtmlAttributes} {...this.eventHandlers} id={this.props.id} className={this.selector}>
+                <this.tag {...this.getHtmlProps(this.props)} {...this.eventHandlers} className={this.selector}>
                     {this.props.children}
                 </this.tag>
             );
