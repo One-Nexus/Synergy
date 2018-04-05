@@ -35,7 +35,8 @@ export default class Component extends React.Component {
 
         if (properties.constructor === Array) {
             properties.forEach(group => this.getEventHandlers(group));
-        } else for (var key in properties) {
+        }
+        else for (var key in properties) {
             const value = properties[key];
 
             if (key.indexOf('event') === 0 || key.indexOf('[') === 0) {
@@ -73,9 +74,16 @@ export default class Component extends React.Component {
         let HtmlProps = {};
 
         for (let prop in props) {
-            if (prop === 'elementname') {
-                HtmlProps['name'] = props[prop];
-            } else {
+            if (prop === 'name') {
+                continue;
+            }
+            else if (prop === 'modifiers') {
+                continue;
+            } 
+            else if (prop === 'elementname') {
+                HtmlProps.name = props[prop];
+            }
+            else {
                 HtmlProps[prop] = props[prop];
             }
         };
