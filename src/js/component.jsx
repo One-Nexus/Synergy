@@ -92,6 +92,12 @@ export default class Component extends React.Component {
     }
 
     render() {
+        const renderTag = (
+            <this.tag {...this.getHtmlProps(this.props)} {...this.eventHandlers} className={this.selector}>
+                {this.props.children}
+            </this.tag>
+        );
+
         if (this.isNested()) {
             const parentKeys = Object.keys(this.props).sort();
             const childKeys = Object.keys(this.props.children.props).sort();
@@ -99,13 +105,9 @@ export default class Component extends React.Component {
             if (JSON.stringify(parentKeys) === JSON.stringify(childKeys)) {
                 return this.props.children;
             }
-        } else {
-            return (
-                <this.tag {...this.getHtmlProps(this.props)} {...this.eventHandlers} className={this.selector}>
-                    {this.props.children}
-                </this.tag>
-            );
-        }
+            else return renderTag;
+        } 
+        else return renderTag;
     }
 }
 
