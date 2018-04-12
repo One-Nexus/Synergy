@@ -29,6 +29,12 @@ export default function(env) {
             })
         ],
 
+        externals: {
+            'react': 'React',
+            'react-dom': 'ReactDOM',
+            'react-router': 'ReactRouter'
+        },
+
         node: { Buffer: (target === 'web') ? false : true },
 
         module: {

@@ -1576,14 +1576,14 @@ $css-properties: (
 ///
 /// @param {string} $string - the string from which to retrieve param
 @function get-param($string) {
-    @if str-index($string, 'component("') == 1 {
-        $string: str-replace($string, 'component("', '');
-        $string: str-replace($string, '")', '');
+    @if str-index($string, 'component(') == 1 {
+        $string: str-replace($string, 'component(', '');
+        $string: str-replace($string, ')', '');
     }
 
-    @else if str-index($string, 'modifier("') == 1 {
-        $string: str-replace($string, 'modifier("', '');
-        $string: str-replace($string, '")', '');
+    @else if str-index($string, 'modifier(') == 1 {
+        $string: str-replace($string, 'modifier(', '');
+        $string: str-replace($string, ')', '');
     }
 
     @else if str-index($string, $component-glue) == 1 {
@@ -1593,6 +1593,8 @@ $css-properties: (
     @else if str-index($string, $modifier-glue) == 1 {
         $string: strip-glue($string, $modifier-glue);
     }
+
+    $string: str-replace($string, "'", '');
 
     @return $string;
 }
