@@ -25,7 +25,10 @@ export default function(env) {
         plugins: [
             new webpack.optimize.UglifyJsPlugin({
                 include: /\.min\.js$/,
-                minimize: true
+                minimize: true,
+                output: {
+                    comments: false
+                }
             })
         ],
 
