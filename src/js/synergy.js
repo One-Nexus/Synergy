@@ -97,7 +97,17 @@ export default function Synergy(els, callback, config, custom, parser) {
         return false;
     }
 
-    if (isModuleElement()) setDomNodeAttributes({ domNodes, module });
+    if (isModuleElement()) {
+        setDomNodeAttributes({ domNodes, module });
+
+        if (window.UI && window.UI.config) {
+            if (window.UI.config[module]) {
+                window.UI.config[module].initialised = true;
+            } else {
+                window.UI.config[module] = { initialised: true };
+            }
+        }
+    }
 
     // Elements found by the Synergy query
     exports.query = domNodes;
