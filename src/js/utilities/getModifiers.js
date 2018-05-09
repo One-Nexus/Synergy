@@ -7,15 +7,15 @@ import * as Synergy from '../synergy';
  * @param {String} module
  */
 export function getModifiers(block, module, glue) {
-    let modifiers;
+    let modifiers = [];
 
     if (block instanceof HTMLElement) {
         Array.prototype.forEach.call(block.classList, className => {
             if (className.indexOf(module) === 0) {
-                modifiers = className.split(glue).slice(1);
+                modifiers.push(className.split(glue).slice(1));
             }
         });
     }
 
-    return modifiers;
+    return [].concat.apply([], modifiers);
 }
