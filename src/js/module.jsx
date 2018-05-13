@@ -88,6 +88,23 @@ export default class Module extends React.Component {
     }
 
     /**
+     * @param {*} properties 
+     */
+    getEventHandlers(properties) {
+        let eventHandlers = {};
+
+        for (let prop in properties) {
+            if (Object.keys(window).includes(prop.toLowerCase())) {
+                if (prop !== 'name') {
+                    eventHandlers[prop] = properties[prop];
+                }
+            }
+        }
+
+        return eventHandlers;
+    }
+
+    /**
      * Render the module
      */
     render() {
@@ -97,6 +114,8 @@ export default class Module extends React.Component {
                 className={this.classNames}
                 data-module={this.props.name}
                 href={this.props.href}
+                
+                {...this.getEventHandlers(this.props)}
             >
                 {this.props.children}
             </this.tag>

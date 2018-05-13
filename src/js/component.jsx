@@ -105,8 +105,10 @@ export default class Component extends React.Component {
             if (JSON.stringify(parentKeys) === JSON.stringify(childKeys)) {
                 return this.props.children;
             }
+
             else return renderTag;
         } 
+
         else return renderTag;
     }
 }
