@@ -69,6 +69,8 @@ export {
  */
 export default function Synergy(els, callback, config, custom, parser) {
 
+    let methods = {};
+
     const componentGlue = getGlue('component', custom);
     const modifierGlue  = getGlue('modifier', custom);
     const module        = getModuleName(els, config);
@@ -100,19 +102,22 @@ export default function Synergy(els, callback, config, custom, parser) {
     if (isModuleElement()) {
         setDomNodeAttributes({ domNodes, module });
 
+        // @TODO create utility function for this
         if (window.UI && window.UI.config) {
-            if (window.UI.config[module]) {
-                window.UI.config[module].initialised = true;
-            } else {
-                window.UI.config[module] = { initialised: true };
+            window.UI.config[module] = window.UI.config[module] || {};
+
+            if (!window.UI.config[module].initialised) {
+                window.UI.config[module] = Object.assign(window.UI.config[module], options, { 
+                    initialised: true 
+                });
             }
         }
     }
 
     // Elements found by the Synergy query
-    exports.query = domNodes;
+    methods.query = domNodes;
 
-    exports.modifier = (query, operator, target = domNodes) => modifier({
+    methods.modifier = (query, operator, target = domNodes) => modifier({
         glue: modifierGlue,
         target,
         module,
@@ -121,7 +126,7 @@ export default function Synergy(els, callback, config, custom, parser) {
         operator
     });
 
-    exports.component = (query, operator, target = domNodes) => component({
+    methods.component = (query, operator, target = domNodes) => component({
         target,
         module,
         components,
@@ -133,13 +138,13 @@ export default function Synergy(els, callback, config, custom, parser) {
 
     if (callback && typeof domNodes !== 'string') {
         if (domNodes instanceof NodeList) {
-            domNodes.forEach(el => callback(el, options, exports));
+            domNodes.forEach(el => callback(el, options, methods));
         } else {
-            return callback(domNodes, options, exports);
+            return callback(domNodes, options, methods);
         }
     }
 
-    return exports;
+    return methods;
 }
 
 if (typeof window !== 'undefined' && !window.Synergy) {
