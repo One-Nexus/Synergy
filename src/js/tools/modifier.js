@@ -48,8 +48,10 @@ export function modifier(options) {
 
         if (matchesQuery || options.operator == 'isset') return matchesQuery;
 
-        // get all components with modifier from document 
-        return (querySelector.length === 0) ? false : querySelector;
+        // @TODO get all components with modifier from document
+        // return (querySelector.length === 0) ? false : querySelector;
+
+        return false;
     }
     
     // get modifiers on element
