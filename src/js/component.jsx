@@ -92,11 +92,19 @@ export default class Component extends React.Component {
     }
 
     render() {
-        const renderTag = (
-            <this.tag {...this.getHtmlProps(this.props)} {...this.eventHandlers} className={this.selector}>
-                {this.props.children}
-            </this.tag>
-        );
+        const renderTag = () => {
+            if (this.props.from) {
+                return React.cloneElement(this.props.from, Object.assign(
+                    ...this.getHtmlProps(this.props), ...this.eventHandlers, { className: this.selector }
+                ), this.props.from.props.children)
+            } else {
+                return (
+                    <this.tag {...this.getHtmlProps(this.props)} {...this.eventHandlers} className={this.selector}>
+                        {this.props.children}
+                    </this.tag>   
+                )
+            }
+        }
 
         if (this.isNested()) {
             const parentKeys = Object.keys(this.props).sort();
@@ -106,10 +114,10 @@ export default class Component extends React.Component {
                 return this.props.children;
             }
 
-            else return renderTag;
+            else return renderTag();
         } 
 
-        else return renderTag;
+        else return renderTag();
     }
 }
 
