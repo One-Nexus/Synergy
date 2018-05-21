@@ -105,6 +105,21 @@ export default class Module extends React.Component {
     }
 
     /**
+     * @param {*} properties 
+     */
+    getDataAttributes(properties) {
+        let dataAttributes = {};
+
+        for (let prop in properties) {
+            if (prop.indexOf('data-') === 0) {
+                dataAttributes[prop] = properties[prop];
+            }
+        }
+
+        return dataAttributes;
+    }
+
+    /**
      * Render the module
      */
     render() {
@@ -115,6 +130,7 @@ export default class Module extends React.Component {
                 data-module={this.props.name}
                 href={this.props.href}
                 
+                {...this.getDataAttributes(this.props)}
                 {...this.getEventHandlers(this.props)}
             >
                 {this.props.children}
