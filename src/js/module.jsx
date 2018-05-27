@@ -1,10 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import ReactDOMServer from 'react-dom/server';
 import PropTypes from 'prop-types';
 import HTMLTags from 'html-tags';
 
 import getModifiersFromProps from './utilities/getModifiersFromProps';
 import renderModifiers from './utilities/renderModifiers';
+
+/**
+ * Used for generating unique module ID's
+ */
+let increment = 1;
 
 /**
  * Construct a Synergy module
@@ -63,6 +69,10 @@ export default class Module extends React.Component {
         this.classes = this.props.className ? ' ' + this.props.className : '';
         this.classNames = this.props.name + this.modifiers + this.classes;
 
+        // @TODO only add id if neccessery e.g. when this.props.before/this.props.after
+        increment++;
+        this.id = this.props.id || `synergy-module-${increment}`
+
         if (Synergy.modules) {
             // determine if any passed prop is a module - if so, add it to `classes`
             Object.entries(this.props).forEach(prop => {
@@ -104,9 +114,11 @@ export default class Module extends React.Component {
     /**
      */
     componentDidMount() {
-        if (Synergy.modules[this.props.name] && Synergy.modules[this.props.name].methods) {
-            if (Synergy.modules[this.props.name].methods.init) {
-                Synergy.modules[this.props.name].methods.init(ReactDOM.findDOMNode(this), this.config);
+        const _module = Synergy.modules[this.props.name];
+
+        if (_module && _module.methods) {
+            if (_module.methods.init) {
+                _module.methods.init(ReactDOM.findDOMNode(this), this.config);
             }
         }
     }
@@ -147,9 +159,11 @@ export default class Module extends React.Component {
      * Render the module
      */
     render() {
-        return (
+        return [
+            this.props.before && this.props.before(() => document.getElementById(this.id)),
+
             <this.tag
-                id={this.props.id}
+                id={this.id}
                 className={this.classNames}
                 data-module={this.props.name}
                 href={this.props.href}
@@ -158,8 +172,10 @@ export default class Module extends React.Component {
                 {...this.getEventHandlers(this.props)}
             >
                 {this.props.children}
-            </this.tag>
-        );
+            </this.tag>,
+
+            this.props.after && this.props.after(() => document.getElementById(this.id))
+        ];
     }
 }
 
