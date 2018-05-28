@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import HTMLTags from 'html-tags';
-import HtmlAttributes from 'html-element-attributes';
 
 import getParam from './utilities/getParam';
 import getModifiersFromProps from './utilities/getModifiersFromProps';
