@@ -6,7 +6,7 @@ import { global } from '../synergy';
  * @param {Object} custom
  * @param {string} glue
  */
-export function getGlue(type, custom, glue) {
+export default function getGlue(type, custom, glue) {
 
     if (custom && custom[type + 'Glue']) {
         glue = custom[type + 'Glue'].replace(/'/g,'');

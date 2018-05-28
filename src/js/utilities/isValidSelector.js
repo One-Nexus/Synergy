@@ -7,7 +7,7 @@
  * @example isValidSelector('[data-foo-bar]') // returns true
  * @example isValidSelector(4) // returns false
  */
-export function isValidSelector(selector) {
+export default function isValidSelector(selector) {
     var stub = document.createElement('br');
     
     try { 

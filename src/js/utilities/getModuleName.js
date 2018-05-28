@@ -4,7 +4,7 @@
  * @param {String|Object|HTMLElement} query - query to retrieve module name
  * @param {Object} [config] - object to retrieve module name
  */
-export function getModuleName(query, config, componentGlue) {
+export default function getModuleName(query, config, componentGlue) {
     
     if (query === null) return false;
 

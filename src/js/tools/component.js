@@ -9,7 +9,7 @@ import * as Synergy from '../synergy';
  * @param {*} options.query
  * @param {*} options.operator
  */
-export function component(options) {
+export default function component(options) {
     // setup constants
     const target = (options.target instanceof HTMLElement) ? options.target : options.target[0];
     const namespace = Synergy.getModuleName(target) + options.componentGlue + options.query;

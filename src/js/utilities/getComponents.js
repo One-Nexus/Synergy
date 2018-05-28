@@ -6,7 +6,7 @@ import * as Synergy from '../synergy';
  * @param {*} block
  * @param {String} module
  */
-export function getComponents(block, module, glue) {
+export default function getComponents(block, module, glue) {
     let components;
 
     if (block instanceof HTMLElement) {

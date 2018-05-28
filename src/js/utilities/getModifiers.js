@@ -6,7 +6,7 @@ import * as Synergy from '../synergy';
  * @param {*} block
  * @param {String} module
  */
-export function getModifiers(block, module, glue) {
+export default function getModifiers(block, module, glue) {
     let modifiers = [];
 
     if (block instanceof HTMLElement) {

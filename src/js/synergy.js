@@ -20,25 +20,21 @@ export { default as getChildrenWithoutSelector } from 'get-children-without-pare
 //*****************************************************************
 
 // Tools
-import { 
-    component, 
-    modifier 
-} from './tools';
+import component from './tools/component';
+import modifier from './tools/modifier';
 
 // Utilities
-import {
-    getBlockName,
-    getComponents,
-    getDomNodes,
-    getGlue,
-    getModifiers,
-    getModuleName,
-    isValidSelector,
-    parents,
-    stripModifiers,
-    getOptions,
-    setDomNodeAttributes
-} from './utilities';
+import getBlockName from './utilities/getBlockName';
+import getComponents from './utilities/getComponents';
+import getDomNodes from './utilities/getDomNodes';
+import getGlue from './utilities/getGlue';
+import getModifiers from './utilities/getModifiers';
+import getModuleName from './utilities/getModuleName';
+import isValidSelector from './utilities/isValidSelector';
+import parents from './utilities/parents';
+import stripModifiers from './utilities/stripModifiers';
+import getOptions from './utilities/getOptions';
+import setDomNodeAttributes from './utilities/setDomNodeAttributes';
 
 export {
     getBlockName,
