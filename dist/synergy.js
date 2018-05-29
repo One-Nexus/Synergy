@@ -1908,10 +1908,13 @@ var Module = function (_React$Component) {
         _this.modifiers = _this.propModifiers + _this.passedModifiers;
         _this.classes = _this.props.className ? ' ' + _this.props.className : '';
         _this.classNames = _this.props.name + _this.modifiers + _this.classes;
+        _this.id = _this.props.id;
 
-        // @TODO only add id if neccessery e.g. when this.props.before/this.props.after
         increment++;
-        _this.id = _this.props.id || 'synergy-module-' + increment;
+
+        if ((_this.props.before || _this.props.after) && !_this.id) {
+            _this.id = 'synergy-module-' + increment;
+        }
 
         if (Synergy.modules) {
             // determine if any passed prop is a module - if so, add it to `classes`

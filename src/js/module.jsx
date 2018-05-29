@@ -28,10 +28,13 @@ export default class Module extends React.Component {
         this.modifiers = this.propModifiers + this.passedModifiers;
         this.classes = this.props.className ? ' ' + this.props.className : '';
         this.classNames = this.props.name + this.modifiers + this.classes;
+        this.id = this.props.id;
 
-        // @TODO only add id if neccessery e.g. when this.props.before/this.props.after
         increment++;
-        this.id = this.props.id || `synergy-module-${increment}`
+
+        if ((this.props.before || this.props.after) && !this.id) {
+            this.id = `synergy-module-${increment}`;
+        }
 
         if (Synergy.modules) {
             // determine if any passed prop is a module - if so, add it to `classes`
