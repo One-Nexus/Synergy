@@ -73,7 +73,7 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.modifier = exports.component = exports.stripModifiers = exports.isValidSelector = exports.getModuleName = exports.getModifiers = exports.getGlue = exports.getDomNodes = exports.getComponents = exports.getBlockName = exports.getChildrenWithoutSelector = exports.deepextend = exports.global = undefined;
+exports.modifier = exports.component = exports.stripModifiers = exports.isValidSelector = exports.getModuleName = exports.getModifiers = exports.getGlue = exports.getDomNodes = exports.getComponents = exports.getBlockName = exports.getChildrenWithoutSelector = exports.deepextend = undefined;
 
 var _deepExtend = __webpack_require__(1);
 
@@ -148,22 +148,6 @@ var _setDomNodeAttributes2 = _interopRequireDefault(_setDomNodeAttributes);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-///****************************************************************
-/// Synergy - https://github.com/esr360/Synergy
-///
-/// @author [@esr360](http://twitter.com/esr360)
-///****************************************************************
-
-var global = exports.global = {
-    'module-namespace': '',
-    'component-glue': '_',
-    'modifier-glue': '-'
-
-    // Vendor
-    //*****************************************************************
-
-};
-
 // Tools & Utilities
 //*****************************************************************
 
@@ -171,6 +155,8 @@ var global = exports.global = {
 
 
 // Utilities
+
+
 exports.getBlockName = _getBlockName2.default;
 exports.getComponents = _getComponents2.default;
 exports.getDomNodes = _getDomNodes2.default;
@@ -301,7 +287,7 @@ if (typeof window !== 'undefined' && !window.Synergy) {
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2013-2015 Viacheslav Lotsmanov
+ * Copyright (c) 2013-2018 Viacheslav Lotsmanov
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -333,7 +319,9 @@ function isSpecificValue(val) {
 
 function cloneSpecificValue(val) {
 	if (val instanceof Buffer) {
-		var x = new Buffer(val.length);
+		var x = Buffer.alloc
+			? Buffer.alloc(val.length)
+			: new Buffer(val.length);
 		val.copy(x);
 		return x;
 	} else if (val instanceof Date) {
@@ -364,6 +352,10 @@ function deepCloneArray(arr) {
 		}
 	});
 	return clone;
+}
+
+function safeGetProperty(object, property) {
+	return property === '__proto__' ? undefined : object[property];
 }
 
 /**
@@ -398,8 +390,8 @@ var deepExtend = module.exports = function (/*obj_1, [obj_2], [obj_N]*/) {
 		}
 
 		Object.keys(obj).forEach(function (key) {
-			src = target[key]; // source value
-			val = obj[key]; // new value
+			src = safeGetProperty(target, key); // source value
+			val = safeGetProperty(obj, key); // new value
 
 			// recursion prevention
 			if (val === target) {
@@ -437,7 +429,7 @@ var deepExtend = module.exports = function (/*obj_1, [obj_2], [obj_N]*/) {
 	});
 
 	return target;
-}
+};
 
 
 /***/ }),
@@ -827,9 +819,6 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = getGlue;
-
-var _synergy = __webpack_require__(0);
-
 /**
  * Get glue
  * 
@@ -838,13 +827,17 @@ var _synergy = __webpack_require__(0);
  * @param {string} glue
  */
 function getGlue(type, custom, glue) {
+    var defaults = {
+        'component-glue': '_',
+        'modifier-glue': '-'
+    };
 
     if (custom && custom[type + 'Glue']) {
         glue = custom[type + 'Glue'].replace(/'/g, '');
     } else if (typeof Synergy !== 'undefined' && Synergy.config && Synergy.config[type + '-glue']) {
         glue = Synergy.config[type + '-glue'];
-    } else if (_synergy.global && _synergy.global[type + '-glue']) {
-        glue = _synergy.global[type + '-glue'];
+    } else {
+        glue = defaults[type + '-glue'];
     }
 
     return glue;

@@ -4,12 +4,6 @@
 /// @author [@esr360](http://twitter.com/esr360)
 ///****************************************************************
 
-export const global = {
-    'module-namespace': '',
-    'component-glue': '_',
-    'modifier-glue': '-'
-}
-
 // Vendor
 //*****************************************************************
 

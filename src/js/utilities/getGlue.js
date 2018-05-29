@@ -1,4 +1,3 @@
-import { global } from '../synergy';
 /**
  * Get glue
  * 
@@ -7,6 +6,10 @@ import { global } from '../synergy';
  * @param {string} glue
  */
 export default function getGlue(type, custom, glue) {
+    const defaults = {
+        'component-glue': '_',
+        'modifier-glue': '-'
+    }
 
     if (custom && custom[type + 'Glue']) {
         glue = custom[type + 'Glue'].replace(/'/g,'');
@@ -14,8 +17,8 @@ export default function getGlue(type, custom, glue) {
     else if ((typeof Synergy !== 'undefined') && Synergy.config && Synergy.config[type + '-glue']) {
         glue = Synergy.config[type + '-glue'];
     }
-    else if (global && global[type + '-glue']) {
-        glue = global[type + '-glue'];
+    else {
+        glue = defaults[type + '-glue'];
     }
 
     return glue;
