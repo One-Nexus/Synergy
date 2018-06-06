@@ -98,7 +98,14 @@ export default class Component extends React.Component {
                 ), this.props.from.props.children)
             } else {
                 return (
-                    <this.tag {...this.getHtmlProps(this.props)} {...this.eventHandlers} className={this.selector}>
+                    <this.tag 
+                        {...this.getHtmlProps(this.props)} 
+                        {...this.eventHandlers} 
+
+                        className={this.selector}
+                        data-component={this.props.name}
+                    >
+
                         {this.props.children}
                     </this.tag>   
                 )
