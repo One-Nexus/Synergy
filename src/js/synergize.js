@@ -7,12 +7,21 @@ export default class Synergize extends React.Component {
     constructor(props, context) {
         super(props, context);
 
-        this.config = (global.UI && global.UI.config) ? global.UI.config[this.props.name] : null;
-        this.methods = this.config ? (this.config.methods || []) : [];
+        try {
+            this.config = global.Synergy.modules[this.props.name].config;
+        } catch(error) {
+            this.config = {};
+        }
 
-        this.methods.forEach(method => {
-            this[method] = Synergy.modules[this.props.name].methods[method];
-        });
+        try {
+            this.methods = global.Synergy.modules[this.props.name].methods;
+        } catch(error) {
+            this.methods = {};
+        }
+
+        for (let method in this.methods) {
+            this[method] = this.methods[method];
+        }
 
         this.content = defaults => {
             if (this.props.content) {

@@ -68,9 +68,17 @@ export default class Module extends React.Component {
      * Content to pass to children components
      */
     getChildContext() {
+        let config;
+
+        try {
+            config = global.Synergy.modules[this.props.name].config;
+        } catch(error) {
+            config = null;
+        }
+
         return { 
             module: this.props.name,
-            config: (global.UI && global.UI.config) ? global.UI.config[this.props.name] : null
+            config
         };
     }
 
