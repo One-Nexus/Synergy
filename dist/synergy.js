@@ -218,17 +218,6 @@ function Synergy(els, callback, config, custom, parser) {
 
     if (isModuleElement()) {
         (0, _setDomNodeAttributes2.default)({ domNodes: domNodes, module: module });
-
-        // @TODO create utility function for this
-        if (window.UI && window.UI.config) {
-            window.UI.config[module] = window.UI.config[module] || {};
-
-            if (!window.UI.config[module].initialised) {
-                window.UI.config[module] = Object.assign(window.UI.config[module], options, {
-                    initialised: true
-                });
-            }
-        }
     }
 
     // Elements found by the Synergy query
@@ -1784,12 +1773,21 @@ var Synergize = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (Synergize.__proto__ || Object.getPrototypeOf(Synergize)).call(this, props, context));
 
-        _this.config = global.UI && global.UI.config ? global.UI.config[_this.props.name] : null;
-        _this.methods = _this.config ? _this.config.methods || [] : [];
+        try {
+            _this.config = global.Synergy.modules[_this.props.name].config;
+        } catch (error) {
+            _this.config = {};
+        }
 
-        _this.methods.forEach(function (method) {
-            _this[method] = Synergy.modules[_this.props.name].methods[method];
-        });
+        try {
+            _this.methods = global.Synergy.modules[_this.props.name].methods;
+        } catch (error) {
+            _this.methods = {};
+        }
+
+        for (var method in _this.methods) {
+            _this[method] = _this.methods[method];
+        }
 
         _this.content = function (defaults) {
             if (_this.props.content) {
@@ -1953,9 +1951,17 @@ var Module = function (_React$Component) {
     _createClass(Module, [{
         key: 'getChildContext',
         value: function getChildContext() {
+            var config = void 0;
+
+            try {
+                config = global.Synergy.modules[this.props.name].config;
+            } catch (error) {
+                config = null;
+            }
+
             return {
                 module: this.props.name,
-                config: global.UI && global.UI.config ? global.UI.config[this.props.name] : null
+                config: config
             };
         }
     }, {
@@ -5783,7 +5789,11 @@ var Component = function (_React$Component) {
                 } else {
                     return _react2.default.createElement(
                         _this3.tag,
-                        _extends({}, _this3.getHtmlProps(_this3.props), _this3.eventHandlers, { className: _this3.selector }),
+                        _extends({}, _this3.getHtmlProps(_this3.props), _this3.eventHandlers, {
+
+                            className: _this3.selector,
+                            'data-component': _this3.props.name
+                        }),
                         _this3.props.children
                     );
                 }

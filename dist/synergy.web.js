@@ -217,17 +217,6 @@ function Synergy(els, callback, config, custom, parser) {
 
     if (isModuleElement()) {
         (0, _setDomNodeAttributes2.default)({ domNodes: domNodes, module: module });
-
-        // @TODO create utility function for this
-        if (window.UI && window.UI.config) {
-            window.UI.config[module] = window.UI.config[module] || {};
-
-            if (!window.UI.config[module].initialised) {
-                window.UI.config[module] = Object.assign(window.UI.config[module], options, {
-                    initialised: true
-                });
-            }
-        }
     }
 
     // Elements found by the Synergy query
