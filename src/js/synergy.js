@@ -49,7 +49,6 @@ export {
  * @author @esr360 <http://twitter.com/esr360>
  * 
  * @module Synergy
- * @access public
  * 
  * @param {(String|HTMLElement|NodeList)} els - Synergy selector to match elements
  * @param {Function} [callback] - function to call on matched elements

@@ -77,8 +77,7 @@ export default class Module extends React.Component {
         }
 
         return { 
-            module: this.props.name,
-            config
+            module: this.props.name, config
         };
     }
 
