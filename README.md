@@ -3,7 +3,7 @@
 [![npm version](https://badge.fury.io/js/Synergy.svg)](https://badge.fury.io/js/Synergy)
 [![npm version](https://img.shields.io/npm/dm/synergy.svg)](https://badge.fury.io/js/Synergy)
 
-[![Synergy](https://raw.githubusercontent.com/esr360/Synergy/gh-pages/logo-small.png "Synergy Logo")](https://github.com/esr360/Synergy)
+<img height="56px" src="http://www.onenexus.io/synergy/github-logo.png" />
 
 > A front-end framework for creating modular, configurable and scalable UI components for the web
 
@@ -20,11 +20,13 @@
 
 ## Overview
 
-Synergy provides powerful tools to help you create configurable modules in `Sass`, `JavaScript` and/or `React`:
+Synergy provides powerful APIs to help you create configurable modules in `Sass`, `JavaScript` and/or `React`:
 
 * [Use Synergy to create Sass components](https://github.com/esr360/Synergy/wiki/Sass)
 * [Use Synergy to create JavaScript components](https://github.com/esr360/Synergy/wiki/JavaScript)
 * [Use Synergy to create React components](https://github.com/esr360/Synergy/wiki/Using-With-React)
+
+> Synergy is ideal for creating your presentational React components when using the [Container Component Pattern](https://reactpatterns.com/#container-component) ([learn more](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0))
 
 Synergy also povides tools allowing you to combine the above aspects together to create a `Synergy Module`. Each aspect can work independently and exists as a separate file with a specific role:
 
@@ -32,6 +34,10 @@ Synergy also povides tools allowing you to combine the above aspects together to
 * [Module Styles](https://github.com/esr360/Synergy/wiki/Sass#isolating-configurable-styles) (`.scss`)
 * [Module Interactions](https://github.com/esr360/Synergy/wiki/Module-Interactions) (`.js`)
 * [Module Interface](https://github.com/esr360/Synergy/wiki/Using-With-React) (`.jsx`)
+
+These are the core concepts of a UI module.
+
+<p align="center"><img src="http://www.onenexus.io/synergy/synergy.png" width="600px" /></p>
 
 ```
 |-- modules
@@ -186,7 +192,7 @@ function toggle(event) {
 }
 ```
 
-> You could move the toggle interaction (and any other module interactions) into a separate `accordion.js` file
+> You could move the toggle interaction (and any other module interactions) into a [separate `accordion.js` file](Module-Interactions#import-existing-interaction-method)
 
 ### Accordion Configuration (`accordion.json`)
 

@@ -22,7 +22,7 @@ export default function modifier(options) {
 
     if ((typeof options.query !== 'undefined') && target instanceof HTMLElement) {
         // add/remove a modifier
-        if (options.operator) {
+        if (typeof options.operator === 'string') {
             if (options.operator === 'set') {
                 return toggleModifier(options.module, target, options.query, 'set', options.glue);
             } 
@@ -35,7 +35,13 @@ export default function modifier(options) {
         }
 
         // get children with modifier
-        if (childModifier.length !== 0) return childModifier;
+        if (childModifier.length !== 0) {
+            if (typeof options.operator === 'function') {
+                childModifier.forEach(el => options.operator(el));
+            }
+
+            return childModifier;
+        }
 
         // determine if element has modifier
         let matchesQuery = false;
