@@ -20,6 +20,26 @@
 
 ## Overview
 
+<table>
+    <tr>
+        <td>
+            <a href="https://github.com/esr360/Synergy/wiki/Sass">
+                <img style="vertical-align: middle;" src="http://www.onenexus.io/synergy/github-sass-logo.png" />
+            </a>
+        </td>
+        <td>
+            <a href="https://github.com/esr360/Synergy/wiki/JavaScript">
+                <img src="http://www.onenexus.io/synergy/github-javascript-logo.png" />
+            </a>
+        </td>
+        <td>
+            <a href="https://github.com/esr360/Synergy/wiki/Using-With-React">
+                <img src="http://www.onenexus.io/synergy/github-react-logo.png" />
+            </a>
+        </td>
+    </tr>
+</table>
+
 Synergy provides powerful APIs to help you create configurable modules in `Sass`, `JavaScript` and/or `React`:
 
 * [Use Synergy to create Sass components](https://github.com/esr360/Synergy/wiki/Sass)
