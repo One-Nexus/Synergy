@@ -174,7 +174,6 @@ exports.modifier = _modifier2.default;
  * @author @esr360 <http://twitter.com/esr360>
  * 
  * @module Synergy
- * @access public
  * 
  * @param {(String|HTMLElement|NodeList)} els - Synergy selector to match elements
  * @param {Function} [callback] - function to call on matched elements
@@ -512,7 +511,7 @@ function component(options) {
 
     if (options.query && target instanceof HTMLElement) {
         // add/remove a component
-        if (options.operator) {
+        if (typeof options.operator === 'string') {
             if (options.operator === 'set') {
                 return toggleComponent(options.module, target, options.query, 'set', options.componentGlue);
             } else if (options.operator === 'unset') {
@@ -524,6 +523,12 @@ function component(options) {
 
         // get children components
         if (childComponent.length !== 0 && !(options.target instanceof NodeList)) {
+            if (typeof options.operator === 'function') {
+                childComponent.forEach(function (el) {
+                    return options.operator(el);
+                });
+            }
+
             return childComponent;
         }
 
@@ -608,7 +613,7 @@ function modifier(options) {
 
     if (typeof options.query !== 'undefined' && target instanceof HTMLElement) {
         // add/remove a modifier
-        if (options.operator) {
+        if (typeof options.operator === 'string') {
             if (options.operator === 'set') {
                 return toggleModifier(options.module, target, options.query, 'set', options.glue);
             } else if (options.operator === 'unset') {
@@ -619,7 +624,15 @@ function modifier(options) {
         }
 
         // get children with modifier
-        if (childModifier.length !== 0) return childModifier;
+        if (childModifier.length !== 0) {
+            if (typeof options.operator === 'function') {
+                childModifier.forEach(function (el) {
+                    return options.operator(el);
+                });
+            }
+
+            return childModifier;
+        }
 
         // determine if element has modifier
         var matchesQuery = false;

@@ -5,7 +5,7 @@
 
 <img height="56px" src="http://www.onenexus.io/synergy/github-logo.png" />
 
-> A front-end framework for creating modular, configurable and scalable UI components for the web
+> A front-end framework for creating modular, configurable and scalable UI components
 
 ### Useful Wiki Pages
 
@@ -24,17 +24,17 @@
     <tr>
         <td>
             <a href="https://github.com/esr360/Synergy/wiki/Sass">
-                <img style="vertical-align: middle;" src="http://www.onenexus.io/synergy/github-sass-logo.png" />
+                <img style="vertical-align: middle;" src="http://www.onenexus.io/synergy/github-sass-logo.png?v=1" />
             </a>
         </td>
         <td>
             <a href="https://github.com/esr360/Synergy/wiki/JavaScript">
-                <img src="http://www.onenexus.io/synergy/github-javascript-logo.png" />
+                <img width="99%" src="http://www.onenexus.io/synergy/github-javascript-logo.png?v=1" />
             </a>
         </td>
         <td>
             <a href="https://github.com/esr360/Synergy/wiki/Using-With-React">
-                <img src="http://www.onenexus.io/synergy/github-react-logo.png" />
+                <img src="http://www.onenexus.io/synergy/github-react-logo.png?v=1" />
             </a>
         </td>
     </tr>
@@ -57,7 +57,7 @@ Synergy also povides tools allowing you to combine the above aspects together to
 
 These are the core concepts of a UI module.
 
-<p align="center"><img src="http://www.onenexus.io/synergy/synergy.png" width="600px" /></p>
+<p align="center"><img src="http://www.onenexus.io/synergy/module-illustration.png?v=1" width="600px" /></p>
 
 ```
 |-- modules
@@ -71,22 +71,6 @@ These are the core concepts of a UI module.
 > Synergy modules can be configured and scaled without having to touch the module's source code
 
 A Synergy module is composed of `Components`. Both `Modules` and `Components` can have `Modifiers`.
-
-###### Sample Structure
-
-```xml
-<Module {modifiers}>
-    <Component {modifiers}>
-        {content}
-    </Component>
-
-    {content}
-
-    <Component {modifiers}>
-        {content}
-    </Component>
-</Module>
-```
 
 * [Learn more about Modules](https://github.com/esr360/Synergy/wiki/What-Is-a-Module)
 * [Learn more about Components](https://github.com/esr360/Synergy/wiki/What-Is-a-Component)
@@ -123,9 +107,9 @@ Using Synergy, you can create themes and control your entire project's UI from a
 
 @import 'accordion.json';
 
-@mixin accordion() {
+@mixin accordion($custom: ()) {
 
-    $config: config($accordion, map-get($theme, 'accordion'));
+    $config: config($accordion, $custom);
 
     @include module {
         @include component('panel') {
@@ -160,31 +144,9 @@ Using Synergy, you can create themes and control your entire project's UI from a
 }
 ```
 
-### Accordion Interface - Plain JavaScript (`accordion.js`)
+### Accordion Interface - JSX (`accordion.jsx`)
 
 > [Learn more](Module-Interactions#the-interaction-interface) about _module interfaces_
-
-```js
-import { Synergy } from 'Synergy';
-
-import config from './accordion.json';
-
-export default function accordion() {
-    Synergy(config.name, accordion => {
-        accordion.component('panel', panel => {
-            panel.component('title', title => {
-                title.addEventListener('click', toggle.bind(panel), false);
-            });
-        });
-    });
-}
-
-function toggle() {
-    this.modifier('active', 'toggle');
-}
-```
-
-### Accordion Interface - JSX (`accordion.jsx`)
 
 ```jsx
 import React from 'react';
@@ -213,6 +175,28 @@ function toggle(event) {
 ```
 
 > You could move the toggle interaction (and any other module interactions) into a [separate `accordion.js` file](Module-Interactions#import-existing-interaction-method)
+
+### Accordion Interface - Plain JavaScript (`accordion.js`)
+
+```js
+import { Synergy } from 'Synergy';
+
+import config from './accordion.json';
+
+export default function accordion() {
+    Synergy(config.name, accordion => {
+        accordion.component('panel', panel => {
+            panel.component('title', title => {
+                title.addEventListener('click', toggle.bind(panel), false);
+            });
+        });
+    });
+}
+
+function toggle() {
+    this.modifier('active', 'toggle');
+}
+```
 
 ### Accordion Configuration (`accordion.json`)
 
@@ -290,7 +274,29 @@ function toggle(event) {
 ));
 ```
 
-### Initialise Using Plain HTML/JavaScript (`app.js`)
+### Render Using React (`app.jsx`)
+
+```html
+<div id="demo"></div>
+```
+
+```js
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+import Accordion from './modules/accordion/accordion.jsx';
+
+ReactDOM.render(
+    <Accordion panels={[
+        {title: 'foo', content: 'bar'},
+        {title: 'fizz', content: 'buzz'},
+    ]} />, 
+
+    document.getElementById('demo')
+);
+```
+
+### Or Initialise Using Plain HTML/JavaScript (`app.js`)
 
 ```html
 <div class="accordion">
@@ -315,34 +321,11 @@ import accordion from './modules/accordion/accordion.js';
 accordion();
 ```
 
-### Or Render Using React (`app.jsx`)
-
-```html
-<div id="demo"></div>
-```
-
-```js
-import React from 'react';
-import ReactDOM from 'react-dom';
-
-import Accordion from './modules/accordion/accordion.jsx';
-
-ReactDOM.render(
-    <Accordion panels={[
-        {title: 'foo', content: 'bar'},
-        {title: 'fizz', content: 'buzz'},
-    ]} />, 
-
-    document.getElementById('demo')
-);
-```
-
 ## Creating a Theme
 
 Using Synergy, you can create themes and control your entire project's UI from a single JSON file by passing custom options and parameters to your modules.
 
 > [Learn more](https://github.com/esr360/Synergy/wiki/Creating-a-Theme) about creating themes
-
 
 ## Changelog
 
