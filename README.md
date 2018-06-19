@@ -29,12 +29,12 @@
         </td>
         <td>
             <a href="https://github.com/esr360/Synergy/wiki/JavaScript">
-                <img width="99%" src="http://www.onenexus.io/synergy/github-javascript-logo.png?v=1" />
+                <img src="http://www.onenexus.io/synergy/github-javascript-logo.png?v=1" />
             </a>
         </td>
         <td>
             <a href="https://github.com/esr360/Synergy/wiki/Using-With-React">
-                <img src="http://www.onenexus.io/synergy/github-react-logo.png?v=1" />
+                <img width="99%" src="http://www.onenexus.io/synergy/github-react-logo.png?v=1" />
             </a>
         </td>
     </tr>
