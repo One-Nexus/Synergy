@@ -146,7 +146,7 @@ Using Synergy, you can create themes and control your entire project's UI from a
 
 ### Accordion Interface - JSX (`accordion.jsx`)
 
-> [Learn more](Module-Interactions#the-interaction-interface) about _module interfaces_
+> [Learn more](https://github.com/esr360/Synergy/wiki/Module-Interactions#the-interaction-interface) about _module interfaces_
 
 ```jsx
 import React from 'react';
@@ -174,7 +174,7 @@ function toggle(event) {
 }
 ```
 
-> You could move the toggle interaction (and any other module interactions) into a [separate `accordion.js` file](Module-Interactions#import-existing-interaction-method)
+> You could move the toggle interaction (and any other module interactions) into a [separate `accordion.js` file](https://github.com/esr360/Synergy/wiki/Module-Interactions#import-existing-interaction-method)
 
 ### Accordion Interface - Plain JavaScript (`accordion.js`)
 
