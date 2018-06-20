@@ -331,10 +331,11 @@ Using Synergy, you can create themes and control your entire project's UI from a
 
 ### Version 3.10.0
 
-Released: 29th May 2018
+Released: 20th June 2018
 
 ###### Release Notes
 
+* Added callback functions to `component` and `modifier` DOM methods
 * Allowing `<Component>`'s to accept event handlers as props
 * Allow passing of custom HTML tag to `<Module>`
 * Set module modifiers by passing as empty prop
@@ -343,15 +344,17 @@ Released: 29th May 2018
 * Allow passing of CSS through Sass map istead of through `@content`
 * Adding `sub-component` Sass mixin
 * Adding `pseudo-state` Sass mixin
-* Dynamically fetch `<Component>` onClick event from window.UI object
+* Adding `Synergize` class (extends `React.Component`)
+* Dynamically fetch `<Component>` onClick event from window.Synergy object
+* Option to render content by passing as `content` prop
 * Set `<Module>` as another module by passing module name as prop
 * Dynamically set `tag` prop on module if `name` prop is valid HTML tag
 * Get HTML attributes from props
-* Sets `initialised` in module config when initialised
+* Components now render with a `data-component` attribute
 * Allow passing of data-attributes to module
 * Append content before/after module through `before` and `after` props
 * Removing Bower
-* General refactoring and bug fixes
+* General refactoring, syntax improvements and bug fixes
 
 ### Version 3.9.2
 
