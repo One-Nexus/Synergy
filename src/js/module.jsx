@@ -13,46 +13,6 @@ import renderModifiers from './utilities/renderModifiers';
 let increment = 1;
 
 /**
- * Construct a Synergy module
- */
-export class Constructor extends React.Component {
-    constructor(props, context) {
-        super(props, context);
-
-        this.config = (global.UI && global.UI.config) ? global.UI.config[this.props.name] : null;
-        this.methods = this.config ? (this.config.methods || []) : [];
-
-        this.methods.forEach(method => {
-            this[method] = Synergy.modules[this.props.name].methods[method];
-        });
-
-        this.content = defaults => {
-            if (this.props.content) {
-                return defaults;
-            }
-
-            if (this.containsStaticMethodContent(this.props.children)) {
-                return this.props.children;
-            }
-
-            return defaults;
-        };
-    }
-
-    containsStaticMethodContent(props) {
-        return Object.entries(this.props).some(prop => {
-            const [key, value] = [prop[0], prop[1]];
-
-            if (value.constructor === Array) {
-                return value.find(prop => prop.type === this.constructor.content);
-            } else {
-                return value.type === this.constructor.content;
-            }
-        });
-    }
-}
-
-/**
  * Render a Synergy module
  *
  * @extends React.Component
@@ -68,10 +28,13 @@ export default class Module extends React.Component {
         this.modifiers = this.propModifiers + this.passedModifiers;
         this.classes = this.props.className ? ' ' + this.props.className : '';
         this.classNames = this.props.name + this.modifiers + this.classes;
+        this.id = this.props.id;
 
-        // @TODO only add id if neccessery e.g. when this.props.before/this.props.after
         increment++;
-        this.id = this.props.id || `synergy-module-${increment}`
+
+        if ((this.props.before || this.props.after) && !this.id) {
+            this.id = `synergy-module-${increment}`;
+        }
 
         if (Synergy.modules) {
             // determine if any passed prop is a module - if so, add it to `classes`
@@ -105,14 +68,19 @@ export default class Module extends React.Component {
      * Content to pass to children components
      */
     getChildContext() {
+        let config;
+
+        try {
+            config = global.Synergy.modules[this.props.name].config;
+        } catch(error) {
+            config = null;
+        }
+
         return { 
-            module: this.props.name,
-            config: (global.UI && global.UI.config) ? global.UI.config[this.props.name] : null
+            module: this.props.name, config
         };
     }
 
-    /**
-     */
     componentDidMount() {
         const _module = Synergy.modules[this.props.name];
 
@@ -123,9 +91,6 @@ export default class Module extends React.Component {
         }
     }
 
-    /**
-     * @param {*} properties 
-     */
     getEventHandlers(properties) {
         let eventHandlers = {};
 
@@ -140,9 +105,6 @@ export default class Module extends React.Component {
         return eventHandlers;
     }
 
-    /**
-     * @param {*} properties 
-     */
     getDataAttributes(properties) {
         let dataAttributes = {};
 
@@ -155,9 +117,6 @@ export default class Module extends React.Component {
         return dataAttributes;
     }
 
-    /**
-     * Render the module
-     */
     render() {
         return [
             this.props.before && this.props.before(() => document.getElementById(this.id)),

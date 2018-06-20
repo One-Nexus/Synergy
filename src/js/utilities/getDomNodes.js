@@ -6,7 +6,7 @@ import * as Synergy from '../synergy';
  * @param {*} query
  * @param {String} module
  */
-export function getDomNodes(query, module, modifierGlue) {
+export default function getDomNodes(query, module, modifierGlue) {
 
     if (query === null) return false;
 

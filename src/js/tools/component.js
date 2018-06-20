@@ -9,7 +9,7 @@ import * as Synergy from '../synergy';
  * @param {*} options.query
  * @param {*} options.operator
  */
-export function component(options) {
+export default function component(options) {
     // setup constants
     const target = (options.target instanceof HTMLElement) ? options.target : options.target[0];
     const namespace = Synergy.getModuleName(target) + options.componentGlue + options.query;
@@ -21,7 +21,7 @@ export function component(options) {
 
     if (options.query && target instanceof HTMLElement) {
         // add/remove a component
-        if (options.operator) {
+        if (typeof options.operator === 'string') {
             if (options.operator === 'set') {
                 return toggleComponent(options.module, target, options.query, 'set', options.componentGlue);
             } 
@@ -35,6 +35,10 @@ export function component(options) {
 
         // get children components
         if (childComponent.length !== 0 && !(options.target instanceof NodeList)) {
+            if (typeof options.operator === 'function') {
+                childComponent.forEach(el => options.operator(el));
+            }
+
             return childComponent;
         }
 

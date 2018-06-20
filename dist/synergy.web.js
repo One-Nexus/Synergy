@@ -73,7 +73,7 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.modifier = exports.component = exports.stripModifiers = exports.isValidSelector = exports.getModuleName = exports.getModifiers = exports.getGlue = exports.getDomNodes = exports.getComponents = exports.getBlockName = exports.getChildrenWithoutSelector = exports.deepextend = exports.global = undefined;
+exports.modifier = exports.component = exports.stripModifiers = exports.isValidSelector = exports.getModuleName = exports.getModifiers = exports.getGlue = exports.getDomNodes = exports.getComponents = exports.getBlockName = exports.getChildrenWithoutSelector = exports.deepextend = undefined;
 
 var _deepExtend = __webpack_require__(1);
 
@@ -94,27 +94,59 @@ Object.defineProperty(exports, 'getChildrenWithoutSelector', {
 });
 exports.default = Synergy;
 
-var _tools = __webpack_require__(3);
+var _component = __webpack_require__(3);
 
-var _utilities = __webpack_require__(6);
+var _component2 = _interopRequireDefault(_component);
+
+var _modifier = __webpack_require__(4);
+
+var _modifier2 = _interopRequireDefault(_modifier);
+
+var _getBlockName = __webpack_require__(5);
+
+var _getBlockName2 = _interopRequireDefault(_getBlockName);
+
+var _getComponents = __webpack_require__(6);
+
+var _getComponents2 = _interopRequireDefault(_getComponents);
+
+var _getDomNodes = __webpack_require__(7);
+
+var _getDomNodes2 = _interopRequireDefault(_getDomNodes);
+
+var _getGlue = __webpack_require__(8);
+
+var _getGlue2 = _interopRequireDefault(_getGlue);
+
+var _getModifiers = __webpack_require__(9);
+
+var _getModifiers2 = _interopRequireDefault(_getModifiers);
+
+var _getModuleName = __webpack_require__(10);
+
+var _getModuleName2 = _interopRequireDefault(_getModuleName);
+
+var _isValidSelector = __webpack_require__(11);
+
+var _isValidSelector2 = _interopRequireDefault(_isValidSelector);
+
+var _parents = __webpack_require__(12);
+
+var _parents2 = _interopRequireDefault(_parents);
+
+var _stripModifiers = __webpack_require__(13);
+
+var _stripModifiers2 = _interopRequireDefault(_stripModifiers);
+
+var _getOptions = __webpack_require__(14);
+
+var _getOptions2 = _interopRequireDefault(_getOptions);
+
+var _setDomNodeAttributes = __webpack_require__(15);
+
+var _setDomNodeAttributes2 = _interopRequireDefault(_setDomNodeAttributes);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-///****************************************************************
-/// Synergy - https://github.com/esr360/Synergy
-///
-/// @author [@esr360](http://twitter.com/esr360)
-///****************************************************************
-
-var global = exports.global = {
-    'module-namespace': '',
-    'component-glue': '_',
-    'modifier-glue': '-'
-
-    // Vendor
-    //*****************************************************************
-
-};
 
 // Tools & Utilities
 //*****************************************************************
@@ -123,16 +155,18 @@ var global = exports.global = {
 
 
 // Utilities
-exports.getBlockName = _utilities.getBlockName;
-exports.getComponents = _utilities.getComponents;
-exports.getDomNodes = _utilities.getDomNodes;
-exports.getGlue = _utilities.getGlue;
-exports.getModifiers = _utilities.getModifiers;
-exports.getModuleName = _utilities.getModuleName;
-exports.isValidSelector = _utilities.isValidSelector;
-exports.stripModifiers = _utilities.stripModifiers;
-exports.component = _tools.component;
-exports.modifier = _tools.modifier;
+
+
+exports.getBlockName = _getBlockName2.default;
+exports.getComponents = _getComponents2.default;
+exports.getDomNodes = _getDomNodes2.default;
+exports.getGlue = _getGlue2.default;
+exports.getModifiers = _getModifiers2.default;
+exports.getModuleName = _getModuleName2.default;
+exports.isValidSelector = _isValidSelector2.default;
+exports.stripModifiers = _stripModifiers2.default;
+exports.component = _component2.default;
+exports.modifier = _modifier2.default;
 
 /**
  * Synergy Module
@@ -140,7 +174,6 @@ exports.modifier = _tools.modifier;
  * @author @esr360 <http://twitter.com/esr360>
  * 
  * @module Synergy
- * @access public
  * 
  * @param {(String|HTMLElement|NodeList)} els - Synergy selector to match elements
  * @param {Function} [callback] - function to call on matched elements
@@ -151,25 +184,27 @@ exports.modifier = _tools.modifier;
 
 function Synergy(els, callback, config, custom, parser) {
 
-    var componentGlue = (0, _utilities.getGlue)('component', custom);
-    var modifierGlue = (0, _utilities.getGlue)('modifier', custom);
-    var module = (0, _utilities.getModuleName)(els, config);
-    var domNodes = (0, _utilities.getDomNodes)(els, module, modifierGlue);
-    var components = (0, _utilities.getComponents)(domNodes, module, componentGlue);
-    var modifiers = (0, _utilities.getModifiers)(domNodes, module, modifierGlue);
-    var options = (0, _utilities.getOptions)({ config: config, parser: parser, custom: custom });
+    var methods = {};
+
+    var componentGlue = (0, _getGlue2.default)('component', custom);
+    var modifierGlue = (0, _getGlue2.default)('modifier', custom);
+    var module = (0, _getModuleName2.default)(els, config);
+    var domNodes = (0, _getDomNodes2.default)(els, module, modifierGlue);
+    var components = (0, _getComponents2.default)(domNodes, module, componentGlue);
+    var modifiers = (0, _getModifiers2.default)(domNodes, module, modifierGlue);
+    var options = (0, _getOptions2.default)({ config: config, parser: parser, custom: custom });
 
     var isModuleElement = function isModuleElement() {
         if (domNodes instanceof NodeList) {
             domNodes.forEach(function (node) {
-                if ((0, _utilities.parents)(node, '[data-module]').length) {
+                if ((0, _parents2.default)(node, '[data-module]').length) {
                     return false;
                 }
             });
 
             return true;
         }
-        if (domNodes instanceof HTMLElement && !(0, _utilities.parents)(domNodes, '[data-module]').length) {
+        if (domNodes instanceof HTMLElement && !(0, _parents2.default)(domNodes, '[data-module]').length) {
             return true;
         }
         if (typeof els === 'string' && els.match(/^[a-zA-Z]*$/)) {
@@ -179,14 +214,16 @@ function Synergy(els, callback, config, custom, parser) {
         return false;
     };
 
-    if (isModuleElement()) (0, _utilities.setDomNodeAttributes)({ domNodes: domNodes, module: module });
+    if (isModuleElement()) {
+        (0, _setDomNodeAttributes2.default)({ domNodes: domNodes, module: module });
+    }
 
     // Elements found by the Synergy query
-    exports.query = domNodes;
+    methods.query = domNodes;
 
-    exports.modifier = function (query, operator) {
+    methods.modifier = function (query, operator) {
         var target = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : domNodes;
-        return (0, _tools.modifier)({
+        return (0, _modifier2.default)({
             glue: modifierGlue,
             target: target,
             module: module,
@@ -196,9 +233,9 @@ function Synergy(els, callback, config, custom, parser) {
         });
     };
 
-    exports.component = function (query, operator) {
+    methods.component = function (query, operator) {
         var target = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : domNodes;
-        return (0, _tools.component)({
+        return (0, _component2.default)({
             target: target,
             module: module,
             components: components,
@@ -212,14 +249,14 @@ function Synergy(els, callback, config, custom, parser) {
     if (callback && typeof domNodes !== 'string') {
         if (domNodes instanceof NodeList) {
             domNodes.forEach(function (el) {
-                return callback(el, options, exports);
+                return callback(el, options, methods);
             });
         } else {
-            return callback(domNodes, options, exports);
+            return callback(domNodes, options, methods);
         }
     }
 
-    return exports;
+    return methods;
 }
 
 if (typeof window !== 'undefined' && !window.Synergy) {
@@ -238,7 +275,7 @@ if (typeof window !== 'undefined' && !window.Synergy) {
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2013-2015 Viacheslav Lotsmanov
+ * Copyright (c) 2013-2018 Viacheslav Lotsmanov
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -270,7 +307,9 @@ function isSpecificValue(val) {
 
 function cloneSpecificValue(val) {
 	if (val instanceof Buffer) {
-		var x = new Buffer(val.length);
+		var x = Buffer.alloc
+			? Buffer.alloc(val.length)
+			: new Buffer(val.length);
 		val.copy(x);
 		return x;
 	} else if (val instanceof Date) {
@@ -301,6 +340,10 @@ function deepCloneArray(arr) {
 		}
 	});
 	return clone;
+}
+
+function safeGetProperty(object, property) {
+	return property === '__proto__' ? undefined : object[property];
 }
 
 /**
@@ -335,8 +378,8 @@ var deepExtend = module.exports = function (/*obj_1, [obj_2], [obj_N]*/) {
 		}
 
 		Object.keys(obj).forEach(function (key) {
-			src = target[key]; // source value
-			val = obj[key]; // new value
+			src = safeGetProperty(target, key); // source value
+			val = safeGetProperty(obj, key); // new value
 
 			// recursion prevention
 			if (val === target) {
@@ -374,7 +417,7 @@ var deepExtend = module.exports = function (/*obj_1, [obj_2], [obj_N]*/) {
 	});
 
 	return target;
-}
+};
 
 
 /***/ }),
@@ -437,38 +480,9 @@ function getChildrenWithoutParentSelector(parent, selector) {
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _component = __webpack_require__(4);
-
-Object.defineProperty(exports, 'component', {
-  enumerable: true,
-  get: function get() {
-    return _component.component;
-  }
-});
-
-var _modifier = __webpack_require__(5);
-
-Object.defineProperty(exports, 'modifier', {
-  enumerable: true,
-  get: function get() {
-    return _modifier.modifier;
-  }
-});
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.component = component;
+exports.default = component;
 
 var _synergy = __webpack_require__(0);
 
@@ -497,7 +511,7 @@ function component(options) {
 
     if (options.query && target instanceof HTMLElement) {
         // add/remove a component
-        if (options.operator) {
+        if (typeof options.operator === 'string') {
             if (options.operator === 'set') {
                 return toggleComponent(options.module, target, options.query, 'set', options.componentGlue);
             } else if (options.operator === 'unset') {
@@ -509,6 +523,12 @@ function component(options) {
 
         // get children components
         if (childComponent.length !== 0 && !(options.target instanceof NodeList)) {
+            if (typeof options.operator === 'function') {
+                childComponent.forEach(function (el) {
+                    return options.operator(el);
+                });
+            }
+
             return childComponent;
         }
 
@@ -554,7 +574,7 @@ function toggleComponent(moduleName, target, query, operator, glue) {
 }
 
 /***/ }),
-/* 5 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -563,7 +583,7 @@ function toggleComponent(moduleName, target, query, operator, glue) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.modifier = modifier;
+exports.default = modifier;
 
 var _synergy = __webpack_require__(0);
 
@@ -593,7 +613,7 @@ function modifier(options) {
 
     if (typeof options.query !== 'undefined' && target instanceof HTMLElement) {
         // add/remove a modifier
-        if (options.operator) {
+        if (typeof options.operator === 'string') {
             if (options.operator === 'set') {
                 return toggleModifier(options.module, target, options.query, 'set', options.glue);
             } else if (options.operator === 'unset') {
@@ -604,7 +624,15 @@ function modifier(options) {
         }
 
         // get children with modifier
-        if (childModifier.length !== 0) return childModifier;
+        if (childModifier.length !== 0) {
+            if (typeof options.operator === 'function') {
+                childModifier.forEach(function (el) {
+                    return options.operator(el);
+                });
+            }
+
+            return childModifier;
+        }
 
         // determine if element has modifier
         var matchesQuery = false;
@@ -617,8 +645,10 @@ function modifier(options) {
 
         if (matchesQuery || options.operator == 'isset') return matchesQuery;
 
-        // get all components with modifier from document 
-        return querySelector.length === 0 ? false : querySelector;
+        // @TODO get all components with modifier from document
+        // return (querySelector.length === 0) ? false : querySelector;
+
+        return false;
     }
 
     // get modifiers on element
@@ -646,119 +676,7 @@ function toggleModifier(moduleName, target, query, operator, glue) {
 }
 
 /***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _getBlockName = __webpack_require__(7);
-
-Object.defineProperty(exports, 'getBlockName', {
-  enumerable: true,
-  get: function get() {
-    return _getBlockName.getBlockName;
-  }
-});
-
-var _getComponents = __webpack_require__(8);
-
-Object.defineProperty(exports, 'getComponents', {
-  enumerable: true,
-  get: function get() {
-    return _getComponents.getComponents;
-  }
-});
-
-var _getDomNodes = __webpack_require__(9);
-
-Object.defineProperty(exports, 'getDomNodes', {
-  enumerable: true,
-  get: function get() {
-    return _getDomNodes.getDomNodes;
-  }
-});
-
-var _getGlue = __webpack_require__(10);
-
-Object.defineProperty(exports, 'getGlue', {
-  enumerable: true,
-  get: function get() {
-    return _getGlue.getGlue;
-  }
-});
-
-var _getModifiers = __webpack_require__(11);
-
-Object.defineProperty(exports, 'getModifiers', {
-  enumerable: true,
-  get: function get() {
-    return _getModifiers.getModifiers;
-  }
-});
-
-var _getModuleName = __webpack_require__(12);
-
-Object.defineProperty(exports, 'getModuleName', {
-  enumerable: true,
-  get: function get() {
-    return _getModuleName.getModuleName;
-  }
-});
-
-var _isValidSelector = __webpack_require__(13);
-
-Object.defineProperty(exports, 'isValidSelector', {
-  enumerable: true,
-  get: function get() {
-    return _isValidSelector.isValidSelector;
-  }
-});
-
-var _parents = __webpack_require__(14);
-
-Object.defineProperty(exports, 'parents', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_parents).default;
-  }
-});
-
-var _stripModifiers = __webpack_require__(15);
-
-Object.defineProperty(exports, 'stripModifiers', {
-  enumerable: true,
-  get: function get() {
-    return _stripModifiers.stripModifiers;
-  }
-});
-
-var _getOptions = __webpack_require__(16);
-
-Object.defineProperty(exports, 'getOptions', {
-  enumerable: true,
-  get: function get() {
-    return _getOptions.getOptions;
-  }
-});
-
-var _setDomNodeAttributes = __webpack_require__(17);
-
-Object.defineProperty(exports, 'setDomNodeAttributes', {
-  enumerable: true,
-  get: function get() {
-    return _setDomNodeAttributes.setDomNodeAttributes;
-  }
-});
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/***/ }),
-/* 7 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -767,7 +685,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.getBlockName = getBlockName;
+exports.default = getBlockName;
 
 var _synergy = __webpack_require__(0);
 
@@ -796,7 +714,7 @@ function getBlockName(block, module, modifierGlue) {
 }
 
 /***/ }),
-/* 8 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -805,7 +723,7 @@ function getBlockName(block, module, modifierGlue) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.getComponents = getComponents;
+exports.default = getComponents;
 
 var _synergy = __webpack_require__(0);
 
@@ -841,7 +759,7 @@ function getComponents(block, module, glue) {
 }
 
 /***/ }),
-/* 9 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -853,7 +771,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-exports.getDomNodes = getDomNodes;
+exports.default = getDomNodes;
 
 var _synergy = __webpack_require__(0);
 
@@ -893,7 +811,7 @@ function getDomNodes(query, module, modifierGlue) {
 }
 
 /***/ }),
-/* 10 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -902,10 +820,7 @@ function getDomNodes(query, module, modifierGlue) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.getGlue = getGlue;
-
-var _synergy = __webpack_require__(0);
-
+exports.default = getGlue;
 /**
  * Get glue
  * 
@@ -914,20 +829,24 @@ var _synergy = __webpack_require__(0);
  * @param {string} glue
  */
 function getGlue(type, custom, glue) {
+    var defaults = {
+        'component-glue': '_',
+        'modifier-glue': '-'
+    };
 
     if (custom && custom[type + 'Glue']) {
         glue = custom[type + 'Glue'].replace(/'/g, '');
     } else if (typeof Synergy !== 'undefined' && Synergy.config && Synergy.config[type + '-glue']) {
         glue = Synergy.config[type + '-glue'];
-    } else if (_synergy.global && _synergy.global[type + '-glue']) {
-        glue = _synergy.global[type + '-glue'];
+    } else {
+        glue = defaults[type + '-glue'];
     }
 
     return glue;
 }
 
 /***/ }),
-/* 11 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -936,7 +855,7 @@ function getGlue(type, custom, glue) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.getModifiers = getModifiers;
+exports.default = getModifiers;
 
 var _synergy = __webpack_require__(0);
 
@@ -951,21 +870,21 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  * @param {String} module
  */
 function getModifiers(block, module, glue) {
-    var modifiers = void 0;
+    var modifiers = [];
 
     if (block instanceof HTMLElement) {
         Array.prototype.forEach.call(block.classList, function (className) {
             if (className.indexOf(module) === 0) {
-                modifiers = className.split(glue).slice(1);
+                modifiers.push(className.split(glue).slice(1));
             }
         });
     }
 
-    return modifiers;
+    return [].concat.apply([], modifiers);
 }
 
 /***/ }),
-/* 12 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -977,7 +896,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-exports.getModuleName = getModuleName;
+exports.default = getModuleName;
 /**
  * Attempt to retrieve possible module name from query
  * 
@@ -1008,7 +927,7 @@ function getModuleName(query, config, componentGlue) {
 }
 
 /***/ }),
-/* 13 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1017,7 +936,7 @@ function getModuleName(query, config, componentGlue) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.isValidSelector = isValidSelector;
+exports.default = isValidSelector;
 /**
  * Test the validity (not existance) of a CSS selector
  * 
@@ -1040,7 +959,7 @@ function isValidSelector(selector) {
 }
 
 /***/ }),
-/* 14 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1076,7 +995,7 @@ function parents(elem, selector) {
 }
 
 /***/ }),
-/* 15 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1085,7 +1004,7 @@ function parents(elem, selector) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.stripModifiers = stripModifiers;
+exports.default = stripModifiers;
 
 var _synergy = __webpack_require__(0);
 
@@ -1111,7 +1030,7 @@ function stripModifiers(block, module, glue) {
 }
 
 /***/ }),
-/* 16 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1120,7 +1039,7 @@ function stripModifiers(block, module, glue) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.getOptions = getOptions;
+exports.default = getOptions;
 
 var _deepExtend = __webpack_require__(1);
 
@@ -1163,7 +1082,7 @@ function getOptions() {
 }
 
 /***/ }),
-/* 17 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1172,7 +1091,7 @@ function getOptions() {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.setDomNodeAttributes = setDomNodeAttributes;
+exports.default = setDomNodeAttributes;
 /**
  * setDomNodeAttributes
  *

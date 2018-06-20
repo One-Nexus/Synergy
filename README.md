@@ -3,339 +3,358 @@
 [![npm version](https://badge.fury.io/js/Synergy.svg)](https://badge.fury.io/js/Synergy)
 [![npm version](https://img.shields.io/npm/dm/synergy.svg)](https://badge.fury.io/js/Synergy)
 
-[![Synergy](https://raw.githubusercontent.com/esr360/Synergy/gh-pages/logo-small.png "Synergy Logo")](https://github.com/esr360/Synergy)
+<img height="56px" src="http://www.onenexus.io/synergy/github-logo.png" />
 
-> A front-end framework for creating modular, configurable and scalable UI components for the web
+> A front-end framework for creating modular, configurable and scalable UI components
 
 ### Useful Wiki Pages
 
-* [What Is Synergy](https://github.com/esr360/Synergy/wiki/What-Is-Synergy)
 * [Why Use Synergy](https://github.com/esr360/Synergy/wiki/Why-Use-Synergy)
 * [Installation](https://github.com/esr360/Synergy/wiki/Installation)
-* [Project Architecture](https://github.com/esr360/Synergy/wiki/Project-Architecture)
-* [Getting Started](https://github.com/esr360/Synergy/wiki/Getting-Started)
-* [Sass Walkthrough](https://github.com/esr360/Synergy/wiki/Sass-Walkthrough)
-* [Sass Mixins](https://github.com/esr360/Synergy/wiki/Sass-Mixins)
+* [Sass](https://github.com/esr360/Synergy/wiki/Sass)
 * [JavaScript](https://github.com/esr360/Synergy/wiki/JavaScript)
-* [Render Components Using React](https://github.com/esr360/Synergy/wiki/Render-Components)
-* [Environment Configuration](https://github.com/esr360/Synergy/wiki/Environment-Configuration)
+* [Using With React](https://github.com/esr360/Synergy/wiki/Using-With-React)
 * [Creating a Theme](https://github.com/esr360/Synergy/wiki/Creating-a-Theme)
-* [Developing Synergy](https://github.com/esr360/Synergy/wiki/Developing-Synergy)
 
 [View SassDoc Documentation](http://esr360.github.io/Synergy/docs/sass) | [View JSDoc Documentation](http://esr360.github.io/Synergy/docs/js)
 
-***
-#### New in version 3.9: Render Synergy modules using React! [Learn More](https://github.com/esr360/Synergy/wiki/Render-Components)
-***
+## Overview
+
+<table>
+    <tr>
+        <td>
+            <a href="https://github.com/esr360/Synergy/wiki/Sass">
+                <img style="vertical-align: middle;" src="http://www.onenexus.io/synergy/github-sass-logo.png?v=1" />
+            </a>
+        </td>
+        <td>
+            <a href="https://github.com/esr360/Synergy/wiki/JavaScript">
+                <img src="http://www.onenexus.io/synergy/github-javascript-logo.png?v=1" />
+            </a>
+        </td>
+        <td>
+            <a href="https://github.com/esr360/Synergy/wiki/Using-With-React">
+                <img width="99%" src="http://www.onenexus.io/synergy/github-react-logo.png?v=1" />
+            </a>
+        </td>
+    </tr>
+</table>
+
+Synergy provides powerful APIs to help you create configurable modules in `Sass`, `JavaScript` and/or `React`:
+
+* [Use Synergy to create Sass components](https://github.com/esr360/Synergy/wiki/Sass)
+* [Use Synergy to create JavaScript components](https://github.com/esr360/Synergy/wiki/JavaScript)
+* [Use Synergy to create React components](https://github.com/esr360/Synergy/wiki/Using-With-React)
+
+> Synergy is ideal for creating your presentational React components when using the [Container Component Pattern](https://reactpatterns.com/#container-component) ([learn more](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0))
+
+Synergy also povides tools allowing you to combine the above aspects together to create a `Synergy Module`. Each aspect can work independently and exists as a separate file with a specific role:
+
+* [Module Configuration](https://github.com/esr360/Synergy/wiki/Configuring-a-Module) (`.json`)
+* [Module Styles](https://github.com/esr360/Synergy/wiki/Sass#isolating-configurable-styles) (`.scss`)
+* [Module Interactions](https://github.com/esr360/Synergy/wiki/Module-Interactions) (`.js`)
+* [Module Interface](https://github.com/esr360/Synergy/wiki/Using-With-React) (`.jsx`)
+
+These are the core concepts of a UI module.
+
+<p align="center"><img src="http://www.onenexus.io/synergy/module-illustration.png?v=1" width="600px" /></p>
+
+```
+|-- modules
+|   |-- accordion
+|   |   |-- accordion.js
+|   |   |-- accordion.json
+|   |   |-- accordion.jsx
+|   |   |-- accordion.scss
+```
+
+> Synergy modules can be configured and scaled without having to touch the module's source code
+
+A Synergy module is composed of `Components`. Both `Modules` and `Components` can have `Modifiers`.
+
+* [Learn more about Modules](https://github.com/esr360/Synergy/wiki/What-Is-a-Module)
+* [Learn more about Components](https://github.com/esr360/Synergy/wiki/What-Is-a-Component)
+* [Learn more about Modifiers](https://github.com/esr360/Synergy/wiki/What-Is-a-Modifier)
+
+Using Synergy, you can create themes and control your entire project's UI from a single JSON file by passing custom options and parameters to your modules.
+
+> [Learn more](https://github.com/esr360/Synergy/wiki/Creating-a-Theme) about creating themes
+
+## Example
+
+> Using Synergy to create a basic `accordion` module which will be configured by `accordion.json` - [Learn more](https://github.com/esr360/Synergy/wiki/Example-Uncovered) about this example
+
+### Structure
+
+```
+|-- UI
+|   |-- modules
+|   |   |-- accordion
+|   |   |   |-- accordion.js
+|   |   |   |-- accordion.json
+|   |   |   |-- accordion.jsx
+|   |   |   |-- accordion.scss
+|   |-- app.scss
+|   |-- app.{js|jsx}
+```
+
+### Fundamental Styles (`accordion.scss`)
+
+> [Learn more](https://github.com/esr360/Synergy/wiki/Sass#isolating-configurable-styles) about module styles
+
+```scss
+@import '../../node_modules/Synergy/dist/synergy';
+
+@import 'accordion.json';
+
+@mixin accordion($custom: ()) {
+
+    $config: config($accordion, $custom);
+
+    @include module {
+        @include component('panel') {
+            &:not(:last-child) {
+                margin-bottom: this('panel', 'vertical-rhythm');
+            }
+
+            @include modifier('active') {
+                @include component('toggle') {
+                    transform: rotate(90deg);
+                }
+
+                @include component('content') {
+                    display: block;
+                }
+            }
+        }
+
+        @include component('title', (
+            'display': block,
+            'cursor': pointer
+        ));
+
+        @include component('toggle', (
+            'float': right
+        ));
+
+        @include component('content', (
+            'display': none
+        ));
+    }
+}
+```
+
+### Accordion Interface - JSX (`accordion.jsx`)
+
+> [Learn more](https://github.com/esr360/Synergy/wiki/Module-Interactions#the-interaction-interface) about _module interfaces_
 
 ```jsx
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { Module, Component } from 'Synergy';
 
-const Accordion = ({name = 'accordion', panels, modifiers}) => (
-    <Module name={name} modifiers={modifiers}>
+import config from './accordion.json';
+
+export default Accordion = ({ panels, ...props }) => (
+    <Module name={config.name} {...props}>
         {panels.map(({title, content}, index) => (
             <Component name="panel" key={index}>
-                <Component name="title">{title}</Component>
+                <Component name="title" onClick={toggle}>
+                    <Component name='toggle' /> {title}
+                </Component>
                 <Component name="content">{content}</Component>
             </Component>
         ))}
     </Module>
 );
 
-// Accordion content
-const panels = [
-    {title: 'foo', content: 'bar'},
-    {title: 'fizz', content: 'buzz'},
-];
+function toggle(event) {
+    const panel = event.target.closest('[data-component="panel"]');
 
-// Render Accordion
+    panel.modifier('active', 'toggle');
+}
+```
+
+> You could move the toggle interaction (and any other module interactions) into a [separate `accordion.js` file](https://github.com/esr360/Synergy/wiki/Module-Interactions#import-existing-interaction-method)
+
+### Accordion Interface - Plain JavaScript (`accordion.js`)
+
+```js
+import { Synergy } from 'Synergy';
+
+import config from './accordion.json';
+
+export default function accordion() {
+    Synergy(config.name, accordion => {
+        accordion.component('panel', panel => {
+            panel.component('title', title => {
+                title.addEventListener('click', toggle.bind(panel), false);
+            });
+        });
+    });
+}
+
+function toggle() {
+    this.modifier('active', 'toggle');
+}
+```
+
+### Accordion Configuration (`accordion.json`)
+
+> [Learn more](https://github.com/esr360/Synergy/wiki/Configuring-a-Module) about module configuration
+
+> This is where cosmetic (and hence configurable) styles are applied to the module and its components
+
+```json
+{
+    "accordion": {
+        "name": "accordion",
+        "panel": {
+            "vertical-rhythm": 0
+        },
+        "title": {
+            "background": "transparent",
+            "color": "#444444",
+            "border": "1px solid rgba(black, 0.15)",
+            "border-radius": 0,
+            "padding": "1em",
+            "transition": "0.4s",
+            "hover": {
+                "background": "#2E3882",
+                "color": "white",
+                "component(toggle)": {
+                    "color": "white"
+                }
+            },
+            "active": {
+                "background": "#2E3882",
+                "color": "white",
+                "border-color": "transparent",
+                "border-radius": 0,
+                "component(toggle)": {
+                    "color": "white"
+                }
+            }
+        },
+        "content": {
+            "background": "white",
+            "color": "#444444",
+            "border": "1px solid rgba(black, 0.15)",
+            "border-radius": 0,
+            "padding": "1.5em"
+        },
+        "toggle": {
+            "color": "rgba(black, 0.4)",
+            "transition": "0.4s"
+        }
+    }
+}
+```
+
+### Loading Styles (`app.scss`)
+
+```scss
+@import '/modules/accordion/accordion';
+
+@include accordion();
+```
+
+###### With Custom Options
+
+```scss
+@import '/modules/accordion/accordion';
+
+@include accordion((
+    'panel': (
+        'vertical-rhythm': 2em
+    ),
+    'title': (
+        'background': #06d2ff,
+        'color': white
+    )
+));
+```
+
+### Render Using React (`app.jsx`)
+
+```html
+<div id="demo"></div>
+```
+
+```js
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+import Accordion from './modules/accordion/accordion.jsx';
+
 ReactDOM.render(
-    <Accordion panels={panels} modifiers={['foo', 'bar']} />, 
-    document.getElementById('react')
+    <Accordion panels={[
+        {title: 'foo', content: 'bar'},
+        {title: 'fizz', content: 'buzz'},
+    ]} />, 
+
+    document.getElementById('demo')
 );
 ```
 
-##### Output:
+### Or Initialise Using Plain HTML/JavaScript (`app.js`)
 
 ```html
-<div class="accordion-foo-bar">
+<div class="accordion">
     <div class="accordion_panel">
-        <div class="accordion_title">foo</div>
+        <div class="accordion_title">
+            <div class="accordion_toggle"></div> foo
+        </div>
         <div class="accordion_content">bar</div>
     </div>
     <div class="accordion_panel">
-        <div class="accordion_title">fizz</div>
+        <div class="accordion_title">
+            <div class="accordion_toggle"></div> fizz
+        </div>
         <div class="accordion_content">buzz</div>
     </div>
 </div>
 ```
 
-### Quick Look
-
-Synergy uses a naming convention similar to BEM: __Module_Component-Modifier__, but unlike BEM, no keywords ever need to be repeated in selectors ([Read More](Sass-Walkthrough)).
-
-###### HTML
-
-```html
-<div class="header-dark-fixed">
-    <div class="header_logo">
-        ...
-    </div>
-</div>
-```
-
-###### Sass
-
-```scss
-@include module('header') {
-
-    // Core header styles
-    ...
-
-    @include modifier('dark') {
-        ...
-    }
-
-    @include modifier('fixed') {
-        ...
-    }
-
-    @include component('logo') {
-        ...
-    }
-
-}
-```
-
-###### JavaScript
-
 ```js
-Synergy('header', header => {
-    const fixed = header.modifier('dark'); // returns Bool
-    const fixed = header.modifier('fixed'); // returns Bool
-    const logo  = header.component('logo')[0]; // returns HTMLElement
+import accordion from './modules/accordion/accordion.js';
 
-    ...
-});
+accordion();
 ```
 
-### Module Example
+## Creating a Theme
 
-```
-|-- modules
-|   |-- header
-|   |   |-- _header.scss
-|   |   |-- header.js
-|   |   |-- header.json
-|-- app.scss
-|-- app.js
-```
+Using Synergy, you can create themes and control your entire project's UI from a single JSON file by passing custom options and parameters to your modules.
 
-> For a detailed analysis of this example, checkout the [Example Uncovered](https://github.com/esr360/Synergy/wiki/Example-Uncovered) wiki page
-
-#### header.json
-
-Synergy allows you to abstract a new layer on-top of your UI module's styles and scripts to isolate all potentially configurable aspects in the form of a JSON file:
-
-```json
-{
-    "header": {
-        "name": "header",
-        "background": "#04E2C1",
-        "height": "100px",
-        "text-color": "#EFFCFA",
-        "link-color": "#FFFFFF",
-        "logo": {
-            "image-path": "../../images/logo.png",
-            "height": "50px",
-            "width": "200px",
-            "padding": "20px 0"
-        },
-        "dark": {
-            "enabled": false,
-            "background": "#353535",
-            "text-color": "#F7F7F7",
-            "link-color": "#04E2C1"
-        },
-        "sticky": {
-            "enabled": false,
-            "offset": 0
-        }
-    }
-}
-```
-
-#### _header.scss
-
-Using the Synergy Sass mixins, the foundation for the module's CSS can be written, hard-coding only the core properties for the module:
-
-> Keys within `header.json` which correspond to CSS properties do not need to be added to `_header.scss`
-
-```scss
-@import 'header.json';
-
-@mixin header($custom: ()) {
-
-    $header: config($header, $custom);
-
-    @include module {
-
-        color: this('text-color');
-
-        a {
-            color: this('link-color');
-        }
-
-        @include component('logo') {
-            background-image: url(this('logo', 'image-path'));
-            background-size: cover;
-            display: inline-block;
-            vertical-align: middle;
-        }
-
-        @include modifier('fixed') {
-            position: fixed;
-            width: 100%;
-            top: 0;
-        }
-
-        @include option('dark') {
-            color: this('dark', 'text-color');
-
-            a {
-                color: this('dark', 'link-color');
-            }
-        }
-
-    }
-
-}
-```
-
-> For the compiled CSS result checkout the [Example Uncovered](https://github.com/esr360/Synergy/wiki/Example-Uncovered) page
-
-#### header.js
-
-Modules, components and modifiers can easily be manipulated using the Synergy function and methods:
-
-```js
-import { Synergy } from 'Synergy';
-import config from './header.json';
-
-export default function header(custom) {
-
-    Synergy('header', (header, options) => {
-
-        const stickyOffset = options.sticky.offset || header.offsetTop;
-        const logo = header.component('logo')[0];
-
-        if (options.sticky.enabled || header.modifier('sticky')) {
-            window.addEventListener('load', stickyHeaderHandler);
-            window.addEventListener('scroll', stickyHeaderHandler);
-        }
-
-        function stickyHeaderHandler() {
-            const operator = (window.scrollY > stickyOffset) ? 'set' : 'unset';
-
-            header.modifier('fixed', operator);
-            logo.modifier('small', operator);
-        }
-
-    }, config, custom);
-
-}
-```
-
-#### app.scss
-
-```scss
-@import '../node_modules/Synergy/dist/synergy';
-
-@import './modules/header/header';
-
-@include header();
-```
-
-Or with custom options:
-
-```scss
-@import '../node_modules/Synergy/dist/synergy';
-
-@import './modules/header/header';
-
-@include header ((
-    'background': #04E2C1,
-    'logo': (
-        'height': 30px,
-        'width': 170px
-    ),
-    'dark': (
-        'enabled': true
-    )
-));
-```
-
-#### app.js
-
-```js
-import header from './modules/header/header';
-
-header();
-```
-
-Or with custom options:
-
-```js
-import header from './modules/header/header';
-
-header ({
-    background: '#04E2C1',
-    logo: {
-        height: '30px',
-        width: '170px'
-    },
-    dark: {
-        enabled: true
-    }
-});
-```
-
-> Naturally, since this is JS, passing the `background` param here will not change the header's background, it merely exposes the value to `header.js` - probably not something that would be done in real life but is shown just for completeness
-
-#### HTML Usage
-
-Given the above, we would now be able to use any of the following markup examples:
-
-```html
-<header class="header">
-    <div class="header_logo"></div>
-</header>
-```
-
-```html
-<!-- This is the equivilent of setting `dark.enabled` to `true` in header.json -->
-<header class="header-dark">
-    <div class="header_logo"></div>
-</header>
-```
-
-```html
-<!-- This is the equivilent of setting `sticky.enabled` to `true` in header.json -->
-<header class="header-sticky">
-    <div class="header_logo"></div>
-</header>
-```
-
-```html
-<!-- This is the equivilent of setting both `dark.enabled` and `sticky.enabled` to `true` in header.json -->
-<header class="header-dark-sticky">
-    <div class="header_logo"></div>
-</header>
-```
+> [Learn more](https://github.com/esr360/Synergy/wiki/Creating-a-Theme) about creating themes
 
 ## Changelog
+
+### Version 3.10.0
+
+Released: 20th June 2018
+
+###### Release Notes
+
+* Added callback functions to `component` and `modifier` DOM methods
+* Allowing `<Component>`'s to accept event handlers as props
+* Allow passing of custom HTML tag to `<Module>`
+* Set module modifiers by passing as empty prop
+* Adding `<Wrapper>` and `<Group>` components
+* Specify list of CSS classes to add via empty prop
+* Allow passing of CSS through Sass map istead of through `@content`
+* Adding `sub-component` Sass mixin
+* Adding `pseudo-state` Sass mixin
+* Adding `Synergize` class (extends `React.Component`)
+* Dynamically fetch `<Component>` onClick event from window.Synergy object
+* Option to render content by passing as `content` prop
+* Set `<Module>` as another module by passing module name as prop
+* Dynamically set `tag` prop on module if `name` prop is valid HTML tag
+* Get HTML attributes from props
+* Components now render with a `data-component` attribute
+* Allow passing of data-attributes to module
+* Append content before/after module through `before` and `after` props
+* Removing Bower
+* General refactoring, syntax improvements and bug fixes
 
 ### Version 3.9.2
 
@@ -352,23 +371,3 @@ Released: 11th January 2018
 ###### Release Notes
 
 * Exporting transpiled module instead of ES6
-
-### Version 3.9.0
-
-Released: 10th January 2018
-
-###### Release Notes
-
-* Now compatible with Node-Sass/Libsass (hence no longer dependent on Ruby) 👯‍♂️
-* Ability to render components with React 😎
-* Replacing Grunt with Webpack 🙏
-* Replacing scss-lint with stylelint
-* General minor improvements
-
-### Version 3.8.1
-
-Released: 6th October 2017
-
-###### Release Notes
-
-* Fixing issue with `this()` function error warning

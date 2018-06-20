@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import HTMLTags from 'html-tags';
-import HtmlAttributes from 'html-element-attributes';
 
 import getParam from './utilities/getParam';
 import getModifiersFromProps from './utilities/getModifiersFromProps';
@@ -99,7 +98,14 @@ export default class Component extends React.Component {
                 ), this.props.from.props.children)
             } else {
                 return (
-                    <this.tag {...this.getHtmlProps(this.props)} {...this.eventHandlers} className={this.selector}>
+                    <this.tag 
+                        {...this.getHtmlProps(this.props)} 
+                        {...this.eventHandlers} 
+
+                        className={this.selector}
+                        data-component={this.props.name}
+                    >
+
                         {this.props.children}
                     </this.tag>   
                 )

@@ -4,12 +4,6 @@
 /// @author [@esr360](http://twitter.com/esr360)
 ///****************************************************************
 
-export const global = {
-    'module-namespace': '',
-    'component-glue': '_',
-    'modifier-glue': '-'
-}
-
 // Vendor
 //*****************************************************************
 
@@ -20,25 +14,21 @@ export { default as getChildrenWithoutSelector } from 'get-children-without-pare
 //*****************************************************************
 
 // Tools
-import { 
-    component, 
-    modifier 
-} from './tools';
+import component from './tools/component';
+import modifier from './tools/modifier';
 
 // Utilities
-import {
-    getBlockName,
-    getComponents,
-    getDomNodes,
-    getGlue,
-    getModifiers,
-    getModuleName,
-    isValidSelector,
-    parents,
-    stripModifiers,
-    getOptions,
-    setDomNodeAttributes
-} from './utilities';
+import getBlockName from './utilities/getBlockName';
+import getComponents from './utilities/getComponents';
+import getDomNodes from './utilities/getDomNodes';
+import getGlue from './utilities/getGlue';
+import getModifiers from './utilities/getModifiers';
+import getModuleName from './utilities/getModuleName';
+import isValidSelector from './utilities/isValidSelector';
+import parents from './utilities/parents';
+import stripModifiers from './utilities/stripModifiers';
+import getOptions from './utilities/getOptions';
+import setDomNodeAttributes from './utilities/setDomNodeAttributes';
 
 export {
     getBlockName,
@@ -59,7 +49,6 @@ export {
  * @author @esr360 <http://twitter.com/esr360>
  * 
  * @module Synergy
- * @access public
  * 
  * @param {(String|HTMLElement|NodeList)} els - Synergy selector to match elements
  * @param {Function} [callback] - function to call on matched elements
@@ -101,17 +90,6 @@ export default function Synergy(els, callback, config, custom, parser) {
 
     if (isModuleElement()) {
         setDomNodeAttributes({ domNodes, module });
-
-        // @TODO create utility function for this
-        if (window.UI && window.UI.config) {
-            window.UI.config[module] = window.UI.config[module] || {};
-
-            if (!window.UI.config[module].initialised) {
-                window.UI.config[module] = Object.assign(window.UI.config[module], options, { 
-                    initialised: true 
-                });
-            }
-        }
     }
 
     // Elements found by the Synergy query

@@ -391,7 +391,7 @@ $module: null !default;
 /// @param {map} $map-old - The map which holds default configuration
 /// @param {map} $map-new - The map which holds custom values
 /// @param {string} $parser - Custom parser to use for configuration
-@function config($map-old, $map-new, $parser: $sass-config-parser) {
+@function config($map-old: (), $map-new: (), $parser: $sass-config-parser) {
 
     $map-old: map-merge((
         'selector-type'  : $selector-type,

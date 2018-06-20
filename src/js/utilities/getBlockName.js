@@ -6,7 +6,7 @@ import * as Synergy from '../synergy';
  * @param {*} block
  * @param {String} module
  */
-export function getBlockName(block, module, modifierGlue) {
+export default function getBlockName(block, module, modifierGlue) {
     let blockName;
 
     if (block instanceof HTMLElement) {
