@@ -329,6 +329,14 @@ Using Synergy, you can create themes and control your entire project's UI from a
 
 ## Changelog
 
+### Version 3.10.1
+
+Released: 25th June 2018
+
+###### Release Notes
+
+* Bug fixes
+
 ### Version 3.10.0
 
 Released: 20th June 2018
