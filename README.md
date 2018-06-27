@@ -329,6 +329,22 @@ Using Synergy, you can create themes and control your entire project's UI from a
 
 ## Changelog
 
+### Version 3.10.2
+
+Released: 25th June 2018
+
+###### Release Notes
+
+* Bug fixes
+
+### Version 3.10.1
+
+Released: 25th June 2018
+
+###### Release Notes
+
+* Bug fixes
+
 ### Version 3.10.0
 
 Released: 20th June 2018
@@ -355,19 +371,3 @@ Released: 20th June 2018
 * Append content before/after module through `before` and `after` props
 * Removing Bower
 * General refactoring, syntax improvements and bug fixes
-
-### Version 3.9.2
-
-Released: 13th January 2018
-
-###### Release Notes
-
-* Fixing bug where only first modifier in module.jsx was parsed
-
-### Version 3.9.1
-
-Released: 11th January 2018
-
-###### Release Notes
-
-* Exporting transpiled module instead of ES6

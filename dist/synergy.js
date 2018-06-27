@@ -946,7 +946,9 @@ exports.default = getModifiersFromProps;
  * @param {*} props 
  * @param {*} blacklist 
  */
-function getModifiersFromProps(props, blacklist) {
+function getModifiersFromProps(props) {
+    var blacklist = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+
     var modifiers = [];
 
     for (var prop in props) {
@@ -1979,7 +1981,7 @@ var Module = function (_React$Component) {
     }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
-            var _module = Synergy.modules[this.props.name];
+            var _module = Synergy.modules ? Synergy.modules[this.props.name] : null;
 
             if (_module && _module.methods) {
                 if (_module.methods.init) {
@@ -5694,8 +5696,6 @@ var _renderModifiers2 = _interopRequireDefault(_renderModifiers);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -5723,6 +5723,8 @@ var Component = function (_React$Component) {
         _this.selector = _this.module + '_' + (_this.props.name + _this.modifiers) + _this.classes;
 
         _this.getEventHandlers([_this.props, _this.config[_this.props.name] ? _this.config[_this.props.name] : {}]);
+
+        if (_this.props.href) _this.tag = 'a';
         return _this;
     }
 
@@ -5781,6 +5783,8 @@ var Component = function (_React$Component) {
                     continue;
                 } else if (prop === 'modifiers') {
                     continue;
+                } else if (prop === 'tag') {
+                    continue;
                 } else if (prop === 'elementname') {
                     HtmlProps.name = props[prop];
                 } else {
@@ -5796,19 +5800,15 @@ var Component = function (_React$Component) {
             var _this3 = this;
 
             var renderTag = function renderTag() {
-                if (_this3.props.from) {
-                    return _react2.default.cloneElement(_this3.props.from, Object.assign.apply(Object, _toConsumableArray(_this3.getHtmlProps(_this3.props)).concat(_toConsumableArray(_this3.eventHandlers), [{ className: _this3.selector }])), _this3.props.from.props.children);
-                } else {
-                    return _react2.default.createElement(
-                        _this3.tag,
-                        _extends({}, _this3.getHtmlProps(_this3.props), _this3.eventHandlers, {
+                return _react2.default.createElement(
+                    _this3.tag,
+                    _extends({}, _this3.getHtmlProps(_this3.props), _this3.eventHandlers, {
 
-                            className: _this3.selector,
-                            'data-component': _this3.props.name
-                        }),
-                        _this3.props.children
-                    );
-                }
+                        className: _this3.selector,
+                        'data-component': _this3.props.name
+                    }),
+                    _this3.props.children
+                );
             };
 
             if (this.isNested()) {

@@ -82,7 +82,7 @@ export default class Module extends React.Component {
     }
 
     componentDidMount() {
-        const _module = Synergy.modules[this.props.name];
+        const _module = Synergy.modules ? Synergy.modules[this.props.name] : null;
 
         if (_module && _module.methods) {
             if (_module.methods.init) {
