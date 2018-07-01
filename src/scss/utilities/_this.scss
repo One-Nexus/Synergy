@@ -9,7 +9,7 @@
     $debug: true;
 
     @if (variable-exists('sass-config-parser') and $sass-config-parser) {
-        $value: call($sass-config-parser, $value);
+        $value: call(get-function($sass-config-parser), $value);
     }
 
     $this: &;

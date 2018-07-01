@@ -19,7 +19,7 @@
 
     // Evaluate configuration values
     @if ($parser) {
-        $map-merged: call($parser, $map-merged);
+        $map-merged: call(get-function($parser), $map-merged);
     }
 
     // Store config in global variable

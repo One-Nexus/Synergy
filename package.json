@@ -47,7 +47,7 @@
     "jsdom": "^11.0.0",
     "jsdom-global": "^3.0.2",
     "mocha": "^3.4.2",
-    "node-sass": "^4.7.2",
+    "node-sass": "^4.9.0",
     "sass-true": "^3.0.0-beta.1",
     "sassdoc": "^2.5.0",
     "stylelint": "^8.4.0",

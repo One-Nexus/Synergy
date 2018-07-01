@@ -6,21 +6,16 @@
 /// @param {string|list} $components - The component or components to be used
 ///
 /// @example
-///
 ///     @include module('header') {
 ///         @include component('wrapper') {
 ///             ...
 ///         }
 ///     }
-///
-///     <div class="header_wrapper">...</div>
 @mixin component($components: null, $content: (), $sub-component: false, $glue: $component-glue) {
 
-    $parents     : ();
     $this        : &;
     $selectors   : '[class*="#{$module}#{$glue}"]';
-    $tree        : module-tree(&);
-    $namespace   : nth($tree, length($tree));
+    $namespace   : nth(module-tree(&), length(module-tree(&)));
 
     @if not $sub-component {
         $namespace: $module;
@@ -34,6 +29,8 @@
             $selectors: join($selectors, $selector, comma);
         }
     }
+
+    $parents: ();
 
     @each $selector in & {
         // spoof the selector into a list
@@ -59,23 +56,58 @@
 
     @if length($parents) == 1 {
         $parents: nth($parents, 1);
-        $parents: clean-selector($parents); // https://github.com/sass/libsass/issues/2520
     }
 
-    @at-root #{if($parents == '()', $selectors, $parents)} {
-        #{if($parents == '()', &, $selectors)} {
-            @content;
-
-            @if selector-is-root-module($this) {
-                @each $component in $components {
-                    $component: if(map-get($config, $component), map-get($config, $component), ());
-                    $content: merge-css-maps($content, $component);
+    @if ($parents == '()') {
+        @at-root #{$selectors} {
+            @include render-component($this, $components, $content) {
+                @content;
+            }
+        }
+    } @else {
+        @at-root #{$parents} {
+            #{$selectors} {
+                @include render-component($this, $components, $content) {
+                    @content;
                 }
             }
-
-            @include get-css-from-map($content);
         }
     }
+
+    // @TODO - this works with node-sass 4.7.2 but not 4.9.0
+    //
+    // @at-root #{if($parents == '()', $selectors, $parents)} {
+    //     #{if($parents == '()', &, $selectors)} {
+    //         @content;
+
+    //         @if selector-is-root-module($this) {
+    //             @each $component in $components {
+    //                 $component: if(map-get($config, $component), map-get($config, $component), ());
+    //                 $content: merge-css-maps($content, $component);
+    //             }
+    //         }
+
+    //         @include get-css-from-map($content);
+    //     }
+    // }
+}
+
+/// Render a component's content
+///
+/// @param {selector} $target
+/// @param {list} $components
+/// @param {map} $content
+@mixin render-component($target, $components, $content) {
+    @content;
+
+    @if selector-is-root-module($target) {
+        @each $component in $components {
+            $component: if(map-get($config, $component), map-get($config, $component), ());
+            $content: merge-css-maps($content, $component);
+        }
+    }
+
+    @include get-css-from-map($content);
 }
 
 /// Alis for `component` mixin with $sub-component: true
