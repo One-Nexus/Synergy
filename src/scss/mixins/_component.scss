@@ -98,7 +98,7 @@
 /// @param {selector} $target
 /// @param {list} $components
 /// @param {map} $content
-@mixin render-component($target, $components, $content) {
+@mixin render-component($target, $components, $content, $config: if(variable-exists('config'), $config, ())) {
     @content;
 
     @if selector-is-root-module($target) {
