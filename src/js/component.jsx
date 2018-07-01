@@ -27,6 +27,8 @@ export default class Component extends React.Component {
         this.getEventHandlers([
             this.props, this.config[this.props.name] ? this.config[this.props.name] : {}
         ]);
+
+        if (this.props.href) this.tag = 'a';
     }
 
     getEventHandlers(properties) {
@@ -78,7 +80,10 @@ export default class Component extends React.Component {
             }
             else if (prop === 'modifiers') {
                 continue;
-            } 
+            }
+            else if (prop === 'tag') {
+                continue;
+            }  
             else if (prop === 'elementname') {
                 HtmlProps.name = props[prop];
             }
@@ -91,26 +96,18 @@ export default class Component extends React.Component {
     }
 
     render() {
-        const renderTag = () => {
-            if (this.props.from) {
-                return React.cloneElement(this.props.from, Object.assign(
-                    ...this.getHtmlProps(this.props), ...this.eventHandlers, { className: this.selector }
-                ), this.props.from.props.children)
-            } else {
-                return (
-                    <this.tag 
-                        {...this.getHtmlProps(this.props)} 
-                        {...this.eventHandlers} 
+        const renderTag = () => (
+            <this.tag 
+                {...this.getHtmlProps(this.props)} 
+                {...this.eventHandlers} 
 
-                        className={this.selector}
-                        data-component={this.props.name}
-                    >
+                className={this.selector}
+                data-component={this.props.name}
+            >
 
-                        {this.props.children}
-                    </this.tag>   
-                )
-            }
-        }
+                {this.props.children}
+            </this.tag>   
+        );
 
         if (this.isNested()) {
             const parentKeys = Object.keys(this.props).sort();

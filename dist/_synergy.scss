@@ -403,7 +403,7 @@ $module: null !default;
 
     // Evaluate configuration values
     @if ($parser) {
-        $map-merged: call($parser, $map-merged);
+        $map-merged: call(get-function($parser), $map-merged);
     }
 
     // Store config in global variable
@@ -1828,7 +1828,7 @@ $css-properties: (
     $debug: true;
 
     @if (variable-exists('sass-config-parser') and $sass-config-parser) {
-        $value: call($sass-config-parser, $value);
+        $value: call(get-function($sass-config-parser), $value);
     }
 
     $this: &;
@@ -2011,21 +2011,16 @@ $css-properties: (
 /// @param {string|list} $components - The component or components to be used
 ///
 /// @example
-///
 ///     @include module('header') {
 ///         @include component('wrapper') {
 ///             ...
 ///         }
 ///     }
-///
-///     <div class="header_wrapper">...</div>
 @mixin component($components: null, $content: (), $sub-component: false, $glue: $component-glue) {
 
-    $parents     : ();
     $this        : &;
     $selectors   : '[class*="#{$module}#{$glue}"]';
-    $tree        : module-tree(&);
-    $namespace   : nth($tree, length($tree));
+    $namespace   : nth(module-tree(&), length(module-tree(&)));
 
     @if not $sub-component {
         $namespace: $module;
@@ -2039,6 +2034,8 @@ $css-properties: (
             $selectors: join($selectors, $selector, comma);
         }
     }
+
+    $parents: ();
 
     @each $selector in & {
         // spoof the selector into a list
@@ -2064,23 +2061,59 @@ $css-properties: (
 
     @if length($parents) == 1 {
         $parents: nth($parents, 1);
-        $parents: clean-selector($parents); // https://github.com/sass/libsass/issues/2520
     }
 
-    @at-root #{if($parents == '()', $selectors, $parents)} {
-        #{if($parents == '()', &, $selectors)} {
-            @content;
-
-            @if selector-is-root-module($this) {
-                @each $component in $components {
-                    $component: if(map-get($config, $component), map-get($config, $component), ());
-                    $content: merge-css-maps($content, $component);
-                }
+    @if ($parents == '()') {
+        @at-root #{$selectors} {
+            @include render-component($this, $components, $content) {
+                @content;
             }
-
-            @include get-css-from-map($content);
         }
     }
+    @else {
+        @at-root #{$parents} {
+            #{$selectors} {
+                @include render-component($this, $components, $content) {
+                    @content;
+                }
+            }
+        }
+    }
+
+    // @TODO - this works with node-sass 4.7.2 but not 4.9.0
+    //
+    // @at-root #{if($parents == '()', $selectors, $parents)} {
+    //     #{if($parents == '()', &, $selectors)} {
+    //         @content;
+
+    //         @if selector-is-root-module($this) {
+    //             @each $component in $components {
+    //                 $component: if(map-get($config, $component), map-get($config, $component), ());
+    //                 $content: merge-css-maps($content, $component);
+    //             }
+    //         }
+
+    //         @include get-css-from-map($content);
+    //     }
+    // }
+}
+
+/// Render a component's content
+///
+/// @param {selector} $target
+/// @param {list} $components
+/// @param {map} $content
+@mixin render-component($target, $components, $content, $config: if(variable-exists('config'), $config, ())) {
+    @content;
+
+    @if selector-is-root-module($target) {
+        @each $component in $components {
+            $component: if(map-get($config, $component), map-get($config, $component), ());
+            $content: merge-css-maps($content, $component);
+        }
+    }
+
+    @include get-css-from-map($content);
 }
 
 /// Alis for `component` mixin with $sub-component: true
@@ -2120,47 +2153,34 @@ $css-properties: (
 ///             ...
 ///         }
 ///     }
-///
-///     <div class="button-large">...</div>
 @mixin modifier($modifiers, $special: null, $glue: $modifier-glue) {
 
-    // BEGIN TOMFOOLERY https://github.com/sass/libsass/issues/2520
-    $this: ();
-
-    @each $selector in & {
-        $selector: clean-selector($selector);
-        $this: append($this, $selector, comma);
-    }
-
-    $selectors: $this;
-    // END TOMFOOLERY
-    //$selectors: &;
+    $selectors: &;
 
     $is-local-flex-type: variable-exists('config') and map-get($config, 'selector-type') == 'flex';
     $is-global-flex-type: not variable-exists('config') and $selector-type == 'flex';
 
-    @if str-index(inspect($this), '.#{$module}') {
+    @if str-index(inspect(&), '.#{$module}') {
         @if $is-local-flex-type or $is-global-flex-type {
             $selectors: ();
 
-            @for $i from 1 through length($this) {
+            @for $i from 1 through length(&) {
                 @if $i % 2 == 0 {
-                    $selectors: append($selectors, nth($this, $i), comma);
+                    $selectors: append($selectors, nth(&, $i), comma);
                 }
             }
         }
     }
 
     @at-root #{$selectors} {
-        $this: &;
         $modifier-selectors: ();
 
         @each $modifier in $modifiers {
             @if $special == 'not' {
-                $modifier-selectors: join($modifier-selectors, '#{$this}:not([class*="#{$glue}#{$modifier}"])', comma);
+                $modifier-selectors: join($modifier-selectors, '&:not([class*="#{$glue}#{$modifier}"])', comma);
             }
             @else {
-                $modifier-selectors: join($modifier-selectors, '#{$this}[class*="#{$glue}#{$modifier}"]', comma);
+                $modifier-selectors: join($modifier-selectors, '&[class*="#{$glue}#{$modifier}"]', comma);
             }
         }
 

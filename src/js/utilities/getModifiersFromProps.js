@@ -2,7 +2,7 @@
  * @param {*} props 
  * @param {*} blacklist 
  */
-export default function getModifiersFromProps(props, blacklist) {
+export default function getModifiersFromProps(props, blacklist = []) {
     const modifiers = [];
 
     for (var prop in props) {

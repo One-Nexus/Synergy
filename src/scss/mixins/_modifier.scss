@@ -13,47 +13,34 @@
 ///             ...
 ///         }
 ///     }
-///
-///     <div class="button-large">...</div>
 @mixin modifier($modifiers, $special: null, $glue: $modifier-glue) {
 
-    // BEGIN TOMFOOLERY https://github.com/sass/libsass/issues/2520
-    $this: ();
-
-    @each $selector in & {
-        $selector: clean-selector($selector);
-        $this: append($this, $selector, comma);
-    }
-
-    $selectors: $this;
-    // END TOMFOOLERY
-    //$selectors: &;
+    $selectors: &;
 
     $is-local-flex-type: variable-exists('config') and map-get($config, 'selector-type') == 'flex';
     $is-global-flex-type: not variable-exists('config') and $selector-type == 'flex';
 
-    @if str-index(inspect($this), '.#{$module}') {
+    @if str-index(inspect(&), '.#{$module}') {
         @if $is-local-flex-type or $is-global-flex-type {
             $selectors: ();
 
-            @for $i from 1 through length($this) {
+            @for $i from 1 through length(&) {
                 @if $i % 2 == 0 {
-                    $selectors: append($selectors, nth($this, $i), comma);
+                    $selectors: append($selectors, nth(&, $i), comma);
                 }
             }
         }
     }
 
     @at-root #{$selectors} {
-        $this: &;
         $modifier-selectors: ();
 
         @each $modifier in $modifiers {
             @if $special == 'not' {
-                $modifier-selectors: join($modifier-selectors, '#{$this}:not([class*="#{$glue}#{$modifier}"])', comma);
+                $modifier-selectors: join($modifier-selectors, '&:not([class*="#{$glue}#{$modifier}"])', comma);
             }
             @else {
-                $modifier-selectors: join($modifier-selectors, '#{$this}[class*="#{$glue}#{$modifier}"]', comma);
+                $modifier-selectors: join($modifier-selectors, '&[class*="#{$glue}#{$modifier}"]', comma);
             }
         }
 
