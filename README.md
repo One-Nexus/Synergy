@@ -329,6 +329,15 @@ Using Synergy, you can create themes and control your entire project's UI from a
 
 ## Changelog
 
+### Version 3.10.3
+
+Released: 1st July 2018
+
+###### Release Notes
+
+* Updating to node-sass `4.9.0`
+* Fixing regression bugs as a result of node-sass update
+
 ### Version 3.10.2
 
 Released: 25th June 2018

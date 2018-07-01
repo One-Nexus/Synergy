@@ -64,7 +64,8 @@
                 @content;
             }
         }
-    } @else {
+    }
+    @else {
         @at-root #{$parents} {
             #{$selectors} {
                 @include render-component($this, $components, $content) {
