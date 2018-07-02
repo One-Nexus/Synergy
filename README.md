@@ -154,7 +154,7 @@ import { Module, Component } from 'Synergy';
 
 import config from './accordion.json';
 
-export default Accordion = ({ panels, ...props }) => (
+const Accordion = ({ panels, ...props }) => (
     <Module name={config.name} {...props}>
         {panels.map(({title, content}, index) => (
             <Component name="panel" key={index}>
@@ -166,6 +166,8 @@ export default Accordion = ({ panels, ...props }) => (
         ))}
     </Module>
 );
+
+export default Accordion;
 
 function toggle(event) {
     const panel = event.target.closest('[data-component="panel"]');
