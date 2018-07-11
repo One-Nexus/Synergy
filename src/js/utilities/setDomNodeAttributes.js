@@ -6,8 +6,14 @@
  */
 export default function setDomNodeAttributes({ domNodes, module } = {}) {
     if (domNodes instanceof NodeList) {
-        domNodes.forEach(el => el.setAttribute('data-module', module));
+        domNodes.forEach(el => {
+            if (!el.hasAttribute('data-module')) {
+                el.setAttribute('data-module', module);
+            }
+        });
     } else if (domNodes instanceof HTMLElement) {
-        domNodes.setAttribute('data-module', module);
+        if (!domNodes.hasAttribute('data-module')) {
+            domNodes.setAttribute('data-module', module);
+        }
     }
 }

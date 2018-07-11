@@ -7,12 +7,14 @@ import * as Synergy from '../synergy';
  * @param {String} module
  */
 export default function getBlockName(block, module, modifierGlue) {
-    let blockName;
+    let blockName = module;
 
     if (block instanceof HTMLElement) {
-        Array.prototype.forEach.call(block.classList, className => {
+        [...block.classList].every(className => {
             if (className.indexOf(module) === 0) {
                 blockName = Synergy.stripModifiers(className, module, modifierGlue);
+
+                return false;
             }
         });
     }

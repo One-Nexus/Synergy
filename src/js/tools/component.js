@@ -12,7 +12,7 @@ import * as Synergy from '../synergy';
 export default function component(options) {
     // setup constants
     const target = (options.target instanceof HTMLElement) ? options.target : options.target[0];
-    const namespace = Synergy.getModuleName(target) + options.componentGlue + options.query;
+    const namespace = (options.module || Synergy.getModuleName(target)) + options.componentGlue + options.query;
     const components = Synergy.getComponents(target, options.module, options.componentGlue);
     const selector = `.${namespace}, [class*="${namespace}${options.modifierGlue}"]`;
     const querySelector = document.querySelectorAll(selector);
