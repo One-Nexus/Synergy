@@ -24,8 +24,31 @@
 
     // Store config in global variable
     $config: $map-merged !global;
+    $smart-config: smart-config($config) !global;
 
     // Return merged map
     @return $map-merged;
 
+}
+
+/// Convert configuration keys such as `component(item)` into the
+/// paramater name, i.e. `item`, so they can be retreived with `this()`
+@function smart-config($config) {
+    $smart-config: ();
+
+    @each $key, $value in $config {
+        @if type-of($value) == 'map' {
+            $smart-config: map-set($smart-config, get-param($key), smart-config($value));
+        }
+
+        @else {
+            @if type-of($key) == 'string' {
+                $key: get-param($key);
+            }
+
+            $smart-config: map-set($smart-config, $key, $value);
+        }
+    }
+
+    @return $smart-config;
 }

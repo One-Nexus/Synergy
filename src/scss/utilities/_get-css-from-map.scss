@@ -21,6 +21,13 @@
                 }
             }
 
+            // $property defines new Component
+            @else if str-index($property, 'sub-component(') == 1 {
+                @include sub-component(get-param($property)) {
+                    @include get-css-from-map($value);
+                }
+            }
+
             // $property defines :hover styles
             @else if $property == 'hover' {
                 @include hover {

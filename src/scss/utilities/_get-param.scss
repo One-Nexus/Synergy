@@ -10,6 +10,11 @@
         $string: str-replace($string, ')', '');
     }
 
+    @if str-index($string, 'sub-component(') == 1 {
+        $string: str-replace($string, 'sub-component(', '');
+        $string: str-replace($string, ')', '');
+    }
+
     @else if str-index($string, 'modifier(') == 1 {
         $string: str-replace($string, 'modifier(', '');
         $string: str-replace($string, ')', '');
