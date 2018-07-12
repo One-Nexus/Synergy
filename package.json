@@ -30,6 +30,7 @@
     "Sass-Boost": "^1.1.0",
     "deep-extend": "^0.5.0",
     "get-children-without-parent-selector": "^0.1.10",
+    "html-attributes": "^1.1.0",
     "html-tags": "^2.0.0",
     "prop-types": "^15.6.0",
     "react": "^16.4.0",

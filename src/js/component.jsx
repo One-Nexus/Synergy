@@ -1,10 +1,9 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import HTMLTags from 'html-tags';
 
+import getHtmlProps from './utilities/getHtmlProps';
 import getParam from './utilities/getParam';
-import getModifiersFromProps from './utilities/getModifiersFromProps';
 import renderModifiers from './utilities/renderModifiers';
 
 /**
@@ -71,34 +70,10 @@ export default class Component extends React.Component {
         }
     }
 
-    getHtmlProps(props) {
-        let HtmlProps = {};
-
-        for (let prop in props) {
-            if (prop === 'name') {
-                continue;
-            }
-            else if (prop === 'modifiers') {
-                continue;
-            }
-            else if (prop === 'tag') {
-                continue;
-            }  
-            else if (prop === 'elementname') {
-                HtmlProps.name = props[prop];
-            }
-            else {
-                HtmlProps[prop] = props[prop];
-            }
-        };
-
-        return HtmlProps;
-    }
-
     render() {
         const renderTag = () => (
             <this.tag 
-                {...this.getHtmlProps(this.props)} 
+                {...getHtmlProps(this.props)} 
                 {...this.eventHandlers} 
 
                 className={this.selector}

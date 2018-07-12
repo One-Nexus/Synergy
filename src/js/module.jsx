@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ReactDOMServer from 'react-dom/server';
 import PropTypes from 'prop-types';
 import HTMLTags from 'html-tags';
 
+import getHtmlProps from './utilities/getHtmlProps';
 import getModifiersFromProps from './utilities/getModifiersFromProps';
 import renderModifiers from './utilities/renderModifiers';
 
@@ -55,13 +55,13 @@ export default class Module extends React.Component {
                     }
                 }
             });
-
-            if (Synergy.CssClassProps) Synergy.CssClassProps.forEach(prop => {
-                if (Object.keys(this.props).includes(prop)) {
-                    this.classNames = this.classNames + ' ' + prop
-                }
-            });
         }
+
+        if (Synergy.CssClassProps) Synergy.CssClassProps.forEach(prop => {
+            if (Object.keys(this.props).includes(prop)) {
+                this.classNames = this.classNames + ' ' + prop
+            }
+        });
     }
 
     /**
@@ -118,23 +118,26 @@ export default class Module extends React.Component {
     }
 
     render() {
-        return [
-            this.props.before && this.props.before(() => document.getElementById(this.id)),
+        return (
+            <React.Fragment>
+                { this.props.before && this.props.before(() => document.getElementById(this.id)) }
 
-            <this.tag
-                id={this.id}
-                className={this.classNames}
-                data-module={this.props.name}
-                href={this.props.href}
-                
-                {...this.getDataAttributes(this.props)}
-                {...this.getEventHandlers(this.props)}
-            >
-                {this.props.children}
-            </this.tag>,
+                <this.tag
+                    id={this.id}
+                    className={this.classNames}
+                    data-module={this.props.name}
 
-            this.props.after && this.props.after(() => document.getElementById(this.id))
-        ];
+                    {...getHtmlProps(this.props)}
+                    
+                    {...this.getDataAttributes(this.props)}
+                    {...this.getEventHandlers(this.props)}
+                >
+                    {this.props.children}
+                </this.tag>
+
+                { this.props.after && this.props.after(() => document.getElementById(this.id)) }
+            </React.Fragment>
+        );
     }
 }
 
@@ -142,3 +145,11 @@ Module.childContextTypes = {
     module: PropTypes.string,
     config: PropTypes.object
 };
+
+Module.method = (module, method, props) => {
+    try {
+        return Synergy.modules[module].methods[method](props);
+    } catch(error) {
+        console.warn(error);
+    }
+}
