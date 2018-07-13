@@ -22,23 +22,23 @@ export default class Module extends React.Component {
     constructor(props, context) {
         super(props, context);
 
-        this.tag = this.props.tag || (HTMLTags.includes(this.props.name) ? this.props.name : 'div');
-        this.propModifiers = renderModifiers(getModifiersFromProps(this.props, Synergy.CssClassProps));
-        this.passedModifiers = renderModifiers(this.props.modifiers);
+        this.tag = props.tag || (HTMLTags.includes(props.name) ? props.name : 'div');
+        this.propModifiers = renderModifiers(getModifiersFromProps(props, Synergy.CssClassProps));
+        this.passedModifiers = renderModifiers(props.modifiers);
         this.modifiers = this.propModifiers + this.passedModifiers;
-        this.classes = this.props.className ? ' ' + this.props.className : '';
-        this.classNames = this.props.name + this.modifiers + this.classes;
-        this.id = this.props.id;
+        this.classes = props.className ? ' ' + props.className : '';
+        this.classNames = props.name + this.modifiers + this.classes;
+        this.id = props.id;
 
         increment++;
 
-        if ((this.props.before || this.props.after) && !this.id) {
+        if ((props.before || props.after) && !this.id) {
             this.id = `synergy-module-${increment}`;
         }
 
         if (Synergy.modules) {
             // determine if any passed prop is a module - if so, add it to `classes`
-            Object.entries(this.props).forEach(prop => {
+            Object.entries(props).forEach(prop => {
                 if (prop[0][0] === prop[0][0].toUpperCase()) {
                     if (Object.keys(Synergy.modules).includes(prop[0].toLowerCase())) {
                         const module = prop[0].toLowerCase();
@@ -58,7 +58,7 @@ export default class Module extends React.Component {
         }
 
         if (Synergy.CssClassProps) Synergy.CssClassProps.forEach(prop => {
-            if (Object.keys(this.props).includes(prop)) {
+            if (Object.keys(props).includes(prop)) {
                 this.classNames = this.classNames + ' ' + prop
             }
         });
@@ -77,7 +77,9 @@ export default class Module extends React.Component {
         }
 
         return { 
-            module: this.props.name, config
+            module: this.props.name,
+            modifiers: this.props.modifiers,
+            config
         };
     }
 
@@ -143,13 +145,6 @@ export default class Module extends React.Component {
 
 Module.childContextTypes = {
     module: PropTypes.string,
+    modifiers: PropTypes.array,
     config: PropTypes.object
 };
-
-Module.method = (module, method, props) => {
-    try {
-        return Synergy.modules[module].methods[method](props);
-    } catch(error) {
-        console.warn(error);
-    }
-}

@@ -18,19 +18,19 @@ export default class Component extends React.Component {
         super(props, context);
 
         this.config = context.config || {};
-        this.tag = this.props.tag || (HTMLTags.includes(this.props.name) ? this.props.name : 'div');
-        this.module = this.props.module || context.module;
-        this.propModifiers = renderModifiers(getModifiersFromProps(this.props, Synergy.CssClassProps));
-        this.passedModifiers = renderModifiers(this.props.modifiers);
+        this.tag = props.tag || (HTMLTags.includes(props.name) ? props.name : 'div');
+        this.module = props.module || context.module;
+        this.propModifiers = renderModifiers(getModifiersFromProps(props, Synergy.CssClassProps));
+        this.passedModifiers = renderModifiers(props.modifiers);
         this.modifiers = this.propModifiers + this.passedModifiers;
-        this.classes = this.props.className ? ' ' + this.props.className : '';
-        this.selector = `${this.module}_${this.props.name + this.modifiers}${this.classes}`;
+        this.classes = props.className ? ' ' + props.className : '';
+        this.selector = `${this.module}_${props.name + this.modifiers}${this.classes}`.replace(/,/g, '_');
 
         this.getEventHandlers([
-            this.props, this.config[this.props.name] ? this.config[this.props.name] : {}
+            props, this.config[props.name] ? this.config[props.name] : {}
         ]);
 
-        if (this.props.href) this.tag = 'a';
+        if (props.href) this.tag = 'a';
     }
 
     getEventHandlers(properties) {
@@ -73,20 +73,28 @@ export default class Component extends React.Component {
         }
     }
 
-    render() {
-        const renderTag = () => (
+    getChildContext() {
+        return {
+            component: this.props.name
+        };
+    }
+
+    renderTag(props) {
+        return (
             <this.tag 
-                {...getHtmlProps(this.props)} 
+                {...getHtmlProps(props)} 
                 {...this.eventHandlers} 
 
                 className={this.selector}
-                data-component={this.props.name}
+                data-component={props.name}
             >
 
-                {this.props.children}
-            </this.tag>   
-        );
+                {props.children}
+            </this.tag>
+        )
+    }
 
+    render() {
         if (this.isNested()) {
             const parentKeys = Object.keys(this.props).sort();
             const childKeys = Object.keys(this.props.children.props).sort();
@@ -95,16 +103,55 @@ export default class Component extends React.Component {
                 return this.props.children;
             }
 
-            else return renderTag();
+            else return this.renderTag(this.props);
         } 
 
-        else return renderTag();
+        else return this.renderTag(this.props);
     }
 }
 
 Component.contextTypes = {
     module: PropTypes.string,
+    modifiers: PropTypes.array,
+    component: PropTypes.string,
+    subComponent: PropTypes.array,
     config: PropTypes.object
+};
+
+Component.childContextTypes = {
+    component: PropTypes.string
+};
+
+export class SubComponent extends Component {
+    constructor(props, context) {
+        super(props, context);
+
+        let namespace = `${context.component}_${props.name}`;
+
+        if (context.subComponent) {
+            namespace = `${namespace}_${context.subComponent.join('_')}`;
+        }
+
+        this.selector = `${this.module}_${namespace + this.modifiers}${this.classes}`.replace(/,/g, '_');
+    }
+
+    getChildContext() {
+        let subComponents = this.context.subComponent || [];
+
+        subComponents.push(this.props.name);
+
+        return {
+            subComponent: subComponents
+        };
+    }
+
+    render() {
+        return this.renderTag(this.props);
+    }
+}
+
+SubComponent.childContextTypes = {
+    subComponent: PropTypes.array
 };
 
 export class Wrapper extends Component {
@@ -112,22 +159,22 @@ export class Wrapper extends Component {
     constructor(props, context) {
         super(props, context);
 
-        this.module = this.props.module;
-        this.namespace = this.props.name || 'wrapper';
-        this.modifiers = renderModifiers(this.props.modifiers);
-        this.classes = this.props.className ? ' ' + this.props.className : '';
+        this.module = props.module;
+        this.namespace = props.name || 'wrapper';
+        this.modifiers = renderModifiers(props.modifiers);
+        this.classes = props.className ? ' ' + props.className : '';
 
         if (!this.module) {
-            if (this.props.children.length) {
-                this.module = this.props.children[0].props.name;
+            if (props.children.length) {
+                this.module = props.children[0].props.name;
             } else {
-                this.module = this.props.children.props.name;
+                this.module = props.children.props.name;
             }
         }
 
         if (Synergy.CssClassProps) Synergy.CssClassProps.forEach(prop => {
-            if (Object.keys(this.props).includes(prop)) {
-                this.classes = this.classes + ' ' + prop
+            if (Object.keys(props).includes(prop)) {
+                this.classes = classes + ' ' + prop
             }
         });
     }
@@ -143,7 +190,7 @@ export class Wrapper extends Component {
 
 export class Group extends Component {
     render() {
-        return(
+        return (
             <Wrapper name='group' {...this.props}>{this.props.children}</Wrapper>
         )
     }
