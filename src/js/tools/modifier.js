@@ -75,13 +75,19 @@ export default function modifier(options) {
  * @param {*} operator 
  */
 function toggleModifier(moduleName, target, query, operator, glue) {
-    return Array.prototype.forEach.call(target.classList, className => {
-        if (className.indexOf(moduleName) === 0) {
-            target.classList.remove(className);
+    return [...target.classList].forEach(className => {
+        const namespace = className.indexOf(glue) > -1 ? className.substring(0, className.indexOf(glue)) : className;
+        const hasModifier = className.indexOf(moduleName) === 0 && className.indexOf(glue + query) > -1;
 
-            target.classList.add(
-                (operator === 'set') ? className + glue + query : className.replace(glue + query, '')
-            );
+        if (operator === 'unset') {
+            if (hasModifier) {
+                target.classList.remove(className);
+                target.classList.add(namespace);
+            }
+        } else if (operator === 'set') {
+            if (!hasModifier) {
+                target.classList.add(className + glue + query);
+            }
         }
     });
 }
