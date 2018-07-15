@@ -98,12 +98,13 @@ export default class Component extends React.Component {
         if (this.isNested()) {
             const parentKeys = Object.keys(this.props).sort();
             const childKeys = Object.keys(this.props.children.props).sort();
+            const sameAsParent = this.props.name === this.props.children.props.name;
 
-            if (JSON.stringify(parentKeys) === JSON.stringify(childKeys)) {
+            if (JSON.stringify(parentKeys) === JSON.stringify(childKeys) && sameAsParent) {
                 return this.props.children;
             }
 
-            else return this.renderTag(this.props);
+            return this.renderTag(this.props);
         } 
 
         else return this.renderTag(this.props);
@@ -132,7 +133,7 @@ export class SubComponent extends Component {
             namespace = `${namespace}_${context.subComponent.join('_')}`;
         }
 
-        this.selector = `${this.module}_${namespace + this.modifiers}${this.classes}`.replace(/,/g, '_');
+        this.selector = `${this.module}_${namespace + this.modifiers}${this.classes}`;
     }
 
     getChildContext() {

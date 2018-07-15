@@ -34,6 +34,7 @@
         $disable-output: map-get($config, 'disable-output');
     }
 
+    // @TODO this needs to identify if nested within itself, not in general
     $nested: &;
 
     @if not $nested {
@@ -62,34 +63,48 @@
     }
 
     @if not $disable-output {
-        #{$selectors} {
+        @if $type == 'natural' {
+            @include module-content($modules, $type, $config, $target);
+
             @content;
-
-            @if not $nested {
-                @include extend-modifiers;
-                @include combine-modifiers;
-
-                @if variable-exists('config') {
-                    @if $modules == map-get($config, 'name') or $target {
-                        @if $target {
-                            #{$target} {
-                                @include get-css-from-map($config);
-                            }
-                        }
-                        @else {
-                            @include get-css-from-map($config);
-                        }
-                    }
+        }
+        @else {
+            #{$selectors} {
+                @if not $nested {
+                    @include module-content($modules, $type, $config, $target);
                 }
+
+                @content;
+            }
+        }
+    }
+}
+
+/// Render a module's content
+///
+/// @param {string|list} $module
+/// @param {string} $type
+/// @param {map} $config
+/// @param {*} $target
+@mixin module-content($module, $type, $config, $target) {
+    @include extend-modifiers;
+    @include combine-modifiers;
+
+    @if variable-exists('config') {
+        @if $module == map-get($config, 'name') or $target {
+            @if $target {
+                #{$target} {
+                    @include get-css-from-map($config);
+                }
+            }
+            @else {
+                @include get-css-from-map($config);
             }
         }
     }
 }
 
 /// Alias for module() mixin
-///
-/// @author [@esr360](http://twitter.com/esr360)
-/// @access public
 ///
 /// @param {string|list} $modules - The module(s) you wish to create
 /// @param {string} $type - Determine module type
@@ -100,8 +115,6 @@
 }
 
 /// Combine modifiers into a new, single modifier
-///
-/// @author [@esr360](http://twitter.com/esr360)
 ///
 /// @param {map} $styles - The CSS styles to output
 @mixin combine-modifiers($combine: if(variable-exists('config'), (map-get($config, 'combine')), '()')) {
@@ -115,8 +128,6 @@
 }
 
 /// Extend modifiers into the naked module
-///
-/// @author [@esr360](http://twitter.com/esr360)
 ///
 /// @param {map} $styles - The CSS styles to output
 @mixin extend-modifiers($modifiers: if(variable-exists('config'), (map-get($config, 'modifiers')), '()')) {
