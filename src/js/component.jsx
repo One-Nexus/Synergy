@@ -24,6 +24,24 @@ export default class Component extends React.Component {
         this.passedModifiers = renderModifiers(props.modifiers);
         this.modifiers = this.propModifiers + this.passedModifiers;
         this.classes = props.className ? ' ' + props.className : '';
+
+        // determine if any passed prop is a module - if so, add it to `classes`
+        Object.entries(props).forEach(prop => {
+            if (prop[0][0] === prop[0][0].toUpperCase()) {
+                const module = prop[0].toLowerCase();
+
+                let modifiers = '';
+
+                if (prop[1].constructor === Array) {
+                    modifiers = '-' + prop[1].join('-');
+                } else if (typeof prop[1] === 'string') {
+                    modifiers = '-' + prop[1];
+                }
+
+                this.classes = this.classes + ' ' + module + modifiers;
+            }
+        });
+
         this.selector = `${this.module}_${props.name + this.modifiers}${this.classes}`.replace(/,/g, '_');
 
         this.getEventHandlers([
