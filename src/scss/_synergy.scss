@@ -13,14 +13,17 @@
 @import 'utilities/css-properties';
 @import 'utilities/enabled';
 @import 'utilities/get-css-from-map';
+@import 'utilities/get-module-name';
 @import 'utilities/get-param';
 @import 'utilities/get-styles';
 @import 'utilities/merge-css-maps';
 @import 'utilities/module-tree';
 @import 'utilities/option';
 @import 'utilities/remove-components';
+@import 'utilities/remove-junk';
 @import 'utilities/remove-modifiers';
 @import 'utilities/selector-is-root-module';
+@import 'utilities/selector-to-map';
 @import 'utilities/selector';
 @import 'utilities/setting';
 @import 'utilities/strip-glue';

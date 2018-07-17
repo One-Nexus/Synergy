@@ -1,7 +1,6 @@
 /// Create a component based off the main module
 ///
 /// @author [@esr360](http://twitter.com/esr360)
-/// @access public
 ///
 /// @param {string|list} $components - The component or components to be used
 ///
@@ -13,12 +12,17 @@
 ///     }
 @mixin component($components: null, $content: (), $sub-component: false, $glue: $component-glue) {
 
-    $this        : &;
-    $selectors   : '[class*="#{$module}#{$glue}"]';
-    $namespace   : nth(module-tree(&), length(module-tree(&)));
+    $this: &;
+    $module-map: selector-to-map($this);
+    $selectors: '[class*="#{$module}#{$glue}"]';
+    $namespace: map-get($module-map, 'module');
 
-    @if not $sub-component {
+    @if str-index($namespace, '%') == 1 {
         $namespace: $module;
+    }
+
+    @if $sub-component {
+        $namespace: nth(module-tree(&), length(module-tree(&)))
     }
 
     @if $components {

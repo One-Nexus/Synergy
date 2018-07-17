@@ -1,0 +1,28 @@
+/// Convert a selector into a map of modules, components and modifiers
+///
+/// @param {string} $selector
+@function selector-to-map($selector) {
+
+    $module-map: (
+        'module'   : null,
+        'component': null,
+        'modifiers': null
+    );
+
+    // Prepare selector for defragmentation
+    $cleaned-selector: inspect(nth($selector, length($selector)));
+    $cleaned-selector: selector-parse(str-replace($cleaned-selector, ' ', ', '));
+    $cleaned-selector: nth($cleaned-selector, length($cleaned-selector));
+    $cleaned-selector: remove-junk(inspect($cleaned-selector));
+
+    // Get module name
+    $module-map: map-set($module-map, 'module', get-module-name($cleaned-selector));
+
+    // Get component name @TODO
+    // $component-name: get-component($cleaned-selector);
+
+    // Get modifiers @TODO
+    // $modifiers: get-modifiers($cleaned-selector);
+
+    @return $module-map;
+}
