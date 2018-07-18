@@ -15,13 +15,13 @@
     $cleaned-selector: nth($cleaned-selector, length($cleaned-selector));
     $cleaned-selector: remove-junk(inspect($cleaned-selector));
 
-    // Get module name
+    // Get and set module name
     $module-map: map-set($module-map, 'module', get-module-name($cleaned-selector));
 
-    // Get component name @TODO
+    // Get and set component name @TODO
     // $component-name: get-component($cleaned-selector);
 
-    // Get modifiers @TODO
+    // Get and set modifiers @TODO
     // $modifiers: get-modifiers($cleaned-selector);
 
     @return $module-map;
