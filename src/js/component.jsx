@@ -21,8 +21,9 @@ export default class Component extends React.Component {
         this.tag = props.tag || (HTMLTags.includes(props.name) ? props.name : 'div');
         this.module = props.module || context.module;
         this.propModifiers = renderModifiers(getModifiersFromProps(props, Synergy.CssClassProps));
+        this.contextModifiers = renderModifiers(getModifiersFromProps(context.props && context.props[props.name], Synergy.CssClassProps));
         this.passedModifiers = renderModifiers(props.modifiers);
-        this.modifiers = this.propModifiers + this.passedModifiers;
+        this.modifiers = this.propModifiers + this.passedModifiers + this.contextModifiers;
         this.classes = props.className ? ' ' + props.className : '';
 
         // determine if any passed prop is a module - if so, add it to `classes`
@@ -100,8 +101,8 @@ export default class Component extends React.Component {
     renderTag(props) {
         return (
             <this.tag 
-                {...getHtmlProps(props)} 
-                {...this.eventHandlers} 
+                {...getHtmlProps(props)}
+                {...this.eventHandlers}
 
                 className={this.selector}
                 data-component={props.name}
@@ -134,7 +135,8 @@ Component.contextTypes = {
     modifiers: PropTypes.array,
     component: PropTypes.string,
     subComponent: PropTypes.array,
-    config: PropTypes.object
+    config: PropTypes.object,
+    props: PropTypes.object
 };
 
 Component.childContextTypes = {
