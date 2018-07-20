@@ -55,11 +55,13 @@
         }
     }
 
-    $target: false;
-
-    @if variable-exists('config') and map-has-key($config, 'target') {
-        $target: map-get($config, 'target');
-    }
+    // @TODO tidy up how $target is used here and in $modifier - also probably
+    // won't work for component()
+    $target: if(
+        variable-exists('config') and map-has-key($config, 'target'),
+        ('module': $module, 'target': map-get($config, 'target')),
+        false
+    ) !global;
 
     @if not $disable-output {
         @if $type == 'natural' {
@@ -91,8 +93,8 @@
 
     @if variable-exists('config') {
         @if $module == map-get($config, 'name') or $target {
-            @if $target {
-                #{$target} {
+            @if type-of($target) == 'map' and map-get($target, 'module') == $module {
+                #{map-get($target, 'target')} {
                     @include get-css-from-map($config);
                 }
             }

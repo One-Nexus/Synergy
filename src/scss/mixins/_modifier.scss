@@ -45,7 +45,13 @@
         }
 
         @at-root #{$modifier-selectors} {
-            @content;
+            @if type-of($target) == 'map' and map-get($target, 'module') == $module {
+                #{map-get($target, 'target')} {
+                    @content;
+                }
+            } @else {
+                @content;
+            }
         }
     }
 
