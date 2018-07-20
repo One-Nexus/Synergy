@@ -32,6 +32,8 @@ export default class Module extends React.Component {
 
         increment++;
 
+        if (props.component) this.tag = props.component;
+
         if ((props.before || props.after) && !this.id) {
             this.id = `synergy-module-${increment}`;
         }
@@ -79,7 +81,8 @@ export default class Module extends React.Component {
         return { 
             module: this.props.name,
             modifiers: this.props.modifiers,
-            config
+            config,
+            props: this.props
         };
     }
 
@@ -130,9 +133,9 @@ export default class Module extends React.Component {
                     data-module={this.props.name}
 
                     {...getHtmlProps(this.props)}
-                    
                     {...this.getDataAttributes(this.props)}
                     {...this.getEventHandlers(this.props)}
+                    {...this.props.componentProps}
                 >
                     {this.props.children}
                 </this.tag>
@@ -146,5 +149,6 @@ export default class Module extends React.Component {
 Module.childContextTypes = {
     module: PropTypes.string,
     modifiers: PropTypes.array,
-    config: PropTypes.object
+    config: PropTypes.object,
+    props: PropTypes.object
 };
