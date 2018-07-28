@@ -11,6 +11,9 @@ export default function setStyles(element, styles, globals, theme, parentElement
 
     const values = (typeof styles === 'object') ? styles : styles(element, globals);
 
+    const stylesDidMount = new Event('stylesdidmount');
+    const moduleDidRepaint = new Event('moduledidrepaint');
+
     // initialise data interface
     element.data = element.data || { eventListeners: [], importantStyles: [] };
 
@@ -18,9 +21,17 @@ export default function setStyles(element, styles, globals, theme, parentElement
     parentElement = parentElement || element;
 
     // attach theme and repaint methods to parent element
-    if (element === parentElement) {
-        parentElement.data.theme = element.data.theme || theme;
-        parentElement.data.repaint = element.data.repaint || styles(element, globals);
+    if (element === parentElement && theme !== false) {
+        parentElement.repaint = () => {
+            setStyles(parentElement, styles(element, globals), globals, false);
+            setStyles(parentElement, theme, globals, false);
+
+            parentElement.data.importantStyles.forEach(style => {
+                style.element.style[style.style[0]] = style.style[1];
+            });
+
+            parentElement.dispatchEvent(moduleDidRepaint);
+        };
     }
 
     for (let [key, value] of Object.entries(values)) {
@@ -66,14 +77,24 @@ export default function setStyles(element, styles, globals, theme, parentElement
 
                         element.data.eventListeners = element.data.eventListeners.filter(item => item !== 'mouseenter');
 
-                        setStyles(parentElement, parentElement.data.repaint, globals, parentElement.data.theme);
+                        parentElement.repaint();
                     }, false);
                 }
             }
 
             else if (value instanceof Array) {
                 if (value[0] === 'important' && value[1] !== false) {
-                    // console.log(element, key, value)
+                    const pushImportantStyle = () => parentElement.data.importantStyles.push({ element, style: [key, value[1]] });
+
+                    if (parentElement.data.importantStyles.length) {
+                        parentElement.data.importantStyles.forEach(style => {
+                            if (style.element === element && style.style.toString() !== [key, value[1]].toString()) {
+                                pushImportantStyle();
+                            }
+                        });
+                    } else {
+                        pushImportantStyle();
+                    }
                 }
             }
 
@@ -87,6 +108,16 @@ export default function setStyles(element, styles, globals, theme, parentElement
         }
     }
 
-    if (typeof theme === 'object') setStyles(element, theme, globals);
+    if (typeof theme === 'object') {
+        setStyles(element, theme, globals, false);
+    }
 
+    // apply important styles that should be unaffected by `theme`
+    if (element === parentElement && theme !== false) {
+        parentElement.data.importantStyles.forEach(style => {
+            style.element.style[style.style[0]] = style.style[1];
+        });
+
+        element.dispatchEvent(stylesDidMount);
+    }
 }
