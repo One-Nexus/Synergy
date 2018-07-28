@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import HTMLTags from 'html-tags';
+import deepExtend from 'deep-extend';
 
 import getHtmlProps from './utilities/getHtmlProps';
 import getModifiersFromProps from './utilities/getModifiersFromProps';
@@ -124,6 +125,8 @@ export default class Module extends React.Component {
 }
 
 Module.setStyles = (...params) => setStyles(...params);
+
+Module.config = deepExtend;
 
 Module.childContextTypes = {
     module: PropTypes.string,
