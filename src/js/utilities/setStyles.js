@@ -10,8 +10,9 @@
 export default function setStyles(element, styles, globals, theme, parentElement) {
 
     const values = (typeof styles === 'object') ? styles : styles(element, globals);
+    const importantValues = values => values.forEach(value => value.element.style[value.style[0]] = value.style[1]);
 
-    const stylesDidMount = new Event('stylesdidmount');
+    const stylesDidMount   = new Event('stylesdidmount');
     const moduleDidRepaint = new Event('moduledidrepaint');
 
     // initialise data interface
@@ -23,12 +24,10 @@ export default function setStyles(element, styles, globals, theme, parentElement
     // attach theme and repaint methods to parent element
     if (element === parentElement && theme !== false) {
         parentElement.repaint = () => {
-            setStyles(parentElement, styles(element, globals), globals, false);
+            setStyles(parentElement, values, globals, false);
             setStyles(parentElement, theme, globals, false);
 
-            parentElement.data.importantStyles.forEach(style => {
-                style.element.style[style.style[0]] = style.style[1];
-            });
+            importantValues(parentElement.data.importantStyles);
 
             parentElement.dispatchEvent(moduleDidRepaint);
         };
@@ -66,7 +65,6 @@ export default function setStyles(element, styles, globals, theme, parentElement
                     element.data.eventListeners.push('mouseenter');
 
                     element.addEventListener('mouseenter', function mouseEnter() {
-                        console.log('foo');
                         setStyles(element, value, globals, false, parentElement);
 
                         element.removeEventListener('mouseenter', mouseEnter);
@@ -98,6 +96,10 @@ export default function setStyles(element, styles, globals, theme, parentElement
                 }
             }
 
+            else if (typeof value === 'function') {
+                element.style[key] = value(element.style[key]);
+            }
+
             else {
 
             }
@@ -112,11 +114,8 @@ export default function setStyles(element, styles, globals, theme, parentElement
         setStyles(element, theme, globals, false);
     }
 
-    // apply important styles that should be unaffected by `theme`
     if (element === parentElement && theme !== false) {
-        parentElement.data.importantStyles.forEach(style => {
-            style.element.style[style.style[0]] = style.style[1];
-        });
+        importantValues(parentElement.data.importantStyles);
 
         element.dispatchEvent(stylesDidMount);
     }
