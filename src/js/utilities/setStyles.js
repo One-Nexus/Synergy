@@ -24,7 +24,7 @@ export default function setStyles(element, styles, globals, theme, parentElement
     // attach theme and repaint methods to parent element
     if (element === parentElement && theme !== false) {
         parentElement.repaint = () => {
-            setStyles(parentElement, values, globals, false);
+            setStyles(parentElement, styles(element, globals), globals, false);
             setStyles(parentElement, theme, globals, false);
 
             importantValues(parentElement.data.importantStyles);
