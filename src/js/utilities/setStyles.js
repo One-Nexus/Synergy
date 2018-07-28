@@ -5,7 +5,7 @@
  * @param {*} styles 
  * @param {*} globals 
  * @param {*} theme 
- * @param {*} scope 
+ * @param {*} parentElement 
  */
 export default function setStyles(element, styles, globals, theme, parentElement) {
 
@@ -82,16 +82,18 @@ export default function setStyles(element, styles, globals, theme, parentElement
 
             else if (value instanceof Array) {
                 if (value[0] === 'important' && value[1] !== false) {
-                    const pushImportantStyle = () => parentElement.data.importantStyles.push({ element, style: [key, value[1]] });
+                    let alreadyContains = false;
 
                     if (parentElement.data.importantStyles.length) {
                         parentElement.data.importantStyles.forEach(style => {
-                            if (style.element === element && style.style.toString() !== [key, value[1]].toString()) {
-                                pushImportantStyle();
+                            if (style.element === element && (style.style.toString() === [key, value[1]].toString())) {
+                                alreadyContains = true;
                             }
                         });
-                    } else {
-                        pushImportantStyle();
+                    }
+
+                    if (!alreadyContains) {
+                        parentElement.data.importantStyles.push({ element, style: [key, value[1]] })
                     }
                 }
             }
