@@ -28,16 +28,14 @@ export default class Module extends React.Component {
 
         increment++;
 
-        this.tag = props.tag || (HTMLTags.includes(props.name) ? props.name : 'div');
+        this.tag = props.component || props.tag || (HTMLTags.includes(props.name) ? props.name : 'div');
         this.propModifiers = renderModifiers(getModifiersFromProps(props, Synergy.CssClassProps));
         this.passedModifiers = renderModifiers(props.modifiers);
         this.modifiers = this.propModifiers + this.passedModifiers;
         this.classes = props.className ? ' ' + props.className : '';
-        this.classNames = props.name + this.modifiers + this.classes;
+        this.classNames = getModuleFromProps(props, props.name + this.modifiers + this.classes);
         this.id = (props.before || props.after) && !props.id ? `synergy-module-${increment}` : props.id;
         this.ref = node => refHandler(node, props);
-
-        if (props.component) this.tag = props.component;
 
         if (Synergy.CssClassProps) Synergy.CssClassProps.forEach(prop => {
             if (Object.keys(props).includes(prop)) {

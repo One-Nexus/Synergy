@@ -8,11 +8,9 @@ export default function getModifiersFromProps(props, blacklist = []) {
     for (var prop in props) {
         const [key, value] = [prop, props[prop]];
 
-        // if prop is name of existing module, do not include in list
-        if (Synergy.modules && (prop[0] === prop[0].toUpperCase())) {
-            if (Object.keys(Synergy.modules).includes(prop.toLowerCase())) {
-                continue;
-            }
+        // if prop is name of module, do not include in list
+        if (prop[0] === prop[0].toUpperCase()) {
+            continue;
         }
 
         if (typeof value === 'boolean' && value) {

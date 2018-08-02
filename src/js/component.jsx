@@ -4,6 +4,7 @@ import HTMLTags from 'html-tags';
 
 import getHtmlProps from './utilities/getHtmlProps';
 import getModifiersFromProps from './utilities/getModifiersFromProps';
+import getModuleFromProps from './utilities/getModulesFromProps';
 import getParam from './utilities/getParam';
 import renderModifiers from './utilities/renderModifiers';
 
@@ -18,31 +19,13 @@ export default class Component extends React.Component {
         super(props, context);
 
         this.config = context.config || {};
-        this.tag = props.tag || (HTMLTags.includes(props.name) ? props.name : 'div');
+        this.tag = props.component || props.tag || (HTMLTags.includes(props.name) ? props.name : 'div');
         this.module = props.module || context.module;
         this.propModifiers = renderModifiers(getModifiersFromProps(props, Synergy.CssClassProps));
         this.contextModifiers = renderModifiers(getModifiersFromProps(context.props && context.props[props.name], Synergy.CssClassProps));
         this.passedModifiers = renderModifiers(props.modifiers);
         this.modifiers = this.propModifiers + this.passedModifiers + this.contextModifiers;
-        this.classes = props.className ? ' ' + props.className : '';
-
-        // determine if any passed prop is a module - if so, add it to `classes`
-        Object.entries(props).forEach(prop => {
-            if (prop[0][0] === prop[0][0].toUpperCase()) {
-                const module = prop[0].toLowerCase();
-
-                let modifiers = '';
-
-                if (prop[1].constructor === Array) {
-                    modifiers = '-' + prop[1].join('-');
-                } else if (typeof prop[1] === 'string') {
-                    modifiers = '-' + prop[1];
-                }
-
-                this.classes = this.classes + ' ' + module + modifiers;
-            }
-        });
-
+        this.classes = getModuleFromProps(props, props.className ? ' ' + props.className : '');
         this.selector = `${this.module}_${props.name + this.modifiers}${this.classes}`.replace(/,/g, '_');
 
         this.getEventHandlers([

@@ -9,6 +9,7 @@
  */
 export default function setStyles(element, styles, globals, theme, parentElement) {
 
+    // console.log(element, styles);
     const values = (typeof styles === 'object') ? styles : styles(element, globals);
     const importantValues = values => values.forEach(value => value.element.style[value.style[0]] = value.style[1]);
 
@@ -25,7 +26,10 @@ export default function setStyles(element, styles, globals, theme, parentElement
     if (element === parentElement && theme !== false) {
         parentElement.repaint = () => {
             setStyles(parentElement, styles(element, globals), globals, false);
-            setStyles(parentElement, theme, globals, false);
+
+            if (theme) {
+                setStyles(parentElement, theme, globals, false);
+            }
 
             importantValues(parentElement.data.importantStyles);
 
@@ -51,6 +55,15 @@ export default function setStyles(element, styles, globals, theme, parentElement
                         setStyles(_component, value, globals, false, parentElement);
                     } 
                     else if (typeof value === 'function') {
+                        // instead of below look at: https://www.npmjs.com/package/get-parameter-names
+                        // const ids = (() => {
+                        //     if (String(value).match(/\(([^)]+)\)/)) {
+                        //         return String(value).match(/\(([^)]+)\)/)[1].replace(/\s/g, '').split(',');
+                        //     } else {
+                        //         return String(value).substr(0, String(value).indexOf(' ')).replace(/\s/g, '').split(',');
+                        //     }
+                        // })();
+
                         setStyles(_component, value(_component), globals, false, parentElement);
                     }
                 });

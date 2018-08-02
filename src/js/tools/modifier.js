@@ -13,7 +13,7 @@ export default function modifier(options) {
     // setup constants
     const target = (options.target instanceof HTMLElement) ? options.target : options.target[0];
     const namespace = Synergy.getBlockName(target, options.module, options.glue) + options.glue + options.query;
-    const modifiers = Synergy.getModifiers(target, options.module, options.glue);
+    const modifiers = Synergy.getModifiers(target, options.module, options.glue, options.query);
     const selector = `.${namespace}, [class*="${namespace}${options.glue}"]`;
     const querySelector = document.querySelectorAll(selector);
     const moduleSelector = `.${options.module}, [class*="${options.module}${options.glue}"]`;

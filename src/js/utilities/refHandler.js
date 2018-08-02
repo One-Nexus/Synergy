@@ -5,18 +5,11 @@
  * @param {Object} props - the props of the React component
  */
 export default function refHandler(node, props) {
-
-    // if (node instanceof HTMLElement) {
-    //     node.addEventListener('stylesdidmount', event => {
-    //         console.log(node, event);
-    //     });
-    // }
+    if (props.styles) {
+        props.styles(node);
+    }
 
     if (props.init) {
         props.init(node);
-    }
-
-    if (props.styles) {
-        props.styles(node);
     }
 }
