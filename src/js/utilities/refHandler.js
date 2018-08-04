@@ -1,3 +1,5 @@
+import setStyles from './setStyles';
+
 /**
  * Handle the ref callback on the rendered React component
  * 
@@ -6,7 +8,7 @@
  */
 export default function refHandler(node, props) {
     if (props.styles) {
-        props.styles(node);
+        setStyles(node, ...props.styles)
     }
 
     if (props.init) {

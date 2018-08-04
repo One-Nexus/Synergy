@@ -1,3 +1,5 @@
+import Synergy from '../synergy';
+
 /**
  * Set a module's styles on a DOM element instance
  * 
@@ -44,25 +46,18 @@ export default function setStyles(element, styles, globals, theme, parentElement
             if (key.indexOf('modifier(') > -1) {
                 const modifier = key.replace('modifier(', '').replace(/\)/g, '');
 
-                if (element.modifier(modifier)) {
+                if (Synergy(element).modifier(modifier)) {
                     setStyles(element, value, globals, false, parentElement);
                 }
             }
 
-            else if (element.component(key)) {
-                element.component(key, _component => {
+            else if (Synergy(element).component(key)) {
+                Synergy(element).component(key, _component => {
                     if (typeof value === 'object') {
                         setStyles(_component, value, globals, false, parentElement);
                     } 
                     else if (typeof value === 'function') {
-                        // instead of below look at: https://www.npmjs.com/package/get-parameter-names
-                        // const ids = (() => {
-                        //     if (String(value).match(/\(([^)]+)\)/)) {
-                        //         return String(value).match(/\(([^)]+)\)/)[1].replace(/\s/g, '').split(',');
-                        //     } else {
-                        //         return String(value).substr(0, String(value).indexOf(' ')).replace(/\s/g, '').split(',');
-                        //     }
-                        // })();
+                        // @TODO getParameterNames(value), pass to `value(...)`
 
                         setStyles(_component, value(_component), globals, false, parentElement);
                     }
