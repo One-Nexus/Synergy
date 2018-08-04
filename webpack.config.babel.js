@@ -35,7 +35,7 @@ export default function(env) {
         externals: {
             'react': 'react',
             'react-dom': 'react-dom',
-            'react-router': 'react-router'
+            'prop-types': 'prop-types'
         },
 
         node: { Buffer: (target === 'web') ? false : true },

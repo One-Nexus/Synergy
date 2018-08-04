@@ -7,11 +7,13 @@ import setStyles from './setStyles';
  * @param {Object} props - the props of the React component
  */
 export default function refHandler(node, props) {
-    if (props.styles) {
-        setStyles(node, ...props.styles)
-    }
+    if (node) {
+        if (props.styles) {
+            setStyles(node, ...props.styles)
+        }
 
-    if (props.init) {
-        props.init(node);
+        if (props.init) {
+            props.init(node);
+        }
     }
 }

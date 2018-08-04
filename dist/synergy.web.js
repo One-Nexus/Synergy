@@ -502,7 +502,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 function component(options) {
     // setup constants
     var target = options.target instanceof HTMLElement ? options.target : options.target[0];
-    var namespace = Synergy.getModuleName(target) + options.componentGlue + options.query;
+    var namespace = (options.module || Synergy.getModuleName(target)) + options.componentGlue + options.query;
     var components = Synergy.getComponents(target, options.module, options.componentGlue);
     var selector = '.' + namespace + ', [class*="' + namespace + options.modifierGlue + '"]';
     var querySelector = document.querySelectorAll(selector);
@@ -591,6 +591,8 @@ var Synergy = _interopRequireWildcard(_synergy);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 /**
  * Modifier
  * 
@@ -604,7 +606,7 @@ function modifier(options) {
     // setup constants
     var target = options.target instanceof HTMLElement ? options.target : options.target[0];
     var namespace = Synergy.getBlockName(target, options.module, options.glue) + options.glue + options.query;
-    var modifiers = Synergy.getModifiers(target, options.module, options.glue);
+    var modifiers = Synergy.getModifiers(target, options.module, options.glue, options.query);
     var selector = '.' + namespace + ', [class*="' + namespace + options.glue + '"]';
     var querySelector = document.querySelectorAll(selector);
     var moduleSelector = '.' + options.module + ', [class*="' + options.module + options.glue + '"]';
@@ -666,11 +668,19 @@ function modifier(options) {
  * @param {*} operator 
  */
 function toggleModifier(moduleName, target, query, operator, glue) {
-    return Array.prototype.forEach.call(target.classList, function (className) {
-        if (className.indexOf(moduleName) === 0) {
-            target.classList.remove(className);
+    return [].concat(_toConsumableArray(target.classList)).forEach(function (className) {
+        var namespace = className.indexOf(glue) > -1 ? className.substring(0, className.indexOf(glue)) : className;
+        var hasModifier = className.indexOf(moduleName) === 0 && className.indexOf(glue + query) > -1;
 
-            target.classList.add(operator === 'set' ? className + glue + query : className.replace(glue + query, ''));
+        if (operator === 'unset') {
+            if (hasModifier) {
+                target.classList.remove(className);
+                target.classList.add(namespace);
+            }
+        } else if (operator === 'set') {
+            if (!hasModifier) {
+                target.classList.add(className + glue + query);
+            }
         }
     });
 }
@@ -693,6 +703,8 @@ var Synergy = _interopRequireWildcard(_synergy);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 /**
  * Get the Synergy block name of an HTMLElement
  * 
@@ -700,12 +712,14 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  * @param {String} module
  */
 function getBlockName(block, module, modifierGlue) {
-    var blockName = void 0;
+    var blockName = module;
 
     if (block instanceof HTMLElement) {
-        Array.prototype.forEach.call(block.classList, function (className) {
+        [].concat(_toConsumableArray(block.classList)).every(function (className) {
             if (className.indexOf(module) === 0) {
                 blockName = Synergy.stripModifiers(className, module, modifierGlue);
+
+                return false;
             }
         });
     }
@@ -856,25 +870,28 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = getModifiers;
-
-var _synergy = __webpack_require__(0);
-
-var Synergy = _interopRequireWildcard(_synergy);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
 /**
  * Retrieve any modifiers of a Synergy HTML Element
  * 
  * @param {*} block
  * @param {String} module
+ * @param {String} glue
+ * @param {String} scope
+ * 
+ * @todo make scope accept an array of scopes
  */
-function getModifiers(block, module, glue) {
+function getModifiers(block, module, glue, scope) {
     var modifiers = [];
 
     if (block instanceof HTMLElement) {
-        Array.prototype.forEach.call(block.classList, function (className) {
+        block.classList.forEach(function (className) {
             if (className.indexOf(module) === 0) {
+                // safely determine if className contains modifier
+                if (scope && (className.indexOf(scope) === className.length - scope.length || className.indexOf(scope + '-') > -1)) {
+                    className = className.replace('-' + scope, '');
+                    modifiers.push(scope);
+                }
+
                 modifiers.push(className.split(glue).slice(1));
             }
         });
@@ -1105,10 +1122,14 @@ function setDomNodeAttributes() {
 
     if (domNodes instanceof NodeList) {
         domNodes.forEach(function (el) {
-            return el.setAttribute('data-module', module);
+            if (!el.hasAttribute('data-module')) {
+                el.setAttribute('data-module', module);
+            }
         });
     } else if (domNodes instanceof HTMLElement) {
-        domNodes.setAttribute('data-module', module);
+        if (!domNodes.hasAttribute('data-module')) {
+            domNodes.setAttribute('data-module', module);
+        }
     }
 }
 
