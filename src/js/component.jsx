@@ -178,7 +178,7 @@ export class Wrapper extends Component {
 
         if (Synergy.CssClassProps) Synergy.CssClassProps.forEach(prop => {
             if (Object.keys(props).includes(prop)) {
-                this.classes = classes + ' ' + prop
+                this.classes = this.classes + ' ' + prop
             }
         });
     }

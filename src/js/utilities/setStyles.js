@@ -12,7 +12,7 @@ import Synergy from '../synergy';
 export default function setStyles(element, styles, globals, theme, parentElement) {
 
     // console.log(element, styles);
-    const values = (typeof styles === 'object') ? styles : styles(element, globals);
+    const values = (typeof styles === 'object') ? styles : styles(element, theme, globals);
     const importantValues = values => values.forEach(value => value.element.style[value.style[0]] = value.style[1]);
 
     const stylesDidMount   = new Event('stylesdidmount');
@@ -27,7 +27,7 @@ export default function setStyles(element, styles, globals, theme, parentElement
     // attach theme and repaint methods to parent element
     if (element === parentElement && theme !== false) {
         parentElement.repaint = () => {
-            setStyles(parentElement, styles(element, globals), globals, false);
+            setStyles(parentElement, styles(element, theme, globals), globals, false);
 
             if (theme) {
                 setStyles(parentElement, theme, globals, false);
