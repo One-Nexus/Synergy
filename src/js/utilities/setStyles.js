@@ -3,41 +3,46 @@ import Synergy from '../synergy';
 /**
  * Set a module's styles on a DOM element instance
  * 
+ * @todo removing exising event handlers (e.g. hover)
+ * 
  * @param {*} element 
  * @param {*} styles 
  * @param {*} globals 
- * @param {*} theme 
+ * @param {*} config 
  * @param {*} parentElement 
+ *
  */
-export default function setStyles(element, styles, globals, theme, parentElement) {
-
-    // console.log(element, styles);
-    const values = (typeof styles === 'object') ? styles : styles(element, theme, globals);
+export default function setStyles(element, styles, globals, config, parentElement) {
+    const values = (typeof styles === 'object') ? styles : styles(element, config, globals);
     const importantValues = values => values.forEach(value => value.element.style[value.style[0]] = value.style[1]);
 
     const stylesDidMount   = new Event('stylesdidmount');
     const moduleDidRepaint = new Event('moduledidrepaint');
 
     // initialise data interface
-    element.data = element.data || { eventListeners: [], importantStyles: [] };
+    element.data = element.data || { states: [], importantStyles: [] };
 
     // determine parent element
     parentElement = parentElement || element;
 
-    // attach theme and repaint methods to parent element
-    if (element === parentElement && theme !== false) {
+    // attach config and repaint methods to parent element
+    if (element === parentElement && config !== false) {
         parentElement.repaint = () => {
-            setStyles(parentElement, styles(element, theme, globals), globals, false);
+            // if (config) {
+            //     setStyles(parentElement, config, globals, false);
+            // }
 
-            if (theme) {
-                setStyles(parentElement, theme, globals, false);
-            }
+            setStyles(parentElement, styles(element, config, globals), globals, false);
 
             importantValues(parentElement.data.importantStyles);
 
             parentElement.dispatchEvent(moduleDidRepaint);
         };
     }
+
+    // if (typeof config === 'object') {
+    //     setStyles(element, config, globals, false);
+    // }
 
     for (let [key, value] of Object.entries(values)) {
         const subComponent = element.querySelectorAll(`[class*="_${key}"]`);
@@ -69,11 +74,15 @@ export default function setStyles(element, styles, globals, theme, parentElement
             }
 
             else if (key === ':hover') {
-                if (!element.data.eventListeners.includes('mouseenter')) {
-                    element.data.eventListeners.push('mouseenter');
+                const hoverState = JSON.stringify(value);
+
+                if (!element.data.states.includes(hoverState)) {
+                    element.data.states.push(hoverState);
 
                     element.addEventListener('mouseenter', function mouseEnter() {
                         setStyles(element, value, globals, false, parentElement);
+
+                        console.log('foo');
 
                         element.removeEventListener('mouseenter', mouseEnter);
                     }, false);
@@ -81,9 +90,14 @@ export default function setStyles(element, styles, globals, theme, parentElement
                     element.addEventListener('mouseleave', function mouseLeave() {
                         element.removeEventListener('mouseleave', mouseLeave);
 
-                        element.data.eventListeners = element.data.eventListeners.filter(item => item !== 'mouseenter');
+                        element.data.states = element.data.states.filter(item => item !== hoverState);
 
-                        parentElement.repaint();
+                        parentElement.repaint({ 
+                            eventListener: {
+                                event: 'mouseleave',
+                                handler: mouseLeave
+                            }
+                        });
                     }, false);
                 }
             }
@@ -120,11 +134,7 @@ export default function setStyles(element, styles, globals, theme, parentElement
         }
     }
 
-    if (typeof theme === 'object') {
-        setStyles(element, theme, globals, false);
-    }
-
-    if (element === parentElement && theme !== false) {
+    if (element === parentElement && config !== false) {
         importantValues(parentElement.data.importantStyles);
 
         element.dispatchEvent(stylesDidMount);
