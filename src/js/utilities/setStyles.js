@@ -56,6 +56,22 @@ export default function setStyles(element, styles, globals, config, parentElemen
                 }
             }
 
+            else if (key === 'group' || key === 'wrapper') {
+                // @TODO this currently runs for each item in the group/wrapper,
+                // should ideally run just once per group/wrapper
+
+                element.parentNode.classList.forEach(className => {
+                    if (className.indexOf('group') === 0 || className.indexOf('wrapper') === 0) {
+                        // apply styles to wrapper/group element
+                        setStyles(element.parentNode, value(), globals, false, parentElement);
+                        // apply styles to child modules
+                        setStyles(element, value(element)[element.getAttribute('data-module')], globals, false, parentElement);
+                    }
+                })
+
+                return;
+            }
+
             else if (Synergy(element).component(key)) {
                 Synergy(element).component(key, _component => {
                     if (typeof value === 'object') {
@@ -117,6 +133,9 @@ export default function setStyles(element, styles, globals, config, parentElemen
                     if (!alreadyContains) {
                         parentElement.data.importantStyles.push({ element, style: [key, value[1]] })
                     }
+                }
+                if (value[0] instanceof HTMLElement) {
+                    setStyles(value[0], value[1], globals, false, parentElement);
                 }
             }
 

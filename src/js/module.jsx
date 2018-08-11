@@ -132,3 +132,38 @@ Module.childContextTypes = {
     config: PropTypes.object,
     props: PropTypes.object
 };
+
+export class Wrapper extends Module {
+    constructor(props, context) {
+        super(props, context);
+
+        this.module = props.module;
+        this.namespace = props.name || 'wrapper';
+
+        if (!this.module) {
+            if (props.children.length) {
+                this.module = props.children[0].type.name.toLowerCase();
+            } else {
+                this.module = props.children.type.name.toLowerCase();
+            }
+        }
+
+        this.dynamicProps = {
+            [this.module]: true
+        }
+    }
+
+    render() {
+        return (
+            <Module name={ this.namespace } { ...this.dynamicProps } { ...this.props }>{this.props.children}</Module>
+        )
+    }
+}
+
+export class Group extends Module {
+    render() {
+        return (
+            <Wrapper name='group' {...this.props}>{this.props.children}</Wrapper>
+        )
+    }
+}
