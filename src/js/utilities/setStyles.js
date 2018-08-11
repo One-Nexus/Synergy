@@ -16,6 +16,12 @@ export default function setStyles(element, styles, globals, config, parentElemen
     const values = (typeof styles === 'object') ? styles : styles(element, config, globals);
     const importantValues = values => values.forEach(value => value.element.style[value.style[0]] = value.style[1]);
 
+    if (values.constructor === Array) {
+        if (values.every(value => value.constructor == Object)) {
+            values.forEach(value => setStyles(element, value, globals, false));
+        }
+    }
+
     const stylesDidMount   = new Event('stylesdidmount');
     const moduleDidRepaint = new Event('moduledidrepaint');
 
