@@ -32,6 +32,8 @@ export default function setStyles(element, styles, globals, config, parentElemen
             //     setStyles(parentElement, config, globals, false);
             // }
 
+            element.style.cssText = null;
+
             setStyles(parentElement, styles(element, config, globals), globals, false);
 
             importantValues(parentElement.data.importantStyles);
@@ -63,7 +65,7 @@ export default function setStyles(element, styles, globals, config, parentElemen
                 element.parentNode.classList.forEach(className => {
                     if (className.indexOf('group') === 0 || className.indexOf('wrapper') === 0) {
                         // apply styles to wrapper/group element
-                        setStyles(element.parentNode, value(), globals, false, parentElement);
+                        setStyles(element.parentNode, value(element.parentNode), globals, false, parentElement);
                         // apply styles to child modules
                         setStyles(element, value(element)[element.getAttribute('data-module')], globals, false, parentElement);
                     }
