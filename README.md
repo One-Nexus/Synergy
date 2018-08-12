@@ -7,16 +7,21 @@
 
 > A front-end framework for creating modular, configurable and scalable UI components
 
+###### Key Features
+
+* Independent APIs for vanilla JavaScript, React and Sass
+* Ability to style modules with JavaScript
+* Ability to create themes
+
 ### Useful Wiki Pages
 
 * [Why Use Synergy](https://github.com/esr360/Synergy/wiki/Why-Use-Synergy)
 * [Installation](https://github.com/esr360/Synergy/wiki/Installation)
-* [Sass](https://github.com/esr360/Synergy/wiki/Sass)
 * [JavaScript](https://github.com/esr360/Synergy/wiki/JavaScript)
 * [Using With React](https://github.com/esr360/Synergy/wiki/Using-With-React)
-* [Creating a Theme](https://github.com/esr360/Synergy/wiki/Creating-a-Theme)
-
-[View SassDoc Documentation](http://esr360.github.io/Synergy/docs/sass) | [View JSDoc Documentation](http://esr360.github.io/Synergy/docs/js)
+* [Styled Modules (with JavaScript)](#TODO)
+* [Sass](https://github.com/esr360/Synergy/wiki/Sass)
+* [Creating Themes](https://github.com/esr360/Synergy/wiki/Creating-a-Theme)
 
 ## Overview
 
@@ -34,7 +39,7 @@
         </td>
         <td>
             <a href="https://github.com/esr360/Synergy/wiki/Using-With-React">
-                <img width="99%" src="http://www.onenexus.io/synergy/github-react-logo.png?v=1" />
+                <img src="http://www.onenexus.io/synergy/github-react-logo.png?v=1" />
             </a>
         </td>
     </tr>
@@ -48,10 +53,10 @@ Synergy provides powerful APIs to help you create configurable modules in `Sass`
 
 > Synergy is ideal for creating your presentational React components when using the [Container Component Pattern](https://reactpatterns.com/#container-component) ([learn more](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0))
 
-Synergy also povides tools allowing you to combine the above aspects together to create a `Synergy Module`. Each aspect can work independently and exists as a separate file with a specific role:
+Synergy also povides tools allowing you to combine the above aspects together to create a `Synergy Module`.
 
-* [Module Configuration](https://github.com/esr360/Synergy/wiki/Configuring-a-Module) (`.json`)
-* [Module Styles](https://github.com/esr360/Synergy/wiki/Sass#isolating-configurable-styles) (`.scss`)
+* [Module Configuration](https://github.com/esr360/Synergy/wiki/Configuring-a-Module) (`.js`|`.json`)
+* [Module Styles/Layout](#TODO) (`.jss`|`.scss`)
 * [Module Interactions](https://github.com/esr360/Synergy/wiki/Module-Interactions) (`.js`)
 * [Module Interface](https://github.com/esr360/Synergy/wiki/Using-With-React) (`.jsx`)
 
@@ -59,13 +64,16 @@ These are the core concepts of a UI module.
 
 <p align="center"><img src="http://www.onenexus.io/synergy/module-illustration.png?v=1" width="600px" /></p>
 
+###### Example Module Structure
+
 ```
 |-- modules
 |   |-- accordion
-|   |   |-- accordion.js
-|   |   |-- accordion.json
-|   |   |-- accordion.jsx
-|   |   |-- accordion.scss
+|   |   |-- assets
+|   |   |   |-- config.js
+|   |   |   |-- interactions.js
+|   |   |   |-- layout.jss
+|   |   |-- interface.jsx
 ```
 
 > Synergy modules can be configured and scaled without having to touch the module's source code
@@ -76,13 +84,13 @@ A Synergy module is composed of `Components`. Both `Modules` and `Components` ca
 * [Learn more about Components](https://github.com/esr360/Synergy/wiki/What-Is-a-Component)
 * [Learn more about Modifiers](https://github.com/esr360/Synergy/wiki/What-Is-a-Modifier)
 
-Using Synergy, you can create themes and control your entire project's UI from a single JSON file by passing custom options and parameters to your modules.
+Using Synergy, you can create themes and control your entire project's UI from a single JS/JSON file by passing custom options and parameters to your modules.
 
 > [Learn more](https://github.com/esr360/Synergy/wiki/Creating-a-Theme) about creating themes
 
 ## Example
 
-> Using Synergy to create a basic `accordion` module which will be configured by `accordion.json` - [Learn more](https://github.com/esr360/Synergy/wiki/Example-Uncovered) about this example
+> Using Synergy to create a basic `accordion` module - [Learn more](https://github.com/esr360/Synergy/wiki/Example-Uncovered) about this example
 
 ### Structure
 
@@ -90,190 +98,164 @@ Using Synergy, you can create themes and control your entire project's UI from a
 |-- UI
 |   |-- modules
 |   |   |-- accordion
-|   |   |   |-- accordion.js
-|   |   |   |-- accordion.json
-|   |   |   |-- accordion.jsx
-|   |   |   |-- accordion.scss
-|   |-- app.scss
-|   |-- app.{js|jsx}
+|   |   |   |-- assets
+|   |   |   |   |-- config.js
+|   |   |   |   |-- interactions.js
+|   |   |   |   |-- layout.jss
+|   |   |-- accordion.jsx
+|   |-- app.js
 ```
 
-### Fundamental Styles (`accordion.scss`)
-
-> [Learn more](https://github.com/esr360/Synergy/wiki/Sass#isolating-configurable-styles) about module styles
-
-```scss
-@import '../../node_modules/Synergy/dist/synergy';
-
-@import 'accordion.json';
-
-@mixin accordion($custom: ()) {
-
-    $config: config($accordion, $custom);
-
-    @include module {
-        @include component('panel') {
-            &:not(:last-child) {
-                margin-bottom: this('panel', 'vertical-rhythm');
-            }
-
-            @include modifier('active') {
-                @include component('toggle') {
-                    transform: rotate(90deg);
-                }
-
-                @include component('content') {
-                    display: block;
-                }
-            }
-        }
-
-        @include component('title', (
-            'display': block,
-            'cursor': pointer
-        ));
-
-        @include component('toggle', (
-            'float': right
-        ));
-
-        @include component('content', (
-            'display': none
-        ));
-    }
-}
-```
-
-### Accordion Interface - JSX (`accordion.jsx`)
+### Accordion Interface (`accordion.jsx`)
 
 > [Learn more](https://github.com/esr360/Synergy/wiki/Module-Interactions#the-interaction-interface) about _module interfaces_
 
 ```jsx
-import React from 'react';
-import { Module, Component } from 'Synergy';
+import defaults from './assets/config.js';
+import interactions from './assets/interactions.js';
+import layout from './assets/layout.jss';
 
-import config from './accordion.json';
+const Accordion = ({ panels, toggle, layout, ...props }) => {
+    const config = Module.config(defaults(window.theme), window.theme.accordion);
 
-const Accordion = ({ panels, ...props }) => (
-    <Module name={config.name} {...props}>
-        {panels.map(({title, content}, index) => (
-            <Component name="panel" key={index}>
-                <Component name="title" onClick={toggle}>
-                    <Component name='toggle' /> {title}
+    return (
+        <Module name={config.name} styles={[layout, window.theme, config]} {...props}>
+            {panels.map(({ title, content, active }, index) => (
+                <Component active={active} name='panel' key={index}>
+                    <Component name='title' onClick={toggle}>
+                        <Component name='toggle' /> {title}
+                    </Component>
+
+                    <Component name='content'>{content}</Component>
                 </Component>
-                <Component name="content">{content}</Component>
-            </Component>
-        ))}
-    </Module>
-);
+            ))}
+        </Module>
+    );
+}
+
+Object.assign(Accordion, interactions, {
+    defaultProps: {
+        toggle: interactions.toggle,
+        layout: layout
+    }
+});
 
 export default Accordion;
-
-function toggle(event) {
-    const panel = event.target.closest('[data-component="panel"]');
-
-    panel.modifier('active', 'toggle');
-}
 ```
 
-> You could move the toggle interaction (and any other module interactions) into a [separate `accordion.js` file](https://github.com/esr360/Synergy/wiki/Module-Interactions#import-existing-interaction-method)
-
-### Accordion Interface - Plain JavaScript (`accordion.js`)
-
-```js
-import { Synergy } from 'Synergy';
-
-import config from './accordion.json';
-
-export default function accordion() {
-    Synergy(config.name, accordion => {
-        accordion.component('panel', panel => {
-            panel.component('title', title => {
-                title.addEventListener('click', toggle.bind(panel), false);
-            });
-        });
-    });
-}
-
-function toggle() {
-    this.modifier('active', 'toggle');
-}
-```
-
-### Accordion Configuration (`accordion.json`)
+### Accordion Configuration (`./assets/config.js`)
 
 > [Learn more](https://github.com/esr360/Synergy/wiki/Configuring-a-Module) about module configuration
 
-> This is where cosmetic (and hence configurable) styles are applied to the module and its components
+```js
+export default theme => ({
+    'name': 'accordion',
 
-```json
-{
-    "accordion": {
-        "name": "accordion",
-        "panel": {
-            "vertical-rhythm": 0
-        },
-        "title": {
-            "background": "transparent",
-            "color": "#444444",
-            "border": "1px solid rgba(black, 0.15)",
-            "border-radius": 0,
-            "padding": "1em",
-            "transition": "0.4s",
-            "hover": {
-                "background": "#2E3882",
-                "color": "white",
-                "component(toggle)": {
-                    "color": "white"
-                }
-            },
-            "active": {
-                "background": "#2E3882",
-                "color": "white",
-                "border-color": "transparent",
-                "border-radius": 0,
-                "component(toggle)": {
-                    "color": "white"
-                }
+    title: {
+        'background': 'transparent',
+        'color': 'grey',
+        'border': `1px solid ${theme.colors.opaque['dark-2']}`,
+        'border-radius': 0,
+        'padding': '1em',
+        'transition': '0.4s',
+
+        ':hover': {
+            'background': theme.colors.brand['brand-1'],
+            'color': theme.colors.greyscale.white,
+
+            toggle: {
+                'color': theme.colors.greyscale.white
             }
-        },
-        "content": {
-            "background": "white",
-            "color": "#444444",
-            "border": "1px solid rgba(black, 0.15)",
-            "border-radius": 0,
-            "padding": "1.5em"
-        },
-        "toggle": {
-            "color": "rgba(black, 0.4)",
-            "transition": "0.4s"
+        }
+    },
+
+    toggle: {
+        'color': theme.colors.opaque['dark-4'],
+        'transition': '0.4s'
+    },
+
+    content: {
+        'background': 'white',
+        'color': 'grey',
+        'border': '1px solid rgba(0,0,0, 0.15)',
+        'border-radius': 0,
+        'padding': '1.5em'
+    },
+
+    // @TODO look into possibility of below syntax instead
+    panel: panel => ({
+        ...(panel.modifier('active') && {
+            title: {
+                'background': theme.colors.brand['brand-2'],
+                'color': theme.colors.greyscale.white,
+                'border-color': 'transparent',
+                'border-radius': 0
+            },
+            toggle: {
+                'color': theme.colors.greyscale.white
+            }        
+        })
+    }),
+
+    panel: {
+        'modifier(active)': {
+            title: {
+                'background': theme.colors.brand['brand-2'],
+                'color': theme.colors.greyscale.white,
+                'border-color': 'transparent',
+                'border-radius': 0
+            },
+            toggle: {
+                'color': theme.colors.greyscale.white
+            }
         }
     }
-}
+});
 ```
 
-### Loading Styles (`app.scss`)
+### Layout Styles (`./assets/layout.jss`)
 
-```scss
-@import '/modules/accordion/accordion';
+> [Learn more](#TODO) about module styles
 
-@include accordion();
-```
+```js
+export default (element, config) => {
+    return [config, {
+        panel: panel => ({
+            'display': 'block'
+        }),
 
-###### With Custom Options
+        title: title => {
+            const panel = title.closest('[data-component="panel"]');
 
-```scss
-@import '/modules/accordion/accordion';
+            return {
+                'display': 'block',
+                'margin': 0,
+                'cursor': 'pointer',
+                'border-bottom': (panel !== panel.parentNode.lastChild) && !panel.style.marginBottom ? 0 : false
+            }
+        },
 
-@include accordion((
-    'panel': (
-        'vertical-rhythm': 2em
-    ),
-    'title': (
-        'background': #06d2ff,
-        'color': white
-    )
-));
+        toggle: toggle => {
+            const panel = toggle.closest('[data-component="panel"]');
+
+            return {
+                'float': 'right',
+                'transform': panel.modifier('active') ? 'rotate(90deg) translateZ(0)' : 'none'
+            }
+        },
+
+        content: content => {
+            const panel = content.closest('[data-component="panel"]');
+
+            return {
+                'display': panel.modifier('active') ? 'block' : 'none',
+                'margin': 0,
+                'margin-top': '-1px',
+                'border-bottom': (panel !== panel.parentNode.lastChild) && !panel.style.marginBottom ? 0 : false
+            }
+        }
+    }]
+};
 ```
 
 ### Render Using React (`app.jsx`)
@@ -296,31 +278,6 @@ ReactDOM.render(
 
     document.getElementById('demo')
 );
-```
-
-### Or Initialise Using Plain HTML/JavaScript (`app.js`)
-
-```html
-<div class="accordion">
-    <div class="accordion_panel">
-        <div class="accordion_title">
-            <div class="accordion_toggle"></div> foo
-        </div>
-        <div class="accordion_content">bar</div>
-    </div>
-    <div class="accordion_panel">
-        <div class="accordion_title">
-            <div class="accordion_toggle"></div> fizz
-        </div>
-        <div class="accordion_content">buzz</div>
-    </div>
-</div>
-```
-
-```js
-import accordion from './modules/accordion/accordion.js';
-
-accordion();
 ```
 
 ## Creating a Theme

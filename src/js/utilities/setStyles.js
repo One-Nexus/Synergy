@@ -14,7 +14,6 @@ import Synergy from '../synergy';
  */
 export default function setStyles(element, styles, globals, config, parentElement) {
     const values = (typeof styles === 'object') ? styles : styles(element, config, globals);
-    const importantValues = values => values.forEach(value => value.element.style[value.style[0]] = value.style[1]);
 
     if (values.constructor === Array) {
         if (values.every(value => value.constructor == Object)) {
@@ -26,7 +25,7 @@ export default function setStyles(element, styles, globals, config, parentElemen
     const moduleDidRepaint = new Event('moduledidrepaint');
 
     // initialise data interface
-    element.data = element.data || { states: [], importantStyles: [] };
+    element.data = element.data || { states: [] };
 
     // determine parent element
     parentElement = parentElement || element;
@@ -41,8 +40,6 @@ export default function setStyles(element, styles, globals, config, parentElemen
             element.style.cssText = null;
 
             setStyles(parentElement, styles(element, config, globals), globals, false);
-
-            importantValues(parentElement.data.importantStyles);
 
             parentElement.dispatchEvent(moduleDidRepaint);
         };
@@ -127,21 +124,6 @@ export default function setStyles(element, styles, globals, config, parentElemen
             }
 
             else if (value instanceof Array) {
-                if (value[0] === 'important' && value[1] !== false) {
-                    let alreadyContains = false;
-
-                    if (parentElement.data.importantStyles.length) {
-                        parentElement.data.importantStyles.forEach(style => {
-                            if (style.element === element && (style.style.toString() === [key, value[1]].toString())) {
-                                alreadyContains = true;
-                            }
-                        });
-                    }
-
-                    if (!alreadyContains) {
-                        parentElement.data.importantStyles.push({ element, style: [key, value[1]] })
-                    }
-                }
                 if (value[0] instanceof HTMLElement) {
                     setStyles(value[0], value[1], globals, false, parentElement);
                 }
@@ -162,8 +144,6 @@ export default function setStyles(element, styles, globals, config, parentElemen
     }
 
     if (element === parentElement && config !== false) {
-        importantValues(parentElement.data.importantStyles);
-
         element.dispatchEvent(stylesDidMount);
     }
 }
