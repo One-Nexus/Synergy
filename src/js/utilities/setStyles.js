@@ -10,14 +10,13 @@ import Synergy from '../synergy';
  * @param {*} globals 
  * @param {*} config 
  * @param {*} parentElement 
- *
  */
-export default function setStyles(element, styles, globals, config, parentElement) {
+export default function setStyles(element, styles, config, globals, parentElement) {
     const values = (typeof styles === 'object') ? styles : styles(element, config, globals);
 
     if (values.constructor === Array) {
         if (values.every(value => value.constructor == Object)) {
-            values.forEach(value => setStyles(element, value, globals, false));
+            values.forEach(value => setStyles(element, value, false, globals));
         }
     }
 
@@ -39,7 +38,7 @@ export default function setStyles(element, styles, globals, config, parentElemen
 
             element.style.cssText = null;
 
-            setStyles(parentElement, styles(element, config, globals), globals, false);
+            setStyles(parentElement, styles(element, config, globals), false, globals);
 
             parentElement.dispatchEvent(moduleDidRepaint);
         };
@@ -57,41 +56,42 @@ export default function setStyles(element, styles, globals, config, parentElemen
                 const modifier = key.replace('modifier(', '').replace(/\)/g, '');
 
                 if (Synergy(element).modifier(modifier)) {
-                    setStyles(element, value, globals, false, parentElement);
+                    setStyles(element, value, false, globals, parentElement);
                 }
             }
 
             else if (key === 'group' || key === 'wrapper') {
                 // @TODO this currently runs for each item in the group/wrapper,
                 // should ideally run just once per group/wrapper
-
                 element.parentNode.classList.forEach(className => {
                     if (className.indexOf('group') === 0 || className.indexOf('wrapper') === 0) {
                         // apply styles to wrapper/group element
-                        setStyles(element.parentNode, value(element.parentNode), globals, false, parentElement);
+                        setStyles(element.parentNode, value(element.parentNode), false, globals, parentElement);
                         // apply styles to child modules
-                        setStyles(element, value(element)[element.getAttribute('data-module')], globals, false, parentElement);
+                        setStyles(element, value(element)[element.getAttribute('data-module')], false, globals, parentElement);
                     }
                 })
 
                 return;
             }
 
-            else if (Synergy(element).component(key)) {
+            // if target element contains child components matching `key`
+            // @TODO be more transparent, don't depend upon the below logic
+            // being indictative of the desired condition
+            else if (Synergy(element).component(key).constructor === Array) {
                 Synergy(element).component(key, _component => {
                     if (typeof value === 'object') {
-                        setStyles(_component, value, globals, false, parentElement);
+                        setStyles(_component, value, false, globals, parentElement);
                     } 
                     else if (typeof value === 'function') {
                         // @TODO getParameterNames(value), pass to `value(...)`
-
-                        setStyles(_component, value(_component), globals, false, parentElement);
+                        setStyles(_component, value(_component), false, globals, parentElement);
                     }
                 });
             }
 
             else if (subComponent.length) {
-                [...subComponent].forEach(query => setStyles(query, value, globals, false, parentElement));
+                [...subComponent].forEach(query => setStyles(query, value, false, globals, parentElement));
             }
 
             else if (key === ':hover') {
@@ -101,7 +101,7 @@ export default function setStyles(element, styles, globals, config, parentElemen
                     element.data.states.push(hoverState);
 
                     element.addEventListener('mouseenter', function mouseEnter() {
-                        setStyles(element, value, globals, false, parentElement);
+                        setStyles(element, value, false, globals, parentElement);
 
                         console.log('foo');
 
@@ -125,7 +125,7 @@ export default function setStyles(element, styles, globals, config, parentElemen
 
             else if (value instanceof Array) {
                 if (value[0] instanceof HTMLElement) {
-                    setStyles(value[0], value[1], globals, false, parentElement);
+                    setStyles(value[0], value[1], false, globals, parentElement);
                 }
             }
 
