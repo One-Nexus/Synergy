@@ -111,30 +111,27 @@ Using Synergy, you can create themes and control your entire project's UI from a
 > [Learn more](https://github.com/esr360/Synergy/wiki/Module-Interactions#the-interaction-interface) about _module interfaces_
 
 ```jsx
-import defaults from './assets/config.js';
+import config from './assets/config.js';
 import interactions from './assets/interactions.js';
 import layout from './assets/layout.jss';
 
-const Accordion = ({ panels, toggle, layout, ...props }) => {
-    const config = Module.config(defaults(window.theme), window.theme.accordion);
-
-    return (
-        <Module name={config.name} styles={[layout, window.theme, config]} {...props}>
-            {panels.map(({ title, content, active }, index) => (
-                <Component active={active} name='panel' key={index}>
-                    <Component name='title' onClick={toggle}>
-                        <Component name='toggle' /> {title}
-                    </Component>
-
-                    <Component name='content'>{content}</Component>
+const Accordion = ({ panels, config, toggle, layout, ...props }) => (
+    <Module name={config.name} styles={[layout, config]} {...props}>
+        {panels.map(({ title, content, active }, index) => (
+            <Component active={active} name='panel' key={index}>
+                <Component name='title' onClick={toggle}>
+                    <Component name='toggle' /> {title}
                 </Component>
-            ))}
-        </Module>
-    );
-}
+
+                <Component name='content'>{content}</Component>
+            </Component>
+        ))}
+    </Module>
+);
 
 Object.assign(Accordion, interactions, {
     defaultProps: {
+        config: config,
         toggle: interactions.toggle,
         layout: layout
     }
@@ -148,29 +145,29 @@ export default Accordion;
 > [Learn more](https://github.com/esr360/Synergy/wiki/Configuring-a-Module) about module configuration
 
 ```js
-export default theme => ({
+export default {
     'name': 'accordion',
 
     title: {
         'background': 'transparent',
         'color': 'grey',
-        'border': `1px solid ${theme.colors.opaque['dark-2']}`,
+        'border': '1px solid rgba(0,0,0, 0.2)',
         'border-radius': 0,
         'padding': '1em',
         'transition': '0.4s',
 
         ':hover': {
-            'background': theme.colors.brand['brand-1'],
-            'color': theme.colors.greyscale.white,
+            'background': '#06D2FF',
+            'color': 'white',
 
             toggle: {
-                'color': theme.colors.greyscale.white
+                'color': 'white'
             }
         }
     },
 
     toggle: {
-        'color': theme.colors.opaque['dark-4'],
+        'color': 'rgba(0,0,0, 0.4)',
         'transition': '0.4s'
     },
 
@@ -182,35 +179,20 @@ export default theme => ({
         'padding': '1.5em'
     },
 
-    // @TODO look into possibility of below syntax instead
-    panel: panel => ({
-        ...(panel.modifier('active') && {
-            title: {
-                'background': theme.colors.brand['brand-2'],
-                'color': theme.colors.greyscale.white,
-                'border-color': 'transparent',
-                'border-radius': 0
-            },
-            toggle: {
-                'color': theme.colors.greyscale.white
-            }        
-        })
-    }),
-
     panel: {
         'modifier(active)': {
             title: {
-                'background': theme.colors.brand['brand-2'],
-                'color': theme.colors.greyscale.white,
+                'background': '#04CEC0',
+                'color': 'white',
                 'border-color': 'transparent',
                 'border-radius': 0
             },
             toggle: {
-                'color': theme.colors.greyscale.white
+                'color': 'white'
             }
         }
     }
-});
+};
 ```
 
 ### Layout Styles (`./assets/layout.jss`)
@@ -220,12 +202,14 @@ export default theme => ({
 ```js
 export default (element, config) => {
     return [config, {
-        panel: panel => ({
+        panel: {
             'display': 'block'
-        }),
+        },
 
         title: title => {
             const panel = title.closest('[data-component="panel"]');
+            const panel = title.component('panel').closest();
+            const panel = title.parentComponent('panel');
 
             return {
                 'display': 'block',
