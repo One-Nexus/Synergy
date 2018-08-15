@@ -26,29 +26,29 @@ Synergy(query, callback, defaults, custom, parser);
     </thead>
     <tbody>
         <tr>
-            <td><code>query</code></td>
+            <td><a href="#query"><code>query</code></a></td>
             <td><code>*</code></td>
-            <td>The query to retrieve/pass DOM elements - this is the only required parameter (<a href="#query">learn more</a>)</td>
+            <td>The query to retrieve/pass DOM elements - this is the only required parameter</td>
         </tr>
         <tr>
-            <td><code>[callback]</code></td>
+            <td><a href="#callback"><code>[callback]</code></a></td>
             <td><code>Function</code></td>
-            <td>Function to call on each element returned from <code>query</code> (<a href="#callback">learn more</a>)</td>
+            <td>Function to call on each element returned from <code>query</code></td>
         </tr>
         <tr>
-            <td><code>[defaults]</code></td>
+            <td><a href="#defaults"><code>[defaults]</code></a></td>
             <td><code>Object</code></td>
-            <td>Default confguration (will be merged with <code>custom</code> and passed to <code>callback</code> - <a href="#defaults">learn more</a>)</td>
+            <td>Default confguration (will be merged with <code>custom</code> and passed to <code>callback</code>)</td>
         </tr>
         <tr>
-            <td><code>[custom]</code></td>
+            <td><a href="#custom"><code>[custom]</code></a></td>
             <td><code>Object</code></td>
-            <td>Custom configuration (will be merged with <code>custom</code> and passed to <code>callback</code> - <a href="#custom">learn more</a>)</td>
+            <td>Custom configuration (will be merged with <code>custom</code> and passed to <code>callback</code>)</td>
         </tr>
         <tr>
-            <td><code>[parser]</code></td>
+            <td><a href="#parser"><code>[parser]</code></a></td>
             <td><code>Function</code></td>
-            <td>Function to call on the merged <code>default</code> + <code>custom</code> object (<a href="#parser">learn more</a>)</td>
+            <td>Function to call on the merged <code>default</code> + <code>custom</code> object</td>
         </tr>
     </tbody>
 </table>
@@ -99,7 +99,7 @@ Resulting in:
 <div class="foo foo-buzz" id="bar">...</div>
 ```
 
-In order to achieve the following result:
+If you wanted to achieve the following result:
 
 
 ```html
