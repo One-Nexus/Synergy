@@ -260,7 +260,6 @@ Synergy('myModule', function(element, options) {
 
 * [.add()](#TODO)
 * [.addModifier()](#TODO)
-* [.allModulesWithModifier()](#TODO)
 * [.find()](#TODO)
 * [.getChildComponent()](#TODO)
 * [.getChildComponents()](#TODO)
@@ -281,7 +280,7 @@ Synergy('myModule', function(element, options) {
 
 ### .add()
 
-> Add a modifer to an element
+> Add a modifer to an element (shorthand for [addModifier](#TODO))
 
 ```js
 Synergy(query).add(modifier)
@@ -289,41 +288,166 @@ Synergy(query).add(modifier)
 
 ### .addModifier()
 
-### .allModulesWithModifier()
+> Add a modifer to an element
+
+```js
+Synergy(query).addModifier(modifier)
+```
 
 ### .find()
 
+> Find a DOM element
+
+```js
+Synergy(query).find({ module, component, modifier });
+```
+
+```js
+Synergy(query).find(module|component|modifier);
+```
+
 ### .getChildComponent()
+
+> Get a child component of a DOM element
+
+```js
+Synergy(query).getChildComponent(component)
+```
 
 ### .getChildComponents()
 
+> Get all child components of a DOM element
+
+```js
+Synergy(query).getChildComponents(component)
+```
+
 ### .getModifiers()
+
+> Get the modifiers assigned to a DOM element
+
+```js
+Synergy(query).getModifiers()
+```
 
 ### .has()
 
+> Determine if a DOM element has a specified modifier (shorthand for [hasModifier](#TODO))
+
+```js
+Synergy(query).has(modifier)
+```
+
 ### .hasModifier()
+
+> Determine if a DOM element has a specified modifier 
+
+```js
+Synergy(query).hasModifier(modifier)
+```
 
 ### .is()
 
+> Determine if a DOM element is a specified module/component/modifier
+
+```js
+Synergy(query).is({ module, component, modifier });
+```
+
+```js
+Synergy(query).is(module|component|modifier);
+```
+
 ### .isComponent()
+
+> Determine if a DOM element is a specified component
+
+```js
+Synergy(query).isComponent(component);
+```
 
 ### .parent()
 
+> Get parent module/component of a DOM element
+
+```js
+Synergy(query).parent(module|component);
+```
+
+```js
+Synergy(query).parent('module'|'component');
+```
+
 ### .parentComponent()
+
+> Get a DOM element's parent component
+
+```js
+Synergy(query).parentComponent(component);
+```
 
 ### .remove()
 
+> Remove a modifier from a DOM element (shorthand for [removeModifier](#TODO))
+
+```js
+Synergy(query).remove(modifier);
+```
+
 ### .removeModifier()
+
+> Remove a modifier from a DOM element 
+
+```js
+Synergy(query).removeModifier(modifier);
+```
 
 ### .set()
 
+> Set DOM element as a specified module/component/modifier
+
+```js
+Synergy(query).set({ module, component, modifier });
+```
+
+```js
+Synergy(query).set(module|component|modifier);
+```
+
 ### .setComponent()
+
+> Set DOM element as a specified component
+
+```js
+Synergy(query).setComponent(component);
+```
 
 ### .unset()
 
+> Unet DOM element as a specified module/component/modifier
+
+```js
+Synergy(query).unset(module|component|modifier);
+```
+
 ### .unsetComponent()
 
+> Unset DOM element as a specified component
+
+```js
+Synergy(query).unsetComponent(component);
+```
+
 ### .query()
+
+> Return the DOM elements found by the [`query` parameter](#query)
+
+```js
+Synergy(query).query;
+```
+
+---
+
 
 ```js
 Synergy(query).getModifiers
