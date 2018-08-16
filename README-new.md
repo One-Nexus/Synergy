@@ -253,13 +253,14 @@ var options = {
 
 Synergy('myModule', function(element, options) {
     console.log(options.fizz); // 'BUZZ'
-}, options, {}, parser); 
+}, options, someOtherConfigObject, parser); 
 ```
 
 ## API
 
 * [.add()](#TODO)
 * [.addModifier()](#TODO)
+* [.component()](#TODO)
 * [.find()](#TODO)
 * [.getChildComponent()](#TODO)
 * [.getChildComponents()](#TODO)
@@ -268,6 +269,7 @@ Synergy('myModule', function(element, options) {
 * [.hasModifier()](#TODO)
 * [.is()](#TODO)
 * [.isComponent()](#TODO)
+* [.modifier()](#TODO)
 * [.parent()](#TODO)
 * [.parentComponent()](#TODO)
 * [.remove()](#TODO)
@@ -283,7 +285,34 @@ Synergy('myModule', function(element, options) {
 > Add a modifer to an element (shorthand for [addModifier](#TODO))
 
 ```js
-Synergy(query).add(modifier)
+Synergy(query).add(modifier);
+```
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Param</th>
+            <th>Type</th>
+            <th>Info</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>modifier</code></td>
+            <td><code>(String|Array)</code></td>
+            <td>The modifier(s) to add to elements returned from <code>query</code></td>
+        </tr>
+    </tbody>
+</table>
+
+###### Examples
+
+```js
+Synergy(query).add('active');
+```
+
+```js
+Synergy(query).add(['disabled', 'error']);
 ```
 
 ### .addModifier()
@@ -291,7 +320,138 @@ Synergy(query).add(modifier)
 > Add a modifer to an element
 
 ```js
-Synergy(query).addModifier(modifier)
+Synergy(query).addModifier(modifier);
+```
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Param</th>
+            <th>Type</th>
+            <th>Info</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>modifier</code></td>
+            <td><code>(String|Array)</code></td>
+            <td>The modifier(s) to add to elements returned from <code>query</code></td>
+        </tr>
+    </tbody>
+</table>
+
+###### Examples
+
+```js
+Synergy(query).addModifier('active');
+```
+
+```js
+Synergy(query).addModifier(['disabled', 'error']);
+```
+
+### .component()
+
+> Various Synergy Component operations
+
+```js
+Synergy(query).component(component, operator);
+```
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Param</th>
+            <th>Type</th>
+            <th>Info</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>component</code></td>
+            <td><code>String</code></td>
+            <td>The component of interest</td>
+        </tr>
+        <tr>
+            <td><code>[operator]</code></td>
+            <td><code>(('set'|'unset'|'find')|Function)</code></td>
+            <td>Depending on what's passed, this will either be a keyword mapping to an operation, or a callback function</td>
+        </tr>
+    </tbody>
+</table>
+
+If `operator` is not passed, the operator will be determined dynamically based on context:
+
+* The method will attempt to find any child components matching the `component` paramater for elements returned by `query`, and return them
+* Failing that, if `query` is a single HTML Element, the method will determine if the element is a component matching the `component` parameter
+* Otherwise, the method will return `false`
+
+If neither `component` nor `operator` are passed, the method will attempt to find all child components of elements returnd by `query`.
+
+##### Example Without Passing Params
+
+```html
+<div class="card">
+    <div class="card_title">...</div>
+    <div class="card_content">...</div>
+</div>
+```
+
+```js
+// Return NodeList containing `card_title` and `card_content` elements
+Synergy('card').component();
+```
+
+```js
+// Return `card_title` HTMLElement
+Synergy('card').component('title');
+```
+
+```js
+// Return false
+Synergy('card').component('fizz');
+```
+
+```js
+// Return true
+Synergy(document.querySelector('.card_title')).component('title');
+```
+
+##### Example With `set` Operator
+
+> It's unlikely you would ever need to set/unset an element as a Synergy Component
+
+```js
+Synergy('card').component('body', 'set');
+```
+
+###### Result
+
+```html
+<div class="card_body">
+    <div class="card_title">...</div>
+    <div class="card_content">...</div>
+</div>
+```
+
+> You could undo this with `Synergy(document.querySelector('.card_body')).component('body', 'unset');`
+
+##### Example With `find` Operator
+
+> If you are trying to find a child component of an element, it's unlikely you would need to explicitly pass this operator
+
+```js
+Synergy('card').component('title', 'find');
+```
+
+##### Example With Callback Function
+
+> Function will be called on each child Component that matches the `component` parameter
+
+```js
+Synergy('card').component('title', function(title) {
+    Synergy(title).addModifier('active');
+});
 ```
 
 ### .find()
@@ -311,7 +471,7 @@ Synergy(query).find(module|component|modifier);
 > Get a child component of a DOM element
 
 ```js
-Synergy(query).getChildComponent(component)
+Synergy(query).getChildComponent(component);
 ```
 
 ### .getChildComponents()
@@ -319,7 +479,7 @@ Synergy(query).getChildComponent(component)
 > Get all child components of a DOM element
 
 ```js
-Synergy(query).getChildComponents(component)
+Synergy(query).getChildComponents(component);
 ```
 
 ### .getModifiers()
@@ -327,7 +487,7 @@ Synergy(query).getChildComponents(component)
 > Get the modifiers assigned to a DOM element
 
 ```js
-Synergy(query).getModifiers()
+Synergy(query).getModifiers();
 ```
 
 ### .has()
@@ -335,7 +495,7 @@ Synergy(query).getModifiers()
 > Determine if a DOM element has a specified modifier (shorthand for [hasModifier](#TODO))
 
 ```js
-Synergy(query).has(modifier)
+Synergy(query).has(modifier);
 ```
 
 ### .hasModifier()
@@ -343,7 +503,7 @@ Synergy(query).has(modifier)
 > Determine if a DOM element has a specified modifier 
 
 ```js
-Synergy(query).hasModifier(modifier)
+Synergy(query).hasModifier(modifier);
 ```
 
 ### .is()
@@ -364,6 +524,14 @@ Synergy(query).is(module|component|modifier);
 
 ```js
 Synergy(query).isComponent(component);
+```
+
+### .modifier()
+
+> Various Synergy operations surrounding Modifiers
+
+```js
+Synergy(query).modifier(modifier);
 ```
 
 ### .parent()
@@ -446,8 +614,7 @@ Synergy(query).unsetComponent(component);
 Synergy(query).query;
 ```
 
----
-
+###
 
 ```js
 Synergy(query).getModifiers
