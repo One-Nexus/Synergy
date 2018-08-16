@@ -305,14 +305,36 @@ Synergy(query).add(modifier);
     </tbody>
 </table>
 
-###### Examples
+##### Example With Single Modifier
 
-```js
-Synergy(query).add('active');
+```html
+<div class="button" id="alpha">Button</div>
 ```
 
 ```js
-Synergy(query).add(['disabled', 'error']);
+Synergy('#alpha').add('active');
+```
+
+###### Result
+
+```html
+<div class="button-active" id="alpha">Button</div>
+```
+
+##### Example With Multiple Modifiers
+
+```html
+<div class="button" id="alpha">Button</div>
+```
+
+```js
+Synergy('#alpha').add(['disabled', 'error']);
+```
+
+###### Result
+
+```html
+<div class="button-disabled-error" id="alpha">Button</div>
 ```
 
 ### .addModifier()
@@ -340,14 +362,36 @@ Synergy(query).addModifier(modifier);
     </tbody>
 </table>
 
-###### Examples
+##### Example With Single Modifier
 
-```js
-Synergy(query).addModifier('active');
+```html
+<div class="button" id="alpha">Button</div>
 ```
 
 ```js
-Synergy(query).addModifier(['disabled', 'error']);
+Synergy('#alpha').addModifier('active');
+```
+
+###### Result
+
+```html
+<div class="button-active" id="alpha">Button</div>
+```
+
+##### Example With Multiple Modifiers
+
+```html
+<div class="button" id="alpha">Button</div>
+```
+
+```js
+Synergy('#alpha').addModifier(['disabled', 'error']);
+```
+
+###### Result
+
+```html
+<div class="button-disabled-error" id="alpha">Button</div>
 ```
 
 ### .component()
@@ -374,7 +418,7 @@ Synergy(query).component(component, operator);
         </tr>
         <tr>
             <td><code>[operator]</code></td>
-            <td><code>(('set'|'unset'|'find')|Function)</code></td>
+            <td><code>(('find'|'is'|'set'|'unset')|Function)</code></td>
             <td>Depending on what's passed, this will either be a keyword mapping to an operation, or a callback function</td>
         </tr>
     </tbody>
@@ -382,39 +426,66 @@ Synergy(query).component(component, operator);
 
 If `operator` is not passed, the operator will be determined dynamically based on context:
 
-* The method will attempt to find any child components matching the `component` paramater for elements returned by `query`, and return them
-* Failing that, if `query` is a single HTML Element, the method will determine if the element is a component matching the `component` parameter
+* The operator will initially be `find` to attempt to find any child components matching the `component` parameter
+* Failing that, if `query` is a single HTML Element, the operator will act as `is` to determine if the element is a component matching the `component` parameter
 * Otherwise, the method will return `false`
 
-If neither `component` nor `operator` are passed, the method will attempt to find all child components of elements returnd by `query`.
+If neither `component` nor `operator` are passed, the method will attempt to find all child components of elements returned by `query`.
 
-##### Example Without Passing Params
+##### Example Without Passing Parameters
 
 ```html
-<div class="card">
+<div class="card" id="alpha">
+    <div class="card_title">...</div>
+    <div class="card_content">...</div>
+</div>
+
+<div class="card" id="beta">
     <div class="card_title">...</div>
     <div class="card_content">...</div>
 </div>
 ```
 
 ```js
-// Return NodeList containing `card_title` and `card_content` elements
 Synergy('card').component();
+
+// Returns:
+NodeList(4) [div.card_title, div.card_content, div.card_title, div.card_content]
 ```
 
 ```js
-// Return `card_title` HTMLElement
 Synergy('card').component('title');
+
+// Returns:
+NodeList(2) [div.card_title, div.card_title]
 ```
 
 ```js
-// Return false
+Synergy('#alpha').component('title');
+
+// Returns:
+NodeList(1) [div.card_title]
+```
+
+```js
 Synergy('card').component('fizz');
+
+// Returns:
+false
 ```
 
 ```js
-// Return true
-Synergy(document.querySelector('.card_title')).component('title');
+Synergy(document.querySelector('#alpha .card_title')).component('fizz');
+
+// Returns:
+false
+```
+
+```js
+Synergy(document.querySelector('#alpha .card_title')).component('title');
+
+// Returns:
+true
 ```
 
 ##### Example With `set` Operator
@@ -438,10 +509,13 @@ Synergy('card').component('body', 'set');
 
 ##### Example With `find` Operator
 
-> If you are trying to find a child component of an element, it's unlikely you would need to explicitly pass this operator
+> If you are trying to find a child component of an element, it's unlikely you would need to explicitly pass this operator as it is initially assumed
 
 ```js
-Synergy('card').component('title', 'find');
+Synergy('#alpha').component('title', 'find');
+
+//Returns:
+NodeList(1) [div.card_title]
 ```
 
 ##### Example With Callback Function
@@ -449,9 +523,18 @@ Synergy('card').component('title', 'find');
 > Function will be called on each child Component that matches the `component` parameter
 
 ```js
-Synergy('card').component('title', function(title) {
+Synergy('#alpha').component('title', function(title) {
     Synergy(title).addModifier('active');
 });
+```
+
+###### Result
+
+```html
+<div class="card" id="alpha">
+    <div class="card_title-active">...</div>
+    <div class="card_content">...</div>
+</div>
 ```
 
 ### .find()
@@ -459,11 +542,134 @@ Synergy('card').component('title', function(title) {
 > Find a DOM element
 
 ```js
+Synergy(query).find($);
+```
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Param</th>
+            <th>Type</th>
+            <th>Info</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>$</code></td>
+            <td><code>(Object|String)</code></td>
+            <td>TODO</td>
+        </tr>
+    </tbody>
+</table>
+
+###### $ as Object
+
+```js
 Synergy(query).find({ module, component, modifier });
 ```
 
+###### $ as String
+
 ```js
-Synergy(query).find(module|component|modifier);
+Synergy(query).find(module|component);
+```
+
+##### Example With $ as Object
+
+```html
+<div id="alpha">
+    <div class="card" id="beta">
+        <div class="card_title" id="gamma">...</div>
+        <div class="card_content" id="delta">...</div>
+        <div class="button card_button-primary" id="epsilon">...</div>
+        <div class="button card_button-secondary" id="zeta">...</div>
+    </div>
+    <div class="button" id="eta">...</div>
+</div>
+```
+
+```js
+Synergy('#alpha').find({
+    module: 'card',
+    component: 'button',
+    modifier: 'primary'
+});
+
+// Returns `#epsilon` HTMLElement
+```
+
+```js
+Synergy('#beta').find({
+    component: 'button',
+    modifier: 'secondary'
+});
+
+// Returns `#zeta` HTMLElement
+```
+
+```js
+Synergy('#beta').find({
+    component: 'button'
+});
+
+// Returns `#epsilon, #zeta` NodeList
+```
+
+```js
+Synergy('#beta').find({
+    component: 'title'
+});
+
+// Returns `#gamma` HTMLElement
+```
+
+```js
+Synergy('#alpha').find({
+    module: 'card',
+    component: 'title'
+});
+
+// Returns `#gamma` HTMLElement
+```
+
+```js
+Synergy('#alpha').find({
+    module: 'button'
+});
+
+// Returns `#epsilon, #zeta, #eta` NodeList
+```
+
+##### Example With $ as String
+
+```html
+<div id="alpha">
+    <div class="card" id="beta">
+        <div class="card_title" id="gamma">...</div>
+        <div class="card_content" id="delta">...</div>
+        <div class="button card_button-primary" id="epsilon">...</div>
+        <div class="button card_button-secondary" id="zeta">...</div>
+    </div>
+    <div class="button" id="eta">...</div>
+</div>
+```
+
+```js
+Synergy('#alpha').find('button');
+
+// Returns `#epsilon. #zeta, #eta` NodeList
+```
+
+```js
+Synergy('#beta').find('button');
+
+// Returns `#epsilon, #zeta` NodeList
+```
+
+```js
+Synergy('#beta').find('title');
+
+// Returns `#gamma` HTMLElement
 ```
 
 ### .getChildComponent()
@@ -473,6 +679,23 @@ Synergy(query).find(module|component|modifier);
 ```js
 Synergy(query).getChildComponent(component);
 ```
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Param</th>
+            <th>Type</th>
+            <th>Info</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>component</code></td>
+            <td><code>String</code></td>
+            <td>TODO</td>
+        </tr>
+    </tbody>
+</table>
 
 ### .getChildComponents()
 
