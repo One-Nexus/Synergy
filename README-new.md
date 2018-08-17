@@ -12,7 +12,7 @@ The `Synergy()` function and its methods are used for interacting with DOM eleme
 
 ## Synergy()
 
-```js
+```jsx
 Synergy(query, callback, defaults, custom, parser);
 ```
 
@@ -74,7 +74,7 @@ A Synergy Selector can be one of the following:
 
 The below queries would all return the above HTML Element ([learn more about the `query` method](#TODO)):
 
-```js
+```jsx
 Synergy('foo').query;
 Synergy('.foo').query;
 Synergy(document.getElementById('bar')).query;
@@ -87,7 +87,7 @@ Synergy({name: 'foo'}).query;
 
 In the above example, the module name is `foo`. This means that `foo` will be used as the namespace for Synergy operations:
 
-```js
+```jsx
 Synergy('foo', function(element) {
     Synergy(element).addModifier('buzz');
 });
@@ -111,7 +111,7 @@ If you wanted to achieve the following result:
 * target the element by passing an array with the first value as the [Synergy Selector query](#query)
 * choose a new module name by passing it as the second value in the array
 
-```js
+```jsx
 Synergy(['foo', 'fizz'], function(element) {
     Synergy(element).addModifier('buzz');
 });
@@ -121,7 +121,7 @@ Synergy(['foo', 'fizz'], function(element) {
 
 This parameter should be used to pass a reference to a function that will be called upon each HTML element matched by the [`query` parameter](#query).
 
-```js
+```jsx
 callback(element, options)
 ```
 
@@ -153,13 +153,13 @@ callback(element, options)
 <div id="myModule">...</div>
 ```
 
-```js
+```jsx
 window.someOtherConfigObject = {
     someProperty: true;
 }
 ```
 
-```js
+```jsx
 var defaults = {
     someProperty: false;
 }
@@ -182,7 +182,7 @@ This parameter should be used to pass any default configuration for your module 
 <div class="myModule">...</div>
 ```
 
-```js
+```jsx
 var defaults = {
     someProperty = false;
 }
@@ -207,7 +207,7 @@ This parameter should be used to pass any custom configuration for your module -
 <div class="myModule">...</div>
 ```
 
-```js
+```jsx
 var defaults = {
     someProperty = false;
 }
@@ -221,7 +221,7 @@ function myModule(custom) {
 }
 ```
 
-```js
+```jsx
 myModule({
     someProperty: true
 })
@@ -233,7 +233,7 @@ This parameter should be used to pass a reference to a function that will be cal
 
 ###### High-Level Example
 
-```js
+```jsx
 // Make all strings in `options` uppercase
 function parser(options) {
     for (var option in options) {
@@ -246,7 +246,7 @@ function parser(options) {
 }
 ```
 
-```js
+```jsx
 var options = {
     fizz: 'buzz';
 }
@@ -284,7 +284,7 @@ Synergy('myModule', function(element, options) {
 
 > Add a modifer to an element (shorthand for [addModifier](#TODO))
 
-```js
+```jsx
 Synergy(query).add(modifier);
 ```
 
@@ -292,7 +292,7 @@ Synergy(query).add(modifier);
 
 > Add a modifer to an element
 
-```js
+```jsx
 Synergy(query).addModifier(modifier);
 ```
 
@@ -319,7 +319,7 @@ Synergy(query).addModifier(modifier);
 <div class="button" id="alpha">Button</div>
 ```
 
-```js
+```jsx
 Synergy('#alpha').addModifier('active');
 ```
 
@@ -335,7 +335,7 @@ Synergy('#alpha').addModifier('active');
 <div class="button" id="alpha">Button</div>
 ```
 
-```js
+```jsx
 Synergy('#alpha').addModifier(['disabled', 'error']);
 ```
 
@@ -349,7 +349,7 @@ Synergy('#alpha').addModifier(['disabled', 'error']);
 
 > Various Synergy Component operations
 
-```js
+```jsx
 Synergy(query).component(component, operator);
 ```
 
@@ -397,42 +397,42 @@ If neither `component` nor `operator` are passed, the method will attempt to fin
 </div>
 ```
 
-```js
+```jsx
 Synergy('card').component();
 
 // Returns:
 NodeList(4) [div.card_title, div.card_content, div.card_title, div.card_content]
 ```
 
-```js
+```jsx
 Synergy('card').component('title');
 
 // Returns:
 NodeList(2) [div.card_title, div.card_title]
 ```
 
-```js
+```jsx
 Synergy('#alpha').component('title');
 
 // Returns:
 NodeList(1) [div.card_title]
 ```
 
-```js
+```jsx
 Synergy('card').component('fizz');
 
 // Returns:
 false
 ```
 
-```js
+```jsx
 Synergy(document.querySelector('#alpha .card_title')).component('fizz');
 
 // Returns:
 false
 ```
 
-```js
+```jsx
 Synergy(document.querySelector('#alpha .card_title')).component('title');
 
 // Returns:
@@ -443,7 +443,7 @@ true
 
 > It's unlikely you would ever need to set/unset an element as a Synergy Component
 
-```js
+```jsx
 Synergy('card').component('body', 'set');
 ```
 
@@ -462,7 +462,7 @@ Synergy('card').component('body', 'set');
 
 > If you are trying to find a child component of an element, it's unlikely you would need to explicitly pass this operator as it is initially assumed
 
-```js
+```jsx
 Synergy('#alpha').component('title', 'find');
 
 //Returns:
@@ -473,7 +473,7 @@ NodeList(1) [div.card_title]
 
 > Function will be called on each child Component that matches the `component` parameter
 
-```js
+```jsx
 Synergy('#alpha').component('title', function(title) {
     Synergy(title).addModifier('active');
 });
@@ -492,7 +492,7 @@ Synergy('#alpha').component('title', function(title) {
 
 > Find a DOM element
 
-```js
+```jsx
 Synergy(query).find($);
 ```
 
@@ -515,13 +515,13 @@ Synergy(query).find($);
 
 ###### $ as Object
 
-```js
+```jsx
 Synergy(query).find({ module, component, modifier });
 ```
 
 ###### $ as String
 
-```js
+```jsx
 Synergy(query).find(module|component);
 ```
 
@@ -539,7 +539,7 @@ Synergy(query).find(module|component);
 </div>
 ```
 
-```js
+```jsx
 Synergy('#alpha').find({
     module: 'card',
     component: 'button',
@@ -550,7 +550,7 @@ Synergy('#alpha').find({
 HTMLElement (<div class="button card_button-primary" id="epsilon">...</div>)
 ```
 
-```js
+```jsx
 Synergy('#beta').find({
     component: 'button',
     modifier: 'secondary'
@@ -560,7 +560,7 @@ Synergy('#beta').find({
 HTMLElement (<div class="button card_button-secondary" id="zeta">...</div>)
 ```
 
-```js
+```jsx
 Synergy('#beta').find({
     component: 'button'
 });
@@ -569,7 +569,7 @@ Synergy('#beta').find({
 NodeList(2) [div#epsilon, div#zeta]
 ```
 
-```js
+```jsx
 Synergy('#beta').find({
     component: 'title'
 });
@@ -578,7 +578,7 @@ Synergy('#beta').find({
 HTMLElement (<div class="card_title" id="gamma">...</div>)
 ```
 
-```js
+```jsx
 Synergy('#alpha').find({
     module: 'card',
     component: 'title'
@@ -588,7 +588,7 @@ Synergy('#alpha').find({
 HTMLElement (<div class="card_title" id="gamma">...</div>)
 ```
 
-```js
+```jsx
 Synergy('#alpha').find({
     module: 'button'
 });
@@ -611,21 +611,21 @@ NodeList(3) [div#epsilon, div#zeta, div#eta]
 </div>
 ```
 
-```js
+```jsx
 Synergy('#alpha').find('button');
 
 // Returns:
 NodeList(3) [div#epsilon, div#zeta, div#eta]
 ```
 
-```js
+```jsx
 Synergy('#beta').find('button');
 
 // Returns:
 NodeList(2) [div#epsilon, div#zeta]
 ```
 
-```js
+```jsx
 Synergy('#beta').find('title');
 
 // Returns
@@ -636,7 +636,7 @@ HTMLElement (<div class="card_title" id="gamma">...</div>)
 
 > Get a child component of a DOM element
 
-```js
+```jsx
 Synergy(query).getChildComponent(component);
 ```
 
@@ -670,14 +670,14 @@ Synergy(query).getChildComponent(component);
 </div>
 ```
 
-```js
+```jsx
 Synergy('#beta').getChildComponent('title');
 
 // Returns
 HTMLElement (<div class="card_title" id="gamma">...</div>)
 ```
 
-```js
+```jsx
 Synergy('#beta').getChildComponent('button');
 
 // Returns
@@ -688,7 +688,7 @@ HTMLElement (<div class="card_button-primary" id="epsilon">...</div>)
 
 > Get all child components of a DOM element
 
-```js
+```jsx
 Synergy(query).getChildComponents(component);
 ```
 
@@ -720,14 +720,14 @@ Synergy(query).getChildComponents(component);
 </div>
 ```
 
-```js
+```jsx
 Synergy('#beta').getChildComponents('title');
 
 // Returns:
 NodeList(1) [div#gamma]
 ```
 
-```js
+```jsx
 Synergy('#beta').getChildComponents('button');
 
 // Returns:
@@ -738,7 +738,7 @@ NodeList(2) [div#epsilon, div#zeta]
 
 > Get the modifiers assigned to a DOM element
 
-```js
+```jsx
 Synergy(query).getModifiers();
 ```
 
@@ -749,14 +749,14 @@ Synergy(query).getModifiers();
 <button id="beta" class="button">Button</button>
 ```
 
-```js
+```jsx
 Synergy('#alpha').getModifiers();
 
 // Returns:
 Array ['large', 'round', 'success']
 ```
 
-```js
+```jsx
 Synergy('#beta').getModifiers();
 
 // Returns:
@@ -767,7 +767,7 @@ Array []
 
 > Determine if a DOM element has a specified modifier (shorthand for [hasModifier](#hasModifier))
 
-```js
+```jsx
 Synergy(query).has(modifier);
 ```
 
@@ -775,7 +775,7 @@ Synergy(query).has(modifier);
 
 > Determine if a DOM element has a specified modifier 
 
-```js
+```jsx
 Synergy(query).hasModifier(modifier);
 ```
 
@@ -802,14 +802,14 @@ Synergy(query).hasModifier(modifier);
 <button id="alpha" class="button-large-round-success">Button</button>
 ```
 
-```js
+```jsx
 Synergy('#alpha').hasModifier('large');
 
 // Returns:
 true
 ```
 
-```js
+```jsx
 Synergy('#alpha').hasModifier('error');
 
 // Returns:
@@ -820,11 +820,11 @@ false
 
 > Determine if a DOM element is a specified module/component/modifier
 
-```js
+```jsx
 Synergy(query).is({ module, component, modifier });
 ```
 
-```js
+```jsx
 Synergy(query).is(module|component|modifier);
 ```
 
@@ -832,7 +832,7 @@ Synergy(query).is(module|component|modifier);
 
 > Determine if a DOM element is a specified component
 
-```js
+```jsx
 Synergy(query).isComponent(component);
 ```
 
@@ -840,7 +840,7 @@ Synergy(query).isComponent(component);
 
 > Various Synergy operations surrounding Modifiers
 
-```js
+```jsx
 Synergy(query).modifier(modifier);
 ```
 
@@ -848,11 +848,11 @@ Synergy(query).modifier(modifier);
 
 > Get parent module/component of a DOM element
 
-```js
+```jsx
 Synergy(query).parent(module|component);
 ```
 
-```js
+```jsx
 Synergy(query).parent('module'|'component');
 ```
 
@@ -860,7 +860,7 @@ Synergy(query).parent('module'|'component');
 
 > Get a DOM element's parent component
 
-```js
+```jsx
 Synergy(query).parentComponent(component);
 ```
 
@@ -868,7 +868,7 @@ Synergy(query).parentComponent(component);
 
 > Remove a modifier from a DOM element (shorthand for [removeModifier](#TODO))
 
-```js
+```jsx
 Synergy(query).remove(modifier);
 ```
 
@@ -876,7 +876,7 @@ Synergy(query).remove(modifier);
 
 > Remove a modifier from a DOM element 
 
-```js
+```jsx
 Synergy(query).removeModifier(modifier);
 ```
 
@@ -884,11 +884,11 @@ Synergy(query).removeModifier(modifier);
 
 > Set DOM element as a specified module/component/modifier
 
-```js
+```jsx
 Synergy(query).set({ module, component, modifier });
 ```
 
-```js
+```jsx
 Synergy(query).set(module|component|modifier);
 ```
 
@@ -896,7 +896,7 @@ Synergy(query).set(module|component|modifier);
 
 > Set DOM element as a specified component
 
-```js
+```jsx
 Synergy(query).setComponent(component);
 ```
 
@@ -904,7 +904,7 @@ Synergy(query).setComponent(component);
 
 > Unet DOM element as a specified module/component/modifier
 
-```js
+```jsx
 Synergy(query).unset(module|component|modifier);
 ```
 
@@ -912,7 +912,7 @@ Synergy(query).unset(module|component|modifier);
 
 > Unset DOM element as a specified component
 
-```js
+```jsx
 Synergy(query).unsetComponent(component);
 ```
 
@@ -920,13 +920,13 @@ Synergy(query).unsetComponent(component);
 
 > Return the DOM elements found by the [`query` parameter](#query)
 
-```js
+```jsx
 Synergy(query).query;
 ```
 
 ###
 
-```js
+```jsx
 Synergy(query).getModifiers
 Synergy(query).hasModifier
 Synergy(query).addModifier
