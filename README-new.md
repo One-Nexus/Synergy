@@ -288,55 +288,6 @@ Synergy('myModule', function(element, options) {
 Synergy(query).add(modifier);
 ```
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Param</th>
-            <th>Type</th>
-            <th>Info</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><code>modifier</code></td>
-            <td><code>(String|Array)</code></td>
-            <td>The modifier(s) to add to elements returned from <code>query</code></td>
-        </tr>
-    </tbody>
-</table>
-
-##### Example With Single Modifier
-
-```html
-<div class="button" id="alpha">Button</div>
-```
-
-```js
-Synergy('#alpha').add('active');
-```
-
-###### Result
-
-```html
-<div class="button-active" id="alpha">Button</div>
-```
-
-##### Example With Multiple Modifiers
-
-```html
-<div class="button" id="alpha">Button</div>
-```
-
-```js
-Synergy('#alpha').add(['disabled', 'error']);
-```
-
-###### Result
-
-```html
-<div class="button-disabled-error" id="alpha">Button</div>
-```
-
 ### .addModifier()
 
 > Add a modifer to an element
@@ -557,7 +508,7 @@ Synergy(query).find($);
         <tr>
             <td><code>$</code></td>
             <td><code>(Object|String)</code></td>
-            <td>TODO</td>
+            <td>The element you are interesting in locating</td>
         </tr>
     </tbody>
 </table>
@@ -595,7 +546,8 @@ Synergy('#alpha').find({
     modifier: 'primary'
 });
 
-// Returns `#epsilon` HTMLElement
+// Returns:
+HTMLElement (<div class="button card_button-primary" id="epsilon">...</div>)
 ```
 
 ```js
@@ -604,7 +556,8 @@ Synergy('#beta').find({
     modifier: 'secondary'
 });
 
-// Returns `#zeta` HTMLElement
+// Returns:
+HTMLElement (<div class="button card_button-secondary" id="zeta">...</div>)
 ```
 
 ```js
@@ -612,7 +565,8 @@ Synergy('#beta').find({
     component: 'button'
 });
 
-// Returns `#epsilon, #zeta` NodeList
+// Returns:
+NodeList(2) [div#epsilon, div#zeta]
 ```
 
 ```js
@@ -620,7 +574,8 @@ Synergy('#beta').find({
     component: 'title'
 });
 
-// Returns `#gamma` HTMLElement
+// Returns:
+HTMLElement (<div class="card_title" id="gamma">...</div>)
 ```
 
 ```js
@@ -629,7 +584,8 @@ Synergy('#alpha').find({
     component: 'title'
 });
 
-// Returns `#gamma` HTMLElement
+// Returns:
+HTMLElement (<div class="card_title" id="gamma">...</div>)
 ```
 
 ```js
@@ -637,7 +593,8 @@ Synergy('#alpha').find({
     module: 'button'
 });
 
-// Returns `#epsilon, #zeta, #eta` NodeList
+// Returns:
+NodeList(3) [div#epsilon, div#zeta, div#eta]
 ```
 
 ##### Example With $ as String
@@ -657,19 +614,22 @@ Synergy('#alpha').find({
 ```js
 Synergy('#alpha').find('button');
 
-// Returns `#epsilon. #zeta, #eta` NodeList
+// Returns:
+NodeList(3) [div#epsilon, div#zeta, div#eta]
 ```
 
 ```js
 Synergy('#beta').find('button');
 
-// Returns `#epsilon, #zeta` NodeList
+// Returns:
+NodeList(2) [div#epsilon, div#zeta]
 ```
 
 ```js
 Synergy('#beta').find('title');
 
-// Returns `#gamma` HTMLElement
+// Returns
+HTMLElement (<div class="card_title" id="gamma">...</div>)
 ```
 
 ### .getChildComponent()
@@ -678,6 +638,58 @@ Synergy('#beta').find('title');
 
 ```js
 Synergy(query).getChildComponent(component);
+```
+
+> Use this when you know the element only has a single occurance of the component - if the element potentially has multiple instances of the component, use the [`getChildComponents`](#getChildComponents) method
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Param</th>
+            <th>Type</th>
+            <th>Info</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>component</code></td>
+            <td><code>String</code></td>
+            <td>The component of interest</td>
+        </tr>
+    </tbody>
+</table>
+
+##### Example
+
+```html
+<div class="card" id="beta">
+    <div class="card_title" id="gamma">...</div>
+    <div class="card_content" id="delta">...</div>
+    <div class="card_button-primary" id="epsilon">...</div>
+    <div class="card_button-secondary" id="zeta">...</div>
+</div>
+```
+
+```js
+Synergy('#beta').getChildComponent('title');
+
+// Returns
+HTMLElement (<div class="card_title" id="gamma">...</div>)
+```
+
+```js
+Synergy('#beta').getChildComponent('button');
+
+// Returns
+HTMLElement (<div class="card_button-primary" id="epsilon">...</div>)
+```
+
+### .getChildComponents()
+
+> Get all child components of a DOM element
+
+```js
+Synergy(query).getChildComponents(component);
 ```
 
 <table class="table">
@@ -692,17 +704,34 @@ Synergy(query).getChildComponent(component);
         <tr>
             <td><code>component</code></td>
             <td><code>String</code></td>
-            <td>TODO</td>
+            <td>The component of interest</td>
         </tr>
     </tbody>
 </table>
 
-### .getChildComponents()
+##### Example
 
-> Get all child components of a DOM element
+```html
+<div class="card" id="beta">
+    <div class="card_title" id="gamma">...</div>
+    <div class="card_content" id="delta">...</div>
+    <div class="card_button-primary" id="epsilon">...</div>
+    <div class="card_button-secondary" id="zeta">...</div>
+</div>
+```
 
 ```js
-Synergy(query).getChildComponents(component);
+Synergy('#beta').getChildComponents('title');
+
+// Returns:
+NodeList(1) [div#gamma]
+```
+
+```js
+Synergy('#beta').getChildComponents('button');
+
+// Returns:
+NodeList(2) [div#epsilon, div#zeta]
 ```
 
 ### .getModifiers()
@@ -713,9 +742,30 @@ Synergy(query).getChildComponents(component);
 Synergy(query).getModifiers();
 ```
 
+##### Example
+
+```html
+<button id="alpha" class="button-large-round-success">Button</button>
+<button id="beta" class="button">Button</button>
+```
+
+```js
+Synergy('#alpha').getModifiers();
+
+// Returns:
+Array ['large', 'round', 'success']
+```
+
+```js
+Synergy('#beta').getModifiers();
+
+// Returns:
+Array []
+```
+
 ### .has()
 
-> Determine if a DOM element has a specified modifier (shorthand for [hasModifier](#TODO))
+> Determine if a DOM element has a specified modifier (shorthand for [hasModifier](#hasModifier))
 
 ```js
 Synergy(query).has(modifier);
@@ -727,6 +777,43 @@ Synergy(query).has(modifier);
 
 ```js
 Synergy(query).hasModifier(modifier);
+```
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Param</th>
+            <th>Type</th>
+            <th>Info</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>modifier</code></td>
+            <td><code>String</code></td>
+            <td>The modifier of interest</td>
+        </tr>
+    </tbody>
+</table>
+
+##### Example
+
+```html
+<button id="alpha" class="button-large-round-success">Button</button>
+```
+
+```js
+Synergy('#alpha').hasModifier('large');
+
+// Returns:
+true
+```
+
+```js
+Synergy('#alpha').hasModifier('error');
+
+// Returns:
+false
 ```
 
 ### .is()

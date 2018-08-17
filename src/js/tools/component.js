@@ -57,8 +57,13 @@ export default function component(options) {
 
         if (matchesQuery || options.operator == 'isset') return matchesQuery;
 
+        return {
+            all: querySelector,
+            closest: target.closest(`[data-component="${options.query}"]`)
+        }
+
         // get all specified components from document 
-        return (querySelector.length === 0) ? false : querySelector;
+        // return (querySelector.length === 0) ? false : querySelector;
     }
     
     // determine the component name of current element
