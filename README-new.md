@@ -1,6 +1,7 @@
 <img height="56px" src="http://www.onenexus.io/synergy/github-javascript-logo.png" />
 
-* [Overview](overview)
+* [Overview](#overview)
+* [Installation & Setup](#TODO)
 * [Synergy()](#synergy-query)
 * [API](#api)
 
@@ -9,6 +10,9 @@
 The `Synergy()` function and its methods are used for interacting with DOM elements that follow the [Synergy naming convention](#TODO).
 
 > [Learn how to integrate with React Synergy modules](#TODO)
+
+## Installation & Setup
+
 
 ## Synergy()
 
@@ -369,7 +373,7 @@ Synergy(query).component(component, operator);
         </tr>
         <tr>
             <td><code>[operator]</code></td>
-            <td><code>(('find'|'is'|'set'|'unset')|Function)</code></td>
+            <td><code>(('find'|'is'|'set'|'unset')|Function([HTMLElement] element))</code></td>
             <td>Depending on what's passed, this will either be a keyword mapping to an operation, or a callback function</td>
         </tr>
     </tbody>
@@ -821,11 +825,138 @@ false
 > Determine if a DOM element is a specified module/component/modifier
 
 ```jsx
+Synergy(query).is($);
+```
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Param</th>
+            <th>Type</th>
+            <th>Info</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>$</code></td>
+            <td><code>(Object|String)</code></td>
+            <td>Determine whether any of the matched elements also match the passed query</td>
+        </tr>
+    </tbody>
+</table>
+
+###### $ as Object
+
+```jsx
 Synergy(query).is({ module, component, modifier });
 ```
 
+###### $ as String
+
 ```jsx
 Synergy(query).is(module|component|modifier);
+```
+
+##### Example With $ as Object
+
+```html
+<div class="card" id="beta">
+    <div class="card_title" id="gamma">...</div>
+    <div class="card_content" id="delta">...</div>
+    <div class="button card_button-primary" id="epsilon">...</div>
+    <div class="button card_button-secondary" id="zeta">...</div>
+</div>
+```
+
+```jsx
+Synergy('#epsilon').is({
+    module: 'card',
+    component: 'button',
+    modifier: 'primary'
+});
+
+// Returns:
+true
+```
+
+```jsx
+Synergy('#epsilon').is({
+    module: 'card'
+});
+
+// Returns:
+true
+```
+
+```jsx
+Synergy('#beta .button').is({
+    module: 'card',
+    component: 'button'
+});
+
+// Returns:
+true
+```
+
+```jsx
+Synergy('#beta .button').is({
+    module: 'card',
+    component: 'button',
+    modifier: 'primary'
+});
+
+// Returns:
+false
+```
+
+```jsx
+Synergy('#beta').is({
+    module: 'card'
+});
+
+// Returns:
+true
+```
+
+```jsx
+Synergy('#delta').is({
+    component: 'content'
+});
+
+// Returns:
+true
+```
+
+##### Example With $ as String
+
+```html
+<div class="card" id="beta">
+    <div class="card_title" id="gamma">...</div>
+    <div class="card_content" id="delta">...</div>
+    <div class="button card_button-primary" id="epsilon">...</div>
+    <div class="button card_button-secondary" id="zeta">...</div>
+</div>
+```
+
+```jsx
+Synergy('#epsilon').is('card');
+
+// Returns:
+true
+```
+
+```jsx
+Synergy('#epsilon').is('button');
+
+// Returns:
+true
+```
+
+```jsx
+Synergy('#epsilon').is('primary');
+
+// Returns:
+true
 ```
 
 ### .isComponent()
@@ -836,12 +967,176 @@ Synergy(query).is(module|component|modifier);
 Synergy(query).isComponent(component);
 ```
 
-### .modifier()
+<table class="table">
+    <thead>
+        <tr>
+            <th>Param</th>
+            <th>Type</th>
+            <th>Info</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>component</code></td>
+            <td><code>String</code></td>
+            <td>The component of interest</td>
+        </tr>
+    </tbody>
+</table>
 
-> Various Synergy operations surrounding Modifiers
+##### Example
+
+```html
+<div class="card" id="beta">
+    <div class="card_title" id="gamma">...</div>
+    <div class="card_content" id="delta">...</div>
+    <div class="button card_button-primary" id="epsilon">...</div>
+    <div class="button card_button-secondary" id="zeta">...</div>
+</div>
+```
 
 ```jsx
-Synergy(query).modifier(modifier);
+Synergy('#gamma')isComponent('title');
+
+// Returns:
+true
+```
+
+```jsx
+Synergy('#gamma')isComponent('card');
+
+// Returns:
+false
+```
+
+```jsx
+Synergy('#beta .button')isComponent('button');
+
+// Returns:
+true
+```
+
+### .modifier()
+
+> Various Synergy Modifier operations
+
+```jsx
+Synergy(query).modifier(modifier, operator);
+```
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Param</th>
+            <th>Type</th>
+            <th>Info</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>modifier</code></td>
+            <td><code>String</code></td>
+            <td>The modifier of interest</td>
+        </tr>
+        <tr>
+            <td><code>[operator]</code></td>
+            <td><code>(('find'|'is'|'set'|'unset')|Function([HTMLElement] element))</code></td>
+            <td>Depending on what's passed, this will either be a keyword mapping to an operation, or a callback function</td>
+        </tr>
+    </tbody>
+</table>
+
+* If `operator` is not passed, it will be assumed to be `is`
+* If neither `component` nor `operator` are passed, the method will return any modifiers of the matched elements
+
+##### Example Without Passing Parameters
+
+```html
+<div class="card" id="beta">
+    <div class="card_title" id="gamma">...</div>
+    <div class="card_content" id="delta">...</div>
+    <div class="button card_button-primary" id="epsilon">...</div>
+    <div class="button card_button-secondary" id="zeta">...</div>
+</div>
+```
+
+```jsx
+Synergy('#epsilon').modifier();
+
+// Returns:
+Array ['primary']
+```
+
+```jsx
+Synergy('#beta .button').modifier();
+
+// Returns:
+Array ['primary', 'secondary']
+```
+
+##### Example With `set` Operator
+
+```html
+<div id="alpha" class="button-primary">Button</div>
+```
+
+```jsx
+Synergy('#alpha').modifier('success', 'set');
+```
+
+###### Result
+
+```html
+<div id="alpha" class="button-primary-success">Button</div>
+```
+
+##### Example With `find` Operator
+
+```html
+<ul class="shopCart" id='cart'>
+    <li class="shopCart_item" id="alpha">...</li>
+    <li class="shopCart_item-discount" id="beta">...</li>
+    <li class="shopCart_item" id="gamma">...</li>
+    <li class="shopCart_item" id="delta">...</li>
+    <li class="shopCart_item-discount" id="epsilon">...</li>
+</li>
+```
+
+```jsx
+Synergy('#cart').modifier('discount', 'find');
+
+// Returns
+NodeList(2) [li#beta, li#epsilon]
+```
+
+##### Example With Callback Function
+
+> Function will be called on each child element that matches the `modifier` parameter
+
+```html
+<ul class="shopCart" id='cart'>
+    <li class="shopCart_item" id="alpha">...</li>
+    <li class="shopCart_item-discount" id="beta">...</li>
+    <li class="shopCart_item" id="gamma">...</li>
+    <li class="shopCart_item" id="delta">...</li>
+    <li class="shopCart_item-discount" id="epsilon">...</li>
+</li>
+```
+
+```jsx
+Synergy('#cart').modifier('discount', function(item) {
+    Synergy('#cart').query.removeChild(item);
+});
+```
+
+###### Result
+
+```html
+<ul class="shopCart" id='cart'>
+    <li class="shopCart_item" id="alpha">...</li>
+    <li class="shopCart_item" id="gamma">...</li>
+    <li class="shopCart_item" id="delta">...</li>
+</li>
 ```
 
 ### .parent()
@@ -922,44 +1217,4 @@ Synergy(query).unsetComponent(component);
 
 ```jsx
 Synergy(query).query;
-```
-
-###
-
-```jsx
-Synergy(query).getModifiers
-Synergy(query).hasModifier
-Synergy(query).addModifier
-Synergy(query).removeModifier
-Synergy(query).allModulesWithModifier
-
-Synergy(query).getChildComponent
-Synergy(query).getChildComponents
-Synergy(query).isComponent
-Synergy(query).setComponent
-Synergy(query).unsetComponent
-Synergy(query).parentComponent
-Synergy(query).allComponents
-
-Synergy(query).find({ module, component, modifier });
-Synergy(query).find( module | component | modifier );
-
-Synergy(query).set({ module, component, modifier });
-Synergy(query).set(component);
-
-Synergy(query).unset({ module, component, modifier });
-Synergy(query).unset(component);
-
-Synergy(query).is({ module, component, modifier });
-Synergy(query).is( module | component | modifier );
-
-Synergy(query).has(modifier);
-
-Synergy(query).parent({ module, component, modifier });
-Synergy(query).parent(module | component);
-Synergy(query).parent( 'module' | 'component' );
-
-Synergy(query).add(modifier)
-
-Synergy(query).remove(modifier)
 ```
