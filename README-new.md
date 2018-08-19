@@ -13,6 +13,7 @@ The `Synergy()` function and its methods are used for interacting with DOM eleme
 
 ## Installation & Setup
 
+@TODO
 
 ## Synergy()
 
@@ -1141,7 +1142,28 @@ Synergy('#cart').modifier('discount', function(item) {
 
 ### .parent()
 
-> Get parent module/component of a DOM element
+> Get parent module/component for each element in the set of matched elements
+
+```jsx
+Synergy(query).parent($);
+```
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Param</th>
+            <th>Type</th>
+            <th>Info</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>$</code></td>
+            <td><code>String</code></td>
+            <td>The name of the module/compoent of the parent you wish the get, or the type of parent you wish to ger</td>
+        </tr>
+    </tbody>
+</table>
 
 ```jsx
 Synergy(query).parent(module|component);
@@ -1149,6 +1171,56 @@ Synergy(query).parent(module|component);
 
 ```jsx
 Synergy(query).parent('module'|'component');
+```
+
+##### Example
+
+```html
+<div class="header" id="alpha">
+    <ul class="socialLinks" id="gamma">
+        <li class="socialLinks_item" id="delta">
+            <span class="socialLinks_item_icon" id="epsilon"></span>...
+        </li>
+        <li class="socialLinks_item" id="zeta">...</li>
+        <li class="socialLinks_item" id="eta">...</li>
+    </ul>
+</div>
+```
+
+###### Getting Specified Parent Module
+
+```jsx
+Synergy('#epsilon').parent('header');
+
+// Returns
+HTMLElement (<div class="header" id="alpha">...</div>)
+```
+
+###### Getting Specified Parent Component
+
+```jsx
+Synergy('#epsilon').parent('item');
+
+// Returns
+HTMLElement (<li class="socialLinks_item" id="delta">...</li>)
+```
+
+###### Getting Parent Module
+
+```jsx
+Synergy('#epsilon').parent('module');
+
+// Returns
+HTMLElement (<ul class="socialLinks" id="gamma">...<ul>)
+```
+
+###### Getting Parent Component
+
+```jsx
+Synergy('#epsilon').parent('component');
+
+// Returns
+HTMLElement (<li class="socialLinks_item" id="delta">)
 ```
 
 ### .parentComponent()
