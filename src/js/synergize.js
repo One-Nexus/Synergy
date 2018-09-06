@@ -37,7 +37,7 @@ export default class Synergize extends React.Component {
     }
 
     containsStaticMethodContent(props) {
-        return Object.entries(this.props).some(prop => {
+        return Object.entries(props).some(prop => {
             const [key, value] = [prop[0], prop[1]];
 
             if (value.constructor === Array) {

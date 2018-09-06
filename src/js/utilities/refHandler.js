@@ -1,4 +1,4 @@
-import setStyles from './setStyles';
+import polymorph from '../../../../Polymorph/src/polymorph';
 
 /**
  * Handle the ref callback on the rendered React component
@@ -9,7 +9,7 @@ import setStyles from './setStyles';
 export default function refHandler(node, props) {
     if (node) {
         if (props.styles) {
-            setStyles(node, ...props.styles)
+            polymorph(node, ...props.styles)
         }
 
         if (props.init) {

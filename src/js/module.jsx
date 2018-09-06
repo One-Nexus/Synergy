@@ -8,7 +8,6 @@ import getHtmlProps from './utilities/getHtmlProps';
 import getModifiersFromProps from './utilities/getModifiersFromProps';
 import getModuleFromProps from './utilities/getModulesFromProps';
 import renderModifiers from './utilities/renderModifiers';
-import setStyles from './utilities/setStyles';
 import refHandler from './utilities/refHandler';
 
 /**
@@ -121,8 +120,6 @@ export default class Module extends React.Component {
         );
     }
 }
-
-Module.setStyles = (...params) => setStyles(...params);
 
 Module.config = deepExtend;
 
