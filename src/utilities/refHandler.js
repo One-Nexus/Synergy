@@ -1,4 +1,4 @@
-import polymorph from '../../../../Polymorph/src/polymorph';
+import polymorph from '../../../Polymorph/src/polymorph';
 
 /**
  * Handle the ref callback on the rendered React component

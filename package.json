@@ -27,7 +27,6 @@
     "url": "https://github.com/esr360/Synergy.git"
   },
   "dependencies": {
-    "Sass-Boost": "^1.1.0",
     "deep-extend": "^0.5.0",
     "get-children-without-parent-selector": "^0.1.10",
     "get-parameter-names": "^0.3.0",
@@ -51,26 +50,13 @@
     "jsdom": "^11.0.0",
     "jsdom-global": "^3.0.2",
     "mocha": "^3.4.2",
-    "node-sass": "^4.9.0",
-    "sass-true": "^3.0.0-beta.1",
-    "sassdoc": "^2.5.0",
-    "stylelint": "^8.4.0",
     "webpack": "^3.10.0"
   },
   "scripts": {
-    "lint": "npm run lint:js && npm run lint:scss",
-    "lint:js": "eslint './src/js/**/*.js'",
-    "lint:scss": "stylelint src/scss/**/*.scss",
-    "test": "npm run test:js && npm run test:scss",
-    "test:js": "mocha unit-testing/js/tests.js --require babel-register",
-    "test:scss": "mocha unit-testing/scss/tests.js --require babel-register",
-    "docs": "npm run docs:js && npm run docs:sass",
-    "docs:js": "jsdoc src/js -r -d docs/js",
-    "docs:sass": "sassdoc src/scss -d docs/sass",
-    "js:web": "webpack --env.target=web",
-    "js:node": "webpack --env.target=node",
-    "js": "npm run js:web && npm run js:node",
-    "sass": "node ./build/sass-concat.js",
-    "compile": "npm run lint && npm test && npm run docs && npm run js && npm run sass"
+    "lint": "eslint './src/js/**/*.js'",
+    "test": "mocha test/tests.js --require babel-register",
+    "docs": "jsdoc src -r -d docs/js",
+    "js": "webpack",
+    "compile": "npm run lint && npm test && npm run docs && npm run js"
   }
 }
