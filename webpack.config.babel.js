@@ -4,8 +4,8 @@ import webpack from 'webpack';
 export default function() {
     return {
         entry: {
-            'synergy': './src/index.js',
-            'synergy.min': './src/index.js',
+            'synergy': './src/synergy.js',
+            'synergy.min': './src/synergy.js',
         },
 
         output: {

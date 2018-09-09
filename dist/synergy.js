@@ -61,17 +61,114 @@ module.exports =
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 8);
+/******/ 	return __webpack_require__(__webpack_require__.s = 16);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+exports.default = getModuleNamespace;
+/**
+ * Get the Module name from a Synergy query
+ * 
+ * @param {*} query 
+ * @param {Bool} strict
+ */
+function getModuleNamespace(query, componentGlue, modifierGlue) {
+    var strict = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
+
+    if (typeof query === 'string' && query.match('^[a-zA-Z0-9_-]+$')) {
+        return query;
+    }
+
+    if ((typeof query === 'undefined' ? 'undefined' : _typeof(query)) === 'object' && 'name' in query) {
+        return query.name;
+    }
+
+    if (query instanceof HTMLElement) {
+        if (query.hasAttribute('data-module')) {
+            return query.getAttribute('data-module');
+        }
+
+        if (query.classList.length) {
+            if (strict) {
+                return query.classList[0].split(modifierGlue)[0].split(componentGlue)[0];
+            }
+
+            return query.classList[0].split(modifierGlue)[0];
+        }
+    }
+}
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = getComponents;
+
+var _getModuleNamespace = __webpack_require__(0);
+
+var _getModuleNamespace2 = _interopRequireDefault(_getModuleNamespace);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+/**
+ * @param {*} componentName 
+ */
+function getComponents() {
+    var componentName = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+
+    var _this = this;
+
+    var modifier = arguments[1];
+    var namespace = arguments[2];
+
+    return [].concat(_toConsumableArray(this.DOMNodes)).reduce(function (matches, node) {
+        namespace = namespace || _this.namespace || (0, _getModuleNamespace2.default)(node, _this.componentGlue, _this.modifierGlue, 'strict');
+
+        var query = namespace + (componentName ? _this.componentGlue + componentName : '');
+
+        return matches.concat.apply(matches, _toConsumableArray([].concat(_toConsumableArray(node.querySelectorAll('[class*="' + query + '"]'))).filter(function (component) {
+            return [].concat(_toConsumableArray(component.classList)).some(function (className) {
+                var isComponent = className.split(_this.componentGlue).length - 1 === 1;
+                var isQueryMatch = className.indexOf(query) === 0;
+
+                if (modifier) {
+                    return isQueryMatch && isComponent && className.indexOf(modifier) > -1;
+                } else {
+                    return isQueryMatch && isComponent;
+                }
+            });
+        })));
+    }, []);
+}
+
+/***/ }),
+/* 2 */
 /***/ (function(module, exports) {
 
 module.exports = require("react");
 
 /***/ }),
-/* 1 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -108,22 +205,161 @@ function getModuleNamespace(query, componentGlue, modifierGlue) {
 }
 
 /***/ }),
-/* 2 */
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = isComponent;
+
+var _getModuleNamespace = __webpack_require__(0);
+
+var _getModuleNamespace2 = _interopRequireDefault(_getModuleNamespace);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+/**
+ * @param {*} componentName 
+ */
+function isComponent(componentName) {
+    var _this = this;
+
+    return [].concat(_toConsumableArray(this.DOMNodes)).every(function (node) {
+        return [].concat(_toConsumableArray(node.classList)).some(function (className) {
+            var isAComponent = className.split(_this.componentGlue).length - 1 === 1;
+            var query = _this.namespace || (0, _getModuleNamespace2.default)(node, _this.componentGlue, _this.modifierGlue);
+            var isMatch = query.indexOf(_this.componentGlue + componentName) > -1;
+
+            return className.indexOf(query) === 0 && isAComponent && isMatch;
+        });
+    });
+}
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = getSubComponts;
+
+var _getModuleNamespace = __webpack_require__(0);
+
+var _getModuleNamespace2 = _interopRequireDefault(_getModuleNamespace);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+/**
+ * @param {*} subComponentName 
+ */
+function getSubComponts(subComponentName) {
+    var _this = this;
+
+    var context = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+    var modifier = arguments[2];
+
+    return [].concat(_toConsumableArray(this.DOMNodes)).reduce(function (matches, node) {
+        var namespace = _this.namespace || (0, _getModuleNamespace2.default)(node, _this.componentGlue, _this.modifierGlue);
+
+        if (context.length) {
+            namespace = [namespace].concat(context, [subComponentName]).join(_this.componentGlue);
+        }
+
+        var depth = namespace.split(_this.componentGlue).length - 1;
+
+        return matches.concat.apply(matches, _toConsumableArray([].concat(_toConsumableArray(node.querySelectorAll('[class*="' + namespace + '"]'))).filter(function (subComponent) {
+            return [].concat(_toConsumableArray(subComponent.classList)).some(function (className) {
+                var namespaceMatch = void 0;
+
+                if (modifier) {
+                    namespaceMatch = className.indexOf(namespace) === 0 && className.indexOf(modifier) > -1;
+                } else {
+                    namespaceMatch = className.indexOf(namespace) === 0;
+                }
+
+                var depthMatch = className.split(_this.componentGlue).length - 1 === (context.length ? depth : depth + 1);
+
+                return namespaceMatch && depthMatch;
+            });
+        })));
+    }, []);
+}
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = hasModifier;
+
+var _getModuleNamespace = __webpack_require__(0);
+
+var _getModuleNamespace2 = _interopRequireDefault(_getModuleNamespace);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+/**
+ * @param {*} modifier 
+ */
+function hasModifier(modifier) {
+    var _this = this;
+
+    if (modifier) {
+        if (modifier.constructor === Array) {
+            return modifier.every(function (_modifier) {
+                return hasModifier.bind(_this)(_modifier);
+            });
+        }
+
+        return [].concat(_toConsumableArray(this.DOMNodes)).every(function (node) {
+            return [].concat(_toConsumableArray(node.classList)).some(function (className) {
+                var matchIndex = className.indexOf(_this.modifierGlue + modifier);
+                var namespaceMatch = className.indexOf(_this.namespace || (0, _getModuleNamespace2.default)(node, _this.modifierGlue, _this.componentGlue)) === 0;
+                var isModifierTest1 = className.indexOf(_this.modifierGlue + modifier + _this.modifierGlue) > -1;
+                var isModifierTest2 = matchIndex > -1 && matchIndex === className.length - modifier.length - 1;
+
+                return namespaceMatch && (isModifierTest1 || isModifierTest2);
+            });
+        });
+    }
+}
+
+/***/ }),
+/* 7 */
 /***/ (function(module, exports) {
 
 module.exports = require("prop-types");
 
 /***/ }),
-/* 3 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-module.exports = __webpack_require__(12);
+module.exports = __webpack_require__(21);
 
 
 /***/ }),
-/* 4 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -134,7 +370,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = getHtmlProps;
 
-var _htmlAttributes = __webpack_require__(14);
+var _htmlAttributes = __webpack_require__(23);
 
 var _htmlAttributes2 = _interopRequireDefault(_htmlAttributes);
 
@@ -165,7 +401,7 @@ function getHtmlProps(props) {
 }
 
 /***/ }),
-/* 5 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -206,7 +442,7 @@ function getModifiersFromProps(props) {
 }
 
 /***/ }),
-/* 6 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -240,7 +476,7 @@ function getModulesFromProps(props, classes) {
 }
 
 /***/ }),
-/* 7 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -265,7 +501,314 @@ function renderModifiers(modifiers) {
 }
 
 /***/ }),
-/* 8 */
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _addModifier = __webpack_require__(14);
+
+Object.defineProperty(exports, 'add', {
+    enumerable: true,
+    get: function get() {
+        return _interopRequireDefault(_addModifier).default;
+    }
+});
+Object.defineProperty(exports, 'addModifier', {
+    enumerable: true,
+    get: function get() {
+        return _interopRequireDefault(_addModifier).default;
+    }
+});
+
+var _component = __webpack_require__(36);
+
+Object.defineProperty(exports, 'component', {
+    enumerable: true,
+    get: function get() {
+        return _interopRequireDefault(_component).default;
+    }
+});
+Object.defineProperty(exports, 'components', {
+    enumerable: true,
+    get: function get() {
+        return _interopRequireDefault(_component).default;
+    }
+});
+
+var _find = __webpack_require__(37);
+
+Object.defineProperty(exports, 'find', {
+    enumerable: true,
+    get: function get() {
+        return _interopRequireDefault(_find).default;
+    }
+});
+
+var _getComponent = __webpack_require__(39);
+
+Object.defineProperty(exports, 'getComponent', {
+    enumerable: true,
+    get: function get() {
+        return _interopRequireDefault(_getComponent).default;
+    }
+});
+
+var _getComponents = __webpack_require__(1);
+
+Object.defineProperty(exports, 'getComponents', {
+    enumerable: true,
+    get: function get() {
+        return _interopRequireDefault(_getComponents).default;
+    }
+});
+
+var _getModifiers = __webpack_require__(40);
+
+Object.defineProperty(exports, 'getModifiers', {
+    enumerable: true,
+    get: function get() {
+        return _interopRequireDefault(_getModifiers).default;
+    }
+});
+
+var _getSubComponent = __webpack_require__(41);
+
+Object.defineProperty(exports, 'getSubComponent', {
+    enumerable: true,
+    get: function get() {
+        return _interopRequireDefault(_getSubComponent).default;
+    }
+});
+
+var _getSubComponents = __webpack_require__(5);
+
+Object.defineProperty(exports, 'getSubComponents', {
+    enumerable: true,
+    get: function get() {
+        return _interopRequireDefault(_getSubComponents).default;
+    }
+});
+
+var _hasModifier = __webpack_require__(6);
+
+Object.defineProperty(exports, 'has', {
+    enumerable: true,
+    get: function get() {
+        return _interopRequireDefault(_hasModifier).default;
+    }
+});
+Object.defineProperty(exports, 'hasModifier', {
+    enumerable: true,
+    get: function get() {
+        return _interopRequireDefault(_hasModifier).default;
+    }
+});
+
+var _is = __webpack_require__(42);
+
+Object.defineProperty(exports, 'is', {
+    enumerable: true,
+    get: function get() {
+        return _interopRequireDefault(_is).default;
+    }
+});
+
+var _isComponent = __webpack_require__(4);
+
+Object.defineProperty(exports, 'isComponent', {
+    enumerable: true,
+    get: function get() {
+        return _interopRequireDefault(_isComponent).default;
+    }
+});
+
+var _modifier = __webpack_require__(44);
+
+Object.defineProperty(exports, 'modifier', {
+    enumerable: true,
+    get: function get() {
+        return _interopRequireDefault(_modifier).default;
+    }
+});
+
+var _removeModifier = __webpack_require__(15);
+
+Object.defineProperty(exports, 'removeModifier', {
+    enumerable: true,
+    get: function get() {
+        return _interopRequireDefault(_removeModifier).default;
+    }
+});
+
+var _parent = __webpack_require__(45);
+
+Object.defineProperty(exports, 'parent', {
+    enumerable: true,
+    get: function get() {
+        return _interopRequireDefault(_parent).default;
+    }
+});
+
+var _parentComponent = __webpack_require__(46);
+
+Object.defineProperty(exports, 'parentComponent', {
+    enumerable: true,
+    get: function get() {
+        return _interopRequireDefault(_parentComponent).default;
+    }
+});
+
+var _setComponent = __webpack_require__(47);
+
+Object.defineProperty(exports, 'setComponent', {
+    enumerable: true,
+    get: function get() {
+        return _interopRequireDefault(_setComponent).default;
+    }
+});
+
+var _subComponent = __webpack_require__(48);
+
+Object.defineProperty(exports, 'subComponent', {
+    enumerable: true,
+    get: function get() {
+        return _interopRequireDefault(_subComponent).default;
+    }
+});
+Object.defineProperty(exports, 'subComponents', {
+    enumerable: true,
+    get: function get() {
+        return _interopRequireDefault(_subComponent).default;
+    }
+});
+
+var _unsetComponent = __webpack_require__(49);
+
+Object.defineProperty(exports, 'unsetComponent', {
+    enumerable: true,
+    get: function get() {
+        return _interopRequireDefault(_unsetComponent).default;
+    }
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = addModifier;
+
+var _getModuleNamespace = __webpack_require__(0);
+
+var _getModuleNamespace2 = _interopRequireDefault(_getModuleNamespace);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * @param {(String|Array)} modifier 
+ */
+function addModifier(modifier) {
+    var _this = this;
+
+    this.DOMNodes.forEach(function (node) {
+        if (modifier.constructor === Array) {
+            modifier = modifier.join(_this.modifierGlue);
+        }
+
+        node.classList.add((_this.namespace || (0, _getModuleNamespace2.default)(node, _this.componentGlue, _this.modifierGlue)) + _this.modifierGlue + modifier);
+    });
+}
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = removeModifier;
+
+var _getModuleNamespace = __webpack_require__(0);
+
+var _getModuleNamespace2 = _interopRequireDefault(_getModuleNamespace);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+/**
+ * @param {(String|Array)} modifier 
+ */
+function removeModifier(modifier) {
+    var _this = this;
+
+    this.DOMNodes.forEach(function (node) {
+        if (modifier.constructor === Array) {
+            return modifier.forEach(function (_modifier) {
+                removeModifier.bind(Object.assign(_this, { DOMNodes: [node] }))(_modifier);
+            });
+        }
+
+        [].concat(_toConsumableArray(node.classList)).forEach(function (className) {
+            var moduleMatch = className.indexOf((_this.namespace || (0, _getModuleNamespace2.default)(node, _this.componentGlue, _this.modifierGlue)) + _this.modifierGlue) === 0;
+            var modifierMatch = className.indexOf(_this.modifierGlue + modifier) > -1;
+            var newClass = className.replace(new RegExp(_this.modifierGlue + modifier, 'g'), '');
+
+            if (moduleMatch && modifierMatch) {
+                node.classList.remove(className);
+                node.classList.add(newClass);
+            }
+        });
+    });
+}
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _src = __webpack_require__(17);
+
+var lucid = _interopRequireWildcard(_src);
+
+var _polymorph = __webpack_require__(27);
+
+var _polymorph2 = _interopRequireDefault(_polymorph);
+
+var _squery = __webpack_require__(30);
+
+var _squery2 = _interopRequireDefault(_squery);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+_squery2.default.init();
+
+Object.assign(window, lucid, { sQuery: _squery2.default });
+
+window.Synergy.styleParser = _polymorph2.default;
+
+/***/ }),
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -275,7 +818,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _synergize = __webpack_require__(9);
+var _synergize = __webpack_require__(18);
 
 Object.defineProperty(exports, 'Synergize', {
   enumerable: true,
@@ -284,7 +827,7 @@ Object.defineProperty(exports, 'Synergize', {
   }
 });
 
-var _module = __webpack_require__(10);
+var _module = __webpack_require__(19);
 
 Object.defineProperty(exports, 'Module', {
   enumerable: true,
@@ -305,7 +848,7 @@ Object.defineProperty(exports, 'Group', {
   }
 });
 
-var _component = __webpack_require__(19);
+var _component = __webpack_require__(25);
 
 Object.defineProperty(exports, 'Component', {
   enumerable: true,
@@ -323,7 +866,7 @@ Object.defineProperty(exports, 'SubComponent', {
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /***/ }),
-/* 9 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -335,7 +878,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(0);
+var _react = __webpack_require__(2);
 
 var _react2 = _interopRequireDefault(_react);
 
@@ -416,7 +959,7 @@ var Synergize = function (_React$Component) {
 exports.default = Synergize;
 
 /***/ }),
-/* 10 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -431,43 +974,43 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(0);
+var _react = __webpack_require__(2);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactDom = __webpack_require__(11);
+var _reactDom = __webpack_require__(20);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _propTypes = __webpack_require__(2);
+var _propTypes = __webpack_require__(7);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _htmlTags = __webpack_require__(3);
+var _htmlTags = __webpack_require__(8);
 
 var _htmlTags2 = _interopRequireDefault(_htmlTags);
 
-var _deepExtend = __webpack_require__(13);
+var _deepExtend = __webpack_require__(22);
 
 var _deepExtend2 = _interopRequireDefault(_deepExtend);
 
-var _getHtmlProps = __webpack_require__(4);
+var _getHtmlProps = __webpack_require__(9);
 
 var _getHtmlProps2 = _interopRequireDefault(_getHtmlProps);
 
-var _getModifiersFromProps = __webpack_require__(5);
+var _getModifiersFromProps = __webpack_require__(10);
 
 var _getModifiersFromProps2 = _interopRequireDefault(_getModifiersFromProps);
 
-var _getModulesFromProps = __webpack_require__(6);
+var _getModulesFromProps = __webpack_require__(11);
 
 var _getModulesFromProps2 = _interopRequireDefault(_getModulesFromProps);
 
-var _renderModifiers = __webpack_require__(7);
+var _renderModifiers = __webpack_require__(12);
 
 var _renderModifiers2 = _interopRequireDefault(_renderModifiers);
 
-var _refHandler = __webpack_require__(15);
+var _refHandler = __webpack_require__(24);
 
 var _refHandler2 = _interopRequireDefault(_refHandler);
 
@@ -502,6 +1045,8 @@ var Module = function (_React$Component) {
 
         increment++;
 
+        var styleParser = props.styleParser || Synergy.styleParser;
+
         _this.tag = props.component || props.tag || (_htmlTags2.default.includes(props.name) ? props.name : 'div');
         _this.propModifiers = (0, _renderModifiers2.default)((0, _getModifiersFromProps2.default)(props, Synergy.CssClassProps));
         _this.passedModifiers = (0, _renderModifiers2.default)(props.modifiers);
@@ -510,7 +1055,7 @@ var Module = function (_React$Component) {
         _this.classNames = (0, _getModulesFromProps2.default)(props, props.name + _this.modifiers + _this.classes);
         _this.id = (props.before || props.after) && !props.id ? 'synergy-module-' + increment : props.id;
         _this.ref = function (node) {
-            return (0, _refHandler2.default)(node, props);
+            return (0, _refHandler2.default)(node, props, styleParser);
         };
 
         if (Synergy.CssClassProps) Synergy.CssClassProps.forEach(function (prop) {
@@ -683,19 +1228,19 @@ var Group = exports.Group = function (_Module2) {
 }(Module);
 
 /***/ }),
-/* 11 */
+/* 20 */
 /***/ (function(module, exports) {
 
 module.exports = require("react-dom");
 
 /***/ }),
-/* 12 */
+/* 21 */
 /***/ (function(module, exports) {
 
 module.exports = ["a","abbr","address","area","article","aside","audio","b","base","bdi","bdo","blockquote","body","br","button","canvas","caption","cite","code","col","colgroup","data","datalist","dd","del","details","dfn","dialog","div","dl","dt","em","embed","fieldset","figcaption","figure","footer","form","h1","h2","h3","h4","h5","h6","head","header","hgroup","hr","html","i","iframe","img","input","ins","kbd","keygen","label","legend","li","link","main","map","mark","math","menu","menuitem","meta","meter","nav","noscript","object","ol","optgroup","option","output","p","param","picture","pre","progress","q","rb","rp","rt","rtc","ruby","s","samp","script","section","select","slot","small","source","span","strong","style","sub","summary","sup","svg","table","tbody","td","template","textarea","tfoot","th","thead","time","title","tr","track","u","ul","var","video","wbr"]
 
 /***/ }),
-/* 13 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -852,7 +1397,7 @@ var deepExtend = module.exports = function (/*obj_1, [obj_2], [obj_N]*/) {
 
 
 /***/ }),
-/* 14 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -996,7 +1541,7 @@ module.exports = {
 
 
 /***/ }),
-/* 15 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1007,12 +1552,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = refHandler;
 
-var _polymorph = __webpack_require__(16);
-
-var _polymorph2 = _interopRequireDefault(_polymorph);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 /**
@@ -1020,11 +1559,12 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
  * 
  * @param {HTMLElement} node - the DOM element of the rendered React component
  * @param {Object} props - the props of the React component
+ * @param {*} styleParser 
  */
-function refHandler(node, props) {
+function refHandler(node, props, styleParser) {
     if (node) {
-        if (props.styles) {
-            _polymorph2.default.apply(undefined, [node].concat(_toConsumableArray(props.styles)));
+        if (props.styles && styleParser) {
+            styleParser.apply(undefined, [node].concat(_toConsumableArray(props.styles)));
         }
 
         if (props.init) {
@@ -1034,295 +1574,7 @@ function refHandler(node, props) {
 }
 
 /***/ }),
-/* 16 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-exports.default = polymorph;
-
-var _hasModifier = __webpack_require__(17);
-
-var _hasModifier2 = _interopRequireDefault(_hasModifier);
-
-var _getComponents = __webpack_require__(18);
-
-var _getComponents2 = _interopRequireDefault(_getComponents);
-
-var _getModuleNamespace = __webpack_require__(1);
-
-var _getModuleNamespace2 = _interopRequireDefault(_getModuleNamespace);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-/**
- * Set a module's styles on a DOM element instance
- * 
- * @param {*} element 
- * @param {*} styles 
- * @param {*} globals 
- * @param {*} config 
- * @param {*} parentElement 
- */
-function polymorph(element, styles, config, globals, parentElement) {
-    // attach repaint methods to parent element
-    if (!parentElement && !element.repaint) {
-        element.repaint = function () {
-            element.style.cssText = null;
-
-            polymorph(element, styles, config, globals);
-
-            element.dispatchEvent(new Event('moduledidrepaint'));
-        };
-    }
-
-    if (styles.constructor === Array) {
-        return styles.forEach(function (stylesheet) {
-            return polymorph(element, stylesheet, config, globals, parentElement);
-        });
-    }
-
-    var values = (typeof styles === 'undefined' ? 'undefined' : _typeof(styles)) === 'object' ? styles : styles(element, config, globals);
-
-    if (values.constructor === Array) {
-        if (values.every(function (value) {
-            return value.constructor == Object;
-        })) {
-            values.forEach(function (value) {
-                return polymorph(element, value, false, globals);
-            });
-        }
-    }
-
-    // initialise data interface
-    element.data = element.data || { states: [] };
-
-    // determine parent element
-    parentElement = parentElement || element;
-
-    var componentGlue = config && config.componentGlue || window.Synergy && Synergy.componentGlue || '_';
-    var modifierGlue = config && config.modifierGlue || window.Synergy && Synergy.modifierGlue || '-';
-
-    var _loop = function _loop(key, value) {
-        var subComponent = [].concat(_toConsumableArray(element.querySelectorAll('[class*="' + (componentGlue + key) + '"]'))).filter(function (subComponent) {
-            return [].concat(_toConsumableArray(subComponent.classList)).some(function (className) {
-                return className.indexOf((0, _getModuleNamespace2.default)(parentElement, componentGlue, modifierGlue)) === 0;
-            });
-        });
-
-        if (typeof value === 'function' || (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object') {
-            if (key.indexOf('modifier(') > -1) {
-                var modifier = key.replace('modifier(', '').replace(/\)/g, '');
-
-                if ((0, _hasModifier2.default)({ element: element, modifier: modifier, modifierGlue: modifierGlue, componentGlue: componentGlue })) {
-                    polymorph(element, value, false, globals, parentElement);
-                }
-            } else if (key === 'group' || key === 'wrapper') {
-                // @TODO this currently runs for each item in the group/wrapper,
-                // should ideally run just once per group/wrapper
-                element.parentNode.classList.forEach(function (className) {
-                    if (className.indexOf('group') === 0 || className.indexOf('wrapper') === 0) {
-                        // apply styles to wrapper/group element
-                        polymorph(element.parentNode, (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' ? value : value(element.parentNode), false, globals, parentElement);
-
-                        // apply styles to child modules
-                        polymorph(element, (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' ? value : value(element)[element.getAttribute('data-module')], false, globals, parentElement);
-                    }
-                });
-
-                return {
-                    v: void 0
-                };
-            }
-
-            // if target element contains child components matching `key`
-            else if ((0, _getComponents2.default)({ element: element, componentName: key, componentGlue: componentGlue }).length) {
-                    (0, _getComponents2.default)({ element: element, componentName: key, componentGlue: componentGlue }).forEach(function (_component) {
-                        if ((typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object') {
-                            polymorph(_component, value, false, globals, parentElement);
-                        } else if (typeof value === 'function') {
-                            polymorph(_component, value(_component), false, globals, parentElement);
-                        }
-                    });
-                } else if (subComponent.length) {
-                    [].concat(_toConsumableArray(subComponent)).forEach(function (query) {
-                        return polymorph(query, value, false, globals, parentElement);
-                    });
-                } else if (key === ':hover') {
-                    var hoverState = JSON.stringify(value);
-
-                    if (!element.data.states.includes(hoverState)) {
-                        element.data.states.push(hoverState);
-
-                        element.addEventListener('mouseenter', function mouseEnter() {
-                            polymorph(element, value, false, globals, parentElement);
-
-                            element.removeEventListener('mouseenter', mouseEnter);
-                        }, false);
-
-                        element.addEventListener('mouseleave', function mouseLeave() {
-                            element.removeEventListener('mouseleave', mouseLeave);
-
-                            element.data.states = element.data.states.filter(function (item) {
-                                return item !== hoverState;
-                            });
-
-                            parentElement.repaint();
-                        }, false);
-                    }
-                } else if (value instanceof Array) {
-                    if (value[0] instanceof HTMLElement) {
-                        polymorph(value[0], value[1], false, globals, parentElement);
-                    }
-                } else if (typeof value === 'function') {
-                    element.style[key] = value(element.style[key]);
-                } else {
-                    // @TODO handle condition (what is it?)
-                }
-        } else {
-            element.style[key] = value;
-        }
-    };
-
-    var _iteratorNormalCompletion = true;
-    var _didIteratorError = false;
-    var _iteratorError = undefined;
-
-    try {
-        for (var _iterator = Object.entries(values)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-            var _ref = _step.value;
-
-            var _ref2 = _slicedToArray(_ref, 2);
-
-            var key = _ref2[0];
-            var value = _ref2[1];
-
-            var _ret = _loop(key, value);
-
-            if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
-        }
-    } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-    } finally {
-        try {
-            if (!_iteratorNormalCompletion && _iterator.return) {
-                _iterator.return();
-            }
-        } finally {
-            if (_didIteratorError) {
-                throw _iteratorError;
-            }
-        }
-    }
-
-    if (element === parentElement && config !== false) {
-        element.dispatchEvent(new Event('stylesdidmount'));
-    }
-}
-
-polymorph.modifier = _hasModifier2.default;
-
-/***/ }),
-/* 17 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = hasModifier;
-
-var _getModuleNamespace = __webpack_require__(1);
-
-var _getModuleNamespace2 = _interopRequireDefault(_getModuleNamespace);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-function hasModifier(_ref) {
-    var element = _ref.element,
-        modifier = _ref.modifier,
-        modifierGlue = _ref.modifierGlue,
-        componentGlue = _ref.componentGlue,
-        namespace = _ref.namespace;
-
-    return [].concat(_toConsumableArray(element.classList)).some(function (className) {
-        var matchIndex = className.indexOf(modifierGlue + modifier);
-        var namespaceMatch = className.indexOf(namespace || (0, _getModuleNamespace2.default)(element, modifierGlue, componentGlue)) === 0;
-        var isModifierTest1 = className.indexOf(modifierGlue + modifier + modifierGlue) > -1;
-        var isModifierTest2 = matchIndex > -1 && matchIndex === className.length - modifier.length - 1;
-
-        return namespaceMatch && (isModifierTest1 || isModifierTest2);
-    });
-}
-
-/***/ }),
-/* 18 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = getComponents;
-
-var _getModuleNamespace = __webpack_require__(1);
-
-var _getModuleNamespace2 = _interopRequireDefault(_getModuleNamespace);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-/**
- * @param {*} componentName 
- */
-function getComponents(_ref) {
-    var _ref2;
-
-    var element = _ref.element,
-        _ref$componentName = _ref.componentName,
-        componentName = _ref$componentName === undefined ? '' : _ref$componentName,
-        modifier = _ref.modifier,
-        namespace = _ref.namespace,
-        componentGlue = _ref.componentGlue,
-        modifierGlue = _ref.modifierGlue;
-
-    var query = (namespace || (0, _getModuleNamespace2.default)(element, componentGlue, modifierGlue, 'strict')) + (componentName ? componentGlue + componentName : '');
-
-    return (_ref2 = []).concat.apply(_ref2, _toConsumableArray([].concat(_toConsumableArray(element.querySelectorAll('[class*="' + query + '"]'))).filter(function (component) {
-        return [].concat(_toConsumableArray(component.classList)).some(function (className) {
-            var isComponent = className.split(componentGlue).length - 1 === 1;
-            var isQueryMatch = className.indexOf(query) === 0;
-
-            if (modifier) {
-                return isQueryMatch && isComponent && className.indexOf(modifier) > -1;
-            } else {
-                return isQueryMatch && isComponent;
-            }
-        });
-    })));
-}
-
-/***/ }),
-/* 19 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1337,35 +1589,35 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(0);
+var _react = __webpack_require__(2);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(2);
+var _propTypes = __webpack_require__(7);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _htmlTags = __webpack_require__(3);
+var _htmlTags = __webpack_require__(8);
 
 var _htmlTags2 = _interopRequireDefault(_htmlTags);
 
-var _getHtmlProps = __webpack_require__(4);
+var _getHtmlProps = __webpack_require__(9);
 
 var _getHtmlProps2 = _interopRequireDefault(_getHtmlProps);
 
-var _getModifiersFromProps = __webpack_require__(5);
+var _getModifiersFromProps = __webpack_require__(10);
 
 var _getModifiersFromProps2 = _interopRequireDefault(_getModifiersFromProps);
 
-var _getModulesFromProps = __webpack_require__(6);
+var _getModulesFromProps = __webpack_require__(11);
 
 var _getModulesFromProps2 = _interopRequireDefault(_getModulesFromProps);
 
-var _getParam = __webpack_require__(20);
+var _getParam = __webpack_require__(26);
 
 var _getParam2 = _interopRequireDefault(_getParam);
 
-var _renderModifiers = __webpack_require__(7);
+var _renderModifiers = __webpack_require__(12);
 
 var _renderModifiers2 = _interopRequireDefault(_renderModifiers);
 
@@ -1551,7 +1803,7 @@ SubComponent.childContextTypes = {
 };
 
 /***/ }),
-/* 20 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1571,6 +1823,1442 @@ function getParam(property) {
     if (property.indexOf('-') === 0) {
         return property.slice(1);
     }
+}
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+exports.default = polymorph;
+
+var _hasModifier = __webpack_require__(28);
+
+var _hasModifier2 = _interopRequireDefault(_hasModifier);
+
+var _getComponents = __webpack_require__(29);
+
+var _getComponents2 = _interopRequireDefault(_getComponents);
+
+var _getModuleNamespace = __webpack_require__(3);
+
+var _getModuleNamespace2 = _interopRequireDefault(_getModuleNamespace);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+/**
+ * Set a module's styles on a DOM element instance
+ * 
+ * @param {*} element 
+ * @param {*} styles 
+ * @param {*} globals 
+ * @param {*} config 
+ * @param {*} parentElement 
+ */
+function polymorph(element, styles, config, globals, parentElement) {
+    // attach repaint methods to parent element
+    if (!parentElement && !element.repaint) {
+        element.repaint = function () {
+            element.style.cssText = null;
+
+            polymorph(element, styles, config, globals);
+
+            element.dispatchEvent(new Event('moduledidrepaint'));
+        };
+    }
+
+    if (styles.constructor === Array) {
+        return styles.forEach(function (stylesheet) {
+            return polymorph(element, stylesheet, config, globals, parentElement);
+        });
+    }
+
+    var values = (typeof styles === 'undefined' ? 'undefined' : _typeof(styles)) === 'object' ? styles : styles(element, config, globals);
+
+    if (values.constructor === Array) {
+        if (values.every(function (value) {
+            return value.constructor == Object;
+        })) {
+            values.forEach(function (value) {
+                return polymorph(element, value, false, globals);
+            });
+        }
+    }
+
+    // initialise data interface
+    element.data = element.data || { states: [] };
+
+    // determine parent element
+    parentElement = parentElement || element;
+
+    var componentGlue = config && config.componentGlue || window.Synergy && Synergy.componentGlue || '_';
+    var modifierGlue = config && config.modifierGlue || window.Synergy && Synergy.modifierGlue || '-';
+
+    var _loop = function _loop(key, value) {
+        var subComponent = [].concat(_toConsumableArray(element.querySelectorAll('[class*="' + (componentGlue + key) + '"]'))).filter(function (subComponent) {
+            return [].concat(_toConsumableArray(subComponent.classList)).some(function (className) {
+                return className.indexOf((0, _getModuleNamespace2.default)(parentElement, componentGlue, modifierGlue)) === 0;
+            });
+        });
+
+        if (typeof value === 'function' || (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object') {
+            if (key.indexOf('modifier(') > -1) {
+                var modifier = key.replace('modifier(', '').replace(/\)/g, '');
+
+                if ((0, _hasModifier2.default)({ element: element, modifier: modifier, modifierGlue: modifierGlue, componentGlue: componentGlue })) {
+                    polymorph(element, value, false, globals, parentElement);
+                }
+            } else if (key === 'group' || key === 'wrapper') {
+                // @TODO this currently runs for each item in the group/wrapper,
+                // should ideally run just once per group/wrapper
+                element.parentNode.classList.forEach(function (className) {
+                    if (className.indexOf('group') === 0 || className.indexOf('wrapper') === 0) {
+                        // apply styles to wrapper/group element
+                        polymorph(element.parentNode, (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' ? value : value(element.parentNode), false, globals, parentElement);
+
+                        // apply styles to child modules
+                        polymorph(element, (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' ? value : value(element)[element.getAttribute('data-module')], false, globals, parentElement);
+                    }
+                });
+
+                return {
+                    v: void 0
+                };
+            }
+
+            // if target element contains child components matching `key`
+            else if ((0, _getComponents2.default)({ element: element, componentName: key, componentGlue: componentGlue }).length) {
+                    (0, _getComponents2.default)({ element: element, componentName: key, componentGlue: componentGlue }).forEach(function (_component) {
+                        if ((typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object') {
+                            polymorph(_component, value, false, globals, parentElement);
+                        } else if (typeof value === 'function') {
+                            polymorph(_component, value(_component), false, globals, parentElement);
+                        }
+                    });
+                } else if (subComponent.length) {
+                    [].concat(_toConsumableArray(subComponent)).forEach(function (query) {
+                        return polymorph(query, value, false, globals, parentElement);
+                    });
+                } else if (key === ':hover') {
+                    var hoverState = JSON.stringify(value);
+
+                    if (!element.data.states.includes(hoverState)) {
+                        element.data.states.push(hoverState);
+
+                        element.addEventListener('mouseenter', function mouseEnter() {
+                            polymorph(element, value, false, globals, parentElement);
+
+                            element.removeEventListener('mouseenter', mouseEnter);
+                        }, false);
+
+                        element.addEventListener('mouseleave', function mouseLeave() {
+                            element.removeEventListener('mouseleave', mouseLeave);
+
+                            element.data.states = element.data.states.filter(function (item) {
+                                return item !== hoverState;
+                            });
+
+                            parentElement.repaint();
+                        }, false);
+                    }
+                } else if (value instanceof Array) {
+                    if (value[0] instanceof HTMLElement) {
+                        polymorph(value[0], value[1], false, globals, parentElement);
+                    }
+                } else if (typeof value === 'function') {
+                    element.style[key] = value(element.style[key]);
+                } else {
+                    // @TODO handle condition (what is it?)
+                }
+        } else {
+            element.style[key] = value;
+        }
+    };
+
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+        for (var _iterator = Object.entries(values)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var _ref = _step.value;
+
+            var _ref2 = _slicedToArray(_ref, 2);
+
+            var key = _ref2[0];
+            var value = _ref2[1];
+
+            var _ret = _loop(key, value);
+
+            if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
+        }
+    } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+    } finally {
+        try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+                _iterator.return();
+            }
+        } finally {
+            if (_didIteratorError) {
+                throw _iteratorError;
+            }
+        }
+    }
+
+    if (element === parentElement && config !== false) {
+        element.dispatchEvent(new Event('stylesdidmount'));
+    }
+}
+
+polymorph.modifier = _hasModifier2.default;
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = hasModifier;
+
+var _getModuleNamespace = __webpack_require__(3);
+
+var _getModuleNamespace2 = _interopRequireDefault(_getModuleNamespace);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function hasModifier(_ref) {
+    var element = _ref.element,
+        modifier = _ref.modifier,
+        modifierGlue = _ref.modifierGlue,
+        componentGlue = _ref.componentGlue,
+        namespace = _ref.namespace;
+
+    return [].concat(_toConsumableArray(element.classList)).some(function (className) {
+        var matchIndex = className.indexOf(modifierGlue + modifier);
+        var namespaceMatch = className.indexOf(namespace || (0, _getModuleNamespace2.default)(element, modifierGlue, componentGlue)) === 0;
+        var isModifierTest1 = className.indexOf(modifierGlue + modifier + modifierGlue) > -1;
+        var isModifierTest2 = matchIndex > -1 && matchIndex === className.length - modifier.length - 1;
+
+        return namespaceMatch && (isModifierTest1 || isModifierTest2);
+    });
+}
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = getComponents;
+
+var _getModuleNamespace = __webpack_require__(3);
+
+var _getModuleNamespace2 = _interopRequireDefault(_getModuleNamespace);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+/**
+ * @param {*} componentName 
+ */
+function getComponents(_ref) {
+    var _ref2;
+
+    var element = _ref.element,
+        _ref$componentName = _ref.componentName,
+        componentName = _ref$componentName === undefined ? '' : _ref$componentName,
+        modifier = _ref.modifier,
+        namespace = _ref.namespace,
+        componentGlue = _ref.componentGlue,
+        modifierGlue = _ref.modifierGlue;
+
+    var query = (namespace || (0, _getModuleNamespace2.default)(element, componentGlue, modifierGlue, 'strict')) + (componentName ? componentGlue + componentName : '');
+
+    return (_ref2 = []).concat.apply(_ref2, _toConsumableArray([].concat(_toConsumableArray(element.querySelectorAll('[class*="' + query + '"]'))).filter(function (component) {
+        return [].concat(_toConsumableArray(component.classList)).some(function (className) {
+            var isComponent = className.split(componentGlue).length - 1 === 1;
+            var isQueryMatch = className.indexOf(query) === 0;
+
+            if (modifier) {
+                return isQueryMatch && isComponent && className.indexOf(modifier) > -1;
+            } else {
+                return isQueryMatch && isComponent;
+            }
+        });
+    })));
+}
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+exports.default = sQuery;
+
+var _getConfig = __webpack_require__(31);
+
+var _getConfig2 = _interopRequireDefault(_getConfig);
+
+var _getDomNodes = __webpack_require__(33);
+
+var _getDomNodes2 = _interopRequireDefault(_getDomNodes);
+
+var _getModuleNamespace = __webpack_require__(0);
+
+var _getModuleNamespace2 = _interopRequireDefault(_getModuleNamespace);
+
+var _init = __webpack_require__(35);
+
+var _init2 = _interopRequireDefault(_init);
+
+var _api = __webpack_require__(13);
+
+var API = _interopRequireWildcard(_api);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * @param {*} SynergyQuery
+ * @param {Function} [callback]
+ * @param {Object} [defaults]
+ * @param {Object} [custom]
+ * @param {Object} [parser]
+ */
+function sQuery(SynergyQuery, callback, defaults, custom, parser) {
+    var methods = {};
+    var config = (0, _getConfig2.default)(defaults, custom, parser);
+
+    var componentGlue = config.componentGlue || window.Synergy && Synergy.componentGlue || '_';
+    var modifierGlue = config.modifierGlue || window.Synergy && Synergy.modifierGlue || '-';
+
+    var namespace = (0, _getModuleNamespace2.default)(SynergyQuery, componentGlue, modifierGlue);
+    var DOMNodes = (0, _getDomNodes2.default)(SynergyQuery);
+
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+        for (var _iterator = Object.entries(API)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var _ref = _step.value;
+
+            var _ref2 = _slicedToArray(_ref, 2);
+
+            var key = _ref2[0];
+            var method = _ref2[1];
+
+            methods[key] = method.bind({ namespace: namespace, DOMNodes: DOMNodes, componentGlue: componentGlue, modifierGlue: modifierGlue });
+        }
+    } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+    } finally {
+        try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+                _iterator.return();
+            }
+        } finally {
+            if (_didIteratorError) {
+                throw _iteratorError;
+            }
+        }
+    }
+
+    if (typeof callback === 'function') {
+        DOMNodes.forEach(function (node) {
+            return callback(node, config);
+        });
+    }
+
+    return Object.assign(methods, {
+        namespace: namespace,
+        DOMNodes: DOMNodes,
+        DOMNode: DOMNodes ? DOMNodes[0] : null
+    });
+}
+
+sQuery.init = _init2.default;
+
+/***/ }),
+/* 31 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = getConfig;
+
+var _deepExtend = __webpack_require__(32);
+
+var _deepExtend2 = _interopRequireDefault(_deepExtend);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * @param {*} defaults 
+ * @param {*} custom 
+ * @param {*} parser 
+ */
+function getConfig(defaults, custom, parser) {
+    var extendedConfig = (0, _deepExtend2.default)(defaults, custom);
+
+    if (typeof parser === 'function') {
+        return parser(extendedConfig);
+    }
+
+    return extendedConfig;
+}
+
+/***/ }),
+/* 32 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/*!
+ * @description Recursive object extending
+ * @author Viacheslav Lotsmanov <lotsmanov89@gmail.com>
+ * @license MIT
+ *
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2013-2018 Viacheslav Lotsmanov
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+
+
+function isSpecificValue(val) {
+	return (
+		val instanceof Buffer
+		|| val instanceof Date
+		|| val instanceof RegExp
+	) ? true : false;
+}
+
+function cloneSpecificValue(val) {
+	if (val instanceof Buffer) {
+		var x = Buffer.alloc
+			? Buffer.alloc(val.length)
+			: new Buffer(val.length);
+		val.copy(x);
+		return x;
+	} else if (val instanceof Date) {
+		return new Date(val.getTime());
+	} else if (val instanceof RegExp) {
+		return new RegExp(val);
+	} else {
+		throw new Error('Unexpected situation');
+	}
+}
+
+/**
+ * Recursive cloning array.
+ */
+function deepCloneArray(arr) {
+	var clone = [];
+	arr.forEach(function (item, index) {
+		if (typeof item === 'object' && item !== null) {
+			if (Array.isArray(item)) {
+				clone[index] = deepCloneArray(item);
+			} else if (isSpecificValue(item)) {
+				clone[index] = cloneSpecificValue(item);
+			} else {
+				clone[index] = deepExtend({}, item);
+			}
+		} else {
+			clone[index] = item;
+		}
+	});
+	return clone;
+}
+
+function safeGetProperty(object, property) {
+	return property === '__proto__' ? undefined : object[property];
+}
+
+/**
+ * Extening object that entered in first argument.
+ *
+ * Returns extended object or false if have no target object or incorrect type.
+ *
+ * If you wish to clone source object (without modify it), just use empty new
+ * object as first argument, like this:
+ *   deepExtend({}, yourObj_1, [yourObj_N]);
+ */
+var deepExtend = module.exports = function (/*obj_1, [obj_2], [obj_N]*/) {
+	if (arguments.length < 1 || typeof arguments[0] !== 'object') {
+		return false;
+	}
+
+	if (arguments.length < 2) {
+		return arguments[0];
+	}
+
+	var target = arguments[0];
+
+	// convert arguments to array and cut off target object
+	var args = Array.prototype.slice.call(arguments, 1);
+
+	var val, src, clone;
+
+	args.forEach(function (obj) {
+		// skip argument if isn't an object, is null, or is an array
+		if (typeof obj !== 'object' || obj === null || Array.isArray(obj)) {
+			return;
+		}
+
+		Object.keys(obj).forEach(function (key) {
+			src = safeGetProperty(target, key); // source value
+			val = safeGetProperty(obj, key); // new value
+
+			// recursion prevention
+			if (val === target) {
+				return;
+
+			/**
+			 * if new value isn't object then just overwrite by new value
+			 * instead of extending.
+			 */
+			} else if (typeof val !== 'object' || val === null) {
+				target[key] = val;
+				return;
+
+			// just clone arrays (and recursive clone objects inside)
+			} else if (Array.isArray(val)) {
+				target[key] = deepCloneArray(val);
+				return;
+
+			// custom cloning and overwrite for specific objects
+			} else if (isSpecificValue(val)) {
+				target[key] = cloneSpecificValue(val);
+				return;
+
+			// overwrite by new value if source isn't object or array
+			} else if (typeof src !== 'object' || src === null || Array.isArray(src)) {
+				target[key] = deepExtend({}, val);
+				return;
+
+			// source value and new value is objects both, extending...
+			} else {
+				target[key] = deepExtend(src, val);
+				return;
+			}
+		});
+	});
+
+	return target;
+};
+
+
+/***/ }),
+/* 33 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+exports.default = getDomNodes;
+
+var _isValidSelector = __webpack_require__(34);
+
+var _isValidSelector2 = _interopRequireDefault(_isValidSelector);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Find matching DOM nodes against passed Synergy query
+ * 
+ * @param {*} query 
+ */
+function getDomNodes(query) {
+    if (query instanceof NodeList) {
+        return query;
+    }
+
+    if (query instanceof HTMLElement) {
+        return [query];
+    }
+
+    if (query instanceof Array) {
+        return getDomNodes(query[0]);
+    }
+
+    if ((0, _isValidSelector2.default)(query) && document.querySelectorAll(query).length) {
+        return document.querySelectorAll(query);
+    }
+
+    if ((typeof query === 'undefined' ? 'undefined' : _typeof(query)) === 'object' && query.name) {
+        return getDomNodes(query.name);
+    }
+
+    if (typeof query === 'string' && query.match('^[a-zA-Z0-9_-]+$')) {
+        return document.querySelectorAll('.' + query + ', [class*="' + query + '-"]');
+    }
+}
+
+/***/ }),
+/* 34 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = isValidSelector;
+/**
+ * Test the validity (not existance) of a CSS selector
+ * 
+ * @param {String} selector - the selector to test for validity
+ * 
+ * @returns {Bool}
+ * 
+ * @example isValidSelector('[data-foo-bar]') // returns true
+ * @example isValidSelector(4) // returns false
+ */
+function isValidSelector(selector) {
+    if (!selector || typeof selector !== 'string') return false;
+
+    var stub = document.createElement('br');
+
+    try {
+        selector && stub.querySelector(selector);
+    } catch (e) {
+        return false;
+    }
+
+    return true;
+}
+
+/***/ }),
+/* 35 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+exports.default = init;
+
+var _api = __webpack_require__(13);
+
+var API = _interopRequireWildcard(_api);
+
+var _getModuleNamespace = __webpack_require__(0);
+
+var _getModuleNamespace2 = _interopRequireDefault(_getModuleNamespace);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function init(custom) {
+    var options = Object.assign({
+        elementProto: true,
+        nodeListProto: true,
+        preset: 'Synergy',
+        attachToWindow: true,
+        alterMethodName: true
+    }, custom);
+
+    var PRESETS = {
+        BEM: ['__', '--', 'block', 'element', 'modifier'],
+        Synergy: ['_', '-', 'module', 'component', 'modifier']
+    };
+
+    var _ref = [].concat(_toConsumableArray(PRESETS[options.preset])),
+        componentGlue = _ref[0],
+        modifierGlue = _ref[1],
+        moduleNamespace = _ref[2],
+        componentNamespace = _ref[3],
+        modifierNamespace = _ref[4];
+
+    if (options.componentGlue) componentGlue = options.componentGlue;
+    if (options.modifierGlue) modifierGlue = options.modifierGlue;
+
+    if (options.elementProto || options.nodeListProto) {
+        var _loop = function _loop(key, method) {
+            var methodName = key;
+
+            if (options.alterMethodName) {
+                var moduleUpperCase = moduleNamespace[0].toUpperCase() + moduleNamespace.substring(1);
+                var componentUpperCase = componentNamespace[0].toUpperCase() + componentNamespace.substring(1);
+                var modifierUpperCase = modifierNamespace[0].toUpperCase() + modifierNamespace.substring(1);
+
+                if (methodName.toLowerCase().indexOf('module') > -1) {
+                    methodName = methodName.replace(new RegExp('module', 'g'), moduleNamespace);
+                }
+
+                if (methodName.toLowerCase().indexOf('Module') > -1) {
+                    methodName = methodName.replace(new RegExp('Module', 'g'), moduleUpperCase);
+                }
+
+                if (methodName.indexOf('component') > -1) {
+                    methodName = methodName.replace(new RegExp('component', 'g'), componentNamespace);
+                }
+
+                if (methodName.indexOf('Component') > -1) {
+                    methodName = methodName.replace(new RegExp('Component', 'g'), componentUpperCase);
+                }
+
+                if (methodName.toLowerCase().indexOf('modifier') > -1) {
+                    methodName = methodName.replace(new RegExp('modifier', 'g'), modifierNamespace);
+                }
+
+                if (methodName.toLowerCase().indexOf('Modifier') > -1) {
+                    methodName = methodName.replace(new RegExp('Modifier', 'g'), modifierUpperCase);
+                }
+            }
+
+            if (typeof document.body[methodName] === 'undefined') {
+                if (options.elementProto) {
+                    Element.prototype[methodName] = function () {
+                        return method.bind({
+                            namespace: (0, _getModuleNamespace2.default)(this, componentGlue, modifierGlue), DOMNodes: [this], componentGlue: componentGlue, modifierGlue: modifierGlue
+                        }).apply(undefined, arguments);
+                    };
+                }
+
+                if (options.nodeListProto) {
+                    NodeList.prototype[methodName] = function () {
+                        return method.bind({
+                            namespace: (0, _getModuleNamespace2.default)(this[0], componentGlue, modifierGlue), DOMNodes: this, componentGlue: componentGlue, modifierGlue: modifierGlue
+                        }).apply(undefined, arguments);
+                    };
+                }
+            }
+        };
+
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+            for (var _iterator = Object.entries(API)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                var _ref2 = _step.value;
+
+                var _ref3 = _slicedToArray(_ref2, 2);
+
+                var key = _ref3[0];
+                var method = _ref3[1];
+
+                _loop(key, method);
+            }
+        } catch (err) {
+            _didIteratorError = true;
+            _iteratorError = err;
+        } finally {
+            try {
+                if (!_iteratorNormalCompletion && _iterator.return) {
+                    _iterator.return();
+                }
+            } finally {
+                if (_didIteratorError) {
+                    throw _iteratorError;
+                }
+            }
+        }
+    }
+
+    if (options.attachToWindow) {
+        window.Synergy = window.Synergy || {};
+
+        Object.assign(Synergy, { componentGlue: componentGlue, modifierGlue: modifierGlue });
+    }
+}
+
+/***/ }),
+/* 36 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = component;
+
+var _getModuleNamespace = __webpack_require__(0);
+
+var _getModuleNamespace2 = _interopRequireDefault(_getModuleNamespace);
+
+var _getComponents = __webpack_require__(1);
+
+var _getComponents2 = _interopRequireDefault(_getComponents);
+
+var _isComponent = __webpack_require__(4);
+
+var _isComponent2 = _interopRequireDefault(_isComponent);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * @param {String} componentName 
+ * @param {(('find'|'is'|'set'|'unset')|Function)} operator 
+ */
+function component(componentName, operator) {
+    var _this = this;
+
+    if (!componentName && !operator) {
+        return _getComponents2.default.bind(this)();
+    }
+
+    if (!operator || operator === 'find') {
+        return _getComponents2.default.bind(this)(componentName);
+    }
+
+    if (operator === 'is') {
+        return _isComponent2.default.bind(this)(componentName);
+    }
+
+    if (operator === 'set') {
+        this.DOMNodes.forEach(function (node) {
+            node.classList.add(_this.namespace || (0, _getModuleNamespace2.default)(node, _this.componentGlue, _this.modifierGlue) + _this.componentGlue + componentName);
+        });
+    }
+
+    if (operator === 'unset') {
+        this.DOMNodes.forEach(function (node) {
+            return node.classList.remove(_this.namespace || (0, _getModuleNamespace2.default)(node, _this.componentGlue, _this.modifierGlue));
+        });
+    }
+
+    if (typeof operator === 'function') {
+        _getComponents2.default.bind(this)(componentName).forEach(function (node) {
+            return operator(node);
+        });
+    }
+}
+
+/***/ }),
+/* 37 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+exports.default = find;
+
+var _getModuleNamespace = __webpack_require__(0);
+
+var _getModuleNamespace2 = _interopRequireDefault(_getModuleNamespace);
+
+var _getModules = __webpack_require__(38);
+
+var _getModules2 = _interopRequireDefault(_getModules);
+
+var _getComponents = __webpack_require__(1);
+
+var _getComponents2 = _interopRequireDefault(_getComponents);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+/**
+ * @param {*} query 
+ */
+function find(query) {
+    var _this = this;
+
+    if ((typeof query === 'undefined' ? 'undefined' : _typeof(query)) === 'object') {
+        var matches = [];
+
+        this.DOMNodes.forEach(function (node) {
+            if (query.module) {
+                if (query.component) {
+                    return matches.push.apply(matches, _toConsumableArray(_getComponents2.default.bind(_this)(query.component, query.modifier, query.module)));
+                }
+
+                return matches.push.apply(matches, _toConsumableArray(node.querySelectorAll('.' + query.module + ', [class*="' + (query.module + query.modifierGlue) + '"]')));
+            }
+
+            if (query.component) {
+                var components = _getComponents2.default.bind(_this)(query.component);
+
+                if (query.modifier) {
+                    return matches.push.apply(matches, _toConsumableArray(components.filter(function (component) {
+                        return [].concat(_toConsumableArray(component.classList)).some(function (className) {
+                            var isNamespace = className.indexOf(_this.namespace || (0, _getModuleNamespace2.default)(component, _this.componentGlue, _this.modifierGlue)) === 0;
+                            var hasModifier = className.indexOf(query.modifier) > -1;
+
+                            return isNamespace && hasModifier;
+                        });
+                    })));
+                }
+
+                return matches.push.apply(matches, _toConsumableArray(components));
+            }
+
+            if (query.modifier) {
+                return;
+            }
+        });
+
+        return matches;
+    }
+
+    if (typeof query === 'string') {
+        if (_getComponents2.default.bind(this)(query).length) {
+            return _getComponents2.default.bind(this)(query);
+        }
+
+        if ((0, _getModules2.default)(this, query).length) {
+            return (0, _getModules2.default)(this, query);
+        }
+    }
+}
+
+/***/ }),
+/* 38 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = getModules;
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+/**
+ * @param {*} target 
+ * @param {*} moduleName 
+ */
+function getModules(target, moduleName) {
+    return [].concat(_toConsumableArray(target.DOMNodes)).reduce(function (matches, node) {
+        return matches.concat.apply(matches, _toConsumableArray(node.querySelectorAll("." + moduleName + ", [class*=\"" + (moduleName + target.modifierGlue) + "\"]")));
+    }, []);
+}
+
+/***/ }),
+/* 39 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = getComponent;
+
+var _getComponents = __webpack_require__(1);
+
+var _getComponents2 = _interopRequireDefault(_getComponents);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+/**
+ * @param {*} componentName 
+ */
+function getComponent(componentName) {
+    var _this = this;
+
+    return [].concat(_toConsumableArray(this.DOMNodes)).map(function (node) {
+        return _getComponents2.default.bind(Object.assign(_this, { DOMNodes: [node] }))(componentName)[0];
+    });
+}
+
+/***/ }),
+/* 40 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = getModifiers;
+
+var _getModuleNamespace = __webpack_require__(0);
+
+var _getModuleNamespace2 = _interopRequireDefault(_getModuleNamespace);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+/**
+ * @param {*} componentName 
+ */
+function getModifiers() {
+    var _this = this,
+        _ref;
+
+    var matches = [];
+
+    // @TODO return a single array rather than an array of arrays
+    this.DOMNodes.forEach(function (node) {
+        matches.push.apply(matches, _toConsumableArray([].concat(_toConsumableArray(node.classList)).filter(function (className) {
+            return className.indexOf(_this.namespace || (0, _getModuleNamespace2.default)(node, _this.componentGlue, _this.modifierGlue)) === 0;
+        }).map(function (target) {
+            return target.split(_this.modifierGlue).slice(1);
+        })));
+    });
+
+    return (_ref = []).concat.apply(_ref, matches);
+}
+
+/***/ }),
+/* 41 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = getComponent;
+
+var _getSubComponents = __webpack_require__(5);
+
+var _getSubComponents2 = _interopRequireDefault(_getSubComponents);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+/**
+ * @param {*} subComponentName 
+ */
+function getComponent(subComponentName) {
+    var _this = this;
+
+    var context = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+
+    return [].concat(_toConsumableArray(this.DOMNodes)).map(function () {
+        return _getSubComponents2.default.bind(_this)(subComponentName, context)[0];
+    });
+}
+
+/***/ }),
+/* 42 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+exports.default = is;
+
+var _getModuleNamespace = __webpack_require__(0);
+
+var _getModuleNamespace2 = _interopRequireDefault(_getModuleNamespace);
+
+var _isModule = __webpack_require__(43);
+
+var _isModule2 = _interopRequireDefault(_isModule);
+
+var _isComponent = __webpack_require__(4);
+
+var _isComponent2 = _interopRequireDefault(_isComponent);
+
+var _hasModifier = __webpack_require__(6);
+
+var _hasModifier2 = _interopRequireDefault(_hasModifier);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+/**
+ * @param {*} query 
+ */
+function is(query) {
+    var _this = this;
+
+    if ((typeof query === 'undefined' ? 'undefined' : _typeof(query)) === 'object') {
+        if (query.module) {
+            if (query.component) {
+                var isModuleNamespace = [].concat(_toConsumableArray(this.DOMNodes)).every(function (node) {
+                    return (_this.namespace || (0, _getModuleNamespace2.default)(node, _this.componentGlue, _this.modifierGlue, true)) === query.module;
+                });
+
+                if (query.modifier) {
+                    return isModuleNamespace && _isComponent2.default.bind(this)(query.component) && _hasModifier2.default.bind(this)(query.modifier);
+                }
+
+                return isModuleNamespace && _isComponent2.default.bind(this)(query.component);
+            }
+
+            return (0, _isModule2.default)(this, query.module);
+        }
+
+        if (query.component) {
+            if (query.modifier) {
+                return _isComponent2.default.bind(this)(query.component) && _hasModifier2.default.bind(this)(query.modifier);
+            }
+
+            return _isComponent2.default.bind(this)(query.component);
+        }
+
+        if (query.modifier) {
+            return _hasModifier2.default.bind(this)(query.modifier);
+        }
+    }
+
+    if (typeof query === 'string') {
+        if ((0, _isModule2.default)(this, query)) {
+            return (0, _isModule2.default)(this, query);
+        }
+
+        if (_isComponent2.default.bind(this)(query)) {
+            return _isComponent2.default.bind(this)(query);
+        }
+
+        if (_hasModifier2.default.bind(this)(query)) {
+            return _hasModifier2.default.bind(this)(query);
+        }
+    }
+
+    return false;
+}
+
+/***/ }),
+/* 43 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = isModule;
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+/**
+ * @param {*} target 
+ * @param {*} moduleName 
+ */
+function isModule(target, moduleName) {
+    return [].concat(_toConsumableArray(target.DOMNodes)).every(function (node) {
+        return node.matches("." + moduleName + ", [class*=\"" + (moduleName + target.modifierGlue) + "\"]");
+    });
+}
+
+/***/ }),
+/* 44 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = modifier;
+
+var _hasModifier = __webpack_require__(6);
+
+var _hasModifier2 = _interopRequireDefault(_hasModifier);
+
+var _addModifier = __webpack_require__(14);
+
+var _addModifier2 = _interopRequireDefault(_addModifier);
+
+var _removeModifier = __webpack_require__(15);
+
+var _removeModifier2 = _interopRequireDefault(_removeModifier);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * @param {String} modifier 
+ * @param {(('is'|'set'|'unset')|Function)} operator 
+ */
+function modifier(modifier, operator) {
+    if (!operator || operator === 'is') {
+        return _hasModifier2.default.bind(this)(modifier);
+    }
+
+    if (operator === 'set') {
+        return _addModifier2.default.bind(this)(modifier);
+    }
+
+    if (operator === 'unset') {
+        return _removeModifier2.default.bind(this)(modifier);
+    }
+}
+
+/***/ }),
+/* 45 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = parent;
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+/**
+ * @param {(String|'module'|'component')} query 
+ */
+function parent(query) {
+    if (query === 'module') {
+        return [].concat(_toConsumableArray(this.DOMNodes)).map(function (node) {
+            return node.parentNode.closest('[data-module]');
+        });
+    }
+
+    if (query === 'component') {
+        return [].concat(_toConsumableArray(this.DOMNodes)).map(function (node) {
+            return node.parentNode.closest('[data-component]');
+        });
+    }
+
+    if (typeof query === 'string') {
+        var moduleMatch = [].concat(_toConsumableArray(this.DOMNodes)).map(function (node) {
+            return node.parentNode.closest('[data-module="' + query + '"]');
+        });
+        var componentMatch = [].concat(_toConsumableArray(this.DOMNodes)).map(function (node) {
+            return node.parentNode.closest('[data-component="' + query + '"]');
+        });
+
+        return moduleMatch[0] ? moduleMatch : componentMatch;
+    }
+}
+
+/***/ }),
+/* 46 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = parentComponent;
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+/**
+ * @param {*} componentName 
+ */
+function parentComponent(componentName) {
+  return [].concat(_toConsumableArray(this.DOMNodes)).map(function (node) {
+    return node.parentNode.closest("[data-component=\"" + componentName + "\"]");
+  });
+}
+
+/***/ }),
+/* 47 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = setComponent;
+
+var _getModuleNamespace = __webpack_require__(0);
+
+var _getModuleNamespace2 = _interopRequireDefault(_getModuleNamespace);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * @param {*} componentName 
+ */
+function setComponent(componentName) {
+    var _this = this;
+
+    this.DOMNodes.forEach(function (node) {
+        var namespace = _this.namespace || (0, _getModuleNamespace2.default)(node, _this.componentGlue, _this.modifierGlue);
+
+        node.classList.remove(namespace);
+        node.classList.add(namespace + _this.componentGlue + componentName);
+    });
+}
+
+/***/ }),
+/* 48 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = subComponent;
+
+var _getSubComponents = __webpack_require__(5);
+
+var _getSubComponents2 = _interopRequireDefault(_getSubComponents);
+
+var _getModuleNamespace = __webpack_require__(0);
+
+var _getModuleNamespace2 = _interopRequireDefault(_getModuleNamespace);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+/**
+ * @param {String} componentName 
+ * @param {(('find'|'is')|Function)} operator 
+ */
+function subComponent(subComponentName, operator) {
+    var _this = this;
+
+    if (!subComponentName && !operator) {
+        return _getSubComponents2.default.bind(this)();
+    }
+
+    if (!operator || operator === 'find') {
+        return _getSubComponents2.default.bind(this)(subComponentName);
+    }
+
+    if (operator === 'is') {
+        return [].concat(_toConsumableArray(this.DOMNodes)).every(function (node) {
+            var query = _this.namespace || (0, _getModuleNamespace2.default)(node, _this.componentGlue, _this.modifierGlue);
+            var isMatch = query.indexOf(subComponentName) === query.length - subComponentName.length;
+
+            return [].concat(_toConsumableArray(node.classList)).some(function (className) {
+                return className.indexOf(query) > -1 && isMatch;
+            });
+        });
+    }
+
+    if (typeof operator === 'function') {
+        _getSubComponents2.default.bind(this)(subComponentName).forEach(function (node) {
+            return operator(node);
+        });
+    }
+}
+
+/***/ }),
+/* 49 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = unsetComponent;
+
+var _getModuleNamespace = __webpack_require__(0);
+
+var _getModuleNamespace2 = _interopRequireDefault(_getModuleNamespace);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+/**
+ * @param {*} componentName 
+ */
+function unsetComponent(componentName) {
+    var _this = this;
+
+    return [].concat(_toConsumableArray(this.DOMNodes)).forEach(function (node) {
+        return [].concat(_toConsumableArray(node.classList)).forEach(function (className) {
+            var isAComponent = className.split(_this.componentGlue).length - 1 === 1;
+            var isMatch = className.indexOf((_this.namespace || (0, _getModuleNamespace2.default)(node, _this.componentGlue, _this.modifierGlue)) + _this.componentGlue + componentName) === 0;
+
+            if (isAComponent && isMatch) {
+                node.classList.remove(className);
+            }
+        });
+    });
 }
 
 /***/ })

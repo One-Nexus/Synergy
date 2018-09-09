@@ -1,3 +1,8 @@
-export { default as Synergize } from './synergize.js';
-export { default as Module, Wrapper, Group } from './module.jsx';
-export { default as Component, SubComponent } from './component.jsx';
+export {
+    Synergize,
+    Module, 
+    Wrapper, 
+    Group,
+    Component, 
+    SubComponent
+} from '../../Lucid/src/index';
