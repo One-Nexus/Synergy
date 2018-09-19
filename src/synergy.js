@@ -5,7 +5,7 @@ import sQuery from '../../sQuery/src/squery';
 if (typeof window !== 'undefined') {
     sQuery.init();
 
-    Object.assign(window, lucid, { sQuery });
+    Object.assign(window, lucid);
 
     window.Synergy.styleParser = polymorph;
 }
