@@ -8,6 +8,10 @@ if (typeof window !== 'undefined') {
     Object.assign(window, lucid);
 
     window.Synergy.styleParser = polymorph;
+
+    window.Synergy.theme = () => {
+        console.log('foo theme');
+    };
 }
 
 export {

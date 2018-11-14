@@ -18,7 +18,7 @@
 * [Why Use Synergy](https://github.com/esr360/Synergy/wiki/Why-Use-Synergy)
 * [Installation](https://github.com/esr360/Synergy/wiki/Installation)
 * [JavaScript](https://github.com/esr360/Synergy/wiki/JavaScript)
-* [Using With React](https://github.com/esr360/Synergy/wiki/Using-With-React)
+* [React](https://github.com/esr360/Synergy/wiki/Using-With-React)
 * [Styled Modules (with JavaScript)](#TODO)
 * [Sass](https://github.com/esr360/Synergy/wiki/Sass)
 * [Creating Themes](https://github.com/esr360/Synergy/wiki/Creating-a-Theme)
@@ -51,7 +51,7 @@ Synergy provides powerful APIs to help you create configurable modules in `Sass`
 * [Use Synergy to create JavaScript components](https://github.com/esr360/Synergy/wiki/JavaScript)
 * [Use Synergy to create React components](https://github.com/esr360/Synergy/wiki/Using-With-React)
 
-> Synergy is ideal for creating your presentational React components when using the [Container Component Pattern](https://reactpatterns.com/#container-component) ([learn more](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0))
+> Synergy is ideal for creating presentational React components when using the [Container Component Pattern](https://reactpatterns.com/#container-component) ([learn more](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0))
 
 Synergy also povides tools allowing you to combine the above aspects together to create a `Synergy Module`.
 
