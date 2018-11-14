@@ -9,8 +9,12 @@ if (typeof window !== 'undefined') {
 
     window.Synergy.styleParser = polymorph;
 
-    window.Synergy.theme = () => {
-        console.log('foo theme');
+    window.Synergy.theme = (modules, theme) => {
+        Object.values(modules).forEach(MODULE => MODULE.defaults && (
+            window[MODULE.name] = Object.assign(MODULE, {
+                config: Module.config(MODULE.defaults(window.theme), theme[MODULE.name])
+            })
+        ));
     };
 }
 
