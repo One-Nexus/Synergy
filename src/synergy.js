@@ -25,6 +25,10 @@ if (typeof window !== 'undefined') {
                 config: Module.config(MODULE.defaults(ui), theme.modules[MODULE.name])
             })
         ));
+
+        if (typeof ui.foundation === 'function') {
+            ui.foundation(ui);
+        }
     };
 
     Synergy.app = ({ modules, ui, theme, pages, config }) => {
