@@ -3,7 +3,7 @@
 [![npm version](https://badge.fury.io/js/Synergy.svg)](https://badge.fury.io/js/Synergy)
 [![npm version](https://img.shields.io/npm/dm/synergy.svg)](https://badge.fury.io/js/Synergy)
 
-<img height="56px" src="http://www.onenexus.io/synergy/github-logo.png?v=1" />
+<img height="56px" src="http://www.onenexus.io/synergy/github-logo.png" />
 
 > A front-end framework for creating modular, configurable and scalable UI components
 
