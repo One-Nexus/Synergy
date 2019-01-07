@@ -1,6 +1,6 @@
-import * as lucid from '../../Lucid/src';
-import polymorph from '../../Polymorph/src/polymorph';
-import sQuery from '../../sQuery/src/squery';
+import * as lucid from '../../../Lucid/Lucid/src';
+import polymorph from '../../../Polymorph/Polymorph/src/polymorph';
+import sQuery from '../../../sQuery/sQuery/src/squery';
 import deepextend from 'deep-extend';
 import { HashRouter, Route } from 'react-router-dom';
 
@@ -35,7 +35,7 @@ if (typeof window !== 'undefined') {
         Synergy.theme(modules, ui, theme);
 
         return (
-            <HashRouter>
+            <HashRouter ref={() => window.appLoaded = true}>
                 <React.Fragment>
                     <Route path='/' exact render={() => <pages.index config={config} />} />
     
