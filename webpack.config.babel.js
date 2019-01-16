@@ -1,5 +1,5 @@
 import path from 'path';
-import webpack from 'webpack';
+import UglifyJsPlugin from 'uglifyjs-webpack-plugin';
 
 export default function() {
     return {
@@ -12,34 +12,38 @@ export default function() {
             path: path.resolve(__dirname, 'dist/'),
             filename: '[name].js',
             publicPath: '/',
-            libraryTarget: 'commonjs2'
+            libraryTarget: 'umd'
         },
 
-        target: 'node',
-
-        plugins: [
-            new webpack.optimize.UglifyJsPlugin({
-                include: /\.min\.js$/,
-                minimize: true,
-                output: {
-                    comments: false
-                }
-            })
-        ],
+        optimization: {
+            minimizer: [
+                new UglifyJsPlugin({
+                    include: /\.min\.js$/,
+                    uglifyOptions: {
+                        output: {
+                            comments: false
+                        }
+                    }
+                })
+            ]
+        },
 
         externals: {
             'react': 'react',
-            'react-dom': 'react-dom',
-            'prop-types': 'prop-types'
+            'react-dom': 'react-dom'
         },
 
         module: {
-            loaders: [{
+            rules: [{
                 test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
-                loaders: ['babel-loader'],
+                use: {
+                    loader: 'babel-loader'
+                }
             }]
         },
+
+        node: { Buffer: false },
 
         stats: { colors: true },
 
