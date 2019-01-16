@@ -1,56 +1,52 @@
 import path from 'path';
-import webpack from 'webpack';
+import UglifyJsPlugin from 'uglifyjs-webpack-plugin';
 
-export default function(env) {
-
-    const target = env.target || 'node';
-
-    const entry = (target === 'node') ? {'synergy': './src/index.js'} : {
-        'synergy.web': './src/js/synergy.js',
-        'synergy.web.min': './src/js/synergy.js',
-    };
-
+export default function() {
     return {
-        entry,
+        entry: {
+            'synergy': './src/synergy.js',
+            'synergy.min': './src/synergy.js',
+        },
 
         output: {
             path: path.resolve(__dirname, 'dist/'),
             filename: '[name].js',
             publicPath: '/',
-            libraryTarget: (target === 'node') ? 'commonjs2' : 'var'
+            libraryTarget: 'umd'
         },
 
-        target,
-
-        plugins: [
-            new webpack.optimize.UglifyJsPlugin({
-                include: /\.min\.js$/,
-                minimize: true,
-                output: {
-                    comments: false
-                }
-            })
-        ],
+        optimization: {
+            minimizer: [
+                new UglifyJsPlugin({
+                    include: /\.min\.js$/,
+                    uglifyOptions: {
+                        output: {
+                            comments: false
+                        }
+                    }
+                })
+            ]
+        },
 
         externals: {
             'react': 'react',
-            'react-dom': 'react-dom',
-            'prop-types': 'prop-types'
+            'react-dom': 'react-dom'
         },
-
-        node: { Buffer: (target === 'web') ? false : true },
 
         module: {
-            loaders: [{
+            rules: [{
                 test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
-                loaders: ['babel-loader'],
+                use: {
+                    loader: 'babel-loader'
+                }
             }]
         },
+
+        node: { Buffer: false },
 
         stats: { colors: true },
 
         devtool: false
     }
-
 };
