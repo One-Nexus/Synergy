@@ -1,5 +1,6 @@
 import path from 'path';
 import UglifyJsPlugin from 'uglifyjs-webpack-plugin';
+import webpack from 'webpack';
 
 export default function() {
     return {
@@ -14,6 +15,14 @@ export default function() {
             publicPath: '/',
             libraryTarget: 'umd'
         },
+
+        plugins: [
+            new webpack.DefinePlugin({
+                'process.env': {
+                    SYNERGY: true
+                }
+            })
+        ],
 
         optimization: {
             minimizer: [

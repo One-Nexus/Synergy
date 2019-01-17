@@ -9,6 +9,7 @@ import sQuery from '../../../sQuery/sQuery/src/squery';
 import deepextend from 'deep-extend';
 
 if (typeof window !== 'undefined') {
+    // Attach common dependencies to window
     window.deepExtend = deepextend;
 
     sQuery.init();
