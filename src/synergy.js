@@ -9,32 +9,46 @@ import sQuery from '../../../sQuery/sQuery/src/squery';
 import deepextend from 'deep-extend';
 
 if (typeof window !== 'undefined') {
-    // Attach common dependencies to window
-    window.deepExtend = deepextend;
+    // Attach Synergy tools to global object
+    Object.assign(window, {
+        Synergy: window.Synergy || {},
+        ...lucid
+    });
 
-    sQuery.init();
+    // Declare global Synergy properties
+    Object.assign(Synergy, {
+        styleParser: polymorph,
+        config: (...params) => deepextend({}, ...params),
+        theme: theme
+    });
+}
 
-    Object.assign(window, lucid);
+/**
+ * Synergy Theme
+ * 
+ * @param {*} modules
+ * @param {*} ui
+ * @param {*} theme
+ */
+function theme(modules, ui, theme) {
+    window.ui = Synergy.config(ui, theme);
 
-    Synergy.styleParser = polymorph;
+    delete window.ui.modules;
 
-    Synergy.config = (...params) => deepextend({}, ...params);
+    sQuery.init({
+        modifierGlue: theme['modifier-glue'],
+        componentGlue: theme['component-glue']
+    });
 
-    Synergy.theme = (modules, ui, theme) => {
-        window.ui = Synergy.config(ui, theme);
+    Synergy.CssClassProps = theme['css-class-props'];
 
-        delete window.ui.modules;
+    Object.values(modules).forEach(MODULE => MODULE.defaults && (
+        window[MODULE.name] = Object.assign(MODULE, {
+            config: Module.config(MODULE.defaults(ui), theme.modules[MODULE.name])
+        })
+    ));
 
-        Synergy.CssClassProps = theme['css-class-props'];
-
-        Object.values(modules).forEach(MODULE => MODULE.defaults && (
-            window[MODULE.name] = Object.assign(MODULE, {
-                config: Module.config(MODULE.defaults(ui), theme.modules[MODULE.name])
-            })
-        ));
-
-        if (typeof ui.foundation === 'function') {
-            ui.foundation(ui);
-        }
-    };
+    if (typeof ui.foundation === 'function') {
+        ui.foundation(ui);
+    }  
 }

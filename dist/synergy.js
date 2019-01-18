@@ -7,7 +7,7 @@
 		var a = typeof exports === 'object' ? factory(require("react"), require("react-dom")) : factory(root["react"], root["react-dom"]);
 		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
 	}
-})(window, function(__WEBPACK_EXTERNAL_MODULE__2__, __WEBPACK_EXTERNAL_MODULE__18__) {
+})(window, function(__WEBPACK_EXTERNAL_MODULE__2__, __WEBPACK_EXTERNAL_MODULE__17__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -806,7 +806,7 @@ function hasModifier(modifier) {
       var matchIndex = className.indexOf(_this.modifierGlue + modifier);
       var namespaceMatch = className.indexOf(namespace) === 0;
       var isModifierTest1 = className.indexOf(_this.modifierGlue + modifier + _this.modifierGlue) > -1;
-      var isModifierTest2 = matchIndex > -1 && matchIndex === className.length - modifier.length - 1;
+      var isModifierTest2 = matchIndex > -1 && matchIndex === className.length - modifier.length - _this.modifierGlue.length;
       return namespaceMatch && (isModifierTest1 || isModifierTest2);
     });
   }
@@ -888,9 +888,9 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 /**
  * @param {*} modifiers 
  */
-function renderModifiers(modifiers) {
+function renderModifiers(modifiers, modifierGlue) {
   if (modifiers && _typeof(modifiers) === 'object' && modifiers.length) {
-    return ('-' + modifiers).replace(/,/g, '-');
+    return (modifierGlue + modifiers).replace(/,/g, modifierGlue);
   }
 
   return '';
@@ -907,13 +907,13 @@ function renderModifiers(modifiers) {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Group; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(18);
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(17);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var html_tags__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(11);
 /* harmony import */ var html_tags__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(html_tags__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _utilities_getHtmlProps__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(12);
 /* harmony import */ var _utilities_getModifiersFromProps__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(10);
-/* harmony import */ var _utilities_getModulesFromProps__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(13);
+/* harmony import */ var _utilities_generateClasses__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(13);
 /* harmony import */ var _utilities_renderModifiers__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(6);
 /* harmony import */ var _utilities_refHandler__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(14);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -945,29 +945,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
- // spoof env process to assis bundle size
+ // spoof env process to assist bundle size
 
-if (typeof process === 'undefined') {
-  window.process = {
-    env: {}
-  };
-}
+if (typeof process === 'undefined') window.process = {
+  env: {}
+};
 /**
  * Used for generating unique module ID's
  */
-
 
 var increment = 1;
 /**
  * Create a context object
  */
 
-var ModuleContext = react__WEBPACK_IMPORTED_MODULE_0___default.a.createContext({
-  module: '',
-  props: {},
-  config: {},
-  ui: {}
-});
+var ModuleContext = react__WEBPACK_IMPORTED_MODULE_0___default.a.createContext();
 
 /**
  * Render a Synergy module
@@ -987,38 +979,42 @@ function (_React$Component) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Module).call(this, props));
     increment++;
-    var styleParser = props.styleParser || Synergy.styleParser;
-    var modifierGlue = props.modifierGlue || window.Synergy && Synergy.modifierGlue || '-';
-    var propModifiers = Object(_utilities_renderModifiers__WEBPACK_IMPORTED_MODULE_6__[/* default */ "a"])(Object(_utilities_getModifiersFromProps__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"])(props, Synergy.CssClassProps));
-    var passedModifiers = Object(_utilities_renderModifiers__WEBPACK_IMPORTED_MODULE_6__[/* default */ "a"])(props.modifiers);
+    var Synergy = window.Synergy || {};
+    var ui = props.ui || window.ui;
+    var modifierGlue = props.modifierGlue || Synergy.modifierGlue || '-';
+    var componentGlue = props.componentGlue || Synergy.componentGlue || '_';
+    var propModifiers = Object(_utilities_renderModifiers__WEBPACK_IMPORTED_MODULE_6__[/* default */ "a"])(Object(_utilities_getModifiersFromProps__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"])(props, Synergy.CssClassProps), modifierGlue);
+    var passedModifiers = Object(_utilities_renderModifiers__WEBPACK_IMPORTED_MODULE_6__[/* default */ "a"])(props.modifiers, modifierGlue);
     var modifiers = propModifiers + passedModifiers;
     var classes = props.className ? ' ' + props.className : '';
+    var styleParser = props.styleParser || Synergy.styleParser;
     _this.config = props.config || {};
 
     if (window[props.name]) {
       _this.config = Module.config(window[props.name].config, _this.config);
     }
 
-    _this.ui = props.ui || window.ui;
     _this.namespace = _this.config.name || props.name;
 
     _this.ref = function (node) {
-      return Object(_utilities_refHandler__WEBPACK_IMPORTED_MODULE_7__[/* default */ "a"])(node, props, styleParser, true, _this.ui, _this.config);
+      return Object(_utilities_refHandler__WEBPACK_IMPORTED_MODULE_7__[/* default */ "a"])(node, props, styleParser, true, ui, _this.config);
     };
 
     _this.id = (props.before || props.after) && !props.id ? "synergy-module-".concat(increment) : props.id;
     _this.tag = props.component || props.tag || (html_tags__WEBPACK_IMPORTED_MODULE_2___default.a.includes(_this.namespace) ? _this.namespace : 'div');
-    _this.classNames = Object(_utilities_getModulesFromProps__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"])(props, _this.namespace + modifiers + classes, modifierGlue);
+    _this.classNames = Object(_utilities_generateClasses__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"])(props, _this.namespace + modifiers + classes, modifierGlue);
     if (Synergy.CssClassProps) Synergy.CssClassProps.forEach(function (prop) {
       if (Object.keys(props).includes(prop)) {
         _this.classNames = _this.classNames + ' ' + prop;
       }
     });
     _this.contextValue = {
+      ui: ui,
+      modifierGlue: modifierGlue,
+      componentGlue: componentGlue,
       module: _this.namespace,
       props: _this.props,
-      config: _this.config,
-      ui: _this.ui
+      config: _this.config
     };
     return _this;
   }
@@ -1090,9 +1086,12 @@ _defineProperty(Module, "config", function () {
     params[_key] = arguments[_key];
   }
 
+  // `process` and `require` are exploited to help reduce bundle size
   if (true) {
-    return deepExtend.apply(void 0, [{}].concat(params));
-  } else {}
+    var _Synergy;
+
+    return (_Synergy = Synergy).config.apply(_Synergy, [{}].concat(params));
+  } else { var _Synergy2; }
 });
 
 _defineProperty(Module, "child", function (props) {
@@ -1356,7 +1355,7 @@ module.exports = __webpack_require__(28);
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getHtmlProps; });
-/* harmony import */ var html_attributes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(19);
+/* harmony import */ var html_attributes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(18);
 /* harmony import */ var html_attributes__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(html_attributes__WEBPACK_IMPORTED_MODULE_0__);
 
 /**
@@ -1392,11 +1391,12 @@ function getHtmlProps(props) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getModulesFromProps; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return generateClasses; });
 /**
- * Get module and modifiers from props
+ * Generate CSS classes for a module
  */
-function getModulesFromProps(props, classes, modifierGlue) {
+function generateClasses(props, classes, modifierGlue) {
+  // Get modules from props
   Object.entries(props).forEach(function (prop) {
     var firstLetter = prop[0][0];
 
@@ -1667,163 +1667,6 @@ process.umask = function() { return 0; };
 
 /***/ }),
 /* 16 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/*!
- * @description Recursive object extending
- * @author Viacheslav Lotsmanov <lotsmanov89@gmail.com>
- * @license MIT
- *
- * The MIT License (MIT)
- *
- * Copyright (c) 2013-2018 Viacheslav Lotsmanov
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of
- * this software and associated documentation files (the "Software"), to deal in
- * the Software without restriction, including without limitation the rights to
- * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
- * the Software, and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
- * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
- * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
- * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
- * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
-
-
-function isSpecificValue(val) {
-	return (
-		val instanceof Buffer
-		|| val instanceof Date
-		|| val instanceof RegExp
-	) ? true : false;
-}
-
-function cloneSpecificValue(val) {
-	if (val instanceof Buffer) {
-		var x = Buffer.alloc
-			? Buffer.alloc(val.length)
-			: new Buffer(val.length);
-		val.copy(x);
-		return x;
-	} else if (val instanceof Date) {
-		return new Date(val.getTime());
-	} else if (val instanceof RegExp) {
-		return new RegExp(val);
-	} else {
-		throw new Error('Unexpected situation');
-	}
-}
-
-/**
- * Recursive cloning array.
- */
-function deepCloneArray(arr) {
-	var clone = [];
-	arr.forEach(function (item, index) {
-		if (typeof item === 'object' && item !== null) {
-			if (Array.isArray(item)) {
-				clone[index] = deepCloneArray(item);
-			} else if (isSpecificValue(item)) {
-				clone[index] = cloneSpecificValue(item);
-			} else {
-				clone[index] = deepExtend({}, item);
-			}
-		} else {
-			clone[index] = item;
-		}
-	});
-	return clone;
-}
-
-function safeGetProperty(object, property) {
-	return property === '__proto__' ? undefined : object[property];
-}
-
-/**
- * Extening object that entered in first argument.
- *
- * Returns extended object or false if have no target object or incorrect type.
- *
- * If you wish to clone source object (without modify it), just use empty new
- * object as first argument, like this:
- *   deepExtend({}, yourObj_1, [yourObj_N]);
- */
-var deepExtend = module.exports = function (/*obj_1, [obj_2], [obj_N]*/) {
-	if (arguments.length < 1 || typeof arguments[0] !== 'object') {
-		return false;
-	}
-
-	if (arguments.length < 2) {
-		return arguments[0];
-	}
-
-	var target = arguments[0];
-
-	// convert arguments to array and cut off target object
-	var args = Array.prototype.slice.call(arguments, 1);
-
-	var val, src, clone;
-
-	args.forEach(function (obj) {
-		// skip argument if isn't an object, is null, or is an array
-		if (typeof obj !== 'object' || obj === null || Array.isArray(obj)) {
-			return;
-		}
-
-		Object.keys(obj).forEach(function (key) {
-			src = safeGetProperty(target, key); // source value
-			val = safeGetProperty(obj, key); // new value
-
-			// recursion prevention
-			if (val === target) {
-				return;
-
-			/**
-			 * if new value isn't object then just overwrite by new value
-			 * instead of extending.
-			 */
-			} else if (typeof val !== 'object' || val === null) {
-				target[key] = val;
-				return;
-
-			// just clone arrays (and recursive clone objects inside)
-			} else if (Array.isArray(val)) {
-				target[key] = deepCloneArray(val);
-				return;
-
-			// custom cloning and overwrite for specific objects
-			} else if (isSpecificValue(val)) {
-				target[key] = cloneSpecificValue(val);
-				return;
-
-			// overwrite by new value if source isn't object or array
-			} else if (typeof src !== 'object' || src === null || Array.isArray(src)) {
-				target[key] = deepExtend({}, val);
-				return;
-
-			// source value and new value is objects both, extending...
-			} else {
-				target[key] = deepExtend(src, val);
-				return;
-			}
-		});
-	});
-
-	return target;
-};
-
-
-/***/ }),
-/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1924,13 +1767,13 @@ function (_React$Component) {
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(27)))
 
 /***/ }),
-/* 18 */
+/* 17 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE__18__;
+module.exports = __WEBPACK_EXTERNAL_MODULE__17__;
 
 /***/ }),
-/* 19 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2074,13 +1917,13 @@ module.exports = {
 
 
 /***/ }),
-/* 20 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return polymorph; });
-/* harmony import */ var _utilities_isValidCssProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(21);
-/* harmony import */ var _utilities_stringifyState__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(22);
+/* harmony import */ var _utilities_isValidCssProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(20);
+/* harmony import */ var _utilities_stringifyState__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(21);
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
@@ -2101,7 +1944,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 
 
-var sQuery = typeof window !== 'undefined' && window.sQuery;
+var sQuery = typeof window !== 'undefined' && window.sQuery; // `process` and `require` exploited to help reduce bundle size
 
 if (!sQuery || typeof process !== 'undefined' && !true) {
   sQuery = {
@@ -2118,13 +1961,14 @@ if (!sQuery || typeof process !== 'undefined' && !true) {
 
 function polymorph(element) {
   var styles = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-  var config = arguments.length > 2 ? arguments[2] : undefined;
+  var config = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
   var globals = arguments.length > 3 ? arguments[3] : undefined;
   var parentElement = arguments.length > 4 ? arguments[4] : undefined;
   var specificity = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : 0;
+  var Synergy = window.Synergy || {};
+  var modifierGlue = config.modifierGlue || Synergy.modifierGlue || '-';
+  var componentGlue = config.componentGlue || Synergy.componentGlue || '_';
   var values = _typeof(styles) === 'object' ? styles : styles(element, config, globals);
-  var componentGlue = config && config.componentGlue || window.Synergy && Synergy.componentGlue || '_';
-  var modifierGlue = config && config.modifierGlue || window.Synergy && Synergy.modifierGlue || '-';
   /**
    * Setup `repaint` method on parent element
    */
@@ -2520,8 +2364,9 @@ function polymorph(element) {
  */
 
 polymorph.modifier = function (element, modifier, modifierGlue, componentGlue) {
-  modifierGlue = modifierGlue || window.Synergy && Synergy.modifierGlue || '-';
-  componentGlue = componentGlue || window.Synergy && Synergy.componentGlue || '_';
+  var Synergy = window.Synergy || {};
+  modifierGlue = modifierGlue || Synergy.modifierGlue || '-';
+  componentGlue = componentGlue || Synergy.componentGlue || '_';
   return sQuery.hasModifier.bind({
     DOMNodes: element,
     modifierGlue: modifierGlue,
@@ -2539,7 +2384,7 @@ if (typeof window !== 'undefined') {
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(15)))
 
 /***/ }),
-/* 21 */
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2556,7 +2401,7 @@ function isValidCssProperty(query) {
 }
 
 /***/ }),
-/* 22 */
+/* 21 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2599,15 +2444,15 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 ;
 
 /***/ }),
-/* 23 */
+/* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return sQuery; });
-/* harmony import */ var _utilities_getConfig__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(24);
-/* harmony import */ var _utilities_getDomNodes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(25);
+/* harmony import */ var _utilities_getConfig__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(23);
+/* harmony import */ var _utilities_getDomNodes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(24);
 /* harmony import */ var _utilities_getModuleNamespace__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(0);
-/* harmony import */ var _utilities_init__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(26);
+/* harmony import */ var _utilities_init__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(25);
 /* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1);
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
 
@@ -2622,13 +2467,11 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
- // spoof env process to assis bundle size
+ // spoof env process to assist bundle size
 
-if (typeof process === 'undefined') {
-  window.process = {
-    env: {}
-  };
-}
+if (typeof process === 'undefined') window.process = {
+  env: {}
+};
 /**
  * @param {*} SynergyQuery
  * @param {Function} [callback]
@@ -2637,12 +2480,12 @@ if (typeof process === 'undefined') {
  * @param {Object} [parser]
  */
 
-
 function sQuery(SynergyQuery, callback, defaults, custom, parser) {
+  var Synergy = window.Synergy || {};
   var methods = {};
   var config = Object(_utilities_getConfig__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(defaults, custom, parser);
-  var componentGlue = config.componentGlue || window.Synergy && window.Synergy.componentGlue || '_';
-  var modifierGlue = config.modifierGlue || window.Synergy && window.Synergy.modifierGlue || '-';
+  var modifierGlue = config.modifierGlue || Synergy.modifierGlue || '-';
+  var componentGlue = config.componentGlue || Synergy.componentGlue || '_';
   var namespace = Object(_utilities_getModuleNamespace__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"])(SynergyQuery, componentGlue, modifierGlue);
   var DOMNodes = Object(_utilities_getDomNodes__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(SynergyQuery);
 
@@ -2697,7 +2540,7 @@ if (typeof window !== 'undefined') {
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(15)))
 
 /***/ }),
-/* 24 */
+/* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2708,10 +2551,10 @@ if (typeof window !== 'undefined') {
  * @param {*} parser 
  */
 function getConfig(defaults, custom, parser) {
-  var extendedConfig;
+  var extendedConfig; // `process` and `require` are exploited to help reduce bundle size
 
   if (true) {
-    extendedConfig = deepExtend(defaults, custom);
+    extendedConfig = Synergy.config(defaults, custom);
   } else {}
 
   if (typeof parser === 'function') {
@@ -2722,7 +2565,7 @@ function getConfig(defaults, custom, parser) {
 }
 
 /***/ }),
-/* 25 */
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2764,7 +2607,7 @@ function getDomNodes(query) {
 }
 
 /***/ }),
-/* 26 */
+/* 25 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2899,6 +2742,163 @@ function init(custom) {
 }
 
 /***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/*!
+ * @description Recursive object extending
+ * @author Viacheslav Lotsmanov <lotsmanov89@gmail.com>
+ * @license MIT
+ *
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2013-2018 Viacheslav Lotsmanov
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+
+
+function isSpecificValue(val) {
+	return (
+		val instanceof Buffer
+		|| val instanceof Date
+		|| val instanceof RegExp
+	) ? true : false;
+}
+
+function cloneSpecificValue(val) {
+	if (val instanceof Buffer) {
+		var x = Buffer.alloc
+			? Buffer.alloc(val.length)
+			: new Buffer(val.length);
+		val.copy(x);
+		return x;
+	} else if (val instanceof Date) {
+		return new Date(val.getTime());
+	} else if (val instanceof RegExp) {
+		return new RegExp(val);
+	} else {
+		throw new Error('Unexpected situation');
+	}
+}
+
+/**
+ * Recursive cloning array.
+ */
+function deepCloneArray(arr) {
+	var clone = [];
+	arr.forEach(function (item, index) {
+		if (typeof item === 'object' && item !== null) {
+			if (Array.isArray(item)) {
+				clone[index] = deepCloneArray(item);
+			} else if (isSpecificValue(item)) {
+				clone[index] = cloneSpecificValue(item);
+			} else {
+				clone[index] = deepExtend({}, item);
+			}
+		} else {
+			clone[index] = item;
+		}
+	});
+	return clone;
+}
+
+function safeGetProperty(object, property) {
+	return property === '__proto__' ? undefined : object[property];
+}
+
+/**
+ * Extening object that entered in first argument.
+ *
+ * Returns extended object or false if have no target object or incorrect type.
+ *
+ * If you wish to clone source object (without modify it), just use empty new
+ * object as first argument, like this:
+ *   deepExtend({}, yourObj_1, [yourObj_N]);
+ */
+var deepExtend = module.exports = function (/*obj_1, [obj_2], [obj_N]*/) {
+	if (arguments.length < 1 || typeof arguments[0] !== 'object') {
+		return false;
+	}
+
+	if (arguments.length < 2) {
+		return arguments[0];
+	}
+
+	var target = arguments[0];
+
+	// convert arguments to array and cut off target object
+	var args = Array.prototype.slice.call(arguments, 1);
+
+	var val, src, clone;
+
+	args.forEach(function (obj) {
+		// skip argument if isn't an object, is null, or is an array
+		if (typeof obj !== 'object' || obj === null || Array.isArray(obj)) {
+			return;
+		}
+
+		Object.keys(obj).forEach(function (key) {
+			src = safeGetProperty(target, key); // source value
+			val = safeGetProperty(obj, key); // new value
+
+			// recursion prevention
+			if (val === target) {
+				return;
+
+			/**
+			 * if new value isn't object then just overwrite by new value
+			 * instead of extending.
+			 */
+			} else if (typeof val !== 'object' || val === null) {
+				target[key] = val;
+				return;
+
+			// just clone arrays (and recursive clone objects inside)
+			} else if (Array.isArray(val)) {
+				target[key] = deepCloneArray(val);
+				return;
+
+			// custom cloning and overwrite for specific objects
+			} else if (isSpecificValue(val)) {
+				target[key] = cloneSpecificValue(val);
+				return;
+
+			// overwrite by new value if source isn't object or array
+			} else if (typeof src !== 'object' || src === null || Array.isArray(src)) {
+				target[key] = deepExtend({}, val);
+				return;
+
+			// source value and new value is objects both, extending...
+			} else {
+				target[key] = deepExtend(src, val);
+				return;
+			}
+		});
+	});
+
+	return target;
+};
+
+
+/***/ }),
 /* 27 */
 /***/ (function(module, exports) {
 
@@ -2946,7 +2946,7 @@ __webpack_require__.d(src_namespaceObject, "Component", function() { return comp
 __webpack_require__.d(src_namespaceObject, "SubComponent", function() { return component_SubComponent; });
 
 // EXTERNAL MODULE: /Users/reede/Documents/Projects/Lucid/Lucid/src/synergize.js
-var synergize = __webpack_require__(17);
+var synergize = __webpack_require__(16);
 
 // EXTERNAL MODULE: /Users/reede/Documents/Projects/Lucid/Lucid/src/module.jsx
 var src_module = __webpack_require__(7);
@@ -2965,8 +2965,8 @@ var getHtmlProps = __webpack_require__(12);
 // EXTERNAL MODULE: /Users/reede/Documents/Projects/Lucid/Lucid/src/utilities/getModifiersFromProps.js
 var getModifiersFromProps = __webpack_require__(10);
 
-// EXTERNAL MODULE: /Users/reede/Documents/Projects/Lucid/Lucid/src/utilities/getModulesFromProps.js
-var getModulesFromProps = __webpack_require__(13);
+// EXTERNAL MODULE: /Users/reede/Documents/Projects/Lucid/Lucid/src/utilities/generateClasses.js
+var generateClasses = __webpack_require__(13);
 
 // EXTERNAL MODULE: /Users/reede/Documents/Projects/Lucid/Lucid/src/utilities/renderModifiers.js
 var renderModifiers = __webpack_require__(6);
@@ -3060,18 +3060,19 @@ function (_React$Component) {
   }, {
     key: "renderTag",
     value: function renderTag(props, context, subComponent) {
-      var styleParser = props.styleParser || Synergy.styleParser;
-      var componentGlue = context.ui['component-glue'];
-      var modifierGlue = context.ui['modifier-glue'];
+      var modifierGlue = context.modifierGlue,
+          componentGlue = context.componentGlue;
       var config = context.config || {};
       var module = props.module || context.module;
-      var propModifiers = Object(renderModifiers["a" /* default */])(Object(getModifiersFromProps["a" /* default */])(props, Synergy.CssClassProps));
-      var contextModifiers = Object(renderModifiers["a" /* default */])(Object(getModifiersFromProps["a" /* default */])(context.props && context.props[props.name], Synergy.CssClassProps));
-      var passedModifiers = Object(renderModifiers["a" /* default */])(props.modifiers);
-      var classes = Object(getModulesFromProps["a" /* default */])(props, props.className ? ' ' + props.className : '', modifierGlue);
+      var propModifiers = Object(renderModifiers["a" /* default */])(Object(getModifiersFromProps["a" /* default */])(props, Synergy.CssClassProps), modifierGlue);
+      var getContextModifiers = Object(getModifiersFromProps["a" /* default */])(context.props && context.props[props.name], Synergy.CssClassProps);
+      var contextModifiers = Object(renderModifiers["a" /* default */])(getContextModifiers, modifierGlue);
+      var passedModifiers = Object(renderModifiers["a" /* default */])(props.modifiers, modifierGlue);
+      var classes = Object(generateClasses["a" /* default */])(props, props.className ? ' ' + props.className : '', modifierGlue);
       var modifiers = propModifiers + passedModifiers + contextModifiers;
       var eventHandlers = this.getEventHandlers([props, config[props.name] ? config[props.name] : {}]);
       var Tag = props.href && 'a' || props.component || props.tag || (html_tags_default.a.includes(props.name) ? props.name : 'div');
+      var styleParser = props.styleParser || Synergy.styleParser;
 
       var ref = function ref(node) {
         return Object(refHandler["a" /* default */])(node, props, styleParser, false, context.ui);
@@ -3140,16 +3141,20 @@ var component_SubComponent = function SubComponent(props) {
 
 
 // EXTERNAL MODULE: /Users/reede/Documents/Projects/Polymorph/Polymorph/src/polymorph.js
-var polymorph = __webpack_require__(20);
+var polymorph = __webpack_require__(19);
 
 // EXTERNAL MODULE: /Users/reede/Documents/Projects/sQuery/sQuery/src/squery.js
-var squery = __webpack_require__(23);
+var squery = __webpack_require__(22);
 
 // EXTERNAL MODULE: ./node_modules/deep-extend/lib/deep-extend.js
-var deep_extend = __webpack_require__(16);
+var deep_extend = __webpack_require__(26);
 var deep_extend_default = /*#__PURE__*/__webpack_require__.n(deep_extend);
 
 // CONCATENATED MODULE: ./src/synergy.js
+function synergy_objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { synergy_defineProperty(target, key, source[key]); }); } return target; }
+
+function synergy_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
  // import * as lucid from '../../../Lucid/Lucid/dist/lucid';
@@ -3159,34 +3164,49 @@ var deep_extend_default = /*#__PURE__*/__webpack_require__.n(deep_extend);
 
 
 if (typeof window !== 'undefined') {
-  // Attach common dependencies to window
-  window.deepExtend = deep_extend_default.a;
-  squery["a" /* default */].init();
-  Object.assign(window, src_namespaceObject);
-  Synergy.styleParser = polymorph["a" /* default */];
+  // Attach Synergy tools to global object
+  Object.assign(window, synergy_objectSpread({
+    Synergy: window.Synergy || {}
+  }, src_namespaceObject)); // Declare global Synergy properties
 
-  Synergy.config = function () {
-    for (var _len = arguments.length, params = new Array(_len), _key = 0; _key < _len; _key++) {
-      params[_key] = arguments[_key];
-    }
+  Object.assign(Synergy, {
+    styleParser: polymorph["a" /* default */],
+    config: function config() {
+      for (var _len = arguments.length, params = new Array(_len), _key = 0; _key < _len; _key++) {
+        params[_key] = arguments[_key];
+      }
 
-    return deep_extend_default.a.apply(void 0, [{}].concat(params));
-  };
+      return deep_extend_default.a.apply(void 0, [{}].concat(params));
+    },
+    theme: synergy_theme
+  });
+}
+/**
+ * Synergy Theme
+ * 
+ * @param {*} modules
+ * @param {*} ui
+ * @param {*} theme
+ */
 
-  Synergy.theme = function (modules, ui, theme) {
-    window.ui = Synergy.config(ui, theme);
-    delete window.ui.modules;
-    Synergy.CssClassProps = theme['css-class-props'];
-    Object.values(modules).forEach(function (MODULE) {
-      return MODULE.defaults && (window[MODULE.name] = Object.assign(MODULE, {
-        config: Module.config(MODULE.defaults(ui), theme.modules[MODULE.name])
-      }));
-    });
 
-    if (typeof ui.foundation === 'function') {
-      ui.foundation(ui);
-    }
-  };
+function synergy_theme(modules, ui, theme) {
+  window.ui = Synergy.config(ui, theme);
+  delete window.ui.modules;
+  squery["a" /* default */].init({
+    modifierGlue: theme['modifier-glue'],
+    componentGlue: theme['component-glue']
+  });
+  Synergy.CssClassProps = theme['css-class-props'];
+  Object.values(modules).forEach(function (MODULE) {
+    return MODULE.defaults && (window[MODULE.name] = Object.assign(MODULE, {
+      config: Module.config(MODULE.defaults(ui), theme.modules[MODULE.name])
+    }));
+  });
+
+  if (typeof ui.foundation === 'function') {
+    ui.foundation(ui);
+  }
 }
 
 /***/ })
