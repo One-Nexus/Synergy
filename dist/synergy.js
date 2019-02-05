@@ -7,7 +7,7 @@
 		var a = typeof exports === 'object' ? factory(require("react"), require("react-dom")) : factory(root["react"], root["react-dom"]);
 		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
 	}
-})(window, function(__WEBPACK_EXTERNAL_MODULE__2__, __WEBPACK_EXTERNAL_MODULE__17__) {
+})(window, function(__WEBPACK_EXTERNAL_MODULE__2__, __WEBPACK_EXTERNAL_MODULE__16__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -91,7 +91,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 29);
+/******/ 	return __webpack_require__(__webpack_require__.s = 27);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -344,6 +344,11 @@ function getQueryFromObject(query, node) {
 // CONCATENATED MODULE: /Users/reede/Documents/Projects/sQuery/sQuery/src/api/getComponent.js
 
 /**
+ * @TODO allow this API
+ * const [title, content] = panel.getComponent(['title', 'content']);
+ */
+
+/**
  * @param {*} componentName 
  */
 
@@ -537,6 +542,9 @@ function modifier_modifier(modifier, operator) {
 
   if (operator === 'unset' || operator === 'remove') {
     return removeModifier.bind(this)(modifier);
+  }
+
+  if (operator === 'toggle') {// @TODO
   }
 }
 // EXTERNAL MODULE: /Users/reede/Documents/Projects/sQuery/sQuery/src/api/parent.js
@@ -907,7 +915,7 @@ function renderModifiers(modifiers, modifierGlue) {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Group; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(17);
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(16);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var html_tags__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(11);
 /* harmony import */ var html_tags__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(html_tags__WEBPACK_IMPORTED_MODULE_2__);
@@ -1001,7 +1009,7 @@ function (_React$Component) {
     };
 
     _this.id = (props.before || props.after) && !props.id ? "synergy-module-".concat(increment) : props.id;
-    _this.tag = props.component || props.tag || (html_tags__WEBPACK_IMPORTED_MODULE_2___default.a.includes(_this.namespace) ? _this.namespace : 'div');
+    _this.tag = props.tag || (html_tags__WEBPACK_IMPORTED_MODULE_2___default.a.includes(_this.namespace) ? _this.namespace : 'div');
     _this.classNames = Object(_utilities_generateClasses__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"])(props, _this.namespace + modifiers + classes, modifierGlue);
     if (Synergy.CssClassProps) Synergy.CssClassProps.forEach(function (prop) {
       if (Object.keys(props).includes(prop)) {
@@ -1010,6 +1018,7 @@ function (_React$Component) {
     });
     _this.contextValue = {
       ui: ui,
+      styleParser: styleParser,
       modifierGlue: modifierGlue,
       componentGlue: componentGlue,
       module: _this.namespace,
@@ -1346,7 +1355,7 @@ function getModifiersFromProps(props) {
 
 "use strict";
 
-module.exports = __webpack_require__(28);
+module.exports = __webpack_require__(26);
 
 
 /***/ }),
@@ -1355,7 +1364,7 @@ module.exports = __webpack_require__(28);
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getHtmlProps; });
-/* harmony import */ var html_attributes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(18);
+/* harmony import */ var html_attributes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(17);
 /* harmony import */ var html_attributes__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(html_attributes__WEBPACK_IMPORTED_MODULE_0__);
 
 /**
@@ -1433,7 +1442,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 /**
  * Handle the ref callback on the rendered React component
  */
-function refHandler(node, props, styleParser, parentModule, theme, config) {
+function refHandler(node, props, styleParser, parentModule, ui, config) {
   if (node && node instanceof HTMLElement) {
     Object.assign(node, {
       isFirstChild: node === node.parentNode.firstChild,
@@ -1446,10 +1455,14 @@ function refHandler(node, props, styleParser, parentModule, theme, config) {
 
     if (styleParser) {
       if (props.styles) {
-        styleParser.apply(void 0, [node].concat(_toConsumableArray(props.styles)));
+        if (props.styles.constructor === Array) {
+          styleParser.apply(void 0, [node].concat(_toConsumableArray(props.styles)));
+        } else {
+          styleParser(node, props.styles, config, ui);
+        }
       } else if (props.name && window[props.name]) {
-        if (window[props.name] && window[props.name].layout && window[props.name].defaults) {
-          styleParser(node, window[props.name].layout, config, theme);
+        if (window[props.name] && window[props.name].layout) {
+          styleParser(node, window[props.name].layout, config, ui);
         }
       }
 
@@ -1457,11 +1470,9 @@ function refHandler(node, props, styleParser, parentModule, theme, config) {
         var fistLetter = prop[0];
 
         if (fistLetter === fistLetter.toUpperCase()) {
-          if (window[prop] && window[prop].layout && window[prop].defaults) {
-            var _config = Module.config(window[prop].defaults(theme), theme[prop]);
-
+          if (window[prop] && window[prop].layout && window[prop].config) {
             node.namespace = node.namespace || prop;
-            styleParser(node, window[prop].layout, _config, theme);
+            styleParser(node, window[prop].layout, window[prop].config, ui);
           }
         }
       });
@@ -1667,113 +1678,12 @@ process.umask = function() { return 0; };
 
 /***/ }),
 /* 16 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-/* WEBPACK VAR INJECTION */(function(global) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Synergize; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-
-/**
- * Construct a Synergy module
- */
-
-var Synergize =
-/*#__PURE__*/
-function (_React$Component) {
-  _inherits(Synergize, _React$Component);
-
-  function Synergize(props, context) {
-    var _this;
-
-    _classCallCheck(this, Synergize);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Synergize).call(this, props, context));
-
-    try {
-      _this.config = global.Synergy.modules[_this.props.name].config;
-    } catch (error) {
-      _this.config = {};
-    }
-
-    try {
-      _this.methods = global.Synergy.modules[_this.props.name].methods;
-    } catch (error) {
-      _this.methods = {};
-    }
-
-    for (var method in _this.methods) {
-      _this[method] = _this.methods[method];
-    }
-
-    _this.content = function (defaults) {
-      if (_this.props.content) {
-        return defaults;
-      }
-
-      if (_this.containsStaticMethodContent(_this.props.children)) {
-        return _this.props.children;
-      }
-
-      return defaults;
-    };
-
-    return _this;
-  }
-
-  _createClass(Synergize, [{
-    key: "containsStaticMethodContent",
-    value: function containsStaticMethodContent(props) {
-      var _this2 = this;
-
-      return Object.entries(props).some(function (prop) {
-        var _ref = [prop[0], prop[1]],
-            key = _ref[0],
-            value = _ref[1];
-
-        if (value.constructor === Array) {
-          return value.find(function (prop) {
-            return prop.type === _this2.constructor.content;
-          });
-        } else {
-          return value.type === _this2.constructor.content;
-        }
-      });
-    }
-  }]);
-
-  return Synergize;
-}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
-
-
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(27)))
+module.exports = __WEBPACK_EXTERNAL_MODULE__16__;
 
 /***/ }),
 /* 17 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE__17__;
-
-/***/ }),
-/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1917,13 +1827,13 @@ module.exports = {
 
 
 /***/ }),
-/* 19 */
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return polymorph; });
-/* harmony import */ var _utilities_isValidCssProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(20);
-/* harmony import */ var _utilities_stringifyState__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(21);
+/* harmony import */ var _utilities_isValidCssProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(19);
+/* harmony import */ var _utilities_stringifyState__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(20);
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
@@ -1944,7 +1854,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 
 
-var sQuery = typeof window !== 'undefined' && window.sQuery; // `process` and `require` exploited to help reduce bundle size
+var sQuery = typeof window !== 'undefined' && window.sQuery; // `process` and `require` are exploited to help reduce bundle size
 
 if (!sQuery || typeof process !== 'undefined' && !true) {
   sQuery = {
@@ -2384,7 +2294,7 @@ if (typeof window !== 'undefined') {
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(15)))
 
 /***/ }),
-/* 20 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2401,7 +2311,7 @@ function isValidCssProperty(query) {
 }
 
 /***/ }),
-/* 21 */
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2444,15 +2354,15 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 ;
 
 /***/ }),
-/* 22 */
+/* 21 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return sQuery; });
-/* harmony import */ var _utilities_getConfig__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(23);
-/* harmony import */ var _utilities_getDomNodes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(24);
+/* harmony import */ var _utilities_getConfig__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(22);
+/* harmony import */ var _utilities_getDomNodes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(23);
 /* harmony import */ var _utilities_getModuleNamespace__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(0);
-/* harmony import */ var _utilities_init__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(25);
+/* harmony import */ var _utilities_init__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(24);
 /* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1);
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
 
@@ -2540,7 +2450,7 @@ if (typeof window !== 'undefined') {
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(15)))
 
 /***/ }),
-/* 23 */
+/* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2565,7 +2475,7 @@ function getConfig(defaults, custom, parser) {
 }
 
 /***/ }),
-/* 24 */
+/* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2607,7 +2517,7 @@ function getDomNodes(query) {
 }
 
 /***/ }),
-/* 25 */
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2627,7 +2537,7 @@ function init(custom) {
     elementProto: true,
     nodeListProto: true,
     preset: 'Synergy',
-    attachToWindow: true,
+    Synergy: true,
     alterMethodName: ['sQuery']
   }, custom);
   options.alterMethodName = options.alterMethodName || [];
@@ -2647,7 +2557,7 @@ function init(custom) {
   componentGlue = options.componentGlue || componentGlue;
   modifierGlue = options.modifierGlue || modifierGlue;
 
-  if (options.attachToWindow) {
+  if (options.Synergy) {
     window.Synergy = window.Synergy || {};
     Object.assign(window.Synergy, {
       componentGlue: componentGlue,
@@ -2742,7 +2652,7 @@ function init(custom) {
 }
 
 /***/ }),
-/* 26 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2899,54 +2809,24 @@ var deepExtend = module.exports = function (/*obj_1, [obj_2], [obj_N]*/) {
 
 
 /***/ }),
-/* 27 */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || new Function("return this")();
-} catch (e) {
-	// This works if the window reference is available
-	if (typeof window === "object") g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-/* 28 */
+/* 26 */
 /***/ (function(module) {
 
 module.exports = ["a","abbr","address","area","article","aside","audio","b","base","bdi","bdo","blockquote","body","br","button","canvas","caption","cite","code","col","colgroup","data","datalist","dd","del","details","dfn","dialog","div","dl","dt","em","embed","fieldset","figcaption","figure","footer","form","h1","h2","h3","h4","h5","h6","head","header","hgroup","hr","html","i","iframe","img","input","ins","kbd","keygen","label","legend","li","link","main","map","mark","math","menu","menuitem","meta","meter","nav","noscript","object","ol","optgroup","option","output","p","param","picture","pre","progress","q","rb","rp","rt","rtc","ruby","s","samp","script","section","select","slot","small","source","span","strong","style","sub","summary","sup","svg","table","tbody","td","template","textarea","tfoot","th","thead","time","title","tr","track","u","ul","var","video","wbr"];
 
 /***/ }),
-/* 29 */
+/* 27 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 var src_namespaceObject = {};
 __webpack_require__.r(src_namespaceObject);
-__webpack_require__.d(src_namespaceObject, "Synergize", function() { return synergize["a" /* default */]; });
 __webpack_require__.d(src_namespaceObject, "Module", function() { return src_module["d" /* default */]; });
 __webpack_require__.d(src_namespaceObject, "Wrapper", function() { return src_module["c" /* Wrapper */]; });
 __webpack_require__.d(src_namespaceObject, "Group", function() { return src_module["a" /* Group */]; });
 __webpack_require__.d(src_namespaceObject, "Component", function() { return component_Component; });
 __webpack_require__.d(src_namespaceObject, "SubComponent", function() { return component_SubComponent; });
-
-// EXTERNAL MODULE: /Users/reede/Documents/Projects/Lucid/Lucid/src/synergize.js
-var synergize = __webpack_require__(16);
 
 // EXTERNAL MODULE: /Users/reede/Documents/Projects/Lucid/Lucid/src/module.jsx
 var src_module = __webpack_require__(7);
@@ -3015,10 +2895,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
-var ComponentContext = external_react_default.a.createContext({
-  component: '',
-  subComponent: []
-});
+var ComponentContext = external_react_default.a.createContext();
 /**
  * Render a Synergy component
  */
@@ -3062,7 +2939,6 @@ function (_React$Component) {
     value: function renderTag(props, context, subComponent) {
       var modifierGlue = context.modifierGlue,
           componentGlue = context.componentGlue;
-      var config = context.config || {};
       var module = props.module || context.module;
       var propModifiers = Object(renderModifiers["a" /* default */])(Object(getModifiersFromProps["a" /* default */])(props, Synergy.CssClassProps), modifierGlue);
       var getContextModifiers = Object(getModifiersFromProps["a" /* default */])(context.props && context.props[props.name], Synergy.CssClassProps);
@@ -3070,12 +2946,11 @@ function (_React$Component) {
       var passedModifiers = Object(renderModifiers["a" /* default */])(props.modifiers, modifierGlue);
       var classes = Object(generateClasses["a" /* default */])(props, props.className ? ' ' + props.className : '', modifierGlue);
       var modifiers = propModifiers + passedModifiers + contextModifiers;
-      var eventHandlers = this.getEventHandlers([props, config[props.name] ? config[props.name] : {}]);
+      var eventHandlers = this.getEventHandlers([props, context.config[props.name] ? context.config[props.name] : {}]);
       var Tag = props.href && 'a' || props.component || props.tag || (html_tags_default.a.includes(props.name) ? props.name : 'div');
-      var styleParser = props.styleParser || Synergy.styleParser;
 
       var ref = function ref(node) {
-        return Object(refHandler["a" /* default */])(node, props, styleParser, false, context.ui);
+        return Object(refHandler["a" /* default */])(node, props, context.styleParser, false, context.ui);
       };
 
       var selector = '';
@@ -3108,7 +2983,7 @@ function (_React$Component) {
         ref: ref,
         className: selector,
         "data-component": props.name.constructor === Array ? props.name[0] : props.name
-      }), props.children));
+      }, this.props.componentProps), props.children));
     }
   }, {
     key: "render",
@@ -3139,15 +3014,14 @@ var component_SubComponent = function SubComponent(props) {
 // CONCATENATED MODULE: /Users/reede/Documents/Projects/Lucid/Lucid/src/index.js
 
 
-
 // EXTERNAL MODULE: /Users/reede/Documents/Projects/Polymorph/Polymorph/src/polymorph.js
-var polymorph = __webpack_require__(19);
+var polymorph = __webpack_require__(18);
 
 // EXTERNAL MODULE: /Users/reede/Documents/Projects/sQuery/sQuery/src/squery.js
-var squery = __webpack_require__(22);
+var squery = __webpack_require__(21);
 
 // EXTERNAL MODULE: ./node_modules/deep-extend/lib/deep-extend.js
-var deep_extend = __webpack_require__(26);
+var deep_extend = __webpack_require__(25);
 var deep_extend_default = /*#__PURE__*/__webpack_require__.n(deep_extend);
 
 // CONCATENATED MODULE: ./src/synergy.js
@@ -3160,6 +3034,7 @@ function synergy_defineProperty(obj, key, value) { if (key in obj) { Object.defi
  // import * as lucid from '../../../Lucid/Lucid/dist/lucid';
 // import polymorph from '../../../Polymorph/Polymorph/dist/polymorph';
 // import sQuery from '../../../sQuery/sQuery/dist/squery';
+// @TODO sQuery.init needs to be called upon importing this file...
 
 
 
@@ -3185,13 +3060,13 @@ if (typeof window !== 'undefined') {
  * Synergy Theme
  * 
  * @param {*} modules
- * @param {*} ui
+ * @param {*} globals
  * @param {*} theme
  */
 
 
-function synergy_theme(modules, ui, theme) {
-  window.ui = Synergy.config(ui, theme);
+function synergy_theme(modules, theme, globals) {
+  window.ui = Synergy.config(globals, theme);
   delete window.ui.modules;
   squery["a" /* default */].init({
     modifierGlue: theme['modifier-glue'],
