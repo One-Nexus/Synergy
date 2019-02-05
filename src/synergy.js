@@ -6,6 +6,8 @@ import sQuery from '../../../sQuery/sQuery/src/squery';
 // import polymorph from '../../../Polymorph/Polymorph/dist/polymorph';
 // import sQuery from '../../../sQuery/sQuery/dist/squery';
 
+// @TODO sQuery.init needs to be called upon importing this file...
+
 import deepextend from 'deep-extend';
 
 if (typeof window !== 'undefined') {
@@ -27,11 +29,11 @@ if (typeof window !== 'undefined') {
  * Synergy Theme
  * 
  * @param {*} modules
- * @param {*} ui
+ * @param {*} globals
  * @param {*} theme
  */
-function theme(modules, ui, theme) {
-    window.ui = Synergy.config(ui, theme);
+function theme(modules, theme, globals) {
+    window.ui = Synergy.config(globals, theme);
 
     delete window.ui.modules;
 
