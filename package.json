@@ -1,7 +1,7 @@
 {
   "name": "@onenexus/synergy",
   "version": "4.0.0",
-  "description": "A front-end framework for building modular, configurable and scalable UI components",
+  "description": "A front-end framework for building modular, configurable and scalable UI components for React apps",
   "main": "dist/synergy.js",
   "author": "(Edmund Reed)[http://twitter.com/esr360] <esr360@live.com>",
   "homepage": "https://github.com/esr360/Synergy",
@@ -9,6 +9,8 @@
     "javascript",
     "modular",
     "modules",
+    "ui",
+    "user-interface",
     "components",
     "front-end",
     "framework",
