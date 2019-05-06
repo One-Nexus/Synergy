@@ -1,6 +1,6 @@
 import * as lucid from '../../../Lucid/Lucid/src';
-import polymorph from '../../../Polymorph/Polymorph/src/polymorph';
 import sQuery from '../../../sQuery/sQuery/src/squery';
+import polymorph from '../../../Polymorph/Polymorph/src/polymorph';
 
 // import * as lucid from '../../../Lucid/Lucid/dist/lucid';
 // import polymorph from '../../../Polymorph/Polymorph/dist/polymorph';

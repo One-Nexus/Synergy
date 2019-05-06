@@ -7,7 +7,7 @@
 		var a = typeof exports === 'object' ? factory(require("react"), require("react-dom")) : factory(root["react"], root["react-dom"]);
 		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
 	}
-})(window, function(__WEBPACK_EXTERNAL_MODULE__2__, __WEBPACK_EXTERNAL_MODULE__16__) {
+})(window, function(__WEBPACK_EXTERNAL_MODULE__1__, __WEBPACK_EXTERNAL_MODULE__12__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -91,7 +91,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 27);
+/******/ 	return __webpack_require__(__webpack_require__.s = 21);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -99,17 +99,15 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getModuleNamespace; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getNamespace; });
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-/**
- * Get the Module name from a Synergy query
- * 
- * @param {*} query 
- * @param {Bool} strict
- */
-function getModuleNamespace(query, componentGlue, modifierGlue) {
-  var strict = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
+function getNamespace(query, strict, config) {
+  config = Object.assign(this || {}, config || {});
+  var _config = config,
+      namespace = _config.namespace,
+      modifierGlue = _config.modifierGlue,
+      componentGlue = _config.componentGlue;
 
   if (query instanceof HTMLElement) {
     if (query.hasAttribute('data-module')) {
@@ -117,11 +115,27 @@ function getModuleNamespace(query, componentGlue, modifierGlue) {
     }
 
     if (query.classList.length) {
-      if (strict) {
-        return query.classList[0].split(modifierGlue)[0].split(componentGlue)[0];
+      var targetClass;
+
+      if (namespace) {
+        targetClass = [].slice.call(query.classList).filter(function (className) {
+          return className.indexOf(namespace) === 0;
+        })[0];
       }
 
-      return query.classList[0].split(modifierGlue)[0];
+      if (!namespace || !targetClass) {
+        targetClass = query.classList[0];
+      }
+
+      if (strict) {
+        return targetClass.split(modifierGlue)[0];
+      }
+
+      return targetClass.split(modifierGlue)[0].split(componentGlue)[0];
+    }
+
+    if (namespace) {
+      return namespace;
     }
   }
 
@@ -129,7 +143,7 @@ function getModuleNamespace(query, componentGlue, modifierGlue) {
     return query;
   }
 
-  if (_typeof(query) === 'object' && 'name' in query) {
+  if (query && _typeof(query) === 'object' && query.name) {
     return query.name;
   }
 
@@ -140,772 +154,12 @@ function getModuleNamespace(query, componentGlue, modifierGlue) {
 
 /***/ }),
 /* 1 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-
-// EXTERNAL MODULE: /Users/reede/Documents/Projects/sQuery/sQuery/src/utilities/getModuleNamespace.js
-var getModuleNamespace = __webpack_require__(0);
-
-// CONCATENATED MODULE: /Users/reede/Documents/Projects/sQuery/sQuery/src/api/addModifier.js
-
-/**
- * @param {(String|Array)} modifier 
- */
-
-function addModifier(modifier) {
-  var _this = this;
-
-  if (this.DOMNodes instanceof NodeList) {
-    return this.DOMNodes.forEach(function (node) {
-      return addModifier.bind(Object.assign(_this, {
-        DOMNodes: node
-      }))(modifier);
-    });
-  }
-
-  if (modifier.constructor === Array) {
-    modifier = modifier.join(this.modifierGlue);
-  }
-
-  var namespace = this.namespace || Object(getModuleNamespace["a" /* default */])(this.DOMNodes, this.componentGlue, this.modifierGlue);
-  this.DOMNodes.classList.add(namespace + this.modifierGlue + modifier);
-  return this.DOMNodes;
-}
-// EXTERNAL MODULE: /Users/reede/Documents/Projects/sQuery/sQuery/src/api/getComponents.js
-var getComponents = __webpack_require__(3);
-
-// CONCATENATED MODULE: /Users/reede/Documents/Projects/sQuery/sQuery/src/api/isComponent.js
-
-/**
- * @param {*} componentName 
- */
-
-function isComponent(componentName) {
-  var _this = this;
-
-  if (this.DOMNodes instanceof NodeList) {
-    return Array.prototype.slice.call(this.DOMNodes).every(function (DOMNodes) {
-      return isComponent.bind(Object.assign(_this, {
-        DOMNodes: DOMNodes
-      }))(componentName);
-    });
-  }
-
-  return Array.prototype.slice.call(this.DOMNodes.classList).some(function (className) {
-    var isAComponent = className.split(_this.componentGlue).length - 1 === 1;
-    var query = (_this.namespace || Object(getModuleNamespace["a" /* default */])(_this.DOMNodes, _this.componentGlue, _this.modifierGlue, 'strict')) + _this.componentGlue + componentName;
-    var isMatch = query.indexOf(_this.componentGlue + componentName) > -1;
-    return className.indexOf(query) === 0 && isAComponent && isMatch;
-  });
-}
-// CONCATENATED MODULE: /Users/reede/Documents/Projects/sQuery/sQuery/src/api/component.js
-
-
-
-/**
- * @param {String} componentName 
- * @param {(('find'|'is'|'set'|'unset')|Function)} operator 
- */
-
-function component_component(componentName, operator) {
-  var _this = this;
-
-  var namespace = function namespace(node) {
-    return _this.namespace || Object(getModuleNamespace["a" /* default */])(node, _this.componentGlue, _this.modifierGlue, 'strict');
-  };
-
-  if (!componentName && !operator) {
-    return getComponents["default"].bind(this)();
-  }
-
-  if (!operator || operator === 'find') {
-    return getComponents["default"].bind(this)(componentName);
-  }
-
-  if (operator === 'is') {
-    return isComponent.bind(this)(componentName);
-  }
-
-  if (operator === 'set') {
-    if (this.DOMNodes instanceof NodeList) {
-      this.DOMNodes.forEach(function (node) {
-        return node.classList.add(namespace(node) + _this.componentGlue + componentName);
-      });
-    } else {
-      this.DOMNodes.classList.add(namespace(this.DOMNodes) + this.componentGlue + componentName);
-    }
-  }
-
-  if (operator === 'unset') {
-    if (this.DOMNodes instanceof NodeList) {
-      this.DOMNodes.forEach(function (node) {
-        return node.classList.remove(namespace(node) + _this.componentGlue + componentName);
-      });
-    } else {
-      this.DOMNodes.classList.remove(namespace(this.DOMNodes) + this.componentGlue + componentName);
-    }
-  }
-
-  if (typeof operator === 'function') {
-    getComponents["default"].bind(this)(componentName).forEach(function (node) {
-      return operator(node);
-    });
-  }
-}
-// CONCATENATED MODULE: /Users/reede/Documents/Projects/sQuery/sQuery/src/utilities/getModules.js
-/**
- * @param {*} target 
- * @param {*} moduleName 
- */
-function getModules(target, moduleName) {
-  if (target.DOMNodes instanceof NodeList) {
-    return Array.prototype.slice.call(this.DOMNodes).reduce(function (matches, node) {
-      return matches.concat(Array.prototype.slice.call(node.querySelectorAll(".".concat(moduleName, ", [class*=\"").concat(moduleName + target.modifierGlue, "\"]"))));
-    }, []);
-  }
-
-  return target.DOMNodes.querySelectorAll(".".concat(moduleName, ", [class*=\"").concat(moduleName + target.modifierGlue, "\"]"));
-}
-// CONCATENATED MODULE: /Users/reede/Documents/Projects/sQuery/sQuery/src/api/find.js
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-
-
-
-/**
- * @param {*} query 
- */
-
-function find(query) {
-  var _this = this;
-
-  if (_typeof(query) === 'object') {
-    if (this.DOMNodes instanceof NodeList) {
-      return Array.prototype.slice.call(this.DOMNodes).reduce(function (matches, node) {
-        return matches.concat(getQueryFromObject.bind(_this)(query, node));
-      }, []);
-    }
-
-    return getQueryFromObject.bind(this)(query, this.DOMNodes);
-  }
-
-  if (typeof query === 'string') {
-    var components = getComponents["default"].bind(this)(query);
-
-    if (components.length) {
-      return components;
-    }
-
-    if (getModules(this, query).length) {
-      return getModules(this, query);
-    }
-  }
-}
-/**
- * @param {Object} query 
- * @param {HTMLElement} node 
- */
-
-function getQueryFromObject(query, node) {
-  var _this2 = this;
-
-  var matches = [];
-
-  if (query.module) {
-    if (query.component) {
-      return matches.concat(Array.prototype.slice.call(getComponents["default"].bind(this)(query.component, query.modifier, query.module)));
-    }
-
-    return matches.concat(Array.prototype.slice.call(node.querySelectorAll(".".concat(query.module, ", [class*=\"").concat(query.module + query.modifierGlue, "\"]"))));
-  }
-
-  if (query.component) {
-    var components = getComponents["default"].bind(this)(query.component);
-
-    if (query.modifier) {
-      return matches.concat(Array.prototype.slice.call(components.filter(function (component) {
-        return Array.prototype.slice.call(component.classList).some(function (className) {
-          var isNamespace = className.indexOf(_this2.namespace || Object(getModuleNamespace["a" /* default */])(component, _this2.componentGlue, _this2.modifierGlue)) === 0;
-          var hasModifier = className.indexOf(query.modifier) > -1;
-          return isNamespace && hasModifier;
-        });
-      })));
-    }
-
-    return matches.concat(Array.prototype.slice.call(components));
-  }
-
-  if (query.modifier) {
-    return;
-  }
-}
-// CONCATENATED MODULE: /Users/reede/Documents/Projects/sQuery/sQuery/src/api/getComponent.js
-
-/**
- * @TODO allow this API
- * const [title, content] = panel.getComponent(['title', 'content']);
- */
-
-/**
- * @param {*} componentName 
- */
-
-function getComponent(componentName) {
-  var _this = this;
-
-  if (this.DOMNodes instanceof NodeList) {
-    return Array.prototype.slice.call(this.DOMNodes).map(function (DOMNodes) {
-      return getComponent.bind(Object.assign(_this, {
-        DOMNodes: DOMNodes
-      }))(componentName);
-    });
-  }
-
-  ;
-  return getComponents["default"].bind(this)(componentName)[0];
-}
-// CONCATENATED MODULE: /Users/reede/Documents/Projects/sQuery/sQuery/src/api/getModifiers.js
-
-/**
- * @param {*} componentName 
- */
-
-function getModifiers() {
-  var _this = this;
-
-  if (this.DOMNodes instanceof NodeList) {
-    return Array.prototype.slice.call(this.DOMNodes).reduce(function (matches, DOMNodes) {
-      return matches.concat(getModifiers.bind(Object.assign(_this, {
-        DOMNodes: DOMNodes
-      }))());
-    }, []);
-  }
-
-  return Array.prototype.slice.call(this.DOMNodes.classList).filter(function (className) {
-    return className.indexOf(_this.namespace || Object(getModuleNamespace["a" /* default */])(_this.DOMNodes, _this.componentGlue, _this.modifierGlue)) === 0;
-  }).map(function (target) {
-    return target.split(_this.modifierGlue).slice(1);
-  })[0];
-}
-// EXTERNAL MODULE: /Users/reede/Documents/Projects/sQuery/sQuery/src/api/getSubComponents.js
-var getSubComponents = __webpack_require__(5);
-
-// CONCATENATED MODULE: /Users/reede/Documents/Projects/sQuery/sQuery/src/api/getSubComponent.js
-
-/**
- * @param {*} subComponentName 
- */
-
-function getSubComponent_getComponent(subComponentName) {
-  var _this = this;
-
-  var context = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
-
-  if (this.DOMNodes instanceof NodeList) {
-    return Array.prototype.slice.call(this.DOMNodes).map(function () {
-      return getSubComponents["default"].bind(_this)(subComponentName, context)[0];
-    });
-  }
-
-  return getSubComponents["default"].bind(this)(subComponentName, context)[0];
-}
-// EXTERNAL MODULE: /Users/reede/Documents/Projects/sQuery/sQuery/src/api/hasModifier.js
-var api_hasModifier = __webpack_require__(4);
-
-// CONCATENATED MODULE: /Users/reede/Documents/Projects/sQuery/sQuery/src/utilities/isModule.js
-/**
- * @param {*} target 
- * @param {*} moduleName 
- */
-function isModule(target, moduleName) {
-  var DOMNodes = !(target.DOMNodes instanceof NodeList) ? [target.DOMNodes] : target.DOMNodes;
-  return Array.prototype.slice.call(DOMNodes).every(function (node) {
-    return node.matches(".".concat(moduleName, ", [class*=\"").concat(moduleName + target.modifierGlue, "\"]"));
-  });
-}
-// CONCATENATED MODULE: /Users/reede/Documents/Projects/sQuery/sQuery/src/api/is.js
-function is_typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { is_typeof = function _typeof(obj) { return typeof obj; }; } else { is_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return is_typeof(obj); }
-
-
-
-
-
-/**
- * @param {*} query 
- */
-
-function is(query) {
-  var _this = this;
-
-  var DOMNodes = !(this.DOMNodes instanceof NodeList) ? [this.DOMNodes] : this.DOMNodes;
-
-  if (is_typeof(query) === 'object') {
-    if (query.module) {
-      if (query.component) {
-        var isModuleNamespace = Array.prototype.slice.call(DOMNodes).every(function (node) {
-          return (_this.namespace || Object(getModuleNamespace["a" /* default */])(node, _this.componentGlue, _this.modifierGlue, true)) === query.module;
-        });
-
-        if (query.modifier) {
-          return isModuleNamespace && isComponent.bind(this)(query.component) && api_hasModifier["default"].bind(this)(query.modifier);
-        }
-
-        return isModuleNamespace && isComponent.bind(this)(query.component);
-      }
-
-      return isModule(this, query.module);
-    }
-
-    if (query.component) {
-      if (query.modifier) {
-        return isComponent.bind(this)(query.component) && api_hasModifier["default"].bind(this)(query.modifier);
-      }
-
-      return isComponent.bind(this)(query.component);
-    }
-
-    if (query.modifier) {
-      return api_hasModifier["default"].bind(this)(query.modifier);
-    }
-  }
-
-  if (typeof query === 'string') {
-    if (isModule(this, query)) {
-      return isModule(this, query);
-    }
-
-    if (isComponent.bind(this)(query)) {
-      return isComponent.bind(this)(query);
-    }
-
-    if (api_hasModifier["default"].bind(this)(query)) {
-      return api_hasModifier["default"].bind(this)(query);
-    }
-  }
-
-  return false;
-}
-// CONCATENATED MODULE: /Users/reede/Documents/Projects/sQuery/sQuery/src/api/removeModifier.js
-
-/**
- * @param {(String|Array)} modifier 
- */
-
-function removeModifier(modifier) {
-  var _this = this;
-
-  if (modifier.constructor === Array) {
-    return modifier.forEach(function (_modifier) {
-      removeModifier.bind(Object.assign(_this))(_modifier);
-    });
-  }
-
-  if (this.DOMNodes instanceof NodeList) {
-    return this.DOMNodes.forEach(function (node) {
-      return removeModifier.bind(Object.assign(_this, {
-        DOMNodes: node
-      }))(modifier);
-    });
-  }
-
-  var node = this.DOMNodes;
-  Array.prototype.slice.call(node.classList).forEach(function (className) {
-    var moduleMatch = className.indexOf((_this.namespace || Object(getModuleNamespace["a" /* default */])(node, _this.componentGlue, _this.modifierGlue)) + _this.modifierGlue) === 0;
-    var modifierMatch = className.indexOf(_this.modifierGlue + modifier) > -1;
-    var newClass = className.replace(new RegExp(_this.modifierGlue + modifier, 'g'), '');
-
-    if (moduleMatch && modifierMatch) {
-      node.classList.remove(className);
-      node.classList.add(newClass);
-    }
-  });
-}
-// CONCATENATED MODULE: /Users/reede/Documents/Projects/sQuery/sQuery/src/api/modifier.js
-
-
-
-/**
- * @param {String} modifier 
- * @param {(('is'|'set'|'unset')|Function)} operator 
- */
-
-function modifier_modifier(modifier, operator) {
-  if (!operator || operator === 'is') {
-    return api_hasModifier["default"].bind(this)(modifier);
-  }
-
-  if (operator === 'set' || operator === 'add') {
-    return addModifier.bind(this)(modifier);
-  }
-
-  if (operator === 'unset' || operator === 'remove') {
-    return removeModifier.bind(this)(modifier);
-  }
-
-  if (operator === 'toggle') {// @TODO
-  }
-}
-// EXTERNAL MODULE: /Users/reede/Documents/Projects/sQuery/sQuery/src/api/parent.js
-var api_parent = __webpack_require__(9);
-
-// CONCATENATED MODULE: /Users/reede/Documents/Projects/sQuery/sQuery/src/api/parentComponent.js
-/**
- * @param {*} componentName 
- */
-function parentComponent(componentName) {
-  if (this.DOMNodes instanceof NodeList) {
-    return Array.prototype.slice.call(this.DOMNodes).map(function (node) {
-      return node.parentNode.closest("[data-component=\"".concat(componentName, "\"]"));
-    });
-  }
-
-  return this.DOMNodes.parentNode.closest("[data-component=\"".concat(componentName, "\"]"));
-}
-// CONCATENATED MODULE: /Users/reede/Documents/Projects/sQuery/sQuery/src/api/setComponent.js
-
-/**
- * @param {*} componentName 
- */
-
-function setComponent(componentName, namespace, replace) {
-  var _this = this;
-
-  if (this.DOMNodes instanceof NodeList) {
-    return this.DOMNodes.forEach(function (DOMNodes) {
-      return setComponent.bind(Object.assign(_this, {
-        DOMNodes: DOMNodes
-      }))(componentName);
-    });
-  }
-
-  if (!namespace && !replace) {
-    replace = this.namespace || Object(getModuleNamespace["a" /* default */])(this.DOMNodes, this.componentGlue, this.modifierGlue);
-  }
-
-  namespace = namespace || this.namespace || Object(getModuleNamespace["a" /* default */])(this.DOMNodes, this.componentGlue, this.modifierGlue);
-  this.DOMNodes.classList.add(namespace + this.componentGlue + componentName);
-  this.DOMNodes.setAttribute('data-component', componentName);
-  replace && this.DOMNodes.classList.remove(replace);
-}
-// CONCATENATED MODULE: /Users/reede/Documents/Projects/sQuery/sQuery/src/api/subComponent.js
-
-
-/**
- * @param {String} componentName 
- * @param {(('find'|'is')|Function)} operator 
- */
-
-function subComponent(subComponentName, operator) {
-  var _this = this;
-
-  if (!subComponentName && !operator) {
-    return getSubComponents["default"].bind(this)();
-  }
-
-  if (!operator || operator === 'find') {
-    return getSubComponents["default"].bind(this)(subComponentName);
-  }
-
-  if (operator === 'is') {
-    if (this.DOMNodes instanceof NodeList) {
-      return Array.prototype.slice.call(this.DOMNodes).every(function (node) {
-        return subComponent_is.bind(_this)(node, subComponentName);
-      });
-    }
-
-    return subComponent_is.bind(this)(this.DOMNodes, subComponentName);
-  }
-
-  if (typeof operator === 'function') {
-    getSubComponents["default"].bind(this)(subComponentName).forEach(function (node) {
-      return operator(node);
-    });
-  }
-}
-/**
- * @param {HTMLElement} node 
- * @param {String} subComponentName 
- */
-
-function subComponent_is(node, subComponentName) {
-  var query = this.namespace || Object(getModuleNamespace["a" /* default */])(node, this.componentGlue, this.modifierGlue);
-  var isMatch = query.indexOf(subComponentName) === query.length - subComponentName.length;
-  return Array.prototype.slice.call(node.classList).some(function (className) {
-    return className.indexOf(query) > -1 && isMatch;
-  });
-}
-// CONCATENATED MODULE: /Users/reede/Documents/Projects/sQuery/sQuery/src/api/unsetComponent.js
-
-/**
- * @param {*} componentName 
- */
-
-function unsetComponent(componentName) {
-  var _this = this;
-
-  if (this.DOMNodes instanceof NodeList) {
-    return this.DOMNodes.forEach(function (DOMNodes) {
-      return unsetComponent.bind(Object.assign(_this, {
-        DOMNodes: DOMNodes
-      }))(componentName);
-    });
-  }
-
-  return Array.prototype.slice.call(this.DOMNodes.classList).forEach(function (className) {
-    var isAComponent = className.split(_this.componentGlue).length - 1 === 1;
-    var isMatch = className.indexOf((_this.namespace || Object(getModuleNamespace["a" /* default */])(_this.DOMNodes, _this.componentGlue, _this.modifierGlue)) + _this.componentGlue + componentName) === 0;
-
-    if (isAComponent && isMatch) {
-      _this.DOMNodes.classList.remove(className);
-    }
-  });
-}
-// CONCATENATED MODULE: /Users/reede/Documents/Projects/sQuery/sQuery/src/api/index.js
-/* concated harmony reexport add */__webpack_require__.d(__webpack_exports__, "add", function() { return addModifier; });
-/* concated harmony reexport addModifier */__webpack_require__.d(__webpack_exports__, "addModifier", function() { return addModifier; });
-/* concated harmony reexport component */__webpack_require__.d(__webpack_exports__, "component", function() { return component_component; });
-/* concated harmony reexport components */__webpack_require__.d(__webpack_exports__, "components", function() { return component_component; });
-/* concated harmony reexport find */__webpack_require__.d(__webpack_exports__, "find", function() { return find; });
-/* concated harmony reexport getComponent */__webpack_require__.d(__webpack_exports__, "getComponent", function() { return getComponent; });
-/* concated harmony reexport getComponents */__webpack_require__.d(__webpack_exports__, "getComponents", function() { return getComponents["default"]; });
-/* concated harmony reexport getModifiers */__webpack_require__.d(__webpack_exports__, "getModifiers", function() { return getModifiers; });
-/* concated harmony reexport getSubComponent */__webpack_require__.d(__webpack_exports__, "getSubComponent", function() { return getSubComponent_getComponent; });
-/* concated harmony reexport getSubComponents */__webpack_require__.d(__webpack_exports__, "getSubComponents", function() { return getSubComponents["default"]; });
-/* concated harmony reexport has */__webpack_require__.d(__webpack_exports__, "has", function() { return api_hasModifier["default"]; });
-/* concated harmony reexport hasModifier */__webpack_require__.d(__webpack_exports__, "hasModifier", function() { return api_hasModifier["default"]; });
-/* concated harmony reexport is */__webpack_require__.d(__webpack_exports__, "is", function() { return is; });
-/* concated harmony reexport isComponent */__webpack_require__.d(__webpack_exports__, "isComponent", function() { return isComponent; });
-/* concated harmony reexport modifier */__webpack_require__.d(__webpack_exports__, "modifier", function() { return modifier_modifier; });
-/* concated harmony reexport removeModifier */__webpack_require__.d(__webpack_exports__, "removeModifier", function() { return removeModifier; });
-/* concated harmony reexport parent */__webpack_require__.d(__webpack_exports__, "parent", function() { return api_parent["default"]; });
-/* concated harmony reexport parentComponent */__webpack_require__.d(__webpack_exports__, "parentComponent", function() { return parentComponent; });
-/* concated harmony reexport setComponent */__webpack_require__.d(__webpack_exports__, "setComponent", function() { return setComponent; });
-/* concated harmony reexport subComponent */__webpack_require__.d(__webpack_exports__, "subComponent", function() { return subComponent; });
-/* concated harmony reexport subComponents */__webpack_require__.d(__webpack_exports__, "subComponents", function() { return subComponent; });
-/* concated harmony reexport unsetComponent */__webpack_require__.d(__webpack_exports__, "unsetComponent", function() { return unsetComponent; });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+module.exports = __WEBPACK_EXTERNAL_MODULE__1__;
 
 /***/ }),
 /* 2 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE__2__;
-
-/***/ }),
-/* 3 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return getComponents; });
-/* harmony import */ var _utilities_getModuleNamespace__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
-/* harmony import */ var _utilities_isValidSelector__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8);
-/* harmony import */ var _parent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9);
-
-
-
-/**
- * @param {*} componentName 
- */
-
-function getComponents() {
-  var _this = this;
-
-  var componentName = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-  var modifier = arguments.length > 1 ? arguments[1] : undefined;
-  var namespace = arguments.length > 2 ? arguments[2] : undefined;
-  if (componentName && !Object(_utilities_isValidSelector__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(componentName)) return [];
-
-  if (this.DOMNodes instanceof NodeList) {
-    return Array.prototype.slice.call(this.DOMNodes).reduce(function (matches, node) {
-      return matches.concat(Array.prototype.slice.call(getComponents.bind(Object.assign(_this, {
-        DOMNodes: node
-      }))(componentName, modifier, namespace)));
-    }, []);
-  }
-
-  if (componentName.indexOf('modifier(') === 0) return;
-  namespace = namespace || this.namespace || Object(_utilities_getModuleNamespace__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(this.DOMNodes, this.componentGlue, this.modifierGlue, 'strict');
-  var query = namespace + (componentName ? this.componentGlue + componentName : '');
-  var selector = ".".concat(query, ", [class*=\"").concat(query + this.modifierGlue, "\"]");
-
-  if (!componentName) {
-    selector = "[class*=\"".concat(query + this.componentGlue, "\"]");
-  }
-
-  var subComponents = Array.prototype.slice.call(this.DOMNodes.querySelectorAll(selector)).filter(function (component) {
-    var parentModule = _parent__WEBPACK_IMPORTED_MODULE_2__["default"].bind(Object.assign(_this, {
-      DOMNodes: component
-    }))(namespace);
-    var parentElementIsModule = _this.parentElement ? _this.parentElement.matches(".".concat(namespace, ", [class*=\"").concat(namespace, "-\"]")) : false;
-
-    if (parentElementIsModule && _this.parentElement !== parentModule) {
-      return false;
-    }
-
-    return Array.prototype.slice.call(component.classList).some(function (className) {
-      var isComponent = className.split(_this.componentGlue).length - 1 === 1;
-      var isQueryMatch = className.indexOf(query) === 0;
-
-      if (modifier) {
-        return isQueryMatch && isComponent && className.indexOf(modifier) > -1;
-      } else {
-        return isQueryMatch && isComponent;
-      }
-    });
-  }); // console.log(subComponents)
-
-  return subComponents;
-}
-
-/***/ }),
-/* 4 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return hasModifier; });
-/* harmony import */ var _utilities_getModuleNamespace__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
-
-/**
- * @param {*} modifier 
- */
-
-function hasModifier(modifier) {
-  var _this = this;
-
-  if (modifier) {
-    if (modifier.constructor === Array) {
-      return modifier.every(function (_modifier) {
-        return hasModifier.bind(_this)(_modifier);
-      });
-    }
-
-    if (this.DOMNodes instanceof NodeList) {
-      return Array.prototype.slice.call(this.DOMNodes).every(function (DOMNodes) {
-        return hasModifier.bind(Object.assign(_this, {
-          DOMNodes: DOMNodes
-        }))(modifier);
-      });
-    }
-
-    var node = this.DOMNodes;
-    return Array.prototype.slice.call(node.classList).some(function (className) {
-      var namespace = _this.namespace || node.namespace || Object(_utilities_getModuleNamespace__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(node, _this.modifierGlue, _this.componentGlue);
-      var matchIndex = className.indexOf(_this.modifierGlue + modifier);
-      var namespaceMatch = className.indexOf(namespace) === 0;
-      var isModifierTest1 = className.indexOf(_this.modifierGlue + modifier + _this.modifierGlue) > -1;
-      var isModifierTest2 = matchIndex > -1 && matchIndex === className.length - modifier.length - _this.modifierGlue.length;
-      return namespaceMatch && (isModifierTest1 || isModifierTest2);
-    });
-  }
-}
-
-/***/ }),
-/* 5 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return getSubComponents; });
-/* harmony import */ var _utilities_getModuleNamespace__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
-/* harmony import */ var _utilities_isValidSelector__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8);
-
-
-/**
- * @param {*} subComponentName 
- */
-
-function getSubComponents(subComponentName) {
-  var _this = this;
-
-  var context = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
-  var modifier = arguments.length > 2 ? arguments[2] : undefined;
-  if (subComponentName && !Object(_utilities_isValidSelector__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(subComponentName)) return [];
-
-  if (this.DOMNodes instanceof NodeList) {
-    return Array.prototype.slice.call(this.DOMNodes).reduce(function (matches, DOMNodes) {
-      return matches.concat(Array.prototype.slice.call(getSubComponents.bind(Object.assign(_this, {
-        DOMNodes: DOMNodes
-      }))(subComponentName, context, modifier)));
-    }, []);
-  }
-
-  var namespace = this.namespace || Object(_utilities_getModuleNamespace__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(this.DOMNodes, this.componentGlue, this.modifierGlue) || '';
-  var depth = namespace.split(this.componentGlue).length - 1;
-
-  if (context.length) {
-    namespace = [namespace].concat(context, [subComponentName]).join(this.componentGlue);
-  } else if (subComponentName) {
-    namespace = namespace + this.componentGlue + subComponentName;
-  }
-
-  var selector = ".".concat(namespace, ", [class*=\"").concat(namespace + this.modifierGlue, "\"]");
-
-  if (!subComponentName) {
-    selector = "[class*=\"".concat(namespace + this.componentGlue, "\"]");
-  }
-
-  return Array.prototype.slice.call(this.DOMNodes.querySelectorAll(selector)).filter(function (subComponent) {
-    return Array.prototype.slice.call(subComponent.classList).some(function (className) {
-      if ((className.match(new RegExp(_this.componentGlue, 'g')) || []).length < 2) {
-        return false;
-      }
-
-      var namespaceMatch;
-
-      if (modifier) {
-        namespaceMatch = className.indexOf(namespace) === 0 && className.indexOf(modifier) > -1;
-      } else {
-        namespaceMatch = className.indexOf(namespace) === 0;
-      }
-
-      var depthMatch = className.split(_this.componentGlue).length - 1 === (context.length ? depth : depth + 1);
-      return depth ? namespaceMatch && depthMatch : namespaceMatch;
-    });
-  });
-}
-
-/***/ }),
-/* 6 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return renderModifiers; });
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-/**
- * @param {*} modifiers 
- */
-function renderModifiers(modifiers, modifierGlue) {
-  if (modifiers && _typeof(modifiers) === 'object' && modifiers.length) {
-    return (modifierGlue + modifiers).replace(/,/g, modifierGlue);
-  }
-
-  return '';
-}
-
-/***/ }),
-/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -913,17 +167,17 @@ function renderModifiers(modifiers, modifierGlue) {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return Module; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return Wrapper; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Group; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(16);
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var html_tags__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(11);
+/* harmony import */ var html_tags__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
 /* harmony import */ var html_tags__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(html_tags__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _utilities_getHtmlProps__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(12);
-/* harmony import */ var _utilities_getModifiersFromProps__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(10);
-/* harmony import */ var _utilities_generateClasses__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(13);
-/* harmony import */ var _utilities_renderModifiers__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(6);
-/* harmony import */ var _utilities_refHandler__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(14);
+/* harmony import */ var _utilities_getHtmlProps__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(7);
+/* harmony import */ var _utilities_getModifiersFromProps__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4);
+/* harmony import */ var _utilities_generateClasses__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(8);
+/* harmony import */ var _utilities_renderModifiers__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(3);
+/* harmony import */ var _utilities_refHandler__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(9);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
@@ -994,8 +248,18 @@ function (_React$Component) {
     var propModifiers = Object(_utilities_renderModifiers__WEBPACK_IMPORTED_MODULE_6__[/* default */ "a"])(Object(_utilities_getModifiersFromProps__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"])(props, Synergy.CssClassProps), modifierGlue);
     var passedModifiers = Object(_utilities_renderModifiers__WEBPACK_IMPORTED_MODULE_6__[/* default */ "a"])(props.modifiers, modifierGlue);
     var modifiers = propModifiers + passedModifiers;
-    var classes = props.className ? ' ' + props.className : '';
+    var classes = props.className ? props.className : '';
     var styleParser = props.styleParser || Synergy.styleParser;
+    var multipleClasses = false;
+
+    if (typeof Synergy.multipleClasses !== 'undefined') {
+      multipleClasses = Synergy.multipleClasses;
+    }
+
+    if (typeof props.multipleClasses !== 'undefined') {
+      multipleClasses = props.multipleClasses;
+    }
+
     _this.config = props.config || {};
 
     if (window[props.name]) {
@@ -1010,7 +274,15 @@ function (_React$Component) {
 
     _this.id = (props.before || props.after) && !props.id ? "synergy-module-".concat(increment) : props.id;
     _this.tag = props.tag || (html_tags__WEBPACK_IMPORTED_MODULE_2___default.a.includes(_this.namespace) ? _this.namespace : 'div');
-    _this.classNames = Object(_utilities_generateClasses__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"])(props, _this.namespace + modifiers + classes, modifierGlue);
+    _this.classNames = Object(_utilities_generateClasses__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"])({
+      props: props,
+      namespace: _this.namespace,
+      modifiers: modifiers,
+      classes: classes,
+      modifierGlue: modifierGlue,
+      componentGlue: componentGlue,
+      multipleClasses: multipleClasses
+    });
     if (Synergy.CssClassProps) Synergy.CssClassProps.forEach(function (prop) {
       if (Object.keys(props).includes(prop)) {
         _this.classNames = _this.classNames + ' ' + prop;
@@ -1021,6 +293,7 @@ function (_React$Component) {
       styleParser: styleParser,
       modifierGlue: modifierGlue,
       componentGlue: componentGlue,
+      multipleClasses: multipleClasses,
       module: _this.namespace,
       props: _this.props,
       config: _this.config
@@ -1180,139 +453,29 @@ function (_Module2) {
 
   return Group;
 }(Module);
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(15)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(11)))
 
 /***/ }),
-/* 8 */
+/* 3 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return isValidSelector; });
-/**
- * Test the validity (not existance) of a CSS selector
- * 
- * @param {String} selector - the selector to test for validity
- * 
- * @returns {Bool}
- * 
- * @example isValidSelector('[data-foo-bar]') // returns true
- * @example isValidSelector(4) // returns false
- */
-function isValidSelector(selector) {
-  if (!selector || typeof selector !== 'string') return false;
-  var stub = document.createElement('br');
-  stub.textContent = 'Hello!';
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return renderModifiers; });
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-  try {
-    selector && stub.querySelector(selector);
-  } catch (e) {
-    return false;
+/**
+ * @param {*} modifiers 
+ */
+function renderModifiers(modifiers, modifierGlue) {
+  if (modifiers && _typeof(modifiers) === 'object' && modifiers.length) {
+    return (modifierGlue + modifiers).replace(/,/g, modifierGlue);
   }
 
-  return true;
+  return '';
 }
 
 /***/ }),
-/* 9 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return parent; });
-/* harmony import */ var _utilities_getModuleNamespace__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
-
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
-
-
-/**
- * @param {(String|'module'|'component')} query 
- */
-
-function parent(query, namespace) {
-  var _this = this;
-
-  if (query === 'module') {
-    return _toConsumableArray(this.DOMNodes).map(function (node) {
-      return node.parentNode.closest('[data-module]');
-    });
-  }
-
-  if (query === 'component') {
-    return _toConsumableArray(this.DOMNodes).map(function (node) {
-      return node.parentNode.closest('[data-component]');
-    });
-  }
-
-  if (query && typeof query === 'string') {
-    var moduleMatch = function moduleMatch() {
-      var nodes = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _this.DOMNodes;
-      var parentModule;
-
-      if (nodes instanceof NodeList) {
-        return _toConsumableArray(nodes).map(function (node) {
-          return moduleMatch(node);
-        });
-      }
-
-      parentModule = nodes.parentNode.closest("[data-module=\"".concat(query, "\"]"));
-
-      if (parentModule) {
-        return parentModule;
-      }
-
-      parentModule = nodes.closest(".".concat(query, ", [class*=\"").concat(query + _this.modifierGlue, "\"]"));
-
-      if (parentModule && Object(_utilities_getModuleNamespace__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(parentModule, _this.componentGlue, _this.modifierGlue, 'strict') === query) {
-        return parentModule;
-      }
-    };
-
-    var componentMatch = function componentMatch() {
-      var nodes = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _this.DOMNodes;
-      namespace = namespace || Object(_utilities_getModuleNamespace__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(nodes, _this.componentGlue, _this.modifierGlue, 'strict');
-      var parentModule, selector;
-
-      if (nodes instanceof NodeList) {
-        return _toConsumableArray(nodes).map(function (node) {
-          return componentMatch(node);
-        });
-      }
-
-      parentModule = nodes.parentNode.closest("[data-component=\"".concat(query, "\"]"));
-
-      if (parentModule) {
-        return parentModule;
-      }
-
-      parentModule = nodes.parentNode.closest(".".concat(namespace + _this.componentGlue + query));
-
-      if (parentModule) {
-        return parentModule;
-      }
-
-      selector = "[class*=\"".concat(namespace + _this.componentGlue, "\"][class*=\"").concat(_this.componentGlue + query, "\"]");
-      parentModule = nodes.parentNode.closest(selector);
-
-      if (parentModule) {
-        return parentModule;
-      }
-    };
-
-    if (this.DOMNodes instanceof HTMLElement) {
-      return moduleMatch() || componentMatch();
-    }
-
-    return moduleMatch()[0] ? moduleMatch() : componentMatch();
-  }
-}
-
-/***/ }),
-/* 10 */
+/* 4 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1350,21 +513,791 @@ function getModifiersFromProps(props) {
 }
 
 /***/ }),
-/* 11 */
+/* 5 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+
+// EXTERNAL MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/utilities/getNamespace.js
+var getNamespace = __webpack_require__(0);
+
+// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/utilities/isSafeElement.js
+function isSafeElement(node, namespace, _ref) {
+  var modifierGlue = _ref.modifierGlue;
+
+  if (node instanceof NodeList || node instanceof Array) {
+    return node.every(function (node) {
+      return isSafeElement(node, namespace, {
+        modifierGlue: modifierGlue
+      });
+    });
+  }
+
+  var matchedClasses = [].slice.call(node.classList).filter(function (className) {
+    var conditions = [className === namespace, className.indexOf(namespace + modifierGlue) === 0];
+    return conditions.some(function (condition) {
+      return !!condition;
+    });
+  });
+  return matchedClasses.length === 1 ? matchedClasses[0] : false;
+}
+// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/addModifier.js
+
+
+function addModifier(node, modifier, config) {
+  config = Object.assign(this || {}, config || {});
+
+  if (node instanceof NodeList || node instanceof Array) {
+    return node.forEach(function (node) {
+      return addModifier(node, modifier, config);
+    });
+  }
+
+  var _config = config,
+      modifierGlue = _config.modifierGlue;
+  var namespace = config.namespace || Object(getNamespace["a" /* default */])(node, true, config);
+  var safeNamespace = isSafeElement(node, namespace, config);
+
+  if (modifier.constructor === Array) {
+    modifier = modifier.join(modifierGlue);
+  }
+
+  if (safeNamespace && !config.multipleClasses) {
+    node.classList.replace(safeNamespace, safeNamespace + modifierGlue + modifier);
+  } else {
+    node.classList.add(namespace + modifierGlue + modifier);
+  }
+
+  if (node.repaint) {
+    node.repaint();
+  }
+
+  return node;
+}
+// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/parent.js
+
+function parent_parent(node, query, config) {
+  config = Object.assign(this || {}, config || {});
+
+  if (node instanceof NodeList || node instanceof Array) {
+    return [].slice.call(node).map(function (node) {
+      return parent_parent(node, query, config);
+    });
+  }
+
+  var _config = config,
+      componentGlue = _config.componentGlue,
+      modifierGlue = _config.modifierGlue;
+  var namespace = config.namespace || Object(getNamespace["a" /* default */])(node, false, config);
+  var $query = query || namespace;
+
+  if ($query !== namespace) {
+    $query = namespace + componentGlue + $query;
+  }
+
+  var parentComponent = $query && node.closest(".".concat($query, ", [class*='").concat($query + modifierGlue, "']"));
+
+  if (parentComponent) {
+    return parentComponent;
+  }
+
+  namespace = config.namespace || Object(getNamespace["a" /* default */])(node, true, config);
+
+  if (namespace && namespace.indexOf(query > -1)) {
+    $query = namespace.substring(0, namespace.indexOf(query) + query.length);
+  }
+
+  var parentSubComponent = $query && node.closest(".".concat($query, ", [class*='").concat($query + modifierGlue, "']"));
+
+  if (parentSubComponent) {
+    return parentSubComponent;
+  }
+}
+// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/utilities/filterElements.js
+
+
+function filterElements(node, elements, subComponent, config) {
+  var namespace = config.namespace || Object(getNamespace["a" /* default */])(node, subComponent, config);
+  var sourceParent = parent_parent(node, namespace, config);
+  if (!sourceParent) return elements;
+  elements = [].slice.call(elements).filter(function (element) {
+    var targetParent = parent_parent(element, namespace, config);
+
+    if (!targetParent) {
+      return true;
+    }
+
+    return targetParent === sourceParent;
+  });
+  return elements;
+}
+// EXTERNAL MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/utilities/isValidSelector.js
+var isValidSelector = __webpack_require__(10);
+
+// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/getComponents.js
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+
+function getComponents(node, componentName, config) {
+  config = Object.assign(this || {}, config || {});
+  if (componentName && !Object(isValidSelector["a" /* default */])(componentName)) return [];
+
+  if (node instanceof NodeList || node instanceof Array) {
+    return [].slice.call(node).reduce(function (matches, node) {
+      return matches.concat([].slice.call(getComponents(node, componentName, config)));
+    }, []);
+  }
+
+  var _config = config,
+      subComponent = _config.subComponent,
+      modifierGlue = _config.modifierGlue,
+      componentGlue = _config.componentGlue;
+  var namespace = config.namespace || Object(getNamespace["a" /* default */])(node, subComponent, config);
+  var components;
+
+  if (!componentName) {
+    components = node.querySelectorAll("[class*='".concat(namespace + componentGlue, "']"));
+  } else {
+    var query = namespace + componentGlue + componentName;
+    components = node.querySelectorAll(".".concat(query, ", [class*='").concat(query + modifierGlue, "']"));
+  }
+
+  components = [].slice.call(components).filter(function (element) {
+    var sourceNamespace = Object(getNamespace["a" /* default */])(node, true, _objectSpread({}, config, {
+      namespace: namespace
+    }));
+    var targetNamespace = Object(getNamespace["a" /* default */])(element, true, _objectSpread({}, config, {
+      namespace: namespace
+    }));
+    var sourceDepth = (sourceNamespace.match(new RegExp(componentGlue, 'g')) || []).length;
+    var targetDepth = (targetNamespace.match(new RegExp(componentGlue, 'g')) || []).length; // Special condition: if no componentName passed and we want sub-components,
+    // find ALL child sub-components, as parent modules cannot have direct
+    // descendant sub-components
+
+    if (subComponent && !componentName && sourceNamespace.indexOf(componentGlue) === -1) {
+      return true;
+    }
+
+    if (subComponent && !sourceDepth) {
+      return false;
+    }
+
+    if (subComponent || !sourceDepth) {
+      sourceDepth++;
+    }
+
+    var modifierCriteria = true;
+    var targetClass = [].slice.call(element.classList).filter(function (className) {
+      return className.indexOf(namespace) === 0;
+    })[0];
+
+    if (config.modifier) {
+      modifierCriteria = targetClass.indexOf(config.modifier) > -1;
+    }
+
+    if (!subComponent && sourceDepth > 1) {
+      if (targetClass.split(componentGlue).length - 1 > 1) {
+        return false;
+      }
+
+      return modifierCriteria;
+    }
+
+    return modifierCriteria && targetDepth === sourceDepth;
+  });
+  components = filterElements(node, components, subComponent, config);
+  return components;
+}
+// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/getComponent.js
+
+/**
+ * @TODO allow this API
+ * const [title, content] = panel.getComponent(['title', 'content']);
+ */
+
+function getComponent(node, componentName, config) {
+  config = Object.assign(this || {}, config || {});
+
+  if (node instanceof NodeList || node instanceof Array) {
+    return [].slice.call(node).map(function (node) {
+      return getComponent(node, componentName, config);
+    });
+  }
+
+  ;
+  return getComponents(node, componentName, config)[0];
+}
+// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/setComponent.js
+
+function setComponent(node, componentName, namespace, replace, config) {
+  config = Object.assign(this || {}, config || {});
+
+  if (node instanceof NodeList || node instanceof Array) {
+    return node.forEach(function (node) {
+      return setComponent(node, componentName, namespace, replace, config);
+    });
+  }
+
+  if (!namespace && !replace) {
+    replace = config.namespace || Object(getNamespace["a" /* default */])(node, false, config);
+  }
+
+  namespace = namespace || config.namespace || Object(getNamespace["a" /* default */])(node, false, config);
+  node.classList.add(namespace + config.componentGlue + componentName);
+  node.setAttribute('data-component', componentName);
+  replace && node.classList.remove(replace);
+}
+// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/unsetComponent.js
+
+function unsetComponent(node, componentName, config) {
+  config = Object.assign(this || {}, config || {});
+
+  if (node instanceof NodeList || node instanceof Array) {
+    return node.forEach(function (node) {
+      return unsetComponent(node, componentName, config);
+    });
+  }
+
+  var _config = config,
+      componentGlue = _config.componentGlue;
+  var namespace = config.namespace || Object(getNamespace["a" /* default */])(node, false, config);
+  return [].slice.call(node.classList).forEach(function (className) {
+    var isAComponent = className.split(componentGlue).length - 1 === 1;
+    var isMatch = className.indexOf(namespace + componentGlue + componentName) === 0;
+
+    if (isAComponent && isMatch) {
+      node.classList.remove(className);
+    }
+  });
+}
+// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/isComponent.js
+
+function isComponent(node, componentName, config) {
+  config = Object.assign(this || {}, config || {});
+
+  if (node instanceof NodeList || node instanceof Array) {
+    return [].slice.call(node).every(function (node) {
+      return isComponent(node, componentName, config);
+    });
+  }
+
+  var _config = config,
+      componentGlue = _config.componentGlue;
+  var namespace = config.namespace || Object(getNamespace["a" /* default */])(node, false, config);
+  return [].slice.call(node.classList).some(function (className) {
+    if (config.subComponent) {
+      var isASubComponent = className.split(componentGlue).length - 1 > 1;
+
+      var _isMatch = className.indexOf(componentName) === className.length - componentName.length;
+
+      return isASubComponent && _isMatch;
+    }
+
+    var isAComponent = className.split(componentGlue).length - 1 === 1;
+    var query = namespace + componentGlue + componentName;
+    var isMatch = query.indexOf(componentGlue + componentName) > -1;
+    return className.indexOf(query) === 0 && isAComponent && isMatch;
+  });
+}
+// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/component.js
+
+
+
+
+
+function component_component(node, componentName, operator, config) {
+  config = Object.assign(this || {}, config || {});
+
+  if (!componentName && !operator) {
+    return (config.getSubComponents || getComponents)(node, false, config);
+  }
+
+  if (!operator || operator === 'find') {
+    return (config.getSubComponents || getComponents)(node, componentName, config);
+  }
+
+  if (operator === 'first') {
+    return (config.getSubComponent || getComponent)(node, componentName, config);
+  }
+
+  if (operator === 'is') {
+    return isComponent(node, componentName, config);
+  }
+
+  if (operator === 'set') {
+    //@TODO setSubComponent
+    return setComponent(node, componentName, null, null, config);
+  }
+
+  if (operator === 'unset') {
+    //@TODO unsetSubComponent
+    return unsetComponent(node, componentName, config);
+  }
+
+  if (typeof operator === 'function') {
+    return getComponents(node, componentName, config).forEach(function (node) {
+      return operator(node);
+    });
+  }
+}
+// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/getModules.js
+function getModules(node, moduleName, config) {
+  config = Object.assign(this || {}, config || {});
+  var _config = config,
+      modifierGlue = _config.modifierGlue;
+
+  if (node instanceof NodeList || node instanceof Array) {
+    var matchedModules = [].slice.call(node).reduce(function (matches, node) {
+      var modules = [].slice.call(getModules(node, moduleName, config));
+      matches = matches.filter(function (match) {
+        return modules.every(function (module) {
+          return module !== match;
+        });
+      });
+      return matches.concat(modules);
+    }, []);
+    return matchedModules;
+  }
+
+  var potentialModules = node.querySelectorAll(".".concat(moduleName, ", [class*=\"").concat(moduleName + modifierGlue, "\"]"));
+  var modules = [].slice.call(potentialModules).filter(function (potentialModule) {
+    return [].slice.call(potentialModule.classList).some(function (className) {
+      return className.indexOf(moduleName) === 0;
+    });
+  });
+  return modules;
+}
+// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/hasModifier.js
+
+function hasModifier(node, modifier, config) {
+  config = Object.assign(this || {}, config || {});
+  if (!modifier) return;
+
+  if (modifier.constructor === Array) {
+    return modifier.every(function (modifier) {
+      return hasModifier(node, modifier, config);
+    });
+  }
+
+  if (node instanceof NodeList || node instanceof Array) {
+    return [].slice.call(node).every(function (node) {
+      return hasModifier(node, modifier, config);
+    });
+  }
+
+  var _config = config,
+      modifierGlue = _config.modifierGlue;
+  var namespace = config.namespace || node.namespace || Object(getNamespace["a" /* default */])(node, false, config);
+  return [].slice.call(node.classList).some(function (className) {
+    var matchIndex = className.indexOf(modifierGlue + modifier);
+    var namespaceMatch = className.indexOf(namespace) === 0;
+    var isModifierTest1 = className.indexOf(modifierGlue + modifier + modifierGlue) > -1;
+    var isModifierTest2 = matchIndex > -1 && matchIndex === className.length - modifier.length - modifierGlue.length;
+    return namespaceMatch && (isModifierTest1 || isModifierTest2);
+  });
+}
+// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/find.js
+function find_objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { find_defineProperty(target, key, source[key]); }); } return target; }
+
+function find_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+
+
+
+function find(node, query, config) {
+  config = Object.assign(this || {}, config || {});
+
+  if (_typeof(query) === 'object') {
+    if (node instanceof NodeList || node instanceof Array) {
+      return [].slice.call(node).reduce(function (matches, node) {
+        return matches.concat(getQueryFromObject(node, query, config));
+      }, []);
+    }
+
+    return getQueryFromObject(node, query, config);
+  }
+
+  if (typeof query === 'string') {
+    var modules = getModules(node, query, config);
+
+    if (modules.length) {
+      return modules;
+    }
+
+    var components = getComponents(node, query, config);
+
+    if (components.length) {
+      return components;
+    }
+  }
+}
+
+function getQueryFromObject(node, query, config) {
+  config = Object.assign(this || {}, config || {});
+  var module = query.module,
+      component = query.component,
+      modifier = query.modifier;
+  var matches = [];
+
+  if (module) {
+    if (component) {
+      matches = getComponents(node, component, find_objectSpread({}, config, {
+        namespace: module,
+        modifier: modifier
+      }));
+    } else {
+      matches = getModules(node, module, config);
+    }
+  } else if (component) {
+    matches = getComponents(node, component, find_objectSpread({}, config, {
+      modifier: modifier
+    }));
+  }
+
+  if (modifier) {
+    matches = [].slice.call(matches).filter(function (match) {
+      return hasModifier(match, modifier, config);
+    });
+  }
+
+  return matches;
+}
+// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/getModifiers.js
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+
+function getModifiers(node, config) {
+  config = Object.assign(this || {}, config || {});
+
+  if (node instanceof NodeList || node instanceof Array) {
+    var _modifiers = [].slice.call(node).reduce(function (matches, node) {
+      return matches.concat(getModifiers(node, config));
+    }, []); // remove duplicates
+
+
+    _modifiers = _toConsumableArray(new Set(_modifiers));
+    return _modifiers;
+  }
+
+  var _config = config,
+      namespace = _config.namespace,
+      modifierGlue = _config.modifierGlue;
+  var targetClass = [].slice.call(node.classList).filter(function (className) {
+    return className.indexOf(namespace || Object(getNamespace["a" /* default */])(node, false, config)) === 0;
+  })[0];
+  var modifiers = targetClass.split(modifierGlue).slice(1);
+  return modifiers;
+}
+// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/getSubComponents.js
+
+function getSubComponents(node, subComponentName, config) {
+  config = Object.assign(this || {}, config || {});
+  config.subComponent = true;
+  return getComponents(node, subComponentName, config);
+}
+// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/getSubComponent.js
+
+function getSubComponent(node, componentName, config) {
+  config = Object.assign(this || {}, config || {});
+
+  if (node instanceof NodeList || node instanceof Array) {
+    return [].slice.call(node).map(function (node) {
+      return getSubComponent(node, componentName, config);
+    });
+  }
+
+  ;
+  return getSubComponents(node, componentName, config)[0];
+}
+// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/isModule.js
+function isModule(node, moduleName, config) {
+  config = Object.assign(this || {}, config || {});
+  var DOMNodes = !(node instanceof NodeList || node instanceof Array) ? [node] : node;
+  return [].slice.call(DOMNodes).every(function (node) {
+    return node.matches(".".concat(moduleName, ", [class*=\"").concat(moduleName + config.modifierGlue, "\"]"));
+  });
+}
+// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/is.js
+function is_typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { is_typeof = function _typeof(obj) { return typeof obj; }; } else { is_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return is_typeof(obj); }
+
+
+
+
+
+function is(node, query, config) {
+  config = Object.assign(this || {}, config || {});
+  var namespace = config.namespace || Object(getNamespace["a" /* default */])(node, false, config);
+
+  if (is_typeof(query) === 'object') {
+    var module = query.module,
+        component = query.component,
+        modifier = query.modifier;
+
+    if (module) {
+      if (component) {
+        var namespaceMatch = namespace === module;
+        var componentMatch = isComponent(node, component, config);
+
+        if (modifier) {
+          return namespaceMatch && componentMatch && hasModifier(node, modifier, config);
+        }
+
+        return namespaceMatch && componentMatch;
+      }
+
+      if (modifier) {
+        return isModule(node, module, config) && hasModifier(node, modifier, config);
+      }
+
+      return isModule(node, module, config);
+    }
+
+    if (component) {
+      if (modifier) {
+        return isComponent(node, component, config) && hasModifier(node, modifier, config);
+      }
+
+      return isComponent(node, component, config);
+    }
+
+    if (modifier) {
+      return hasModifier(node, modifier, config);
+    }
+  }
+
+  if (typeof query === 'string') {
+    if (isModule(node, query, config)) {
+      return isModule(node, query, config);
+    }
+
+    if (isComponent(node, query, config)) {
+      return isComponent(node, query, config);
+    }
+
+    if (hasModifier(node, query, config)) {
+      return hasModifier(node, query, config);
+    }
+  }
+
+  return false;
+}
+// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/removeModifier.js
+
+function removeModifier(node, modifier, config) {
+  config = Object.assign(this || {}, config || {});
+
+  if (modifier.constructor === Array) {
+    return modifier.forEach(function (_modifier) {
+      return removeModifier(node, _modifier, config);
+    });
+  }
+
+  if (node instanceof NodeList || node instanceof Array) {
+    return node.forEach(function (node) {
+      return removeModifier(node, modifier, config);
+    });
+  }
+
+  var _config = config,
+      modifierGlue = _config.modifierGlue;
+  var namespace = config.namespace || Object(getNamespace["a" /* default */])(node, true, config);
+  [].slice.call(node.classList).forEach(function (className) {
+    var moduleMatch = className.indexOf(namespace + modifierGlue) === 0;
+    var modifierMatch = className.indexOf(modifierGlue + modifier) > -1;
+    var newClass = className.replace(new RegExp(modifierGlue + modifier, 'g'), '');
+
+    if (moduleMatch && modifierMatch) {
+      node.classList.replace(className, newClass);
+    }
+  });
+
+  if (node.repaint) {
+    node.repaint();
+  }
+
+  return node;
+}
+// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/toggleModifier.js
+
+
+
+function toggleModifier(node, modifier, config) {
+  config = Object.assign(this || {}, config || {});
+
+  if (node instanceof NodeList || node instanceof Array) {
+    return node.forEach(function (node) {
+      return toggleModifier(node, modifier, config);
+    });
+  }
+
+  if (hasModifier(node, modifier, config)) {
+    return removeModifier(node, modifier, config);
+  } else {
+    return addModifier(node, modifier, config);
+  }
+}
+// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/modifier.js
+
+
+
+
+
+function modifier_modifier(node, modifier, operator, config) {
+  config = Object.assign(this || {}, config || {});
+
+  if (!operator && !modifier) {
+    return getModifiers(node, config);
+  }
+
+  if (!operator || operator === 'is') {
+    return hasModifier(node, modifier, config);
+  }
+
+  if (operator === 'set' || operator === 'add') {
+    return addModifier(node, modifier, config);
+  }
+
+  if (operator === 'unset' || operator === 'remove') {
+    return removeModifier(node, modifier, config);
+  }
+
+  if (operator === 'toggle') {
+    return toggleModifier(node, modifier, config);
+  }
+}
+// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/module.js
+
+
+function module_module(node, moduleName, operator, config) {
+  config = Object.assign(this || {}, config || {});
+
+  if (!operator || operator === 'find') {
+    return getModules(node, moduleName, config);
+  }
+
+  if (operator === 'is') {
+    return isModule(node, moduleName, config);
+  }
+
+  if (typeof operator === 'function') {
+    return getModules(node, moduleName, config).forEach(function (node) {
+      return operator(node);
+    });
+  }
+}
+// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/subComponent.js
+
+
+
+function subComponent_subComponent(node, subComponentName, operator, config) {
+  config = Object.assign(this || {}, config || {});
+  config.subComponent = true;
+  config.getSubComponent = getSubComponent;
+  config.getSubComponents = getSubComponents;
+  return component_component(node, subComponentName, operator, config);
+}
+// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/index.js
+/* concated harmony reexport add */__webpack_require__.d(__webpack_exports__, "add", function() { return addModifier; });
+/* concated harmony reexport addModifier */__webpack_require__.d(__webpack_exports__, "addModifier", function() { return addModifier; });
+/* concated harmony reexport component */__webpack_require__.d(__webpack_exports__, "component", function() { return component_component; });
+/* concated harmony reexport components */__webpack_require__.d(__webpack_exports__, "components", function() { return component_component; });
+/* concated harmony reexport find */__webpack_require__.d(__webpack_exports__, "find", function() { return find; });
+/* concated harmony reexport getComponent */__webpack_require__.d(__webpack_exports__, "getComponent", function() { return getComponent; });
+/* concated harmony reexport getComponents */__webpack_require__.d(__webpack_exports__, "getComponents", function() { return getComponents; });
+/* concated harmony reexport getModifiers */__webpack_require__.d(__webpack_exports__, "getModifiers", function() { return getModifiers; });
+/* concated harmony reexport getModules */__webpack_require__.d(__webpack_exports__, "getModules", function() { return getModules; });
+/* concated harmony reexport getSubComponent */__webpack_require__.d(__webpack_exports__, "getSubComponent", function() { return getSubComponent; });
+/* concated harmony reexport getSubComponents */__webpack_require__.d(__webpack_exports__, "getSubComponents", function() { return getSubComponents; });
+/* concated harmony reexport has */__webpack_require__.d(__webpack_exports__, "has", function() { return hasModifier; });
+/* concated harmony reexport hasModifier */__webpack_require__.d(__webpack_exports__, "hasModifier", function() { return hasModifier; });
+/* concated harmony reexport is */__webpack_require__.d(__webpack_exports__, "is", function() { return is; });
+/* concated harmony reexport isComponent */__webpack_require__.d(__webpack_exports__, "isComponent", function() { return isComponent; });
+/* concated harmony reexport isModule */__webpack_require__.d(__webpack_exports__, "isModule", function() { return isModule; });
+/* concated harmony reexport modifier */__webpack_require__.d(__webpack_exports__, "modifier", function() { return modifier_modifier; });
+/* concated harmony reexport module */__webpack_require__.d(__webpack_exports__, "module", function() { return module_module; });
+/* concated harmony reexport modules */__webpack_require__.d(__webpack_exports__, "modules", function() { return module_module; });
+/* concated harmony reexport parent */__webpack_require__.d(__webpack_exports__, "parent", function() { return parent_parent; });
+/* concated harmony reexport remove */__webpack_require__.d(__webpack_exports__, "remove", function() { return removeModifier; });
+/* concated harmony reexport removeModifier */__webpack_require__.d(__webpack_exports__, "removeModifier", function() { return removeModifier; });
+/* concated harmony reexport setComponent */__webpack_require__.d(__webpack_exports__, "setComponent", function() { return setComponent; });
+/* concated harmony reexport subComponent */__webpack_require__.d(__webpack_exports__, "subComponent", function() { return subComponent_subComponent; });
+/* concated harmony reexport subComponents */__webpack_require__.d(__webpack_exports__, "subComponents", function() { return subComponent_subComponent; });
+/* concated harmony reexport toggle */__webpack_require__.d(__webpack_exports__, "toggle", function() { return toggleModifier; });
+/* concated harmony reexport toggleModifier */__webpack_require__.d(__webpack_exports__, "toggleModifier", function() { return toggleModifier; });
+/* concated harmony reexport toggleModifiers */__webpack_require__.d(__webpack_exports__, "toggleModifiers", function() { return toggleModifier; });
+/* concated harmony reexport unsetComponent */__webpack_require__.d(__webpack_exports__, "unsetComponent", function() { return unsetComponent; });
+// addModifier
+ // component
+
+ // find
+
+ // getComponent
+
+ // getComponents
+
+ // getModifiers
+
+ // getModules
+
+ // getSubComponent
+
+ // getSubComponents
+
+ // hasModifier
+
+ // is
+
+ // isComponent
+
+ // isModule
+
+ // modifier
+
+ // module
+
+ // parent
+
+ // removeModifier
+
+ // setComponent
+
+ // subComponent
+
+ // toggleModifier
+
+ // unsetComponent
+
+
+
+/***/ }),
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-module.exports = __webpack_require__(26);
+module.exports = __webpack_require__(20);
 
 
 /***/ }),
-/* 12 */
+/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getHtmlProps; });
-/* harmony import */ var html_attributes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(17);
+/* harmony import */ var html_attributes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(13);
 /* harmony import */ var html_attributes__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(html_attributes__WEBPACK_IMPORTED_MODULE_0__);
 
 /**
@@ -1396,7 +1329,7 @@ function getHtmlProps(props) {
 }
 
 /***/ }),
-/* 13 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1404,29 +1337,76 @@ function getHtmlProps(props) {
 /**
  * Generate CSS classes for a module
  */
-function generateClasses(props, classes, modifierGlue) {
-  // Get modules from props
+function generateClasses(_ref) {
+  var props = _ref.props,
+      namespace = _ref.namespace,
+      modifiers = _ref.modifiers,
+      classes = _ref.classes,
+      modifierGlue = _ref.modifierGlue,
+      componentGlue = _ref.componentGlue,
+      multipleClasses = _ref.multipleClasses;
+  var classNames = []; // Get modules from props
+
   Object.entries(props).forEach(function (prop) {
-    var firstLetter = prop[0][0];
+    var key = prop[0];
+    var value = prop[1];
+    var firstLetter = key[0];
 
     if (firstLetter === firstLetter.toUpperCase()) {
-      var module = prop[0].toLowerCase();
-      var modifiers = '';
+      var module = key.toLowerCase();
 
-      if (prop[1].constructor === Array) {
-        modifiers = modifierGlue + prop[1].join(modifierGlue);
-      } else if (typeof prop[1] === 'string') {
-        modifiers = modifierGlue + prop[1];
+      if (multipleClasses) {
+        classNames.push(module);
+
+        if (value.constructor === Array) {
+          value.forEach(function (modifier) {
+            classNames.push(module + modifierGlue + modifier);
+          });
+        } else if (typeof value === 'string') {
+          classNames.push(module + modifierGlue + value);
+        }
+      } else {
+        var propModifiers = '';
+
+        if (value.constructor === Array) {
+          propModifiers = modifierGlue + value.join(modifierGlue);
+        } else if (typeof value === 'string') {
+          propModifiers = modifierGlue + value;
+        }
+
+        classNames.push(module + propModifiers);
+      }
+    }
+  }); // if (namespace.indexOf(componentGlue > 0)) {
+  //     if (props.name instanceof Array) {
+  //         // @TODO
+  //     }
+  // }
+
+  if (multipleClasses) {
+    // @TODO refactor the whole thing because we are splitting
+    // what was originally unsplit to begin with
+    modifiers.split(modifierGlue).forEach(function (modifier) {
+      var className;
+
+      if (modifier) {
+        className = namespace + modifierGlue + modifier;
+      } else {
+        className = namespace;
       }
 
-      classes = classes + ' ' + module + modifiers;
-    }
-  });
+      classNames.push(className);
+    });
+  } else {
+    classNames.push(namespace + modifiers);
+  }
+
+  classes = classNames.join(' ') + (classes ? ' ' + classes : '');
   return classes;
 }
 
 /***/ }),
-/* 14 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1487,7 +1467,27 @@ function refHandler(node, props, styleParser, parentModule, ui, config) {
 }
 
 /***/ }),
-/* 15 */
+/* 10 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return isValidSelector; });
+function isValidSelector(selector) {
+  if (!selector || typeof selector !== 'string') return false;
+  var stub = document.createElement('br');
+  stub.textContent = 'Hello!';
+
+  try {
+    selector && stub.querySelector(selector);
+  } catch (e) {
+    return false;
+  }
+
+  return true;
+}
+
+/***/ }),
+/* 11 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -1677,13 +1677,13 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 16 */
+/* 12 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE__16__;
+module.exports = __WEBPACK_EXTERNAL_MODULE__12__;
 
 /***/ }),
-/* 17 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1827,21 +1827,15 @@ module.exports = {
 
 
 /***/ }),
-/* 18 */
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(process) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return polymorph; });
-/* harmony import */ var _utilities_isValidCssProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(19);
-/* harmony import */ var _utilities_stringifyState__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(20);
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
-
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
-
+/* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var _utilities_getConfig__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(15);
+/* harmony import */ var _utilities_getDOMNodes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(16);
+/* harmony import */ var _utilities_getNamespace__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(0);
+/* harmony import */ var _utilities_init__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(17);
+/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(5);
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
@@ -1849,529 +1843,6 @@ function _nonIterableRest() { throw new TypeError("Invalid attempt to destructur
 function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-
-
-var sQuery = typeof window !== 'undefined' && window.sQuery; // `process` and `require` are exploited to help reduce bundle size
-
-if (!sQuery || typeof process !== 'undefined' && !true) {
-  sQuery = {
-    getComponents: __webpack_require__(3).default,
-    getSubComponents: __webpack_require__(5).default,
-    hasModifier: __webpack_require__(4).default,
-    parent: __webpack_require__(9).default
-  };
-}
-/**
- * Set a module's styles on a DOM element instance
- */
-
-
-function polymorph(element) {
-  var styles = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-  var config = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-  var globals = arguments.length > 3 ? arguments[3] : undefined;
-  var parentElement = arguments.length > 4 ? arguments[4] : undefined;
-  var specificity = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : 0;
-  var Synergy = window.Synergy || {};
-  var modifierGlue = config.modifierGlue || Synergy.modifierGlue || '-';
-  var componentGlue = config.componentGlue || Synergy.componentGlue || '_';
-  var values = _typeof(styles) === 'object' ? styles : styles(element, config, globals);
-  /**
-   * Setup `repaint` method on parent element
-   */
-
-  if (!parentElement && !element.repaint) {
-    element.repaint = function (custom) {
-      /**
-       * Merge default + custom options
-       */
-      var options = Object.assign({
-        clean: false
-      }, custom);
-      /**
-       * Get child components
-       */
-
-      var components = sQuery.getComponents.bind({
-        DOMNodes: element,
-        componentGlue: componentGlue,
-        modifierGlue: modifierGlue,
-        parentElement: element
-      })();
-      /**
-       * Get child sub-components
-       */
-
-      var subComponents = sQuery.getSubComponents.bind({
-        DOMNodes: element,
-        componentGlue: componentGlue,
-        modifierGlue: modifierGlue,
-        parentElement: element
-      })();
-      /**
-       * Remove styles that were not added by polymorph
-       */
-
-      if (options.clean) {
-        element.style.cssText = null;
-        components.forEach(function (component) {
-          return component.style.cssText = null;
-        });
-      }
-      /**
-       * Clean parent element/module
-       */
-
-
-      element.data && Object.keys(element.data.properties).forEach(function (property) {
-        element.style[property] = null;
-      });
-      element.data.properties = {};
-      /**
-       * Clean child components
-       */
-
-      components.forEach(function (component) {
-        component.data && Object.keys(component.data.properties).forEach(function (property) {
-          component.style[property] = null;
-        });
-        component.data = null;
-      });
-      /**
-       * Clean child sub-components
-       */
-
-      subComponents.forEach(function (component) {
-        component.data && Object.keys(component.data.properties).forEach(function (property) {
-          component.style[property] = null;
-        });
-        component.data = null;
-      });
-      /**
-       * Repaint the module
-       */
-
-      polymorph(element, styles, config, globals);
-
-      if (element.repaint.states.length) {
-        element.repaint.states.forEach(function (style) {
-          return style();
-        });
-      }
-
-      element.dispatchEvent(new Event('moduledidrepaint'));
-    };
-
-    element.repaint.states = [];
-  }
-  /**
-   * Handle array of top-level rule sets/stylesheets
-   */
-
-
-  if (styles.constructor === Array) {
-    return styles.forEach(function (stylesheet) {
-      return polymorph(element, stylesheet, config, globals, parentElement, specificity);
-    });
-  }
-  /**
-   * Handle array of object values for cascading effect
-   */
-
-
-  if (values.constructor === Array) {
-    if (values.every(function (value) {
-      return value.constructor == Object;
-    })) {
-      values.forEach(function (value) {
-        return polymorph(element, value, false, globals);
-      });
-    }
-  }
-  /**
-   * Initialise data interface
-   */
-
-
-  element.data = element.data || {
-    states: [],
-    properties: {}
-  };
-  /**
-   * Determine the parent element/module
-   */
-
-  parentElement = parentElement || element;
-  /**
-   * Loop through rule set
-   */
-
-  var _arr = Object.entries(values);
-
-  var _loop = function _loop() {
-    var _arr$_i = _slicedToArray(_arr[_i], 2),
-        key = _arr$_i[0],
-        value = _arr$_i[1];
-
-    var matchedComponents = sQuery.getComponents.bind({
-      DOMNodes: element,
-      componentGlue: componentGlue,
-      modifierGlue: modifierGlue,
-      parentElement: parentElement
-    })(key);
-    var matchedSubComponents = sQuery.getSubComponents.bind({
-      DOMNodes: element,
-      componentGlue: componentGlue,
-      modifierGlue: modifierGlue,
-      parentElement: parentElement
-    })(key);
-    /**
-     * Handle object of CSS properties / function that will return an object
-     * of CSS properties
-     */
-
-    if (typeof value === 'function' || _typeof(value) === 'object') {
-      /**
-       * Handle case where desired element for styles to be applied needs to be
-       * manually controlled
-       */
-      if (value instanceof Array) {
-        if (value[0] instanceof HTMLElement) {
-          polymorph(value[0], value[1], false, globals, parentElement, specificity);
-        }
-
-        if (value[0] instanceof NodeList) {
-          value[0].forEach(function (node) {
-            return polymorph(node, value[1], false, globals, parentElement, specificity);
-          });
-        }
-      }
-      /**
-       * Handle `modifiers`
-       */
-      else if (key.indexOf('modifier(') > -1) {
-          var modifier = key.replace('modifier(', '').replace(/\)/g, '');
-
-          if (sQuery.hasModifier.bind({
-            DOMNodes: element,
-            componentGlue: componentGlue,
-            modifierGlue: modifierGlue
-          })(modifier)) {
-            specificity++;
-            polymorph(element, value, false, globals, parentElement, specificity);
-          }
-        }
-        /**
-         * Smart handle `components`
-         */
-        else if (matchedComponents.length) {
-            matchedComponents.forEach(function (_component) {
-              if (_typeof(value) === 'object') {
-                polymorph(_component, value, false, globals, parentElement);
-              } else if (typeof value === 'function') {
-                polymorph(_component, value(_component), false, globals, parentElement);
-              }
-            });
-          }
-          /**
-           * Handle `sub-components`
-           */
-          else if (key.indexOf('subComponent(') > -1) {
-              var subComponent = key.replace('subComponent(', '').replace(/\)/g, '');
-              var subComponents = sQuery.getSubComponents.bind({
-                DOMNodes: element,
-                componentGlue: componentGlue,
-                modifierGlue: modifierGlue,
-                parentElement: parentElement
-              })(subComponent);
-
-              if (subComponents.length) {
-                subComponents.forEach(function (_component) {
-                  if (_typeof(value) === 'object') {
-                    polymorph(_component, value, false, globals, parentElement);
-                  } else if (typeof value === 'function') {
-                    polymorph(_component, value(_component), false, globals, parentElement);
-                  }
-                });
-              }
-
-              return {
-                v: void 0
-              };
-            }
-            /**
-             * Smart handle `sub-components`
-             */
-            else if (matchedSubComponents.length) {
-                if (value.disableCascade) {
-                  matchedSubComponents = matchedSubComponents.filter(function (subComponent) {
-                    if (!element.getAttribute('data-component')) {
-                      console.warn("".concat(element, " does not have data-component attribute so disableCascade option in ").concat(value, " may not reliably work"));
-                    }
-
-                    var componentName = element.getAttribute('data-component') || _toConsumableArray(element.classList).reduce(function (accumulator, currentValue) {
-                      if (currentValue.indexOf(componentGlue) > 1) {
-                        currentValue = currentValue.substring(currentValue.lastIndexOf(componentGlue) + 1, currentValue.length);
-                        return currentValue.substring(0, currentValue.indexOf(modifierGlue));
-                      }
-                    }, []);
-
-                    var parentSubComponent = sQuery.parent.bind({
-                      DOMNodes: subComponent,
-                      modifierGlue: modifierGlue,
-                      componentGlue: componentGlue
-                    })(componentName);
-                    return element === parentSubComponent;
-                  });
-                }
-
-                matchedSubComponents.forEach(function (_component) {
-                  if (_typeof(value) === 'object') {
-                    polymorph(_component, value, false, globals, parentElement);
-                  } else if (typeof value === 'function') {
-                    polymorph(_component, value(_component), false, globals, parentElement);
-                  }
-                });
-              }
-              /**
-               * Handle module `group` and `wrapper`
-               */
-              else if (key === 'group' || key === 'wrapper') {
-                  // @TODO this currently runs for each item in the group/wrapper,
-                  // should ideally run just once per group/wrapper
-                  element.parentNode.classList.forEach(function (className) {
-                    if (className.indexOf('group') === 0 || className.indexOf('wrapper') === 0) {
-                      var wrapperValues = _typeof(value) === 'object' ? value : value(element.parentNode);
-                      var childValues = _typeof(value) === 'object' ? value : value(element); // apply styles to wrapper/group element
-
-                      polymorph(element.parentNode, wrapperValues, false, globals, parentElement); // apply styles to child modules
-
-                      polymorph(element, childValues, false, globals, parentElement);
-                    }
-                  });
-                  return {
-                    v: void 0
-                  };
-                }
-                /**
-                 * Handle `hover` interaction
-                 */
-                else if (key === ':hover') {
-                    var stringifiedState = Object(_utilities_stringifyState__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(values);
-                    var isHoverState = parentElement.data.states.some(function (state) {
-                      return state.type === 'mouseover' && state.element === element && state.value === stringifiedState;
-                    });
-
-                    if (!isHoverState) {
-                      parentElement.data.states.push({
-                        type: 'mouseover',
-                        element: element,
-                        value: stringifiedState
-                      });
-                      element.addEventListener('mouseover', function mouseover() {
-                        element.removeEventListener('mouseover', mouseover);
-                        parentElement.repaint.states.push(function () {
-                          return polymorph(element, value, false, globals, parentElement);
-                        });
-                        polymorph(element, value, false, globals, parentElement);
-                      }, false);
-                      element.addEventListener('mouseout', function mouseout() {
-                        element.removeEventListener('mouseout', mouseout);
-                        parentElement.data.states = parentElement.data.states.filter(function (state) {
-                          return !(state.type === 'mouseover' && state.element === element && state.value === stringifiedState);
-                        });
-                        parentElement.repaint.states = [];
-                        parentElement.repaint();
-                      }, false);
-                    }
-                  }
-                  /**
-                   * Handle `focus` interaction
-                   */
-                  else if (key === ':focus') {
-                      // handleState(parentElement, element, ['focus', 'blur'], value, globals);
-                      var isFocusState = parentElement.data.states.some(function (state) {
-                        return state.type === 'focus' && state.element === element;
-                      });
-
-                      if (!isFocusState) {
-                        parentElement.data.states.push({
-                          type: 'focus',
-                          element: element
-                        });
-                        element.addEventListener('focus', function focus() {
-                          element.removeEventListener('focus', focus);
-                          polymorph(element, value, false, globals, parentElement);
-                        }, true);
-                        element.addEventListener('blur', function blur() {
-                          element.removeEventListener('blur', blur);
-                          parentElement.data.states = parentElement.data.states.filter(function (state) {
-                            return !(state.type === 'focus' && state.element === element);
-                          });
-                          parentElement.repaint();
-                        }, true);
-                      }
-                    }
-                    /**
-                     * Handle `before` pseudo element
-                     */
-                    // else if (key === ':before') {
-                    //     console.log(value);
-                    // }
-
-                    /**
-                     * Handle case where CSS `value` to be applied to `element` is a function
-                     */
-                    else if (typeof value === 'function') {
-                        if (!element.data.properties[key] || element.data.properties[key].specificity < specificity) {
-                          if (Object(_utilities_isValidCssProperty__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(key)) {
-                            element.style[key] = value(element.style[key]);
-                            element.data.properties[key] = {
-                              value: value(element.style[key]),
-                              specificity: specificity
-                            };
-                          }
-                        } else {// @TODO handle condition (what is it?)
-                        }
-                      } else {// @TODO handle condition (what is it?)
-                        }
-    }
-    /**
-     * Handle CSS property
-     */
-    else {
-        var props = element.data.properties;
-
-        if (!props[key] || !props[key].specificity || props[key].specificity < specificity) {
-          element.style[key] = value;
-          props[key] = {
-            value: value,
-            specificity: specificity
-          };
-        }
-      }
-  };
-
-  for (var _i = 0; _i < _arr.length; _i++) {
-    var _ret = _loop();
-
-    if (_typeof(_ret) === "object") return _ret.v;
-  }
-  /**
-   * Dispatch initial event when styles first mount
-   */
-
-
-  if (element === parentElement && config !== false) {
-    element.dispatchEvent(new Event('stylesdidmount'));
-  }
-}
-/**
- * Wrapper for sQuery `hasModifier()`
- */
-
-polymorph.modifier = function (element, modifier, modifierGlue, componentGlue) {
-  var Synergy = window.Synergy || {};
-  modifierGlue = modifierGlue || Synergy.modifierGlue || '-';
-  componentGlue = componentGlue || Synergy.componentGlue || '_';
-  return sQuery.hasModifier.bind({
-    DOMNodes: element,
-    modifierGlue: modifierGlue,
-    componentGlue: componentGlue
-  })(modifier);
-};
-/**
- * Attach to Window
- */
-
-
-if (typeof window !== 'undefined') {
-  window.polymorph = polymorph;
-}
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(15)))
-
-/***/ }),
-/* 19 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return isValidCssProperty; });
-/**
- * Determine if a string is a valid CSS property
- * 
- * @param {String} query
- */
-function isValidCssProperty(query) {
-  var el = document.createElement('div');
-  el.style[query] = 'initial';
-  return !!el.style.cssText;
-}
-
-/***/ }),
-/* 20 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-/**
- * Stringify a polymorph state
- * 
- * @see https://stackoverflow.com/a/48254637/2253888
- * 
- * @param {Object} state 
- */
-/* harmony default export */ __webpack_exports__["a"] = (function (state) {
-  var cache = new Set();
-  return JSON.stringify(state, function (key, value) {
-    // Do not attempt to serialize DOM elements as the bloat causes browser to crash
-    if (value instanceof HTMLElement) {
-      value = '[HTMLElement]';
-    }
-
-    if (_typeof(value) === 'object' && value !== null) {
-      if (cache.has(value)) {
-        // Circular reference found
-        try {
-          // If this value does not reference a parent it can be deduped
-          return JSON.parse(JSON.stringify(value));
-        } catch (err) {
-          // discard key if value cannot be deduped
-          return;
-        }
-      } // Store value in our set
-
-
-      cache.add(value);
-    }
-
-    return value;
-  });
-});
-;
-
-/***/ }),
-/* 21 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return sQuery; });
-/* harmony import */ var _utilities_getConfig__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(22);
-/* harmony import */ var _utilities_getDomNodes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(23);
-/* harmony import */ var _utilities_getModuleNamespace__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(0);
-/* harmony import */ var _utilities_init__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(24);
-/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1);
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
-
-function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
 
 
 
@@ -2382,22 +1853,21 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 if (typeof process === 'undefined') window.process = {
   env: {}
 };
-/**
- * @param {*} SynergyQuery
- * @param {Function} [callback]
- * @param {Object} [defaults]
- * @param {Object} [custom]
- * @param {Object} [parser]
- */
+/** */
 
 function sQuery(SynergyQuery, callback, defaults, custom, parser) {
   var Synergy = window.Synergy || {};
+  sQuery.config = sQuery.config || {};
   var methods = {};
   var config = Object(_utilities_getConfig__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(defaults, custom, parser);
   var modifierGlue = config.modifierGlue || Synergy.modifierGlue || '-';
   var componentGlue = config.componentGlue || Synergy.componentGlue || '_';
-  var namespace = Object(_utilities_getModuleNamespace__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"])(SynergyQuery, componentGlue, modifierGlue);
-  var DOMNodes = Object(_utilities_getDomNodes__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(SynergyQuery);
+  var multipleClasses = config.multipleClasses || Synergy.multipleClasses || false;
+  var namespace = Object(_utilities_getNamespace__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"])(SynergyQuery, false, {
+    componentGlue: componentGlue,
+    modifierGlue: modifierGlue
+  });
+  var DOMNodes = Object(_utilities_getDOMNodes__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(SynergyQuery);
 
   var _arr = Object.entries(_api__WEBPACK_IMPORTED_MODULE_4__);
 
@@ -2406,30 +1876,37 @@ function sQuery(SynergyQuery, callback, defaults, custom, parser) {
         key = _arr$_i[0],
         method = _arr$_i[1];
 
-    methods[key] = method.bind({
+    if (sQuery.config.methods && sQuery.config.methods[key]) {
+      key = sQuery.config.methods[key];
+    }
+
+    var internalConfig = {
       namespace: namespace,
-      DOMNodes: DOMNodes,
       componentGlue: componentGlue,
-      modifierGlue: modifierGlue
-    });
+      modifierGlue: modifierGlue,
+      multipleClasses: multipleClasses
+    };
+
+    if (DOMNodes) {
+      methods[key] = method.bind(internalConfig, DOMNodes);
+    } else {
+      methods[key] = method.bind(internalConfig);
+    }
   }
 
   if (typeof callback === 'function') {
-    if (DOMNodes instanceof NodeList) {
-      DOMNodes.forEach(function (node) {
-        return callback(node, config);
-      });
-    } else {
-      callback(node, DOMNodes);
-    }
+    DOMNodes.forEach(function (node) {
+      return callback(node, config);
+    });
   }
 
   return Object.assign(methods, {
     namespace: namespace,
-    DOMNodes: DOMNodes,
-    DOMNode: DOMNodes ? DOMNodes[0] : null
+    nodes: DOMNodes,
+    node: DOMNodes ? DOMNodes[0] : null
   });
 }
+
 sQuery.init = _utilities_init__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"];
 
 var _arr2 = Object.entries(_api__WEBPACK_IMPORTED_MODULE_4__);
@@ -2446,11 +1923,11 @@ if (typeof window !== 'undefined') {
   window.sQuery = sQuery;
 }
 
-
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(15)))
+/* harmony default export */ __webpack_exports__["a"] = (sQuery);
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(11)))
 
 /***/ }),
-/* 22 */
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2475,12 +1952,12 @@ function getConfig(defaults, custom, parser) {
 }
 
 /***/ }),
-/* 23 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getDomNodes; });
-/* harmony import */ var _isValidSelector__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8);
+/* harmony import */ var _isValidSelector__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(10);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 
@@ -2496,7 +1973,7 @@ function getDomNodes(query) {
   }
 
   if (query instanceof HTMLElement) {
-    return query;
+    return [query];
   }
 
   if (query instanceof Array) {
@@ -2517,12 +1994,12 @@ function getDomNodes(query) {
 }
 
 /***/ }),
-/* 24 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return init; });
-/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
@@ -2542,28 +2019,33 @@ function init(custom) {
   }, custom);
   options.alterMethodName = options.alterMethodName || [];
   var PRESETS = {
-    BEM: ['__', '--', 'block', 'element', 'modifier'],
-    Synergy: ['_', '-', 'module', 'component', 'modifier']
+    BEM: ['__', '--', 'block', 'element', 'modifier', true],
+    Synergy: ['_', '-', 'module', 'component', 'modifier', false]
   };
 
-  var _Array$prototype$slic = Array.prototype.slice.call(PRESETS[options.preset]),
-      _Array$prototype$slic2 = _slicedToArray(_Array$prototype$slic, 5),
-      componentGlue = _Array$prototype$slic2[0],
-      modifierGlue = _Array$prototype$slic2[1],
-      moduleNamespace = _Array$prototype$slic2[2],
-      componentNamespace = _Array$prototype$slic2[3],
-      modifierNamespace = _Array$prototype$slic2[4];
+  var _slice$call = [].slice.call(PRESETS[options.preset]),
+      _slice$call2 = _slicedToArray(_slice$call, 6),
+      componentGlue = _slice$call2[0],
+      modifierGlue = _slice$call2[1],
+      moduleNamespace = _slice$call2[2],
+      componentNamespace = _slice$call2[3],
+      modifierNamespace = _slice$call2[4],
+      multipleClasses = _slice$call2[5];
 
   componentGlue = options.componentGlue || componentGlue;
   modifierGlue = options.modifierGlue || modifierGlue;
+  multipleClasses = typeof options.multipleClasses === 'undefined' ? multipleClasses : options.multipleClasses;
 
   if (options.Synergy) {
     window.Synergy = window.Synergy || {};
     Object.assign(window.Synergy, {
       componentGlue: componentGlue,
-      modifierGlue: modifierGlue
+      modifierGlue: modifierGlue,
+      multipleClasses: multipleClasses
     });
   }
+
+  var methods = {};
 
   var _arr2 = Object.entries(_api__WEBPACK_IMPORTED_MODULE_0__);
 
@@ -2580,11 +2062,11 @@ function init(custom) {
       var componentUpperCase = componentNamespace[0].toUpperCase() + componentNamespace.substring(1);
       var modifierUpperCase = modifierNamespace[0].toUpperCase() + modifierNamespace.substring(1);
 
-      if (methodName.toLowerCase().indexOf('module') > -1) {
+      if (methodName.indexOf('module') > -1) {
         newMethodName = methodName.replace(new RegExp('module', 'g'), moduleNamespace);
       }
 
-      if (methodName.toLowerCase().indexOf('Module') > -1) {
+      if (methodName.indexOf('Module') > -1) {
         newMethodName = methodName.replace(new RegExp('Module', 'g'), moduleUpperCase);
       }
 
@@ -2594,15 +2076,8 @@ function init(custom) {
 
       if (methodName.indexOf('Component') > -1) {
         newMethodName = methodName.replace(new RegExp('Component', 'g'), componentUpperCase);
-      }
+      } // @TODO do modifier renames
 
-      if (methodName.toLowerCase().indexOf('modifier') > -1) {
-        newMethodName = methodName.replace(new RegExp('modifier', 'g'), modifierNamespace);
-      }
-
-      if (methodName.toLowerCase().indexOf('Modifier') > -1) {
-        newMethodName = methodName.replace(new RegExp('Modifier', 'g'), modifierUpperCase);
-      }
 
       if (options.preset !== 'Synergy' && sQuery && options.alterMethodName.includes('sQuery')) {
         sQuery[newMethodName] = function (node) {
@@ -2615,6 +2090,8 @@ function init(custom) {
           return (_this = this(node))[methodName].apply(_this, params);
         };
       }
+
+      methods[methodName] = newMethodName || methodName;
     }
 
     if (options.elementProto) {
@@ -2622,12 +2099,15 @@ function init(custom) {
 
       if (typeof document.body[methodName] === 'undefined') {
         Element.prototype[methodName] = function () {
+          for (var _len2 = arguments.length, params = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+            params[_key2] = arguments[_key2];
+          }
+
           return method.bind({
-            DOMNodes: this,
-            parentElement: this,
             componentGlue: componentGlue,
-            modifierGlue: modifierGlue
-          }).apply(void 0, arguments);
+            modifierGlue: modifierGlue,
+            multipleClasses: multipleClasses
+          }).apply(void 0, [this].concat(params));
         };
       }
     }
@@ -2636,12 +2116,15 @@ function init(custom) {
       methodName = options.alterMethodName.includes('nodeListProto') ? newMethodName : methodName;
 
       NodeList.prototype[methodName] = function () {
+        for (var _len3 = arguments.length, params = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+          params[_key3] = arguments[_key3];
+        }
+
         return method.bind({
-          DOMNodes: this,
-          parentElement: this,
           componentGlue: componentGlue,
-          modifierGlue: modifierGlue
-        }).apply(void 0, arguments);
+          modifierGlue: modifierGlue,
+          multipleClasses: multipleClasses
+        }).apply(void 0, [this].concat(params));
       };
     }
   };
@@ -2649,10 +2132,383 @@ function init(custom) {
   for (var _i2 = 0; _i2 < _arr2.length; _i2++) {
     _loop();
   }
+
+  if (typeof sQuery !== 'undefined') {
+    sQuery.config = Object.assign(options, {
+      methods: methods
+    });
+  }
 }
 
 /***/ }),
-/* 25 */
+/* 18 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return polymorph; });
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+// `process` and `require` are exploited to help reduce bundle size
+if (typeof process === 'undefined') window.process = {
+  env: {}
+};
+function polymorph(element, styles) {
+  var config = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+  var globals = arguments.length > 3 ? arguments[3] : undefined;
+  var Synergy = window.Synergy || {};
+  var sQuery = window.sQuery;
+
+  if (false) {}
+
+  var modifierGlue = config.modifierGlue || Synergy.modifierGlue || '-';
+  var componentGlue = config.componentGlue || Synergy.componentGlue || '_';
+  var CONFIG = {
+    componentGlue: componentGlue,
+    modifierGlue: modifierGlue
+  };
+  var STYLESHEET = styles;
+
+  if (typeof styles === 'function') {
+    STYLESHEET = styles(element, config, globals);
+  }
+
+  if (styles.constructor === Array) {
+    STYLESHEET = styles.map(function (style) {
+      return typeof style === 'function' ? style(element, config, globals) : style;
+    });
+  }
+
+  if (STYLESHEET.constructor === Array) {
+    if (STYLESHEET.every(function (value) {
+      return value && value.constructor === Object;
+    })) {
+      STYLESHEET.forEach(function (value) {
+        return handleStyleSheet(element, value, CONFIG);
+      });
+    }
+  } else {
+    handleStyleSheet(element, STYLESHEET, CONFIG);
+  }
+
+  element.repaint();
+}
+/**
+ * 
+ */
+
+function handleStyleSheet(element, stylesheet, config) {
+  var context = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : [];
+
+  if (!element.polymorph) {
+    var WRAPPER_ELEMENT = [].slice.call(element.parentNode.classList).some(function (className) {
+      return className.indexOf('group') === 0 || className.indexOf('wrapper') === 0;
+    }) && element.parentNode;
+    element.polymorph = {
+      rules: [],
+      COMPONENTS: sQuery.getComponents.bind(_objectSpread({}, config))(element),
+      SUB_COMPONENTS: sQuery.getSubComponents.bind(_objectSpread({}, config))(element)
+    };
+    var _element$polymorph = element.polymorph,
+        COMPONENTS = _element$polymorph.COMPONENTS,
+        SUB_COMPONENTS = _element$polymorph.SUB_COMPONENTS;
+
+    element.repaint = function (disableDependentElements) {
+      var allDependentElements = [];
+
+      if (WRAPPER_ELEMENT && WRAPPER_ELEMENT.repaint) {
+        WRAPPER_ELEMENT.repaint(true);
+      }
+
+      [element].concat(_toConsumableArray(COMPONENTS), _toConsumableArray(SUB_COMPONENTS)).forEach(function (el) {
+        if (el.polymorph) {
+          el.polymorph.rules.forEach(function (rule) {
+            if (rule.context.every(function (ruleContext) {
+              if (ruleContext.value === 'hover') {
+                return ruleContext.source.polymorph.isHovered;
+              }
+
+              if (ruleContext.value === 'focus') {
+                return ruleContext.source.polymorph.isFocused;
+              }
+
+              return sQuery.hasModifier.bind(_objectSpread({}, config))(ruleContext.source, ruleContext.value);
+            })) {
+              var _allDependentElements;
+
+              var dependentElements = doStyles(el, rule.styles) || [];
+              dependentElements.length && (_allDependentElements = allDependentElements).push.apply(_allDependentElements, _toConsumableArray(dependentElements));
+            }
+          });
+
+          if (allDependentElements.includes(el)) {
+            allDependentElements.filter(function (item) {
+              return item !== el;
+            });
+          }
+        }
+      });
+
+      if (!disableDependentElements && allDependentElements.length) {
+        allDependentElements = allDependentElements.filter(function (item, pos) {
+          return allDependentElements.indexOf(item) == pos;
+        });
+        allDependentElements.forEach(function (el) {
+          return el.repaint && el.repaint(true);
+        });
+      }
+    };
+  }
+
+  element.polymorph.rules = element.polymorph.rules.concat({
+    context: context,
+    styles: stylesheet
+  });
+
+  if (typeof stylesheet === 'function') {
+    stylesheet = stylesheet(element);
+  }
+
+  if (!stylesheet) return;
+  Object.entries(stylesheet).forEach(function (_ref) {
+    var _ref2 = _slicedToArray(_ref, 2),
+        key = _ref2[0],
+        value = _ref2[1];
+
+    var COMPONENTS = sQuery.getComponents.bind(_objectSpread({}, config))(element, key);
+    var SUB_COMPONENTS = sQuery.getSubComponents.bind(_objectSpread({}, config))(element, key); //Handle case where desired element for styles to be applied is manually controlled
+
+    if (value instanceof Array && value[0]) {
+      if (value[0] instanceof HTMLElement) {
+        handleStyleSheet(value[0], value[1], config, context);
+      }
+
+      if (value[0] instanceof NodeList) {
+        value[0].forEach(function (el) {
+          return handleStyleSheet(el, value[1], config, context);
+        });
+      }
+
+      return;
+    } // Smart handle `components`
+
+
+    if (COMPONENTS.length) {
+      if (value.disableCascade) {
+        COMPONENTS = COMPONENTS.filter(function (component) {
+          return COMPONENTS.every(function (_component) {
+            return component.contains(_component);
+          });
+        });
+      }
+
+      return COMPONENTS.forEach(function (component) {
+        return handleStyleSheet(component, value, config, context);
+      });
+    } // Smart handle `sub-components`
+
+
+    if (SUB_COMPONENTS.length) {
+      if (value.disableCascade) {
+        SUB_COMPONENTS = SUB_COMPONENTS.filter(function (subComponent) {
+          var componentName = _toConsumableArray(element.classList).reduce(function ($, currentValue) {
+            if (currentValue.indexOf(config.componentGlue) > 1) {
+              var glueLength = config.componentGlue.length;
+              var nameStart = currentValue.lastIndexOf(config.componentGlue) + glueLength;
+              currentValue = currentValue.substring(nameStart, currentValue.length);
+              return currentValue.substring(0, currentValue.indexOf(config.modifierGlue));
+            }
+          }, []);
+
+          var parentSubComponent = sQuery.parent.bind(_objectSpread({}, config))(subComponent, componentName);
+          return element === parentSubComponent;
+        });
+      }
+
+      return SUB_COMPONENTS.forEach(function (component) {
+        return handleStyleSheet(component, value, config, context);
+      });
+    } // Handle `sub-components`
+
+
+    if (key.indexOf('subComponent(') > -1) {
+      var subComponent = key.replace('subComponent(', '').replace(/\)/g, '');
+      var subComponents = sQuery.getSubComponents.bind(_objectSpread({}, config))(element, subComponent);
+      return subComponents.forEach(function (component) {
+        return handleStyleSheet(component, value, config, context);
+      });
+    } // Handle `modifiers`
+
+
+    if (key.indexOf('modifier(') > -1) {
+      var modifier = key.replace('modifier(', '').replace(/\)/g, '');
+      return handleStyleSheet(element, value, config, context.concat({
+        source: element,
+        value: modifier
+      }));
+    } // Handle `hover` interaction
+
+
+    if (key === ':hover') {
+      handleStyleSheet(element, value, config, context.concat({
+        source: element,
+        value: 'hover'
+      }));
+      element.addEventListener('mouseenter', function (event) {
+        element.polymorph.isHovered = true;
+        element.repaint();
+      });
+      element.addEventListener('mouseleave', function (event) {
+        element.polymorph.isHovered = false;
+        element.repaint();
+      });
+      return;
+    } // Handle `focus` interaction
+
+
+    if (key === ':focus') {
+      handleStyleSheet(element, value, config, context.concat({
+        source: element,
+        value: 'focus'
+      }));
+      element.addEventListener('focus', function (event) {
+        element.polymorph.isFocused = true;
+        element.repaint();
+      });
+      element.addEventListener('blur', function (event) {
+        element.polymorph.isFocused = false;
+        element.repaint();
+      });
+      return;
+    } // Handle Group/Wrapper elements
+
+
+    if (key === 'group' || key === 'wrapper') {
+      var wrapper = element.parentNode;
+      return wrapper.classList.forEach(function (className) {
+        if (className.indexOf('group') === 0 || className.indexOf('wrapper') === 0) {
+          handleStyleSheet(wrapper, value, config, context);
+        }
+      });
+    }
+  });
+  element.polymorph.rules.sort(function (a, b) {
+    if (!a.context.length && !b.context.length) {
+      return 0;
+    }
+
+    if (a.context.length && !b.context.length) {
+      return 1;
+    }
+
+    if (!a.context.length && b.context.length) {
+      return -1;
+    }
+
+    if (a.context.some(function (c) {
+      return c.value === 'hover';
+    }) && b.context.some(function (c) {
+      return c.value === 'hover';
+    })) {
+      return 0;
+    }
+
+    if (b.context.some(function (c) {
+      return c.value === 'hover';
+    })) {
+      return -1;
+    }
+
+    return 0;
+  });
+}
+/**
+ * 
+ */
+
+
+function doStyles(el, styles) {
+  if (typeof styles === 'function') {
+    styles = styles(el);
+  }
+
+  if (!styles) return;
+  Object.entries(styles).forEach(function (_ref3) {
+    var _ref4 = _slicedToArray(_ref3, 2),
+        key = _ref4[0],
+        value = _ref4[1];
+
+    if (typeof value === 'function') {
+      try {
+        return el.style[key] = value(el.style[key]);
+      } catch (error) {
+        return error;
+      }
+    } // https://stackoverflow.com/questions/55867116
+
+
+    if (!isNaN(key)) {
+      return;
+    }
+
+    return el.style[key] = value;
+  });
+  var dependentElements = Object.values(styles).reduce(function (accumulator, currentValue) {
+    if (currentValue instanceof Array && currentValue[0]) {
+      if (currentValue[0] instanceof NodeList || currentValue[0] instanceof Array) {
+        return accumulator.concat.apply(accumulator, _toConsumableArray(currentValue[0]));
+      }
+
+      return accumulator.concat(currentValue[0]);
+    }
+
+    return accumulator;
+  }, []);
+  return dependentElements;
+}
+/**
+ * Wrapper for sQuery `hasModifier()`
+ */
+
+
+polymorph.modifier = function (element, modifier, modifierGlue, componentGlue) {
+  var Synergy = window.Synergy || {};
+  modifierGlue = modifierGlue || Synergy.modifierGlue || '-';
+  componentGlue = componentGlue || Synergy.componentGlue || '_';
+  return sQuery.hasModifier.bind({
+    modifierGlue: modifierGlue,
+    componentGlue: componentGlue
+  })(element, modifier);
+};
+/**
+ * Attach to Window
+ */
+
+
+if (typeof window !== 'undefined') {
+  window.polymorph = polymorph;
+}
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(11)))
+
+/***/ }),
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2809,52 +2665,54 @@ var deepExtend = module.exports = function (/*obj_1, [obj_2], [obj_N]*/) {
 
 
 /***/ }),
-/* 26 */
+/* 20 */
 /***/ (function(module) {
 
 module.exports = ["a","abbr","address","area","article","aside","audio","b","base","bdi","bdo","blockquote","body","br","button","canvas","caption","cite","code","col","colgroup","data","datalist","dd","del","details","dfn","dialog","div","dl","dt","em","embed","fieldset","figcaption","figure","footer","form","h1","h2","h3","h4","h5","h6","head","header","hgroup","hr","html","i","iframe","img","input","ins","kbd","keygen","label","legend","li","link","main","map","mark","math","menu","menuitem","meta","meter","nav","noscript","object","ol","optgroup","option","output","p","param","picture","pre","progress","q","rb","rp","rt","rtc","ruby","s","samp","script","section","select","slot","small","source","span","strong","style","sub","summary","sup","svg","table","tbody","td","template","textarea","tfoot","th","thead","time","title","tr","track","u","ul","var","video","wbr"];
 
 /***/ }),
-/* 27 */
+/* 21 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 var src_namespaceObject = {};
 __webpack_require__.r(src_namespaceObject);
+__webpack_require__.d(src_namespaceObject, "default", function() { return src; });
 __webpack_require__.d(src_namespaceObject, "Module", function() { return src_module["d" /* default */]; });
 __webpack_require__.d(src_namespaceObject, "Wrapper", function() { return src_module["c" /* Wrapper */]; });
 __webpack_require__.d(src_namespaceObject, "Group", function() { return src_module["a" /* Group */]; });
 __webpack_require__.d(src_namespaceObject, "Component", function() { return component_Component; });
 __webpack_require__.d(src_namespaceObject, "SubComponent", function() { return component_SubComponent; });
+__webpack_require__.d(src_namespaceObject, "BEM", function() { return BEM; });
 
-// EXTERNAL MODULE: /Users/reede/Documents/Projects/Lucid/Lucid/src/module.jsx
-var src_module = __webpack_require__(7);
+// EXTERNAL MODULE: /Users/edmund.reed/Projects/Lucid/Lucid/src/module.jsx
+var src_module = __webpack_require__(2);
 
 // EXTERNAL MODULE: external "react"
-var external_react_ = __webpack_require__(2);
+var external_react_ = __webpack_require__(1);
 var external_react_default = /*#__PURE__*/__webpack_require__.n(external_react_);
 
-// EXTERNAL MODULE: /Users/reede/Documents/Projects/Lucid/Lucid/node_modules/html-tags/index.js
-var html_tags = __webpack_require__(11);
+// EXTERNAL MODULE: /Users/edmund.reed/Projects/Lucid/Lucid/node_modules/html-tags/index.js
+var html_tags = __webpack_require__(6);
 var html_tags_default = /*#__PURE__*/__webpack_require__.n(html_tags);
 
-// EXTERNAL MODULE: /Users/reede/Documents/Projects/Lucid/Lucid/src/utilities/getHtmlProps.js
-var getHtmlProps = __webpack_require__(12);
+// EXTERNAL MODULE: /Users/edmund.reed/Projects/Lucid/Lucid/src/utilities/getHtmlProps.js
+var getHtmlProps = __webpack_require__(7);
 
-// EXTERNAL MODULE: /Users/reede/Documents/Projects/Lucid/Lucid/src/utilities/getModifiersFromProps.js
-var getModifiersFromProps = __webpack_require__(10);
+// EXTERNAL MODULE: /Users/edmund.reed/Projects/Lucid/Lucid/src/utilities/getModifiersFromProps.js
+var getModifiersFromProps = __webpack_require__(4);
 
-// EXTERNAL MODULE: /Users/reede/Documents/Projects/Lucid/Lucid/src/utilities/generateClasses.js
-var generateClasses = __webpack_require__(13);
+// EXTERNAL MODULE: /Users/edmund.reed/Projects/Lucid/Lucid/src/utilities/generateClasses.js
+var generateClasses = __webpack_require__(8);
 
-// EXTERNAL MODULE: /Users/reede/Documents/Projects/Lucid/Lucid/src/utilities/renderModifiers.js
-var renderModifiers = __webpack_require__(6);
+// EXTERNAL MODULE: /Users/edmund.reed/Projects/Lucid/Lucid/src/utilities/renderModifiers.js
+var renderModifiers = __webpack_require__(3);
 
-// EXTERNAL MODULE: /Users/reede/Documents/Projects/Lucid/Lucid/src/utilities/refHandler.js
-var refHandler = __webpack_require__(14);
+// EXTERNAL MODULE: /Users/edmund.reed/Projects/Lucid/Lucid/src/utilities/refHandler.js
+var refHandler = __webpack_require__(9);
 
-// CONCATENATED MODULE: /Users/reede/Documents/Projects/Lucid/Lucid/src/component.jsx
+// CONCATENATED MODULE: /Users/edmund.reed/Projects/Lucid/Lucid/src/component.jsx
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
@@ -2944,7 +2802,6 @@ function (_React$Component) {
       var getContextModifiers = Object(getModifiersFromProps["a" /* default */])(context.props && context.props[props.name], Synergy.CssClassProps);
       var contextModifiers = Object(renderModifiers["a" /* default */])(getContextModifiers, modifierGlue);
       var passedModifiers = Object(renderModifiers["a" /* default */])(props.modifiers, modifierGlue);
-      var classes = Object(generateClasses["a" /* default */])(props, props.className ? ' ' + props.className : '', modifierGlue);
       var modifiers = propModifiers + passedModifiers + contextModifiers;
       var eventHandlers = this.getEventHandlers([props, context.config[props.name] ? context.config[props.name] : {}]);
       var Tag = props.href && 'a' || props.component || props.tag || (html_tags_default.a.includes(props.name) ? props.name : 'div');
@@ -2953,35 +2810,37 @@ function (_React$Component) {
         return Object(refHandler["a" /* default */])(node, props, context.styleParser, false, context.ui);
       };
 
-      var selector = '';
-
-      if (props.name instanceof Array) {
-        props.name.forEach(function (name) {
-          return selector = (selector ? selector + ' ' : '') + "".concat(module + componentGlue + name + modifiers);
-        });
-        selector = selector + classes;
-      } else {
-        selector = "".concat(module + componentGlue + props.name + modifiers) + classes;
-      }
-
       var contextValues = {
         component: context.component
-      };
+      }; // if (props.name instanceof Array) {
+      //     @TODO
+      // }
+
+      var namespace;
 
       if (subComponent) {
         contextValues.subComponent = [].concat(_toConsumableArray(context.subComponent || []), [props.name]);
         var subComponents = contextValues.subComponent.length ? contextValues.subComponent.join(componentGlue) : '';
-        var namespace = "".concat((context.component || props.name) + componentGlue + subComponents);
-        selector = "".concat(module + componentGlue + namespace + modifiers + classes);
+        namespace = "".concat(module + componentGlue + (context.component || props.name) + componentGlue + subComponents);
       } else {
         contextValues.component = props.name;
+        namespace = module + componentGlue + props.name;
       }
 
+      var classes = Object(generateClasses["a" /* default */])({
+        props: props,
+        namespace: namespace,
+        modifiers: modifiers,
+        classes: props.className ? props.className : '',
+        modifierGlue: modifierGlue,
+        componentGlue: componentGlue,
+        multipleClasses: context.multipleClasses
+      });
       return external_react_default.a.createElement(ComponentContext.Provider, {
         value: contextValues
       }, external_react_default.a.createElement(Tag, _extends({}, Object(getHtmlProps["a" /* default */])(props), eventHandlers, {
         ref: ref,
-        className: selector,
+        className: classes,
         "data-component": props.name.constructor === Array ? props.name[0] : props.name
       }, this.props.componentProps), props.children));
     }
@@ -3011,17 +2870,28 @@ var component_SubComponent = function SubComponent(props) {
     subComponent: true
   }, props), props.children);
 };
-// CONCATENATED MODULE: /Users/reede/Documents/Projects/Lucid/Lucid/src/index.js
+// CONCATENATED MODULE: /Users/edmund.reed/Projects/Lucid/Lucid/src/index.js
 
 
-// EXTERNAL MODULE: /Users/reede/Documents/Projects/Polymorph/Polymorph/src/polymorph.js
+var BEM = {
+  Block: src_module["d" /* default */],
+  Element: component_Component,
+  SubElement: component_SubComponent
+};
+/* harmony default export */ var src = ({
+  Module: src_module["d" /* default */],
+  Component: component_Component,
+  SubComponent: component_SubComponent
+});
+
+// EXTERNAL MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/squery.js
+var squery = __webpack_require__(14);
+
+// EXTERNAL MODULE: /Users/edmund.reed/Projects/Polymorph/Polymorph/src/polymorph.js
 var polymorph = __webpack_require__(18);
 
-// EXTERNAL MODULE: /Users/reede/Documents/Projects/sQuery/sQuery/src/squery.js
-var squery = __webpack_require__(21);
-
 // EXTERNAL MODULE: ./node_modules/deep-extend/lib/deep-extend.js
-var deep_extend = __webpack_require__(25);
+var deep_extend = __webpack_require__(19);
 var deep_extend_default = /*#__PURE__*/__webpack_require__.n(deep_extend);
 
 // CONCATENATED MODULE: ./src/synergy.js
