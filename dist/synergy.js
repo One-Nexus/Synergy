@@ -519,10 +519,10 @@ function getModifiersFromProps(props) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 
-// EXTERNAL MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/utilities/getNamespace.js
+// EXTERNAL MODULE: ./node_modules/@onenexus/squery/src/utilities/getNamespace.js
 var getNamespace = __webpack_require__(0);
 
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/utilities/isSafeElement.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/utilities/isSafeElement.js
 function isSafeElement(node, namespace, _ref) {
   var modifierGlue = _ref.modifierGlue;
 
@@ -542,7 +542,7 @@ function isSafeElement(node, namespace, _ref) {
   });
   return matchedClasses.length === 1 ? matchedClasses[0] : false;
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/addModifier.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/addModifier.js
 
 
 function addModifier(node, modifier, config) {
@@ -575,7 +575,7 @@ function addModifier(node, modifier, config) {
 
   return node;
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/parent.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/parent.js
 
 function parent_parent(node, query, config) {
   config = Object.assign(this || {}, config || {});
@@ -614,7 +614,7 @@ function parent_parent(node, query, config) {
     return parentSubComponent;
   }
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/utilities/filterElements.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/utilities/filterElements.js
 
 
 function filterElements(node, elements, subComponent, config) {
@@ -632,10 +632,10 @@ function filterElements(node, elements, subComponent, config) {
   });
   return elements;
 }
-// EXTERNAL MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/utilities/isValidSelector.js
+// EXTERNAL MODULE: ./node_modules/@onenexus/squery/src/utilities/isValidSelector.js
 var isValidSelector = __webpack_require__(10);
 
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/getComponents.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/getComponents.js
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -713,7 +713,7 @@ function getComponents(node, componentName, config) {
   components = filterElements(node, components, subComponent, config);
   return components;
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/getComponent.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/getComponent.js
 
 /**
  * @TODO allow this API
@@ -732,7 +732,7 @@ function getComponent(node, componentName, config) {
   ;
   return getComponents(node, componentName, config)[0];
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/setComponent.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/setComponent.js
 
 function setComponent(node, componentName, namespace, replace, config) {
   config = Object.assign(this || {}, config || {});
@@ -752,7 +752,7 @@ function setComponent(node, componentName, namespace, replace, config) {
   node.setAttribute('data-component', componentName);
   replace && node.classList.remove(replace);
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/unsetComponent.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/unsetComponent.js
 
 function unsetComponent(node, componentName, config) {
   config = Object.assign(this || {}, config || {});
@@ -775,7 +775,7 @@ function unsetComponent(node, componentName, config) {
     }
   });
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/isComponent.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/isComponent.js
 
 function isComponent(node, componentName, config) {
   config = Object.assign(this || {}, config || {});
@@ -804,7 +804,7 @@ function isComponent(node, componentName, config) {
     return className.indexOf(query) === 0 && isAComponent && isMatch;
   });
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/component.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/component.js
 
 
 
@@ -845,7 +845,7 @@ function component_component(node, componentName, operator, config) {
     });
   }
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/getModules.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/getModules.js
 function getModules(node, moduleName, config) {
   config = Object.assign(this || {}, config || {});
   var _config = config,
@@ -872,7 +872,7 @@ function getModules(node, moduleName, config) {
   });
   return modules;
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/hasModifier.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/hasModifier.js
 
 function hasModifier(node, modifier, config) {
   config = Object.assign(this || {}, config || {});
@@ -901,7 +901,7 @@ function hasModifier(node, modifier, config) {
     return namespaceMatch && (isModifierTest1 || isModifierTest2);
   });
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/find.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/find.js
 function find_objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { find_defineProperty(target, key, source[key]); }); } return target; }
 
 function find_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -969,7 +969,7 @@ function getQueryFromObject(node, query, config) {
 
   return matches;
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/getModifiers.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/getModifiers.js
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
@@ -1001,14 +1001,14 @@ function getModifiers(node, config) {
   var modifiers = targetClass.split(modifierGlue).slice(1);
   return modifiers;
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/getSubComponents.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/getSubComponents.js
 
 function getSubComponents(node, subComponentName, config) {
   config = Object.assign(this || {}, config || {});
   config.subComponent = true;
   return getComponents(node, subComponentName, config);
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/getSubComponent.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/getSubComponent.js
 
 function getSubComponent(node, componentName, config) {
   config = Object.assign(this || {}, config || {});
@@ -1022,7 +1022,7 @@ function getSubComponent(node, componentName, config) {
   ;
   return getSubComponents(node, componentName, config)[0];
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/isModule.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/isModule.js
 function isModule(node, moduleName, config) {
   config = Object.assign(this || {}, config || {});
   var DOMNodes = !(node instanceof NodeList || node instanceof Array) ? [node] : node;
@@ -1030,7 +1030,7 @@ function isModule(node, moduleName, config) {
     return node.matches(".".concat(moduleName, ", [class*=\"").concat(moduleName + config.modifierGlue, "\"]"));
   });
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/is.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/is.js
 function is_typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { is_typeof = function _typeof(obj) { return typeof obj; }; } else { is_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return is_typeof(obj); }
 
 
@@ -1094,7 +1094,7 @@ function is(node, query, config) {
 
   return false;
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/removeModifier.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/removeModifier.js
 
 function removeModifier(node, modifier, config) {
   config = Object.assign(this || {}, config || {});
@@ -1130,7 +1130,7 @@ function removeModifier(node, modifier, config) {
 
   return node;
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/toggleModifier.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/toggleModifier.js
 
 
 
@@ -1149,7 +1149,7 @@ function toggleModifier(node, modifier, config) {
     return addModifier(node, modifier, config);
   }
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/modifier.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/modifier.js
 
 
 
@@ -1178,7 +1178,7 @@ function modifier_modifier(node, modifier, operator, config) {
     return toggleModifier(node, modifier, config);
   }
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/module.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/module.js
 
 
 function module_module(node, moduleName, operator, config) {
@@ -1198,7 +1198,7 @@ function module_module(node, moduleName, operator, config) {
     });
   }
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/subComponent.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/subComponent.js
 
 
 
@@ -1209,7 +1209,7 @@ function subComponent_subComponent(node, subComponentName, operator, config) {
   config.getSubComponents = getSubComponents;
   return component_component(node, subComponentName, operator, config);
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/index.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/index.js
 /* concated harmony reexport add */__webpack_require__.d(__webpack_exports__, "add", function() { return addModifier; });
 /* concated harmony reexport addModifier */__webpack_require__.d(__webpack_exports__, "addModifier", function() { return addModifier; });
 /* concated harmony reexport component */__webpack_require__.d(__webpack_exports__, "component", function() { return component_component; });
@@ -1288,8 +1288,8 @@ function subComponent_subComponent(node, subComponentName, operator, config) {
 
 "use strict";
 
-module.exports = __webpack_require__(20);
 
+module.exports = __webpack_require__(20);
 
 /***/ }),
 /* 7 */
@@ -1491,9 +1491,7 @@ function isValidSelector(selector) {
 /***/ (function(module, exports) {
 
 // shim for using process in browser
-var process = module.exports = {};
-
-// cached from whatever global is present so that test runners that stub it
+var process = module.exports = {}; // cached from whatever global is present so that test runners that stub it
 // don't break things.  But we need to wrap it in a try catch in case it is
 // wrapped in strict mode code which doesn't define any globals.  It's inside a
 // function because try/catches deoptimize in certain engines.
@@ -1502,153 +1500,171 @@ var cachedSetTimeout;
 var cachedClearTimeout;
 
 function defaultSetTimout() {
-    throw new Error('setTimeout has not been defined');
+  throw new Error('setTimeout has not been defined');
 }
-function defaultClearTimeout () {
-    throw new Error('clearTimeout has not been defined');
+
+function defaultClearTimeout() {
+  throw new Error('clearTimeout has not been defined');
 }
+
 (function () {
-    try {
-        if (typeof setTimeout === 'function') {
-            cachedSetTimeout = setTimeout;
-        } else {
-            cachedSetTimeout = defaultSetTimout;
-        }
-    } catch (e) {
-        cachedSetTimeout = defaultSetTimout;
+  try {
+    if (typeof setTimeout === 'function') {
+      cachedSetTimeout = setTimeout;
+    } else {
+      cachedSetTimeout = defaultSetTimout;
     }
-    try {
-        if (typeof clearTimeout === 'function') {
-            cachedClearTimeout = clearTimeout;
-        } else {
-            cachedClearTimeout = defaultClearTimeout;
-        }
-    } catch (e) {
-        cachedClearTimeout = defaultClearTimeout;
+  } catch (e) {
+    cachedSetTimeout = defaultSetTimout;
+  }
+
+  try {
+    if (typeof clearTimeout === 'function') {
+      cachedClearTimeout = clearTimeout;
+    } else {
+      cachedClearTimeout = defaultClearTimeout;
     }
-} ())
+  } catch (e) {
+    cachedClearTimeout = defaultClearTimeout;
+  }
+})();
+
 function runTimeout(fun) {
-    if (cachedSetTimeout === setTimeout) {
-        //normal enviroments in sane situations
-        return setTimeout(fun, 0);
-    }
-    // if setTimeout wasn't available but was latter defined
-    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-        cachedSetTimeout = setTimeout;
-        return setTimeout(fun, 0);
-    }
+  if (cachedSetTimeout === setTimeout) {
+    //normal enviroments in sane situations
+    return setTimeout(fun, 0);
+  } // if setTimeout wasn't available but was latter defined
+
+
+  if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+    cachedSetTimeout = setTimeout;
+    return setTimeout(fun, 0);
+  }
+
+  try {
+    // when when somebody has screwed with setTimeout but no I.E. maddness
+    return cachedSetTimeout(fun, 0);
+  } catch (e) {
     try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedSetTimeout(fun, 0);
-    } catch(e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-            return cachedSetTimeout.call(null, fun, 0);
-        } catch(e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-            return cachedSetTimeout.call(this, fun, 0);
-        }
+      // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+      return cachedSetTimeout.call(null, fun, 0);
+    } catch (e) {
+      // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+      return cachedSetTimeout.call(this, fun, 0);
     }
-
-
+  }
 }
+
 function runClearTimeout(marker) {
-    if (cachedClearTimeout === clearTimeout) {
-        //normal enviroments in sane situations
-        return clearTimeout(marker);
-    }
-    // if clearTimeout wasn't available but was latter defined
-    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-        cachedClearTimeout = clearTimeout;
-        return clearTimeout(marker);
-    }
+  if (cachedClearTimeout === clearTimeout) {
+    //normal enviroments in sane situations
+    return clearTimeout(marker);
+  } // if clearTimeout wasn't available but was latter defined
+
+
+  if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+    cachedClearTimeout = clearTimeout;
+    return clearTimeout(marker);
+  }
+
+  try {
+    // when when somebody has screwed with setTimeout but no I.E. maddness
+    return cachedClearTimeout(marker);
+  } catch (e) {
     try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedClearTimeout(marker);
-    } catch (e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-            return cachedClearTimeout.call(null, marker);
-        } catch (e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-            return cachedClearTimeout.call(this, marker);
-        }
+      // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+      return cachedClearTimeout.call(null, marker);
+    } catch (e) {
+      // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+      // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+      return cachedClearTimeout.call(this, marker);
     }
-
-
-
+  }
 }
+
 var queue = [];
 var draining = false;
 var currentQueue;
 var queueIndex = -1;
 
 function cleanUpNextTick() {
-    if (!draining || !currentQueue) {
-        return;
-    }
-    draining = false;
-    if (currentQueue.length) {
-        queue = currentQueue.concat(queue);
-    } else {
-        queueIndex = -1;
-    }
-    if (queue.length) {
-        drainQueue();
-    }
+  if (!draining || !currentQueue) {
+    return;
+  }
+
+  draining = false;
+
+  if (currentQueue.length) {
+    queue = currentQueue.concat(queue);
+  } else {
+    queueIndex = -1;
+  }
+
+  if (queue.length) {
+    drainQueue();
+  }
 }
 
 function drainQueue() {
-    if (draining) {
-        return;
-    }
-    var timeout = runTimeout(cleanUpNextTick);
-    draining = true;
+  if (draining) {
+    return;
+  }
 
-    var len = queue.length;
-    while(len) {
-        currentQueue = queue;
-        queue = [];
-        while (++queueIndex < len) {
-            if (currentQueue) {
-                currentQueue[queueIndex].run();
-            }
-        }
-        queueIndex = -1;
-        len = queue.length;
+  var timeout = runTimeout(cleanUpNextTick);
+  draining = true;
+  var len = queue.length;
+
+  while (len) {
+    currentQueue = queue;
+    queue = [];
+
+    while (++queueIndex < len) {
+      if (currentQueue) {
+        currentQueue[queueIndex].run();
+      }
     }
-    currentQueue = null;
-    draining = false;
-    runClearTimeout(timeout);
+
+    queueIndex = -1;
+    len = queue.length;
+  }
+
+  currentQueue = null;
+  draining = false;
+  runClearTimeout(timeout);
 }
 
 process.nextTick = function (fun) {
-    var args = new Array(arguments.length - 1);
-    if (arguments.length > 1) {
-        for (var i = 1; i < arguments.length; i++) {
-            args[i - 1] = arguments[i];
-        }
+  var args = new Array(arguments.length - 1);
+
+  if (arguments.length > 1) {
+    for (var i = 1; i < arguments.length; i++) {
+      args[i - 1] = arguments[i];
     }
-    queue.push(new Item(fun, args));
-    if (queue.length === 1 && !draining) {
-        runTimeout(drainQueue);
-    }
+  }
+
+  queue.push(new Item(fun, args));
+
+  if (queue.length === 1 && !draining) {
+    runTimeout(drainQueue);
+  }
+}; // v8 likes predictible objects
+
+
+function Item(fun, array) {
+  this.fun = fun;
+  this.array = array;
+}
+
+Item.prototype.run = function () {
+  this.fun.apply(null, this.array);
 };
 
-// v8 likes predictible objects
-function Item(fun, array) {
-    this.fun = fun;
-    this.array = array;
-}
-Item.prototype.run = function () {
-    this.fun.apply(null, this.array);
-};
 process.title = 'browser';
 process.browser = true;
 process.env = {};
 process.argv = [];
 process.version = ''; // empty string to avoid regexp issues
+
 process.versions = {};
 
 function noop() {}
@@ -1663,18 +1679,25 @@ process.emit = noop;
 process.prependListener = noop;
 process.prependOnceListener = noop;
 
-process.listeners = function (name) { return [] }
+process.listeners = function (name) {
+  return [];
+};
 
 process.binding = function (name) {
-    throw new Error('process.binding is not supported');
+  throw new Error('process.binding is not supported');
 };
 
-process.cwd = function () { return '/' };
+process.cwd = function () {
+  return '/';
+};
+
 process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
+  throw new Error('process.chdir is not supported');
 };
-process.umask = function() { return 0; };
 
+process.umask = function () {
+  return 0;
+};
 
 /***/ }),
 /* 12 */
@@ -1691,8 +1714,6 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__12__;
  * html-attributes
  * https://github.com/alexmingoia/html-attributes
  */
-
-
 
 /**
  * @module html-attributes
@@ -1824,7 +1845,6 @@ module.exports = {
   "wmode": "wmode",
   "wrap": "wrap"
 };
-
 
 /***/ }),
 /* 14 */
@@ -2540,56 +2560,51 @@ if (typeof window !== 'undefined') {
  */
 
 
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function isSpecificValue(val) {
-	return (
-		val instanceof Buffer
-		|| val instanceof Date
-		|| val instanceof RegExp
-	) ? true : false;
+  return val instanceof Buffer || val instanceof Date || val instanceof RegExp ? true : false;
 }
 
 function cloneSpecificValue(val) {
-	if (val instanceof Buffer) {
-		var x = Buffer.alloc
-			? Buffer.alloc(val.length)
-			: new Buffer(val.length);
-		val.copy(x);
-		return x;
-	} else if (val instanceof Date) {
-		return new Date(val.getTime());
-	} else if (val instanceof RegExp) {
-		return new RegExp(val);
-	} else {
-		throw new Error('Unexpected situation');
-	}
+  if (val instanceof Buffer) {
+    var x = Buffer.alloc ? Buffer.alloc(val.length) : new Buffer(val.length);
+    val.copy(x);
+    return x;
+  } else if (val instanceof Date) {
+    return new Date(val.getTime());
+  } else if (val instanceof RegExp) {
+    return new RegExp(val);
+  } else {
+    throw new Error('Unexpected situation');
+  }
 }
-
 /**
  * Recursive cloning array.
  */
+
+
 function deepCloneArray(arr) {
-	var clone = [];
-	arr.forEach(function (item, index) {
-		if (typeof item === 'object' && item !== null) {
-			if (Array.isArray(item)) {
-				clone[index] = deepCloneArray(item);
-			} else if (isSpecificValue(item)) {
-				clone[index] = cloneSpecificValue(item);
-			} else {
-				clone[index] = deepExtend({}, item);
-			}
-		} else {
-			clone[index] = item;
-		}
-	});
-	return clone;
+  var clone = [];
+  arr.forEach(function (item, index) {
+    if (_typeof(item) === 'object' && item !== null) {
+      if (Array.isArray(item)) {
+        clone[index] = deepCloneArray(item);
+      } else if (isSpecificValue(item)) {
+        clone[index] = cloneSpecificValue(item);
+      } else {
+        clone[index] = deepExtend({}, item);
+      }
+    } else {
+      clone[index] = item;
+    }
+  });
+  return clone;
 }
 
 function safeGetProperty(object, property) {
-	return property === '__proto__' ? undefined : object[property];
+  return property === '__proto__' ? undefined : object[property];
 }
-
 /**
  * Extening object that entered in first argument.
  *
@@ -2599,70 +2614,61 @@ function safeGetProperty(object, property) {
  * object as first argument, like this:
  *   deepExtend({}, yourObj_1, [yourObj_N]);
  */
-var deepExtend = module.exports = function (/*obj_1, [obj_2], [obj_N]*/) {
-	if (arguments.length < 1 || typeof arguments[0] !== 'object') {
-		return false;
-	}
 
-	if (arguments.length < 2) {
-		return arguments[0];
-	}
 
-	var target = arguments[0];
+var deepExtend = module.exports = function ()
+/*obj_1, [obj_2], [obj_N]*/
+{
+  if (arguments.length < 1 || _typeof(arguments[0]) !== 'object') {
+    return false;
+  }
 
-	// convert arguments to array and cut off target object
-	var args = Array.prototype.slice.call(arguments, 1);
+  if (arguments.length < 2) {
+    return arguments[0];
+  }
 
-	var val, src, clone;
+  var target = arguments[0]; // convert arguments to array and cut off target object
 
-	args.forEach(function (obj) {
-		// skip argument if isn't an object, is null, or is an array
-		if (typeof obj !== 'object' || obj === null || Array.isArray(obj)) {
-			return;
-		}
+  var args = Array.prototype.slice.call(arguments, 1);
+  var val, src, clone;
+  args.forEach(function (obj) {
+    // skip argument if isn't an object, is null, or is an array
+    if (_typeof(obj) !== 'object' || obj === null || Array.isArray(obj)) {
+      return;
+    }
 
-		Object.keys(obj).forEach(function (key) {
-			src = safeGetProperty(target, key); // source value
-			val = safeGetProperty(obj, key); // new value
+    Object.keys(obj).forEach(function (key) {
+      src = safeGetProperty(target, key); // source value
 
-			// recursion prevention
-			if (val === target) {
-				return;
+      val = safeGetProperty(obj, key); // new value
+      // recursion prevention
 
-			/**
-			 * if new value isn't object then just overwrite by new value
-			 * instead of extending.
-			 */
-			} else if (typeof val !== 'object' || val === null) {
-				target[key] = val;
-				return;
-
-			// just clone arrays (and recursive clone objects inside)
-			} else if (Array.isArray(val)) {
-				target[key] = deepCloneArray(val);
-				return;
-
-			// custom cloning and overwrite for specific objects
-			} else if (isSpecificValue(val)) {
-				target[key] = cloneSpecificValue(val);
-				return;
-
-			// overwrite by new value if source isn't object or array
-			} else if (typeof src !== 'object' || src === null || Array.isArray(src)) {
-				target[key] = deepExtend({}, val);
-				return;
-
-			// source value and new value is objects both, extending...
-			} else {
-				target[key] = deepExtend(src, val);
-				return;
-			}
-		});
-	});
-
-	return target;
+      if (val === target) {
+        return;
+        /**
+         * if new value isn't object then just overwrite by new value
+         * instead of extending.
+         */
+      } else if (_typeof(val) !== 'object' || val === null) {
+        target[key] = val;
+        return; // just clone arrays (and recursive clone objects inside)
+      } else if (Array.isArray(val)) {
+        target[key] = deepCloneArray(val);
+        return; // custom cloning and overwrite for specific objects
+      } else if (isSpecificValue(val)) {
+        target[key] = cloneSpecificValue(val);
+        return; // overwrite by new value if source isn't object or array
+      } else if (_typeof(src) !== 'object' || src === null || Array.isArray(src)) {
+        target[key] = deepExtend({}, val);
+        return; // source value and new value is objects both, extending...
+      } else {
+        target[key] = deepExtend(src, val);
+        return;
+      }
+    });
+  });
+  return target;
 };
-
 
 /***/ }),
 /* 20 */
@@ -2686,33 +2692,33 @@ __webpack_require__.d(src_namespaceObject, "Component", function() { return comp
 __webpack_require__.d(src_namespaceObject, "SubComponent", function() { return component_SubComponent; });
 __webpack_require__.d(src_namespaceObject, "BEM", function() { return BEM; });
 
-// EXTERNAL MODULE: /Users/edmund.reed/Projects/Lucid/Lucid/src/module.jsx
+// EXTERNAL MODULE: ./node_modules/@onenexus/lucid/src/module.jsx
 var src_module = __webpack_require__(2);
 
 // EXTERNAL MODULE: external "react"
 var external_react_ = __webpack_require__(1);
 var external_react_default = /*#__PURE__*/__webpack_require__.n(external_react_);
 
-// EXTERNAL MODULE: /Users/edmund.reed/Projects/Lucid/Lucid/node_modules/html-tags/index.js
+// EXTERNAL MODULE: ./node_modules/html-tags/index.js
 var html_tags = __webpack_require__(6);
 var html_tags_default = /*#__PURE__*/__webpack_require__.n(html_tags);
 
-// EXTERNAL MODULE: /Users/edmund.reed/Projects/Lucid/Lucid/src/utilities/getHtmlProps.js
+// EXTERNAL MODULE: ./node_modules/@onenexus/lucid/src/utilities/getHtmlProps.js
 var getHtmlProps = __webpack_require__(7);
 
-// EXTERNAL MODULE: /Users/edmund.reed/Projects/Lucid/Lucid/src/utilities/getModifiersFromProps.js
+// EXTERNAL MODULE: ./node_modules/@onenexus/lucid/src/utilities/getModifiersFromProps.js
 var getModifiersFromProps = __webpack_require__(4);
 
-// EXTERNAL MODULE: /Users/edmund.reed/Projects/Lucid/Lucid/src/utilities/generateClasses.js
+// EXTERNAL MODULE: ./node_modules/@onenexus/lucid/src/utilities/generateClasses.js
 var generateClasses = __webpack_require__(8);
 
-// EXTERNAL MODULE: /Users/edmund.reed/Projects/Lucid/Lucid/src/utilities/renderModifiers.js
+// EXTERNAL MODULE: ./node_modules/@onenexus/lucid/src/utilities/renderModifiers.js
 var renderModifiers = __webpack_require__(3);
 
-// EXTERNAL MODULE: /Users/edmund.reed/Projects/Lucid/Lucid/src/utilities/refHandler.js
+// EXTERNAL MODULE: ./node_modules/@onenexus/lucid/src/utilities/refHandler.js
 var refHandler = __webpack_require__(9);
 
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/Lucid/Lucid/src/component.jsx
+// CONCATENATED MODULE: ./node_modules/@onenexus/lucid/src/component.jsx
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
@@ -2870,7 +2876,7 @@ var component_SubComponent = function SubComponent(props) {
     subComponent: true
   }, props), props.children);
 };
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/Lucid/Lucid/src/index.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/lucid/src/index.js
 
 
 var BEM = {
@@ -2884,10 +2890,10 @@ var BEM = {
   SubComponent: component_SubComponent
 });
 
-// EXTERNAL MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/squery.js
+// EXTERNAL MODULE: ./node_modules/@onenexus/squery/src/squery.js
 var squery = __webpack_require__(14);
 
-// EXTERNAL MODULE: /Users/edmund.reed/Projects/Polymorph/Polymorph/src/polymorph.js
+// EXTERNAL MODULE: ./node_modules/@onenexus/polymorph/src/polymorph.js
 var polymorph = __webpack_require__(18);
 
 // EXTERNAL MODULE: ./node_modules/deep-extend/lib/deep-extend.js
@@ -2899,12 +2905,14 @@ function synergy_objectSpread(target) { for (var i = 1; i < arguments.length; i+
 
 function synergy_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-
-
- // import * as lucid from '../../../Lucid/Lucid/dist/lucid';
+// import * as lucid from '../../../Lucid/Lucid/src';
+// import sQuery from '../../../sQuery/sQuery/src/squery';
+// import polymorph from '../../../Polymorph/Polymorph/src/polymorph';
+// import * as lucid from '../../../Lucid/Lucid/dist/lucid';
 // import polymorph from '../../../Polymorph/Polymorph/dist/polymorph';
 // import sQuery from '../../../sQuery/sQuery/dist/squery';
-// @TODO sQuery.init needs to be called upon importing this file...
+
+
 
 
 
@@ -2928,10 +2936,6 @@ if (typeof window !== 'undefined') {
 }
 /**
  * Synergy Theme
- * 
- * @param {*} modules
- * @param {*} globals
- * @param {*} theme
  */
 
 

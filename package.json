@@ -26,6 +26,8 @@
     "url": "https://github.com/esr360/Synergy.git"
   },
   "dependencies": {
+    "@onenexus/lucid": "1.0.0-beta.0",
+    "@onenexus/polymorph": "1.0.0-beta.0",
     "@onenexus/squery": "1.0.0-beta.1",
     "deep-extend": "^0.5.1",
     "react": "^16.4.0",

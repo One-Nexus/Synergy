@@ -1,12 +1,14 @@
-import * as lucid from '../../../Lucid/Lucid/src';
-import sQuery from '../../../sQuery/sQuery/src/squery';
-import polymorph from '../../../Polymorph/Polymorph/src/polymorph';
+// import * as lucid from '../../../Lucid/Lucid/src';
+// import sQuery from '../../../sQuery/sQuery/src/squery';
+// import polymorph from '../../../Polymorph/Polymorph/src/polymorph';
 
 // import * as lucid from '../../../Lucid/Lucid/dist/lucid';
 // import polymorph from '../../../Polymorph/Polymorph/dist/polymorph';
 // import sQuery from '../../../sQuery/sQuery/dist/squery';
 
-// @TODO sQuery.init needs to be called upon importing this file...
+import * as lucid from '@onenexus/lucid/src';
+import sQuery from '@onenexus/squery/src/squery';
+import polymorph from '@onenexus/polymorph/src/polymorph';
 
 import deepextend from 'deep-extend';
 
@@ -27,10 +29,6 @@ if (typeof window !== 'undefined') {
 
 /**
  * Synergy Theme
- * 
- * @param {*} modules
- * @param {*} globals
- * @param {*} theme
  */
 function theme(modules, theme, globals) {
     window.ui = Synergy.config(globals, theme);
