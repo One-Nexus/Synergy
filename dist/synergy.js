@@ -2901,6 +2901,16 @@ var deep_extend = __webpack_require__(19);
 var deep_extend_default = /*#__PURE__*/__webpack_require__.n(deep_extend);
 
 // CONCATENATED MODULE: ./src/synergy.js
+function synergy_typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { synergy_typeof = function _typeof(obj) { return typeof obj; }; } else { synergy_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return synergy_typeof(obj); }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 function synergy_objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { synergy_defineProperty(target, key, source[key]); }); } return target; }
 
 function synergy_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -2924,13 +2934,8 @@ if (typeof window !== 'undefined') {
 
   Object.assign(Synergy, {
     styleParser: polymorph["a" /* default */],
-    config: function config() {
-      for (var _len = arguments.length, params = new Array(_len), _key = 0; _key < _len; _key++) {
-        params[_key] = arguments[_key];
-      }
-
-      return deep_extend_default.a.apply(void 0, [{}].concat(params));
-    },
+    // config: (...params) => deepextend({}, ...params),
+    config: deep_extend_default.a,
     theme: synergy_theme
   });
 }
@@ -2939,23 +2944,52 @@ if (typeof window !== 'undefined') {
  */
 
 
-function synergy_theme(modules, theme, globals) {
-  window.ui = Synergy.config(globals, theme);
-  delete window.ui.modules;
+function synergy_theme(modules, theme, globals, trump) {
+  if (typeof theme === 'function') {
+    theme = theme(globals);
+  }
+
+  Synergy.config(globals, Synergy.config(theme, trump));
   squery["a" /* default */].init({
     modifierGlue: theme['modifier-glue'],
     componentGlue: theme['component-glue']
   });
   Synergy.CssClassProps = theme['css-class-props'];
   Object.values(modules).forEach(function (MODULE) {
-    return MODULE.defaults && (window[MODULE.name] = Object.assign(MODULE, {
-      config: Module.config(MODULE.defaults(ui), theme.modules[MODULE.name])
-    }));
+    if (MODULE.defaults) {
+      var evaluatedConfig = evalConfig(theme.modules[MODULE.name]);
+      window[MODULE.name] = Object.assign(MODULE, {
+        config: Synergy.config(MODULE.defaults(globals), evaluatedConfig)
+      });
+    }
   });
 
-  if (typeof ui.foundation === 'function') {
-    ui.foundation(ui);
+  if (typeof globals.foundation === 'function') {
+    globals.foundation(globals);
   }
+
+  delete globals.modules, window.ui = globals;
+}
+/**
+ * Evaluate module config properties
+ */
+
+
+function evalConfig(config) {
+  if (!config) return;
+  Object.entries(config).forEach(function (_ref) {
+    var _ref2 = _slicedToArray(_ref, 2),
+        key = _ref2[0],
+        value = _ref2[1];
+
+    if (synergy_typeof(value) === 'object') {
+      return evalConfig(value);
+    } else {
+      if (typeof value !== 'function') return;
+      return config[key] = value();
+    }
+  });
+  return config;
 }
 
 /***/ })

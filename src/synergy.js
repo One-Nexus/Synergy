@@ -22,7 +22,8 @@ if (typeof window !== 'undefined') {
     // Declare global Synergy properties
     Object.assign(Synergy, {
         styleParser: polymorph,
-        config: (...params) => deepextend({}, ...params),
+        // config: (...params) => deepextend({}, ...params),
+        config: deepextend,
         theme: theme
     });
 }
@@ -30,10 +31,12 @@ if (typeof window !== 'undefined') {
 /**
  * Synergy Theme
  */
-function theme(modules, theme, globals) {
-    window.ui = Synergy.config(globals, theme);
+function theme(modules, theme, globals, trump) {
+    if (typeof theme === 'function') {
+        theme = theme(globals);
+    }
 
-    delete window.ui.modules;
+    Synergy.config(globals, Synergy.config(theme, trump));
 
     sQuery.init({
         modifierGlue: theme['modifier-glue'],
@@ -42,13 +45,38 @@ function theme(modules, theme, globals) {
 
     Synergy.CssClassProps = theme['css-class-props'];
 
-    Object.values(modules).forEach(MODULE => MODULE.defaults && (
-        window[MODULE.name] = Object.assign(MODULE, {
-            config: Module.config(MODULE.defaults(ui), theme.modules[MODULE.name])
-        })
-    ));
+    Object.values(modules).forEach(MODULE => {
+        if (MODULE.defaults) {
+            const evaluatedConfig = evalConfig(theme.modules[MODULE.name]);
 
-    if (typeof ui.foundation === 'function') {
-        ui.foundation(ui);
-    }  
+            window[MODULE.name] = Object.assign(MODULE, {
+                config: Synergy.config(MODULE.defaults(globals), evaluatedConfig)
+            });
+        }
+    });
+
+    if (typeof globals.foundation === 'function') {
+        globals.foundation(globals);
+    }
+
+    delete globals.modules, window.ui = globals;
+}
+
+/**
+ * Evaluate module config properties
+ */
+function evalConfig(config) {
+    if (!config) return;
+
+    Object.entries(config).forEach(([key, value]) => {
+        if (typeof value === 'object') {
+            return evalConfig(value);
+        } else {
+            if (typeof value !== 'function') return;
+
+            return config[key] = value();
+        }
+    });
+
+    return config;
 }

@@ -58,6 +58,7 @@
     "test": "mocha test/tests.js --require @babel/register",
     "docs": "jsdoc src -r -d docs/js",
     "js": "webpack",
-    "build": "npm run lint && npm test && npm run docs && npm run js"
+    "build": "npm run lint && npm test && npm run docs && npm run js",
+    "foo": "node ./utilities/generate-JSON-config.js 'demo/app.json'"
   }
 }
