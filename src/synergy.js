@@ -1,5 +1,5 @@
 // import * as lucid from '../../../Lucid/Lucid/src';
-// import sQuery from '../../../sQuery/sQuery/src/squery';
+import sQuery from '../../../sQuery/sQuery/src/squery';
 // import polymorph from '../../../Polymorph/Polymorph/src/polymorph';
 
 // import * as lucid from '../../../Lucid/Lucid/dist/lucid';
@@ -7,7 +7,7 @@
 // import sQuery from '../../../sQuery/sQuery/dist/squery';
 
 import * as lucid from '@onenexus/lucid/src';
-import sQuery from '@onenexus/squery/src/squery';
+// import sQuery from '@onenexus/squery/src/squery';
 import polymorph from '@onenexus/polymorph/src/polymorph';
 
 import deepextend from 'deep-extend';
@@ -31,19 +31,24 @@ if (typeof window !== 'undefined') {
 /**
  * Synergy Theme
  */
-function theme(modules, theme, globals, trump) {
+function theme(modules, theme, globals, app) {
     if (typeof theme === 'function') {
         theme = theme(globals);
     }
 
-    Synergy.config(globals, Synergy.config(theme, trump));
+    if (theme.theme) {
+        theme = theme.theme;
+    }
 
-    sQuery.init({
-        modifierGlue: theme['modifier-glue'],
-        componentGlue: theme['component-glue']
-    });
+    if (app.Synergy && !app.options) {
+        app.options = app.Synergy;
+    }
 
-    Synergy.CssClassProps = theme['css-class-props'];
+    Object.assign(Synergy, app.options);
+
+    Synergy.config(globals, Synergy.config(theme, app.theme));
+
+    sQuery.init();
 
     Object.values(modules).forEach(MODULE => {
         if (MODULE.defaults) {
