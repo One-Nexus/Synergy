@@ -5,28 +5,28 @@
 
 <img height="56px" src="http://www.onenexus.io/synergy/github-logo.png" />
 
-> Synergy is a front-end framework for building modular, configurable and scalable UI components for React apps
+> Synergy is a framework for building modular, configurable and scalable UI components for React-DOM projects
 
 ###### Features
 
-* Style elements using either [Sass](#TODO) or [JavaScript](#TODO) ([learn more](#TODO))
-* Make UI updates to your app without modifying source code ([learn more](#TODO))
-* Easily configure modules and create themes for your app ([learn more](#TODO))
-* Add UI interactions without requiring class components or hooks ([learn more](#TODO))
-* Everything you need to create component libraries/UI styleguides ([learn more](#TODO))
+* Style elements using either [Sass](https://github.com/One-Nexus/Synergy/wiki/Using-Sass-With-Synergy) or [JavaScript](https://github.com/One-Nexus/Synergy/wiki/Styling-Modules#styling-a-module-with-javascript) ([learn more](https://github.com/One-Nexus/Synergy/wiki/Styling-Modules))
+* Make cosmetic UI updates to your app without modifying source code ([learn more](https://github.com/One-Nexus/Synergy/wiki/Module-Configuration#apply-cosmetic-css-via-configuration))
+* Easily configure modules and create themes for your app ([learn more](https://github.com/One-Nexus/Synergy/wiki/Themes))
+* Add UI interactions without requiring class components, hooks or state ([learn more](https://github.com/One-Nexus/Synergy/wiki/Interactions))
+* Everything you need to create component libraries/UI styleguides
 
 ###### Useful Wiki Pages
 
-* [Installation & Setup](#TODO)
-* [Modules, Components & Modifiers](#TODO)
-* [Creating a Synergy Module](#TODO)
-* [Module Configuration](#TODO)
-* [Themes](#TODO)
+* [Installation & Setup](https://github.com/One-Nexus/Synergy/wiki/Installation)
+* [Modules, Components & Modifiers](https://github.com/One-Nexus/Synergy/wiki/Modules,-Components-and-Modifiers)
+* [Creating a Synergy Module](https://github.com/One-Nexus/Synergy/wiki/Creating-a-Module)
+* [Module Configuration](https://github.com/One-Nexus/Synergy/wiki/Module-Configuration)
+* [Themes](https://github.com/One-Nexus/Synergy/wiki/Themes)
 
 ## 60 Second Accordion From Scratch
 
 ```
-npm install --save react @onenexus/synergy;
+npm install --save react react-dom @onenexus/synergy;
 ```
 
 ###### accordion.jsx
@@ -36,35 +36,40 @@ import React from 'react';
 import '@onenexus/synergy';
 
 const styles = () => ({
+    panel: {
+        'modifier(active)': {
+            title: {
+                'background': 'LightSeaGreen',
+                'color': '#FFFFFF'
+            }
+        }
+    },
+
     title: {
         'background': 'DodgerBlue',
+        'color': '#005A9C',
         'padding': '1em',
-        'color': '#444444',
         ':hover': {
             'background': 'DeepSkyBlue',
-            'color': 'white'
-        },
-        'active': {
-            'background': 'LightSeaGreen',
-            'color': 'white'
+            'color': '#FFFFFF'
         }
     },
 
     content: content => ({
         'padding': '1em',
         'color': '#444444',
-        'display': content.parent('panel').modifier('active') ? 'block' : 'none',
+        'display': content.parent('panel').is('active') ? 'block' : 'none',
     })
 });
 
 const interactions = {
-    toggle: event => event.target.parent('panel').modifier('active', 'toggle');
+    toggle: event => event.target.parent('panel').toggleModifier('active');
 }
 
 const Accordion = ({ panels }) => (
     <Module name='accordion' styles={styles}>
-        {panels.map(({ title, content }, index) => (
-            <Component name='panel' key={index}>
+        {panels.map(({ title, content }) => (
+            <Component name='panel'>
                 <Component name='title' onClick={interactions.toggle}>
                     {title}
                 </Component>
@@ -81,10 +86,29 @@ export default Accordion;
 ###### Usage
 
 ```jsx
-todo
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Accordion from './accordion.jsx';
+
+const data = [
+    {
+        title: 'accordion title 1',
+        content: 'lorem ipsum'
+    },
+    {
+        title: 'accordion title 2',
+        content: <p>foo bar</p>
+    }
+];
+
+const Screen = () => (
+    <Accordion panels={data} />
+);
+
+ReactDOM.render(<Screen />, document.getElementById('app'));
 ```
 
-> This example is short and concise for demo purposes; for a more complete example utilising more features see the [Module Example](#TODO) page
+> This example is short and concise for demo purposes; for a more complete example utilising more features see the [Module Example](https://github.com/One-Nexus/Synergy/wiki/Creating-a-Module) page
 
 ## Overview
 
@@ -101,8 +125,4 @@ These are the main concerns of a UI module; Synergy allows you to work on each c
 
 > Synergy is ideal for creating presentational React components when using the [Container Component Pattern](https://reactpatterns.com/#container-component) ([learn more](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0))
 
-For more information see the [About Synergy](#TODO) page.
-
-###### Useful Reading
-
-* [TODO](#TODO)
+For more information see the [About Synergy](https://github.com/One-Nexus/Synergy/wiki/About-Synergy) page.
