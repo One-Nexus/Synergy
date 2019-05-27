@@ -31,7 +31,7 @@ if (typeof window !== 'undefined') {
 /**
  * Synergy Theme
  */
-function theme(modules, theme, globals, app) {
+function theme(modules, theme = {}, globals = {}, app = {}) {
     if (typeof theme === 'function') {
         theme = theme(globals);
     }
@@ -52,10 +52,13 @@ function theme(modules, theme, globals, app) {
 
     Object.values(modules).forEach(MODULE => {
         if (MODULE.defaults) {
-            const evaluatedConfig = evalConfig(theme.modules[MODULE.name]);
+            const evaluatedConfig = theme.modules && evalConfig(theme.modules[MODULE.name]);
 
             window[MODULE.name] = Object.assign(MODULE, {
-                config: Synergy.config(MODULE.defaults(globals), evaluatedConfig)
+                config: Synergy.config(
+                    typeof MODULE.defaults === 'function' ? MODULE.defaults(globals) : MODULE.defaults, 
+                    evaluatedConfig
+                )
             });
         }
     });

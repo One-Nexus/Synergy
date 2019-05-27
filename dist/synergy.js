@@ -2942,7 +2942,11 @@ if (typeof window !== 'undefined') {
  */
 
 
-function synergy_theme(modules, theme, globals, app) {
+function synergy_theme(modules) {
+  var theme = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  var globals = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+  var app = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+
   if (typeof theme === 'function') {
     theme = theme(globals);
   }
@@ -2960,9 +2964,9 @@ function synergy_theme(modules, theme, globals, app) {
   squery["a" /* default */].init();
   Object.values(modules).forEach(function (MODULE) {
     if (MODULE.defaults) {
-      var evaluatedConfig = evalConfig(theme.modules[MODULE.name]);
+      var evaluatedConfig = theme.modules && evalConfig(theme.modules[MODULE.name]);
       window[MODULE.name] = Object.assign(MODULE, {
-        config: Synergy.config(MODULE.defaults(globals), evaluatedConfig)
+        config: Synergy.config(typeof MODULE.defaults === 'function' ? MODULE.defaults(globals) : MODULE.defaults, evaluatedConfig)
       });
     }
   });
