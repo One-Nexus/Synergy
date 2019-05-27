@@ -39,18 +39,18 @@ const styles = () => ({
     panel: {
         'modifier(active)': {
             title: {
-                'background': 'LightSeaGreen',
+                'background': '#00FFB2',
                 'color': '#FFFFFF'
             }
         }
     },
 
     title: {
-        'background': 'DodgerBlue',
+        'background': '#1E90FF',
         'color': '#005A9C',
         'padding': '1em',
         ':hover': {
-            'background': 'DeepSkyBlue',
+            'background': '#01BFFF',
             'color': '#FFFFFF'
         }
     },
