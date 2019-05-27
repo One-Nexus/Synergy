@@ -7,7 +7,7 @@
 		var a = typeof exports === 'object' ? factory(require("react"), require("react-dom")) : factory(root["react"], root["react-dom"]);
 		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
 	}
-})(window, function(__WEBPACK_EXTERNAL_MODULE__1__, __WEBPACK_EXTERNAL_MODULE__16__) {
+})(window, function(__WEBPACK_EXTERNAL_MODULE__1__, __WEBPACK_EXTERNAL_MODULE__12__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -169,15 +169,15 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__1__;
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Group; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(16);
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var html_tags__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
+/* harmony import */ var html_tags__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
 /* harmony import */ var html_tags__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(html_tags__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _utilities_getHtmlProps__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(8);
+/* harmony import */ var _utilities_getHtmlProps__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(7);
 /* harmony import */ var _utilities_getModifiersFromProps__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4);
-/* harmony import */ var _utilities_generateClasses__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(9);
+/* harmony import */ var _utilities_generateClasses__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(8);
 /* harmony import */ var _utilities_renderModifiers__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(3);
-/* harmony import */ var _utilities_refHandler__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(10);
+/* harmony import */ var _utilities_refHandler__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(9);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
@@ -519,10 +519,10 @@ function getModifiersFromProps(props) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 
-// EXTERNAL MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/utilities/getNamespace.js
+// EXTERNAL MODULE: ./node_modules/@onenexus/squery/src/utilities/getNamespace.js
 var getNamespace = __webpack_require__(0);
 
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/utilities/isSafeElement.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/utilities/isSafeElement.js
 function isSafeElement(node, namespace, _ref) {
   var modifierGlue = _ref.modifierGlue;
 
@@ -542,7 +542,7 @@ function isSafeElement(node, namespace, _ref) {
   });
   return matchedClasses.length === 1 ? matchedClasses[0] : false;
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/addModifier.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/addModifier.js
 
 
 function addModifier(node, modifier, config) {
@@ -575,7 +575,7 @@ function addModifier(node, modifier, config) {
 
   return node;
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/parent.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/parent.js
 
 function parent_parent(node, query, config) {
   config = Object.assign(this || {}, config || {});
@@ -614,7 +614,7 @@ function parent_parent(node, query, config) {
     return parentSubComponent;
   }
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/utilities/filterElements.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/utilities/filterElements.js
 
 
 function filterElements(node, elements, subComponent, config) {
@@ -632,10 +632,10 @@ function filterElements(node, elements, subComponent, config) {
   });
   return elements;
 }
-// EXTERNAL MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/utilities/isValidSelector.js
-var isValidSelector = __webpack_require__(6);
+// EXTERNAL MODULE: ./node_modules/@onenexus/squery/src/utilities/isValidSelector.js
+var isValidSelector = __webpack_require__(10);
 
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/getComponents.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/getComponents.js
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -713,7 +713,7 @@ function getComponents(node, componentName, config) {
   components = filterElements(node, components, subComponent, config);
   return components;
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/getComponent.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/getComponent.js
 
 /**
  * @TODO allow this API
@@ -732,7 +732,7 @@ function getComponent(node, componentName, config) {
   ;
   return getComponents(node, componentName, config)[0];
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/setComponent.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/setComponent.js
 
 function setComponent(node, componentName, namespace, replace, config) {
   config = Object.assign(this || {}, config || {});
@@ -752,7 +752,7 @@ function setComponent(node, componentName, namespace, replace, config) {
   node.setAttribute('data-component', componentName);
   replace && node.classList.remove(replace);
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/unsetComponent.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/unsetComponent.js
 
 function unsetComponent(node, componentName, config) {
   config = Object.assign(this || {}, config || {});
@@ -775,7 +775,7 @@ function unsetComponent(node, componentName, config) {
     }
   });
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/isComponent.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/isComponent.js
 
 function isComponent(node, componentName, config) {
   config = Object.assign(this || {}, config || {});
@@ -804,7 +804,7 @@ function isComponent(node, componentName, config) {
     return className.indexOf(query) === 0 && isAComponent && isMatch;
   });
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/component.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/component.js
 
 
 
@@ -845,7 +845,7 @@ function component_component(node, componentName, operator, config) {
     });
   }
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/getModules.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/getModules.js
 function getModules(node, moduleName, config) {
   config = Object.assign(this || {}, config || {});
   var _config = config,
@@ -872,7 +872,7 @@ function getModules(node, moduleName, config) {
   });
   return modules;
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/hasModifier.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/hasModifier.js
 
 function hasModifier(node, modifier, config) {
   config = Object.assign(this || {}, config || {});
@@ -901,7 +901,7 @@ function hasModifier(node, modifier, config) {
     return namespaceMatch && (isModifierTest1 || isModifierTest2);
   });
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/find.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/find.js
 function find_objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { find_defineProperty(target, key, source[key]); }); } return target; }
 
 function find_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -969,7 +969,7 @@ function getQueryFromObject(node, query, config) {
 
   return matches;
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/getModifiers.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/getModifiers.js
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
@@ -1001,14 +1001,14 @@ function getModifiers(node, config) {
   var modifiers = targetClass.split(modifierGlue).slice(1);
   return modifiers;
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/getSubComponents.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/getSubComponents.js
 
 function getSubComponents(node, subComponentName, config) {
   config = Object.assign(this || {}, config || {});
   config.subComponent = true;
   return getComponents(node, subComponentName, config);
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/getSubComponent.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/getSubComponent.js
 
 function getSubComponent(node, componentName, config) {
   config = Object.assign(this || {}, config || {});
@@ -1022,7 +1022,7 @@ function getSubComponent(node, componentName, config) {
   ;
   return getSubComponents(node, componentName, config)[0];
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/isModule.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/isModule.js
 function isModule(node, moduleName, config) {
   config = Object.assign(this || {}, config || {});
   var DOMNodes = !(node instanceof NodeList || node instanceof Array) ? [node] : node;
@@ -1030,7 +1030,7 @@ function isModule(node, moduleName, config) {
     return node.matches(".".concat(moduleName, ", [class*=\"").concat(moduleName + config.modifierGlue, "\"]"));
   });
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/is.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/is.js
 function is_typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { is_typeof = function _typeof(obj) { return typeof obj; }; } else { is_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return is_typeof(obj); }
 
 
@@ -1094,7 +1094,7 @@ function is(node, query, config) {
 
   return false;
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/removeModifier.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/removeModifier.js
 
 function removeModifier(node, modifier, config) {
   config = Object.assign(this || {}, config || {});
@@ -1130,7 +1130,7 @@ function removeModifier(node, modifier, config) {
 
   return node;
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/toggleModifier.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/toggleModifier.js
 
 
 
@@ -1149,7 +1149,7 @@ function toggleModifier(node, modifier, config) {
     return addModifier(node, modifier, config);
   }
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/modifier.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/modifier.js
 
 
 
@@ -1178,7 +1178,7 @@ function modifier_modifier(node, modifier, operator, config) {
     return toggleModifier(node, modifier, config);
   }
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/module.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/module.js
 
 
 function module_module(node, moduleName, operator, config) {
@@ -1198,7 +1198,7 @@ function module_module(node, moduleName, operator, config) {
     });
   }
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/subComponent.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/subComponent.js
 
 
 
@@ -1209,7 +1209,7 @@ function subComponent_subComponent(node, subComponentName, operator, config) {
   config.getSubComponents = getSubComponents;
   return component_component(node, subComponentName, operator, config);
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/index.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/index.js
 /* concated harmony reexport add */__webpack_require__.d(__webpack_exports__, "add", function() { return addModifier; });
 /* concated harmony reexport addModifier */__webpack_require__.d(__webpack_exports__, "addModifier", function() { return addModifier; });
 /* concated harmony reexport component */__webpack_require__.d(__webpack_exports__, "component", function() { return component_component; });
@@ -1284,26 +1284,6 @@ function subComponent_subComponent(node, subComponentName, operator, config) {
 
 /***/ }),
 /* 6 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return isValidSelector; });
-function isValidSelector(selector) {
-  if (!selector || typeof selector !== 'string') return false;
-  var stub = document.createElement('br');
-  stub.textContent = 'Hello!';
-
-  try {
-    selector && stub.querySelector(selector);
-  } catch (e) {
-    return false;
-  }
-
-  return true;
-}
-
-/***/ }),
-/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1312,12 +1292,12 @@ function isValidSelector(selector) {
 module.exports = __webpack_require__(20);
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getHtmlProps; });
-/* harmony import */ var html_attributes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(17);
+/* harmony import */ var html_attributes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(13);
 /* harmony import */ var html_attributes__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(html_attributes__WEBPACK_IMPORTED_MODULE_0__);
 
 /**
@@ -1349,7 +1329,7 @@ function getHtmlProps(props) {
 }
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1426,7 +1406,7 @@ function generateClasses(_ref) {
 }
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1484,6 +1464,26 @@ function refHandler(node, props, styleParser, parentModule, ui, config) {
       window[props.name].init(node);
     }
   }
+}
+
+/***/ }),
+/* 10 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return isValidSelector; });
+function isValidSelector(selector) {
+  if (!selector || typeof selector !== 'string') return false;
+  var stub = document.createElement('br');
+  stub.textContent = 'Hello!';
+
+  try {
+    selector && stub.querySelector(selector);
+  } catch (e) {
+    return false;
+  }
+
+  return true;
 }
 
 /***/ }),
@@ -1701,330 +1701,12 @@ process.umask = function () {
 
 /***/ }),
 /* 12 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var _utilities_getConfig__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(13);
-/* harmony import */ var _utilities_getDOMNodes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(14);
-/* harmony import */ var _utilities_getNamespace__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(0);
-/* harmony import */ var _utilities_init__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(15);
-/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(5);
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
-
-function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-
-
-
-
- // spoof env process to assist bundle size
-
-if (typeof process === 'undefined') window.process = {
-  env: {}
-};
-/** */
-
-function sQuery(SynergyQuery, callback, defaults, custom, parser) {
-  var Synergy = window.Synergy || {};
-  sQuery.config = sQuery.config || {};
-  var methods = {};
-  var config = Object(_utilities_getConfig__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(defaults, custom, parser);
-  var modifierGlue = config.modifierGlue || Synergy.modifierGlue || '-';
-  var componentGlue = config.componentGlue || Synergy.componentGlue || '_';
-  var multipleClasses = config.multipleClasses || Synergy.multipleClasses || false;
-  var namespace = Object(_utilities_getNamespace__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"])(SynergyQuery, false, {
-    componentGlue: componentGlue,
-    modifierGlue: modifierGlue
-  });
-  var DOMNodes = Object(_utilities_getDOMNodes__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(SynergyQuery);
-
-  var _arr = Object.entries(_api__WEBPACK_IMPORTED_MODULE_4__);
-
-  for (var _i = 0; _i < _arr.length; _i++) {
-    var _arr$_i = _slicedToArray(_arr[_i], 2),
-        key = _arr$_i[0],
-        method = _arr$_i[1];
-
-    if (sQuery.config.methods && sQuery.config.methods[key]) {
-      key = sQuery.config.methods[key];
-    }
-
-    var internalConfig = {
-      namespace: namespace,
-      componentGlue: componentGlue,
-      modifierGlue: modifierGlue,
-      multipleClasses: multipleClasses
-    };
-
-    if (DOMNodes) {
-      methods[key] = method.bind(internalConfig, DOMNodes);
-    } else {
-      methods[key] = method.bind(internalConfig);
-    }
-  }
-
-  if (typeof callback === 'function') {
-    DOMNodes.forEach(function (node) {
-      return callback(node, config);
-    });
-  }
-
-  return Object.assign(methods, {
-    namespace: namespace,
-    nodes: DOMNodes,
-    node: DOMNodes ? DOMNodes[0] : null
-  });
-}
-
-sQuery.init = _utilities_init__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"];
-
-var _arr2 = Object.entries(_api__WEBPACK_IMPORTED_MODULE_4__);
-
-for (var _i2 = 0; _i2 < _arr2.length; _i2++) {
-  var _arr2$_i = _slicedToArray(_arr2[_i2], 2),
-      key = _arr2$_i[0],
-      method = _arr2$_i[1];
-
-  sQuery[key] = method;
-}
-
-if (typeof window !== 'undefined') {
-  window.sQuery = sQuery;
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (sQuery);
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(11)))
+module.exports = __WEBPACK_EXTERNAL_MODULE__12__;
 
 /***/ }),
 /* 13 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getConfig; });
-/**
- * @param {*} defaults 
- * @param {*} custom 
- * @param {*} parser 
- */
-function getConfig(defaults, custom, parser) {
-  var extendedConfig; // `process` and `require` are exploited to help reduce bundle size
-
-  if (true) {
-    extendedConfig = Synergy.config(defaults, custom);
-  } else {}
-
-  if (typeof parser === 'function') {
-    return parser(extendedConfig);
-  }
-
-  return extendedConfig;
-}
-
-/***/ }),
-/* 14 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getDomNodes; });
-/* harmony import */ var _isValidSelector__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6);
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-
-/**
- * Find matching DOM nodes against passed Synergy query
- * 
- * @param {*} query 
- */
-
-function getDomNodes(query) {
-  if (query instanceof NodeList) {
-    return query;
-  }
-
-  if (query instanceof HTMLElement) {
-    return [query];
-  }
-
-  if (query instanceof Array) {
-    return getDomNodes(query[0]);
-  }
-
-  if (Object(_isValidSelector__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(query) && document.querySelectorAll(query).length) {
-    return document.querySelectorAll(query);
-  }
-
-  if (_typeof(query) === 'object' && query.name) {
-    return getDomNodes(query.name);
-  }
-
-  if (typeof query === 'string' && query.match("^[a-zA-Z0-9_-]+$")) {
-    return document.querySelectorAll(".".concat(query, ", [class*=\"").concat(query, "-\"]"));
-  }
-}
-
-/***/ }),
-/* 15 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return init; });
-/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
-
-function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-
-function init(custom) {
-  var Synergy = window.Synergy || {};
-  var options = Object.assign({
-    elementProto: true,
-    nodeListProto: true,
-    preset: 'Synergy',
-    Synergy: true,
-    alterMethodName: ['sQuery'],
-    componentGlue: Synergy.componentGlue,
-    modifierGlue: Synergy.modifierGlue,
-    multipleClasses: Synergy.multipleClasses
-  }, custom);
-  options.alterMethodName = options.alterMethodName || [];
-  var PRESETS = {
-    BEM: ['__', '--', 'block', 'element', 'modifier', true],
-    Synergy: ['_', '-', 'module', 'component', 'modifier', false]
-  };
-
-  var _slice$call = [].slice.call(PRESETS[options.preset]),
-      _slice$call2 = _slicedToArray(_slice$call, 6),
-      componentGlue = _slice$call2[0],
-      modifierGlue = _slice$call2[1],
-      moduleNamespace = _slice$call2[2],
-      componentNamespace = _slice$call2[3],
-      modifierNamespace = _slice$call2[4],
-      multipleClasses = _slice$call2[5];
-
-  componentGlue = options.componentGlue || componentGlue;
-  modifierGlue = options.modifierGlue || modifierGlue;
-  multipleClasses = typeof options.multipleClasses === 'undefined' ? multipleClasses : options.multipleClasses;
-
-  if (options.Synergy) {
-    window.Synergy = Synergy;
-    Object.assign(window.Synergy, {
-      componentGlue: componentGlue,
-      modifierGlue: modifierGlue,
-      multipleClasses: multipleClasses
-    });
-  }
-
-  var methods = {};
-
-  var _arr2 = Object.entries(_api__WEBPACK_IMPORTED_MODULE_0__);
-
-  var _loop = function _loop() {
-    var _arr2$_i = _slicedToArray(_arr2[_i2], 2),
-        key = _arr2$_i[0],
-        method = _arr2$_i[1];
-
-    var methodName = key,
-        newMethodName = void 0;
-
-    if (options.alterMethodName.length) {
-      var moduleUpperCase = moduleNamespace[0].toUpperCase() + moduleNamespace.substring(1);
-      var componentUpperCase = componentNamespace[0].toUpperCase() + componentNamespace.substring(1);
-      var modifierUpperCase = modifierNamespace[0].toUpperCase() + modifierNamespace.substring(1);
-
-      if (methodName.indexOf('module') > -1) {
-        newMethodName = methodName.replace(new RegExp('module', 'g'), moduleNamespace);
-      }
-
-      if (methodName.indexOf('Module') > -1) {
-        newMethodName = methodName.replace(new RegExp('Module', 'g'), moduleUpperCase);
-      }
-
-      if (methodName.indexOf('component') > -1) {
-        newMethodName = methodName.replace(new RegExp('component', 'g'), componentNamespace);
-      }
-
-      if (methodName.indexOf('Component') > -1) {
-        newMethodName = methodName.replace(new RegExp('Component', 'g'), componentUpperCase);
-      } // @TODO do modifier renames
-
-
-      if (options.preset !== 'Synergy' && sQuery && options.alterMethodName.includes('sQuery')) {
-        sQuery[newMethodName] = function (node) {
-          var _this;
-
-          for (var _len = arguments.length, params = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-            params[_key - 1] = arguments[_key];
-          }
-
-          return (_this = this(node))[methodName].apply(_this, params);
-        };
-      }
-
-      methods[methodName] = newMethodName || methodName;
-    }
-
-    if (options.elementProto) {
-      methodName = options.alterMethodName.includes('elementProto') ? newMethodName : methodName;
-
-      if (typeof document.body[methodName] === 'undefined') {
-        Element.prototype[methodName] = function () {
-          for (var _len2 = arguments.length, params = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-            params[_key2] = arguments[_key2];
-          }
-
-          return method.bind({
-            componentGlue: componentGlue,
-            modifierGlue: modifierGlue,
-            multipleClasses: multipleClasses
-          }).apply(void 0, [this].concat(params));
-        };
-      }
-    }
-
-    if (options.nodeListProto) {
-      methodName = options.alterMethodName.includes('nodeListProto') ? newMethodName : methodName;
-
-      NodeList.prototype[methodName] = function () {
-        for (var _len3 = arguments.length, params = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-          params[_key3] = arguments[_key3];
-        }
-
-        return method.bind({
-          componentGlue: componentGlue,
-          modifierGlue: modifierGlue,
-          multipleClasses: multipleClasses
-        }).apply(void 0, [this].concat(params));
-      };
-    }
-  };
-
-  for (var _i2 = 0; _i2 < _arr2.length; _i2++) {
-    _loop();
-  }
-
-  if (typeof sQuery !== 'undefined') {
-    sQuery.config = Object.assign(options, {
-      methods: methods
-    });
-  }
-}
-
-/***/ }),
-/* 16 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE__16__;
-
-/***/ }),
-/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2163,6 +1845,318 @@ module.exports = {
   "wmode": "wmode",
   "wrap": "wrap"
 };
+
+/***/ }),
+/* 14 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var _utilities_getConfig__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(15);
+/* harmony import */ var _utilities_getDOMNodes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(16);
+/* harmony import */ var _utilities_getNamespace__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(0);
+/* harmony import */ var _utilities_init__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(17);
+/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(5);
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+
+
+
+ // spoof env process to assist bundle size
+
+if (typeof process === 'undefined') window.process = {
+  env: {}
+};
+/** */
+
+function sQuery(SynergyQuery, callback, defaults, custom, parser) {
+  var Synergy = window.Synergy || {};
+  sQuery.config = sQuery.config || {};
+  var methods = {};
+  var config = Object(_utilities_getConfig__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(defaults, custom, parser);
+  var modifierGlue = config.modifierGlue || Synergy.modifierGlue || '-';
+  var componentGlue = config.componentGlue || Synergy.componentGlue || '_';
+  var multipleClasses = config.multipleClasses || Synergy.multipleClasses || false;
+  var namespace = Object(_utilities_getNamespace__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"])(SynergyQuery, false, {
+    componentGlue: componentGlue,
+    modifierGlue: modifierGlue
+  });
+  var DOMNodes = Object(_utilities_getDOMNodes__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(SynergyQuery);
+
+  for (var _i = 0, _Object$entries = Object.entries(_api__WEBPACK_IMPORTED_MODULE_4__); _i < _Object$entries.length; _i++) {
+    var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
+        key = _Object$entries$_i[0],
+        method = _Object$entries$_i[1];
+
+    if (sQuery.config.methods && sQuery.config.methods[key]) {
+      key = sQuery.config.methods[key];
+    }
+
+    var internalConfig = {
+      namespace: namespace,
+      componentGlue: componentGlue,
+      modifierGlue: modifierGlue,
+      multipleClasses: multipleClasses
+    };
+
+    if (DOMNodes) {
+      methods[key] = method.bind(internalConfig, DOMNodes);
+    } else {
+      methods[key] = method.bind(internalConfig);
+    }
+  }
+
+  if (typeof callback === 'function') {
+    DOMNodes.forEach(function (node) {
+      return callback(node, config);
+    });
+  }
+
+  return Object.assign(methods, {
+    namespace: namespace,
+    nodes: DOMNodes,
+    node: DOMNodes ? DOMNodes[0] : null
+  });
+}
+
+sQuery.init = _utilities_init__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"];
+
+for (var _i2 = 0, _Object$entries2 = Object.entries(_api__WEBPACK_IMPORTED_MODULE_4__); _i2 < _Object$entries2.length; _i2++) {
+  var _Object$entries2$_i = _slicedToArray(_Object$entries2[_i2], 2),
+      key = _Object$entries2$_i[0],
+      method = _Object$entries2$_i[1];
+
+  sQuery[key] = method;
+}
+
+if (typeof window !== 'undefined') {
+  window.sQuery = sQuery;
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (sQuery);
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(11)))
+
+/***/ }),
+/* 15 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getConfig; });
+/**
+ * @param {*} defaults 
+ * @param {*} custom 
+ * @param {*} parser 
+ */
+function getConfig(defaults, custom, parser) {
+  var extendedConfig; // `process` and `require` are exploited to help reduce bundle size
+
+  if (true) {
+    extendedConfig = Synergy.config(defaults, custom);
+  } else {}
+
+  if (typeof parser === 'function') {
+    return parser(extendedConfig);
+  }
+
+  return extendedConfig;
+}
+
+/***/ }),
+/* 16 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getDomNodes; });
+/* harmony import */ var _isValidSelector__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(10);
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+
+/**
+ * Find matching DOM nodes against passed Synergy query
+ * 
+ * @param {*} query 
+ */
+
+function getDomNodes(query) {
+  if (query instanceof NodeList) {
+    return query;
+  }
+
+  if (query instanceof HTMLElement) {
+    return [query];
+  }
+
+  if (query instanceof Array) {
+    return getDomNodes(query[0]);
+  }
+
+  if (Object(_isValidSelector__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(query) && document.querySelectorAll(query).length) {
+    return document.querySelectorAll(query);
+  }
+
+  if (_typeof(query) === 'object' && query.name) {
+    return getDomNodes(query.name);
+  }
+
+  if (typeof query === 'string' && query.match("^[a-zA-Z0-9_-]+$")) {
+    return document.querySelectorAll(".".concat(query, ", [class*=\"").concat(query, "-\"]"));
+  }
+}
+
+/***/ }),
+/* 17 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return init; });
+/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+function init(custom) {
+  var Synergy = window.Synergy || {};
+  var options = Object.assign({
+    elementProto: true,
+    nodeListProto: true,
+    preset: 'Synergy',
+    Synergy: true,
+    alterMethodName: ['sQuery'],
+    componentGlue: Synergy.componentGlue,
+    modifierGlue: Synergy.modifierGlue,
+    multipleClasses: Synergy.multipleClasses
+  }, custom);
+  options.alterMethodName = options.alterMethodName || [];
+  var PRESETS = {
+    BEM: ['__', '--', 'block', 'element', 'modifier', true],
+    Synergy: ['_', '-', 'module', 'component', 'modifier', false]
+  };
+
+  var _slice$call = [].slice.call(PRESETS[options.preset]),
+      _slice$call2 = _slicedToArray(_slice$call, 6),
+      componentGlue = _slice$call2[0],
+      modifierGlue = _slice$call2[1],
+      moduleNamespace = _slice$call2[2],
+      componentNamespace = _slice$call2[3],
+      modifierNamespace = _slice$call2[4],
+      multipleClasses = _slice$call2[5];
+
+  componentGlue = options.componentGlue || componentGlue;
+  modifierGlue = options.modifierGlue || modifierGlue;
+  multipleClasses = typeof options.multipleClasses === 'undefined' ? multipleClasses : options.multipleClasses;
+
+  if (options.Synergy) {
+    window.Synergy = Synergy;
+    Object.assign(window.Synergy, {
+      componentGlue: componentGlue,
+      modifierGlue: modifierGlue,
+      multipleClasses: multipleClasses
+    });
+  }
+
+  var methods = {};
+
+  var _loop = function _loop() {
+    var _Object$entries$_i = _slicedToArray(_Object$entries[_i2], 2),
+        key = _Object$entries$_i[0],
+        method = _Object$entries$_i[1];
+
+    var methodName = key,
+        newMethodName = void 0;
+
+    if (options.alterMethodName.length) {
+      var moduleUpperCase = moduleNamespace[0].toUpperCase() + moduleNamespace.substring(1);
+      var componentUpperCase = componentNamespace[0].toUpperCase() + componentNamespace.substring(1);
+      var modifierUpperCase = modifierNamespace[0].toUpperCase() + modifierNamespace.substring(1);
+
+      if (methodName.indexOf('module') > -1) {
+        newMethodName = methodName.replace(new RegExp('module', 'g'), moduleNamespace);
+      }
+
+      if (methodName.indexOf('Module') > -1) {
+        newMethodName = methodName.replace(new RegExp('Module', 'g'), moduleUpperCase);
+      }
+
+      if (methodName.indexOf('component') > -1) {
+        newMethodName = methodName.replace(new RegExp('component', 'g'), componentNamespace);
+      }
+
+      if (methodName.indexOf('Component') > -1) {
+        newMethodName = methodName.replace(new RegExp('Component', 'g'), componentUpperCase);
+      } // @TODO do modifier renames
+
+
+      if (options.preset !== 'Synergy' && sQuery && options.alterMethodName.includes('sQuery')) {
+        sQuery[newMethodName] = function (node) {
+          var _this;
+
+          for (var _len = arguments.length, params = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+            params[_key - 1] = arguments[_key];
+          }
+
+          return (_this = this(node))[methodName].apply(_this, params);
+        };
+      }
+
+      methods[methodName] = newMethodName || methodName;
+    }
+
+    if (options.elementProto) {
+      methodName = options.alterMethodName.includes('elementProto') ? newMethodName : methodName;
+
+      if (typeof document.body[methodName] === 'undefined') {
+        Element.prototype[methodName] = function () {
+          for (var _len2 = arguments.length, params = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+            params[_key2] = arguments[_key2];
+          }
+
+          return method.bind({
+            componentGlue: componentGlue,
+            modifierGlue: modifierGlue,
+            multipleClasses: multipleClasses
+          }).apply(void 0, [this].concat(params));
+        };
+      }
+    }
+
+    if (options.nodeListProto) {
+      methodName = options.alterMethodName.includes('nodeListProto') ? newMethodName : methodName;
+
+      NodeList.prototype[methodName] = function () {
+        for (var _len3 = arguments.length, params = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+          params[_key3] = arguments[_key3];
+        }
+
+        return method.bind({
+          componentGlue: componentGlue,
+          modifierGlue: modifierGlue,
+          multipleClasses: multipleClasses
+        }).apply(void 0, [this].concat(params));
+      };
+    }
+  };
+
+  for (var _i2 = 0, _Object$entries = Object.entries(_api__WEBPACK_IMPORTED_MODULE_0__); _i2 < _Object$entries.length; _i2++) {
+    _loop();
+  }
+
+  if (typeof sQuery !== 'undefined') {
+    sQuery.config = Object.assign(options, {
+      methods: methods
+    });
+  }
+}
 
 /***/ }),
 /* 18 */
@@ -2696,9 +2690,6 @@ __webpack_require__.d(src_namespaceObject, "Component", function() { return comp
 __webpack_require__.d(src_namespaceObject, "SubComponent", function() { return component_SubComponent; });
 __webpack_require__.d(src_namespaceObject, "BEM", function() { return BEM; });
 
-// EXTERNAL MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/squery.js
-var squery = __webpack_require__(12);
-
 // EXTERNAL MODULE: ./node_modules/@onenexus/lucid/src/module.jsx
 var src_module = __webpack_require__(2);
 
@@ -2707,23 +2698,23 @@ var external_react_ = __webpack_require__(1);
 var external_react_default = /*#__PURE__*/__webpack_require__.n(external_react_);
 
 // EXTERNAL MODULE: ./node_modules/html-tags/index.js
-var html_tags = __webpack_require__(7);
+var html_tags = __webpack_require__(6);
 var html_tags_default = /*#__PURE__*/__webpack_require__.n(html_tags);
 
 // EXTERNAL MODULE: ./node_modules/@onenexus/lucid/src/utilities/getHtmlProps.js
-var getHtmlProps = __webpack_require__(8);
+var getHtmlProps = __webpack_require__(7);
 
 // EXTERNAL MODULE: ./node_modules/@onenexus/lucid/src/utilities/getModifiersFromProps.js
 var getModifiersFromProps = __webpack_require__(4);
 
 // EXTERNAL MODULE: ./node_modules/@onenexus/lucid/src/utilities/generateClasses.js
-var generateClasses = __webpack_require__(9);
+var generateClasses = __webpack_require__(8);
 
 // EXTERNAL MODULE: ./node_modules/@onenexus/lucid/src/utilities/renderModifiers.js
 var renderModifiers = __webpack_require__(3);
 
 // EXTERNAL MODULE: ./node_modules/@onenexus/lucid/src/utilities/refHandler.js
-var refHandler = __webpack_require__(10);
+var refHandler = __webpack_require__(9);
 
 // CONCATENATED MODULE: ./node_modules/@onenexus/lucid/src/component.jsx
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -2897,6 +2888,9 @@ var BEM = {
   SubComponent: component_SubComponent
 });
 
+// EXTERNAL MODULE: ./node_modules/@onenexus/squery/src/squery.js
+var squery = __webpack_require__(14);
+
 // EXTERNAL MODULE: ./node_modules/@onenexus/polymorph/src/polymorph.js
 var polymorph = __webpack_require__(18);
 
@@ -2920,12 +2914,12 @@ function synergy_objectSpread(target) { for (var i = 1; i < arguments.length; i+
 function synergy_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 // import * as lucid from '../../../Lucid/Lucid/src';
- // import polymorph from '../../../Polymorph/Polymorph/src/polymorph';
+// import sQuery from '../../../sQuery/sQuery/src/squery';
+// import polymorph from '../../../Polymorph/Polymorph/src/polymorph';
 // import * as lucid from '../../../Lucid/Lucid/dist/lucid';
 // import polymorph from '../../../Polymorph/Polymorph/dist/polymorph';
 // import sQuery from '../../../sQuery/sQuery/dist/squery';
 
- // import sQuery from '@onenexus/squery/src/squery';
 
 
 
@@ -2964,13 +2958,9 @@ function synergy_theme(modules, theme, globals, app) {
   Object.assign(Synergy, app.options);
   Synergy.config(globals, Synergy.config(theme, app.theme));
   squery["a" /* default */].init();
-  console.log('ting');
   Object.values(modules).forEach(function (MODULE) {
-    console.log('fizz', MODULE);
-
     if (MODULE.defaults) {
       var evaluatedConfig = evalConfig(theme.modules[MODULE.name]);
-      console.log('byzz', MODULE.name);
       window[MODULE.name] = Object.assign(MODULE, {
         config: Synergy.config(MODULE.defaults(globals), evaluatedConfig)
       });

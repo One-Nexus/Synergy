@@ -1,6 +1,6 @@
 {
   "name": "@onenexus/synergy",
-  "version": "4.0.0",
+  "version": "4.0.0-beta.0",
   "description": "A front-end framework for building modular, configurable and scalable UI components for React apps",
   "main": "dist/synergy.js",
   "author": "(Edmund Reed)[http://twitter.com/esr360] <esr360@live.com>",
@@ -26,22 +26,23 @@
     "url": "https://github.com/esr360/Synergy.git"
   },
   "dependencies": {
+    "@onenexus/cell": "1.0.0-beta.1",
     "@onenexus/lucid": "1.0.0-beta.0",
-    "@onenexus/polymorph": "1.0.0-beta.0",
-    "@onenexus/squery": "1.0.0-beta.1",
+    "@onenexus/polymorph": "1.0.0-beta.1",
+    "@onenexus/squery": "1.0.0-beta.2",
     "deep-extend": "^0.5.1",
     "react": "^16.4.0",
     "react-dom": "^16.4.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.2.2",
+    "@babel/core": "^7.4.5",
     "@babel/plugin-proposal-class-properties": "^7.2.3",
-    "@babel/preset-env": "^7.2.3",
+    "@babel/preset-env": "^7.4.5",
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.0.0",
     "babel-loader": "^8.0.5",
     "eslint": "^4.14.0",
-    "jsdoc": "^3.5.5",
+    "jsdoc": "^3.6.2",
     "jsdom": "^13.1.0",
     "jsdom-global": "^3.0.2",
     "mocha": "^3.4.2",
@@ -58,7 +59,6 @@
     "test": "mocha test/tests.js --require @babel/register",
     "docs": "jsdoc src -r -d docs/js",
     "js": "webpack",
-    "build": "npm run lint && npm test && npm run docs && npm run js",
-    "foo": "node ./utilities/generate-JSON-config.js 'demo/app.json'"
+    "build": "npm run lint && npm test && npm run docs && npm run js"
   }
 }

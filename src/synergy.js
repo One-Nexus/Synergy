@@ -1,5 +1,5 @@
 // import * as lucid from '../../../Lucid/Lucid/src';
-import sQuery from '../../../sQuery/sQuery/src/squery';
+// import sQuery from '../../../sQuery/sQuery/src/squery';
 // import polymorph from '../../../Polymorph/Polymorph/src/polymorph';
 
 // import * as lucid from '../../../Lucid/Lucid/dist/lucid';
@@ -7,7 +7,7 @@ import sQuery from '../../../sQuery/sQuery/src/squery';
 // import sQuery from '../../../sQuery/sQuery/dist/squery';
 
 import * as lucid from '@onenexus/lucid/src';
-// import sQuery from '@onenexus/squery/src/squery';
+import sQuery from '@onenexus/squery/src/squery';
 import polymorph from '@onenexus/polymorph/src/polymorph';
 
 import deepextend from 'deep-extend';
