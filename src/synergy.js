@@ -51,16 +51,18 @@ function theme(modules, theme = {}, globals = {}, app = {}) {
     sQuery.init();
 
     Object.values(modules).forEach(MODULE => {
-        if (MODULE.defaults) {
-            const evaluatedConfig = theme.modules && evalConfig(theme.modules[MODULE.name]);
+        let defaultConfig = MODULE.config || {};
 
-            window[MODULE.name] = Object.assign(MODULE, {
-                config: Synergy.config(
-                    typeof MODULE.defaults === 'function' ? MODULE.defaults(globals) : MODULE.defaults, 
-                    evaluatedConfig
-                )
-            });
+        if (typeof defaultConfig === 'function') {
+            defaultConfig = defaultConfig(globals);
         }
+
+        const namespace = MODULE.defaultProps.name || MODULE.name;
+        const themeConfig = theme.modules && evalConfig(theme.modules[namespace]);
+
+        window[namespace] = Object.assign(MODULE, {
+            config: Synergy.config(defaultConfig, themeConfig)
+        });
     });
 
     if (typeof globals.foundation === 'function') {

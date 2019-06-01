@@ -7,7 +7,7 @@
 		var a = typeof exports === 'object' ? factory(require("react"), require("react-dom")) : factory(root["react"], root["react-dom"]);
 		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
 	}
-})(window, function(__WEBPACK_EXTERNAL_MODULE__1__, __WEBPACK_EXTERNAL_MODULE__12__) {
+})(window, function(__WEBPACK_EXTERNAL_MODULE__1__, __WEBPACK_EXTERNAL_MODULE__19__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -169,7 +169,7 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__1__;
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Group; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(19);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var html_tags__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
 /* harmony import */ var html_tags__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(html_tags__WEBPACK_IMPORTED_MODULE_2__);
@@ -212,14 +212,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 if (typeof process === 'undefined') window.process = {
   env: {}
 };
-/**
- * Used for generating unique module ID's
- */
+/** Used for generating unique module ID's */
 
 var increment = 1;
-/**
- * Create a context object
- */
+/** Create a context object */
 
 var ModuleContext = react__WEBPACK_IMPORTED_MODULE_0___default.a.createContext();
 
@@ -245,31 +241,24 @@ function (_React$Component) {
     var ui = props.ui || window.ui;
     var modifierGlue = props.modifierGlue || Synergy.modifierGlue || '-';
     var componentGlue = props.componentGlue || Synergy.componentGlue || '_';
-    var propModifiers = Object(_utilities_renderModifiers__WEBPACK_IMPORTED_MODULE_6__[/* default */ "a"])(Object(_utilities_getModifiersFromProps__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"])(props, Synergy.CssClassProps), modifierGlue);
+    var propModifiers = Object(_utilities_renderModifiers__WEBPACK_IMPORTED_MODULE_6__[/* default */ "a"])(Object(_utilities_getModifiersFromProps__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"])(props, Synergy.CSSClassProps), modifierGlue);
     var passedModifiers = Object(_utilities_renderModifiers__WEBPACK_IMPORTED_MODULE_6__[/* default */ "a"])(props.modifiers, modifierGlue);
     var modifiers = propModifiers + passedModifiers;
     var classes = props.className ? props.className : '';
     var styleParser = props.styleParser || Synergy.styleParser;
+    var config = props.config || {};
+
+    if (window[props.name] && window[props.name].config) {
+      config = Module.config(window[props.name].config, config);
+    }
+
     var multipleClasses = false;
-
-    if (typeof Synergy.multipleClasses !== 'undefined') {
-      multipleClasses = Synergy.multipleClasses;
-    }
-
-    if (typeof props.multipleClasses !== 'undefined') {
-      multipleClasses = props.multipleClasses;
-    }
-
-    _this.config = props.config || {};
-
-    if (window[props.name]) {
-      _this.config = Module.config(window[props.name].config, _this.config);
-    }
-
-    _this.namespace = _this.config.name || props.name;
+    if (typeof Synergy.multipleClasses !== 'undefined') multipleClasses = Synergy.multipleClasses;
+    if (typeof props.multipleClasses !== 'undefined') multipleClasses = props.multipleClasses;
+    _this.namespace = config.name || props.name;
 
     _this.ref = function (node) {
-      return Object(_utilities_refHandler__WEBPACK_IMPORTED_MODULE_7__[/* default */ "a"])(node, props, styleParser, true, ui, _this.config);
+      return Object(_utilities_refHandler__WEBPACK_IMPORTED_MODULE_7__[/* default */ "a"])(node, props, styleParser, true, ui, config);
     };
 
     _this.id = (props.before || props.after) && !props.id ? "synergy-module-".concat(increment) : props.id;
@@ -283,7 +272,7 @@ function (_React$Component) {
       componentGlue: componentGlue,
       multipleClasses: multipleClasses
     });
-    if (Synergy.CssClassProps) Synergy.CssClassProps.forEach(function (prop) {
+    if (Synergy.CSSClassProps) Synergy.CSSClassProps.forEach(function (prop) {
       if (Object.keys(props).includes(prop)) {
         _this.classNames = _this.classNames + ' ' + prop;
       }
@@ -294,25 +283,14 @@ function (_React$Component) {
       modifierGlue: modifierGlue,
       componentGlue: componentGlue,
       multipleClasses: multipleClasses,
+      config: config,
       module: _this.namespace,
-      props: _this.props,
-      config: _this.config
+      props: _this.props
     };
     return _this;
   }
 
   _createClass(Module, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      var _module = Synergy.modules ? Synergy.modules[this.namespace] : null;
-
-      if (_module && _module.methods) {
-        if (_module.methods.init) {
-          _module.methods.init(react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.findDOMNode(this), this.config);
-        }
-      }
-    }
-  }, {
     key: "getEventHandlers",
     value: function getEventHandlers(properties) {
       var eventHandlers = {};
@@ -1198,6 +1176,20 @@ function module_module(node, moduleName, operator, config) {
     });
   }
 }
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/parentModule.js
+
+function parentModule(node, config) {
+  config = Object.assign(this || {}, config || {});
+
+  if (node instanceof NodeList || node instanceof Array) {
+    return [].slice.call(node).map(function (node) {
+      return parentModule(node, config);
+    });
+  }
+
+  var namespace = config.namespace || Object(getNamespace["a" /* default */])(node, false, config);
+  return node.closest(".".concat(namespace, ", [class*='").concat(namespace + config.modifierGlue, "']"));
+}
 // CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/subComponent.js
 
 
@@ -1230,6 +1222,7 @@ function subComponent_subComponent(node, subComponentName, operator, config) {
 /* concated harmony reexport module */__webpack_require__.d(__webpack_exports__, "module", function() { return module_module; });
 /* concated harmony reexport modules */__webpack_require__.d(__webpack_exports__, "modules", function() { return module_module; });
 /* concated harmony reexport parent */__webpack_require__.d(__webpack_exports__, "parent", function() { return parent_parent; });
+/* concated harmony reexport parentModule */__webpack_require__.d(__webpack_exports__, "parentModule", function() { return parentModule; });
 /* concated harmony reexport remove */__webpack_require__.d(__webpack_exports__, "remove", function() { return removeModifier; });
 /* concated harmony reexport removeModifier */__webpack_require__.d(__webpack_exports__, "removeModifier", function() { return removeModifier; });
 /* concated harmony reexport setComponent */__webpack_require__.d(__webpack_exports__, "setComponent", function() { return setComponent; });
@@ -1270,6 +1263,8 @@ function subComponent_subComponent(node, subComponentName, operator, config) {
 
  // parent
 
+ // parentModule
+
  // removeModifier
 
  // setComponent
@@ -1297,7 +1292,7 @@ module.exports = __webpack_require__(20);
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getHtmlProps; });
-/* harmony import */ var html_attributes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(13);
+/* harmony import */ var html_attributes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(12);
 /* harmony import */ var html_attributes__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(html_attributes__WEBPACK_IMPORTED_MODULE_0__);
 
 /**
@@ -1429,9 +1424,11 @@ function refHandler(node, props, styleParser, parentModule, ui, config) {
       isLastChild: node === node.parentNode.lastChild
     });
 
-    if (parentModule && window[props.name] && window[props.name].defaults) {
+    if (parentModule) {
       node.config = config;
     }
+
+    var NAMESPACE = props.name || config.name;
 
     if (styleParser) {
       if (props.styles) {
@@ -1440,10 +1437,8 @@ function refHandler(node, props, styleParser, parentModule, ui, config) {
         } else {
           styleParser(node, props.styles, config, ui);
         }
-      } else if (props.name && window[props.name]) {
-        if (window[props.name] && window[props.name].layout) {
-          styleParser(node, window[props.name].layout, config, ui);
-        }
+      } else if (window[NAMESPACE] && window[NAMESPACE].layout) {
+        styleParser(node, window[NAMESPACE].layout, config, ui);
       }
 
       Object.keys(props).forEach(function (prop) {
@@ -1451,7 +1446,7 @@ function refHandler(node, props, styleParser, parentModule, ui, config) {
 
         if (fistLetter === fistLetter.toUpperCase()) {
           if (window[prop] && window[prop].layout && window[prop].config) {
-            node.namespace = node.namespace || prop;
+            node.namespace = node.namespace || window[prop].config.name || prop;
             styleParser(node, window[prop].layout, window[prop].config, ui);
           }
         }
@@ -1460,8 +1455,8 @@ function refHandler(node, props, styleParser, parentModule, ui, config) {
 
     if (props.init) {
       props.init(node);
-    } else if (window[props.name] && window[props.name].init) {
-      window[props.name].init(node);
+    } else if (window[NAMESPACE] && window[NAMESPACE].init) {
+      window[NAMESPACE].init(node);
     }
   }
 }
@@ -1701,12 +1696,6 @@ process.umask = function () {
 
 /***/ }),
 /* 12 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE__12__;
-
-/***/ }),
-/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1847,14 +1836,14 @@ module.exports = {
 };
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var _utilities_getConfig__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(15);
-/* harmony import */ var _utilities_getDOMNodes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(16);
+/* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var _utilities_getConfig__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(14);
+/* harmony import */ var _utilities_getDOMNodes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
 /* harmony import */ var _utilities_getNamespace__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(0);
-/* harmony import */ var _utilities_init__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(17);
+/* harmony import */ var _utilities_init__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(16);
 /* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(5);
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
 
@@ -1943,7 +1932,7 @@ if (typeof window !== 'undefined') {
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(11)))
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1968,7 +1957,7 @@ function getConfig(defaults, custom, parser) {
 }
 
 /***/ }),
-/* 16 */
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2010,7 +1999,7 @@ function getDomNodes(query) {
 }
 
 /***/ }),
-/* 17 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2159,7 +2148,7 @@ function init(custom) {
 }
 
 /***/ }),
-/* 18 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2366,10 +2355,19 @@ function handleStyleSheet(element, stylesheet, config) {
     } // Handle `sub-components`
 
 
-    if (key.indexOf('subComponent(') > -1) {
-      var subComponent = key.replace('subComponent(', '').replace(/\)/g, '');
+    if (key.indexOf('sub-component(') > -1) {
+      var subComponent = key.replace('sub-component(', '').replace(/\)/g, '');
       var subComponents = sQuery.getSubComponents.bind(_objectSpread({}, config))(element, subComponent);
       return subComponents.forEach(function (component) {
+        return handleStyleSheet(component, value, config, context);
+      });
+    } // Handle `components`
+
+
+    if (key.indexOf('component(') > -1) {
+      var component = key.replace('component(', '').replace(/\)/g, '');
+      var components = sQuery.getComponents.bind(_objectSpread({}, config))(element, component);
+      return components.forEach(function (component) {
         return handleStyleSheet(component, value, config, context);
       });
     } // Handle `modifiers`
@@ -2526,7 +2524,7 @@ if (typeof window !== 'undefined') {
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(11)))
 
 /***/ }),
-/* 19 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2669,6 +2667,12 @@ var deepExtend = module.exports = function ()
 };
 
 /***/ }),
+/* 19 */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE__19__;
+
+/***/ }),
 /* 20 */
 /***/ (function(module) {
 
@@ -2802,8 +2806,8 @@ function (_React$Component) {
       var modifierGlue = context.modifierGlue,
           componentGlue = context.componentGlue;
       var module = props.module || context.module;
-      var propModifiers = Object(renderModifiers["a" /* default */])(Object(getModifiersFromProps["a" /* default */])(props, Synergy.CssClassProps), modifierGlue);
-      var getContextModifiers = Object(getModifiersFromProps["a" /* default */])(context.props && context.props[props.name], Synergy.CssClassProps);
+      var propModifiers = Object(renderModifiers["a" /* default */])(Object(getModifiersFromProps["a" /* default */])(props, Synergy.CSSClassProps), modifierGlue);
+      var getContextModifiers = Object(getModifiersFromProps["a" /* default */])(context.props && context.props[props.name], Synergy.CSSClassProps);
       var contextModifiers = Object(renderModifiers["a" /* default */])(getContextModifiers, modifierGlue);
       var passedModifiers = Object(renderModifiers["a" /* default */])(props.modifiers, modifierGlue);
       var modifiers = propModifiers + passedModifiers + contextModifiers;
@@ -2816,10 +2820,7 @@ function (_React$Component) {
 
       var contextValues = {
         component: context.component
-      }; // if (props.name instanceof Array) {
-      //     @TODO
-      // }
-
+      };
       var namespace;
 
       if (subComponent) {
@@ -2889,13 +2890,13 @@ var BEM = {
 });
 
 // EXTERNAL MODULE: ./node_modules/@onenexus/squery/src/squery.js
-var squery = __webpack_require__(14);
+var squery = __webpack_require__(13);
 
 // EXTERNAL MODULE: ./node_modules/@onenexus/polymorph/src/polymorph.js
-var polymorph = __webpack_require__(18);
+var polymorph = __webpack_require__(17);
 
 // EXTERNAL MODULE: ./node_modules/deep-extend/lib/deep-extend.js
-var deep_extend = __webpack_require__(19);
+var deep_extend = __webpack_require__(18);
 var deep_extend_default = /*#__PURE__*/__webpack_require__.n(deep_extend);
 
 // CONCATENATED MODULE: ./src/synergy.js
@@ -2963,12 +2964,17 @@ function synergy_theme(modules) {
   Synergy.config(globals, Synergy.config(theme, app.theme));
   squery["a" /* default */].init();
   Object.values(modules).forEach(function (MODULE) {
-    if (MODULE.defaults) {
-      var evaluatedConfig = theme.modules && evalConfig(theme.modules[MODULE.name]);
-      window[MODULE.name] = Object.assign(MODULE, {
-        config: Synergy.config(typeof MODULE.defaults === 'function' ? MODULE.defaults(globals) : MODULE.defaults, evaluatedConfig)
-      });
+    var defaultConfig = MODULE.config || {};
+
+    if (typeof defaultConfig === 'function') {
+      defaultConfig = defaultConfig(globals);
     }
+
+    var namespace = MODULE.defaultProps.name || MODULE.name;
+    var themeConfig = theme.modules && evalConfig(theme.modules[namespace]);
+    window[namespace] = Object.assign(MODULE, {
+      config: Synergy.config(defaultConfig, themeConfig)
+    });
   });
 
   if (typeof globals.foundation === 'function') {
