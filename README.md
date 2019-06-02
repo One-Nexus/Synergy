@@ -126,3 +126,12 @@ These are the main concerns of a UI module; Synergy allows you to work on each c
 > Synergy is ideal for creating presentational React components when using the [Container Component Pattern](https://reactpatterns.com/#container-component) ([learn more](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0))
 
 For more information see the [About Synergy](https://github.com/One-Nexus/Synergy/wiki/About-Synergy) page.
+
+---
+
+<a href="https://twitter.com/ESR360">
+    <img src="http://edmundreed.com/assets/images/twitter.gif?v=1" width="250px" />
+</a>
+<a href="https://github.com/ESR360">
+    <img src="http://edmundreed.com/assets/images/github.gif?v=1" width="250px" />
+</a>
