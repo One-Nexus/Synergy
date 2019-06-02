@@ -23,6 +23,23 @@
 * [Module Configuration](https://github.com/One-Nexus/Synergy/wiki/Module-Configuration)
 * [Themes](https://github.com/One-Nexus/Synergy/wiki/Themes)
 
+###### Boilerplates
+
+<table width="100%">
+    <tr>
+        <td>
+            <a href="https://github.com/One-Nexus/Synergy-Boilerplate">
+                Synergy Boilerplate (Javascript Styles)
+            </a>
+        </td>
+        <td>
+            <a href="https://github.com/One-Nexus/Synergy-Boilerplate-Sass">
+                Synergy Boilerplate (Sass Styles)
+            </a>
+        </td>
+    </tr>
+</table>
+
 ## 60 Second Accordion From Scratch
 
 ```
