@@ -1,6 +1,6 @@
 {
   "name": "@onenexus/synergy",
-  "version": "4.0.0-beta.8",
+  "version": "4.0.0-beta.9",
   "description": "A front-end framework for building modular, configurable and scalable UI components for React apps",
   "main": "dist/synergy.js",
   "author": "(Edmund Reed)[http://twitter.com/esr360] <esr360@live.com>",
@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "@onenexus/cell": "1.0.0-beta.5",
-    "@onenexus/lucid": "1.0.0-beta.2",
+    "@onenexus/lucid": "1.0.0-beta.3",
     "@onenexus/polymorph": "1.0.0-beta.3",
     "@onenexus/squery": "1.0.0-beta.4",
     "deep-extend": "^0.5.1",
