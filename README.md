@@ -46,6 +46,8 @@
 npm install --save react react-dom @onenexus/synergy;
 ```
 
+> [View a live demo of this example in CodeSandbox](https://codesandbox.io/s/95k4y)
+
 ###### accordion.jsx
 
 ```jsx
@@ -80,7 +82,7 @@ const styles = () => ({
 });
 
 const interactions = {
-    toggle: event => event.target.parent('panel').toggleModifier('active');
+    toggle: event => event.target.parent('panel').toggleModifier('active')
 }
 
 const Accordion = ({ panels }) => (

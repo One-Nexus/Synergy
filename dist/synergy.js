@@ -1277,7 +1277,7 @@ function subComponent_subComponent(node, subComponentName, operator, config) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getHtmlProps; });
-/* harmony import */ var html_attributes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(11);
+/* harmony import */ var html_attributes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(12);
 /* harmony import */ var html_attributes__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(html_attributes__WEBPACK_IMPORTED_MODULE_0__);
 
 /**
@@ -1681,6 +1681,102 @@ process.umask = function () {
 
 /***/ }),
 /* 11 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var _utilities_getConfig__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(13);
+/* harmony import */ var _utilities_getDOMNodes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(14);
+/* harmony import */ var _utilities_getNamespace__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(0);
+/* harmony import */ var _utilities_init__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(15);
+/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(5);
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+
+
+
+ // spoof env process to assist bundle size
+
+if (typeof process === 'undefined') window.process = {
+  env: {}
+};
+/** */
+
+function sQuery(SynergyQuery, callback, defaults, custom, parser) {
+  var Synergy = window.Synergy || {};
+  sQuery.config = sQuery.config || {};
+  var methods = {};
+  var config = Object(_utilities_getConfig__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(defaults, custom, parser);
+  var modifierGlue = config.modifierGlue || Synergy.modifierGlue || '-';
+  var componentGlue = config.componentGlue || Synergy.componentGlue || '_';
+  var multipleClasses = config.multipleClasses || Synergy.multipleClasses || false;
+  var namespace = Object(_utilities_getNamespace__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"])(SynergyQuery, false, {
+    componentGlue: componentGlue,
+    modifierGlue: modifierGlue
+  });
+  var DOMNodes = Object(_utilities_getDOMNodes__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(SynergyQuery);
+
+  for (var _i = 0, _Object$entries = Object.entries(_api__WEBPACK_IMPORTED_MODULE_4__); _i < _Object$entries.length; _i++) {
+    var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
+        key = _Object$entries$_i[0],
+        method = _Object$entries$_i[1];
+
+    if (sQuery.config.methods && sQuery.config.methods[key]) {
+      key = sQuery.config.methods[key];
+    }
+
+    var internalConfig = {
+      namespace: namespace,
+      componentGlue: componentGlue,
+      modifierGlue: modifierGlue,
+      multipleClasses: multipleClasses
+    };
+
+    if (DOMNodes) {
+      methods[key] = method.bind(internalConfig, DOMNodes);
+    } else {
+      methods[key] = method.bind(internalConfig);
+    }
+  }
+
+  if (typeof callback === 'function') {
+    DOMNodes.forEach(function (node) {
+      return callback(node, config);
+    });
+  }
+
+  return Object.assign(methods, {
+    namespace: namespace,
+    nodes: DOMNodes,
+    node: DOMNodes ? DOMNodes[0] : null
+  });
+}
+
+sQuery.init = _utilities_init__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"];
+
+for (var _i2 = 0, _Object$entries2 = Object.entries(_api__WEBPACK_IMPORTED_MODULE_4__); _i2 < _Object$entries2.length; _i2++) {
+  var _Object$entries2$_i = _slicedToArray(_Object$entries2[_i2], 2),
+      key = _Object$entries2$_i[0],
+      method = _Object$entries2$_i[1];
+
+  sQuery[key] = method;
+}
+
+if (typeof window !== 'undefined') {
+  window.sQuery = sQuery;
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (sQuery);
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(10)))
+
+/***/ }),
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1821,102 +1917,6 @@ module.exports = {
 };
 
 /***/ }),
-/* 12 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var _utilities_getConfig__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(13);
-/* harmony import */ var _utilities_getDOMNodes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(14);
-/* harmony import */ var _utilities_getNamespace__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(0);
-/* harmony import */ var _utilities_init__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(15);
-/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(5);
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
-
-function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-
-
-
-
- // spoof env process to assist bundle size
-
-if (typeof process === 'undefined') window.process = {
-  env: {}
-};
-/** */
-
-function sQuery(SynergyQuery, callback, defaults, custom, parser) {
-  var Synergy = window.Synergy || {};
-  sQuery.config = sQuery.config || {};
-  var methods = {};
-  var config = Object(_utilities_getConfig__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(defaults, custom, parser);
-  var modifierGlue = config.modifierGlue || Synergy.modifierGlue || '-';
-  var componentGlue = config.componentGlue || Synergy.componentGlue || '_';
-  var multipleClasses = config.multipleClasses || Synergy.multipleClasses || false;
-  var namespace = Object(_utilities_getNamespace__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"])(SynergyQuery, false, {
-    componentGlue: componentGlue,
-    modifierGlue: modifierGlue
-  });
-  var DOMNodes = Object(_utilities_getDOMNodes__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(SynergyQuery);
-
-  for (var _i = 0, _Object$entries = Object.entries(_api__WEBPACK_IMPORTED_MODULE_4__); _i < _Object$entries.length; _i++) {
-    var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
-        key = _Object$entries$_i[0],
-        method = _Object$entries$_i[1];
-
-    if (sQuery.config.methods && sQuery.config.methods[key]) {
-      key = sQuery.config.methods[key];
-    }
-
-    var internalConfig = {
-      namespace: namespace,
-      componentGlue: componentGlue,
-      modifierGlue: modifierGlue,
-      multipleClasses: multipleClasses
-    };
-
-    if (DOMNodes) {
-      methods[key] = method.bind(internalConfig, DOMNodes);
-    } else {
-      methods[key] = method.bind(internalConfig);
-    }
-  }
-
-  if (typeof callback === 'function') {
-    DOMNodes.forEach(function (node) {
-      return callback(node, config);
-    });
-  }
-
-  return Object.assign(methods, {
-    namespace: namespace,
-    nodes: DOMNodes,
-    node: DOMNodes ? DOMNodes[0] : null
-  });
-}
-
-sQuery.init = _utilities_init__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"];
-
-for (var _i2 = 0, _Object$entries2 = Object.entries(_api__WEBPACK_IMPORTED_MODULE_4__); _i2 < _Object$entries2.length; _i2++) {
-  var _Object$entries2$_i = _slicedToArray(_Object$entries2[_i2], 2),
-      key = _Object$entries2$_i[0],
-      method = _Object$entries2$_i[1];
-
-  sQuery[key] = method;
-}
-
-if (typeof window !== 'undefined') {
-  window.sQuery = sQuery;
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (sQuery);
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(10)))
-
-/***/ }),
 /* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -2007,9 +2007,9 @@ function init(custom) {
     preset: 'Synergy',
     Synergy: true,
     alterMethodName: ['sQuery'],
-    componentGlue: Synergy.componentGlue,
-    modifierGlue: Synergy.modifierGlue,
-    multipleClasses: Synergy.multipleClasses
+    componentGlue: typeof sQuery !== 'undefined' && Synergy.componentGlue,
+    modifierGlue: typeof sQuery !== 'undefined' && Synergy.modifierGlue,
+    multipleClasses: typeof sQuery !== 'undefined' && Synergy.multipleClasses
   }, custom);
   options.alterMethodName = options.alterMethodName || [];
   var PRESETS = {
@@ -2089,6 +2089,10 @@ function init(custom) {
     if (options.elementProto) {
       methodName = options.alterMethodName.includes('elementProto') ? newMethodName : methodName;
 
+      if (Element.prototype[methodName] && Element.prototype[methodName].sQuery) {
+        Element.prototype[methodName] = undefined;
+      }
+
       if (typeof document.body[methodName] === 'undefined') {
         Element.prototype[methodName] = function () {
           for (var _len2 = arguments.length, params = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
@@ -2101,11 +2105,13 @@ function init(custom) {
             multipleClasses: multipleClasses
           }).apply(void 0, [this].concat(params));
         };
+
+        Element.prototype[methodName].sQuery = true;
       }
     }
 
     if (options.nodeListProto) {
-      methodName = options.alterMethodName.includes('nodeListProto') ? newMethodName : methodName;
+      methodName = options.alterMethodName.includes('nodeListProto') ? newMethodName : methodName; // @todo conditionally add this if not exists (and delete if previously added by sQuery)
 
       NodeList.prototype[methodName] = function () {
         for (var _len3 = arguments.length, params = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
@@ -2118,6 +2124,8 @@ function init(custom) {
           multipleClasses: multipleClasses
         }).apply(void 0, [this].concat(params));
       };
+
+      NodeList.prototype[methodName].sQuery = true;
     }
   };
 
@@ -2858,7 +2866,7 @@ var BEM = {
 });
 
 // EXTERNAL MODULE: ./node_modules/@onenexus/squery/src/squery.js
-var squery = __webpack_require__(12);
+var squery = __webpack_require__(11);
 
 // EXTERNAL MODULE: ./node_modules/@onenexus/polymorph/src/polymorph.js
 var polymorph = __webpack_require__(16);
@@ -2882,23 +2890,27 @@ function synergy_objectSpread(target) { for (var i = 1; i < arguments.length; i+
 
 function synergy_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+// import * as lucid from '../../../Lucid/Lucid/src';
+// import sQuery from '../../../sQuery/sQuery/src/squery';
+// import polymorph from '../../../Polymorph/Polymorph/src/polymorph';
+// import * as lucid from '../../../Lucid/Lucid/dist/lucid';
+// import polymorph from '../../../Polymorph/Polymorph/dist/polymorph';
+// import sQuery from '../../../sQuery/sQuery/dist/squery';
 
 
 
 
 
 if (typeof window !== 'undefined') {
-  // Attach Synergy tools to global object
   Object.assign(window, synergy_objectSpread({
     Synergy: window.Synergy || {}
-  }, src_namespaceObject)); // Declare global Synergy properties
-
+  }, src_namespaceObject));
   Object.assign(Synergy, {
     styleParser: polymorph["a" /* default */],
-    // config: (...params) => deepextend({}, ...params),
     config: deep_extend_default.a,
     theme: synergy_theme
   });
+  squery["a" /* default */].init();
 }
 /**
  * Synergy Theme

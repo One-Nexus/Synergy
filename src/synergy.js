@@ -1,3 +1,11 @@
+// import * as lucid from '../../../Lucid/Lucid/src';
+// import sQuery from '../../../sQuery/sQuery/src/squery';
+// import polymorph from '../../../Polymorph/Polymorph/src/polymorph';
+
+// import * as lucid from '../../../Lucid/Lucid/dist/lucid';
+// import polymorph from '../../../Polymorph/Polymorph/dist/polymorph';
+// import sQuery from '../../../sQuery/sQuery/dist/squery';
+
 import * as lucid from '@onenexus/lucid/src';
 import sQuery from '@onenexus/squery/src/squery';
 import polymorph from '@onenexus/polymorph/src/polymorph';
@@ -5,19 +13,18 @@ import polymorph from '@onenexus/polymorph/src/polymorph';
 import deepextend from 'deep-extend';
 
 if (typeof window !== 'undefined') {
-    // Attach Synergy tools to global object
     Object.assign(window, {
         Synergy: window.Synergy || {},
         ...lucid
     });
 
-    // Declare global Synergy properties
     Object.assign(Synergy, {
         styleParser: polymorph,
-        // config: (...params) => deepextend({}, ...params),
         config: deepextend,
         theme: theme
     });
+
+    sQuery.init();
 }
 
 /**
