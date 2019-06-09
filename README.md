@@ -63,7 +63,7 @@ const styles = {
         'background': '#00FFB2',
         'color': '#FFFFFF'
       }
-    }),
+    })
   }),
 
   heading: {
@@ -120,7 +120,7 @@ const data = [
 ];
 
 const Screen = () => (
-    <Accordion panels={data} />
+  <Accordion panels={data} />
 );
 
 ReactDOM.render(<Screen />, document.getElementById('app'));
