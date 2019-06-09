@@ -51,7 +51,7 @@ npm install --save react react-dom @onenexus/synergy;
 ###### accordion.jsx
 
 ```jsx
-import React from 'react';
+import React, { useState } from 'react';
 import '@onenexus/synergy';
 
 const styles = {
