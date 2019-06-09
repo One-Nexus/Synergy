@@ -1,14 +1,14 @@
-// import * as lucid from '../../../Lucid/Lucid/src';
-// import sQuery from '../../../sQuery/sQuery/src/squery';
-// import polymorph from '../../../Polymorph/Polymorph/src/polymorph';
+import * as lucid from '../../../Lucid/Lucid/src';
+import sQuery from '../../../sQuery/sQuery/src/getters';
+import polymorph from '../../../Polymorph/Polymorph/src/polymorph';
 
 // import * as lucid from '../../../Lucid/Lucid/dist/lucid';
 // import polymorph from '../../../Polymorph/Polymorph/dist/polymorph';
 // import sQuery from '../../../sQuery/sQuery/dist/squery';
 
-import * as lucid from '@onenexus/lucid/src';
-import sQuery from '@onenexus/squery/src/squery';
-import polymorph from '@onenexus/polymorph/src/polymorph';
+// import * as lucid from '@onenexus/lucid/src';
+// import sQuery from '@onenexus/squery/src/squery';
+// import polymorph from '@onenexus/polymorph/src/polymorph';
 
 import deepextend from 'deep-extend';
 
@@ -56,7 +56,7 @@ function theme(modules, theme = {}, globals = {}, app = {}) {
             defaultConfig = defaultConfig(globals);
         }
 
-        const namespace = MODULE.defaultProps.name || MODULE.name;
+        const namespace = (MODULE.defaultProps && MODULE.defaultProps.name) || MODULE.name;
         const themeConfig = theme.modules && evalConfig(theme.modules[namespace]);
 
         window[namespace] = Object.assign(MODULE, {

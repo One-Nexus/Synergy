@@ -26,18 +26,18 @@
 ###### Boilerplates
 
 <table width="100%">
-    <tr>
-        <td>
-            <a href="https://github.com/One-Nexus/Synergy-Boilerplate">
-                Synergy Boilerplate (Javascript Styles)
-            </a>
-        </td>
-        <td>
-            <a href="https://github.com/One-Nexus/Synergy-Boilerplate-Sass">
-                Synergy Boilerplate (Sass Styles)
-            </a>
-        </td>
-    </tr>
+  <tr>
+    <td>
+      <a href="https://github.com/One-Nexus/Synergy-Boilerplate">
+        Synergy Boilerplate (Javascript Styles)
+      </a>
+    </td>
+    <td>
+      <a href="https://github.com/One-Nexus/Synergy-Boilerplate-Sass">
+        Synergy Boilerplate (Sass Styles)
+      </a>
+    </td>
+  </tr>
 </table>
 
 ## 60 Second Accordion From Scratch
@@ -54,49 +54,48 @@ npm install --save react react-dom @onenexus/synergy;
 import React from 'react';
 import '@onenexus/synergy';
 
-const styles = () => ({
-    panel: {
-        'modifier(active)': {
-            title: {
-                'background': '#00FFB2',
-                'color': '#FFFFFF'
-            }
-        }
-    },
+const styles = {
+  'font-family': 'sans-serif',
 
-    title: {
-        'background': '#1E90FF',
-        'color': '#005A9C',
-        'padding': '1em',
-        ':hover': {
-            'background': '#01BFFF',
-            'color': '#FFFFFF'
-        }
-    },
+  panel: panel => ({
+    ...(panel.is('open') && {
+      heading: {
+        'background': '#00FFB2',
+        'color': '#FFFFFF'
+      }
+    }),
+  }),
 
-    content: content => ({
-        'padding': '1em',
-        'color': '#444444',
-        'display': content.parent('panel').is('active') ? 'block' : 'none',
-    })
-});
+  heading: {
+    'background': '#1E90FF',
+    'color': '#005A9C',
+    'padding': '1em',
+    ':hover': {
+      'background': '#01BFFF',
+      'color': '#FFFFFF'
+    }
+  },
 
-const interactions = {
-    toggle: event => event.target.parent('panel').toggleModifier('active')
-}
+  content: content => ({
+    'padding': '1em',
+    'color': '#444444',
+    'display': content.parent('panel').is('open') ? 'block' : 'none'
+  })
+};
 
 const Accordion = ({ panels }) => (
-    <Module name='accordion' styles={styles}>
-        {panels.map(({ title, content }) => (
-            <Component name='panel'>
-                <Component name='title' onClick={interactions.toggle}>
-                    {title}
-                </Component>
+  <Module name='accordion' styles={styles}>
+    {panels.map(({ heading, content }) => {
+      const [isOpen, toggle] = useState(false);
 
-                <Component name='content'>{content}</Component>
-            </Component>
-        ))}
-    </Module>
+      return (
+        <Component name='panel' open={isOpen}>
+          <Component name='heading' content={heading} onClick={() => toggle(!isOpen)} />
+          <Component name='content' content={content} />
+        </Component>
+      );
+    })}
+  </Module>
 );
 
 export default Accordion;
@@ -110,14 +109,14 @@ import ReactDOM from 'react-dom';
 import Accordion from './accordion.jsx';
 
 const data = [
-    {
-        title: 'accordion title 1',
-        content: 'lorem ipsum'
-    },
-    {
-        title: 'accordion title 2',
-        content: <p>foo bar</p>
-    }
+  {
+    heading: 'accordion heading 1',
+    content: 'lorem ipsum'
+  },
+  {
+    heading: 'accordion heading 2',
+    content: <p>foo bar</p>
+  }
 ];
 
 const Screen = () => (
@@ -149,8 +148,8 @@ For more information see the [About Synergy](https://github.com/One-Nexus/Synerg
 ---
 
 <a href="https://twitter.com/ESR360">
-    <img src="http://edmundreed.com/assets/images/twitter.gif?v=1" width="250px" />
+  <img src="http://edmundreed.com/assets/images/twitter.gif?v=1" width="250px" />
 </a>
 <a href="https://github.com/ESR360">
-    <img src="http://edmundreed.com/assets/images/github.gif?v=1" width="250px" />
+  <img src="http://edmundreed.com/assets/images/github.gif?v=1" width="250px" />
 </a>
