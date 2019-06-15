@@ -277,6 +277,13 @@ function (_React$Component) {
       Object(_utilities_refHandler__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"])(this.REF.current, this.props, this.styleParser, true, this.ui, this.config);
     }
   }, {
+    key: "componentDidUpdate",
+    value: function componentDidUpdate() {
+      if (this.REF.current.repaint) {
+        this.REF.current.repaint();
+      }
+    }
+  }, {
     key: "render",
     value: function render() {
       var Synergy = window.Synergy || {};
@@ -326,7 +333,7 @@ function (_React$Component) {
         className: classNames,
         "data-module": namespace,
         ref: this.REF
-      }, Object(_utilities_getHtmlProps__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(props), this.getDataAttributes(props), this.getEventHandlers(props), props.componentProps), props.children), props.after && props.after(function () {
+      }, Object(_utilities_getHtmlProps__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(props), this.getDataAttributes(props), this.getEventHandlers(props), props.componentProps), props.content || props.children), props.after && props.after(function () {
         return document.getElementById(id);
       }));
     }
@@ -654,17 +661,16 @@ function refHandler(node, props, styleParser, parentModule, ui, config) {
       } else if (window[NAMESPACE] && window[NAMESPACE].init) {
         window[NAMESPACE].init(node);
       }
-    }
+    } // @NOTE: below currently replaced in favour of `componentDidMount`
+    //
+    // const observer = new MutationObserver(() => node.repaint && node.repaint());
+    // observer.observe(node, {
+    //     attributes: true, 
+    //     attributeFilter: ['class'],
+    //     childList: false, 
+    //     characterData: false
+    // });
 
-    var observer = new MutationObserver(function () {
-      return node.repaint && node.repaint();
-    });
-    observer.observe(node, {
-      attributes: true,
-      attributeFilter: ['class'],
-      childList: false,
-      characterData: false
-    });
   }
 }
 
@@ -695,7 +701,7 @@ function isValidSelector(selector) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/getModules.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/getModules.js
 function getModules(node, moduleName, config) {
   config = Object.assign(this || {}, config || {});
   var _config = config,
@@ -722,10 +728,10 @@ function getModules(node, moduleName, config) {
   });
   return modules;
 }
-// EXTERNAL MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/utilities/getNamespace.js
+// EXTERNAL MODULE: ./node_modules/@onenexus/squery/src/utilities/getNamespace.js
 var getNamespace = __webpack_require__(0);
 
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/parent.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/parent.js
 
 function parent_parent(node, query, config) {
   config = Object.assign(this || {}, config || {});
@@ -764,7 +770,7 @@ function parent_parent(node, query, config) {
     return parentSubComponent;
   }
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/utilities/filterElements.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/utilities/filterElements.js
 
 
 function filterElements(node, elements, subComponent, config) {
@@ -782,10 +788,10 @@ function filterElements(node, elements, subComponent, config) {
   });
   return elements;
 }
-// EXTERNAL MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/utilities/isValidSelector.js
+// EXTERNAL MODULE: ./node_modules/@onenexus/squery/src/utilities/isValidSelector.js
 var isValidSelector = __webpack_require__(8);
 
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/getComponents.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/getComponents.js
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -863,7 +869,7 @@ function getComponents(node, componentName, config) {
   components = filterElements(node, components, subComponent, config);
   return components;
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/hasModifier.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/hasModifier.js
 
 function hasModifier(node, modifier, config) {
   config = Object.assign(this || {}, config || {});
@@ -892,7 +898,7 @@ function hasModifier(node, modifier, config) {
     return namespaceMatch && (isModifierTest1 || isModifierTest2);
   });
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/find.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/find.js
 function find_objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { find_defineProperty(target, key, source[key]); }); } return target; }
 
 function find_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -960,7 +966,7 @@ function getQueryFromObject(node, query, config) {
 
   return matches;
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/getComponent.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/getComponent.js
 
 /**
  * @TODO allow this API
@@ -979,7 +985,7 @@ function getComponent(node, componentName, config) {
   ;
   return getComponents(node, componentName, config)[0];
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/getModifiers.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/getModifiers.js
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
@@ -1011,14 +1017,14 @@ function getModifiers(node, config) {
   var modifiers = targetClass.split(modifierGlue).slice(1);
   return modifiers;
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/getSubComponents.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/getSubComponents.js
 
 function getSubComponents(node, subComponentName, config) {
   config = Object.assign(this || {}, config || {});
   config.subComponent = true;
   return getComponents(node, subComponentName, config);
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/getSubComponent.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/getSubComponent.js
 
 function getSubComponent(node, componentName, config) {
   config = Object.assign(this || {}, config || {});
@@ -1032,7 +1038,7 @@ function getSubComponent(node, componentName, config) {
   ;
   return getSubComponents(node, componentName, config)[0];
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/isModule.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/isModule.js
 function isModule(node, moduleName, config) {
   config = Object.assign(this || {}, config || {});
   var DOMNodes = !(node instanceof NodeList || node instanceof Array) ? [node] : node;
@@ -1040,7 +1046,7 @@ function isModule(node, moduleName, config) {
     return node.matches(".".concat(moduleName, ", [class*=\"").concat(moduleName + config.modifierGlue, "\"]"));
   });
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/isComponent.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/isComponent.js
 
 function isComponent(node, componentName, config) {
   config = Object.assign(this || {}, config || {});
@@ -1069,7 +1075,7 @@ function isComponent(node, componentName, config) {
     return className.indexOf(query) === 0 && isAComponent && isMatch;
   });
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/is.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/is.js
 function is_typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { is_typeof = function _typeof(obj) { return typeof obj; }; } else { is_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return is_typeof(obj); }
 
 
@@ -1133,7 +1139,7 @@ function is(node, query, config) {
 
   return false;
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/parentModule.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/parentModule.js
 
 function parentModule(node, config) {
   config = Object.assign(this || {}, config || {});
@@ -1147,7 +1153,7 @@ function parentModule(node, config) {
   var namespace = config.namespace || Object(getNamespace["a" /* default */])(node, false, config);
   return node.closest(".".concat(namespace, ", [class*='").concat(namespace + config.modifierGlue, "']"));
 }
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/api/getters.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/getters.js
 /* concated harmony reexport find */__webpack_require__.d(__webpack_exports__, "find", function() { return find; });
 /* concated harmony reexport getComponent */__webpack_require__.d(__webpack_exports__, "getComponent", function() { return getComponent; });
 /* concated harmony reexport getComponents */__webpack_require__.d(__webpack_exports__, "getComponents", function() { return getComponents; });
@@ -1734,6 +1740,8 @@ function init(custom, API) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return polymorph; });
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
@@ -1829,6 +1837,10 @@ function handleStyleSheet(element, stylesheet, config) {
         if (el.polymorph) {
           el.polymorph.rules.forEach(function (rule) {
             if (rule.context.every(function (ruleContext) {
+              if (typeof ruleContext === 'function') {
+                return ruleContext();
+              }
+
               if (ruleContext.value === 'hover') {
                 return ruleContext.source.polymorph.isHovered;
               }
@@ -1841,6 +1853,7 @@ function handleStyleSheet(element, stylesheet, config) {
             })) {
               var _allDependentElements;
 
+              // `doStyles()` applies the styles and returns dependent elements
               var dependentElements = doStyles(el, rule.styles) || [];
               dependentElements.length && (_allDependentElements = allDependentElements).push.apply(_allDependentElements, _toConsumableArray(dependentElements));
             }
@@ -1881,17 +1894,48 @@ function handleStyleSheet(element, stylesheet, config) {
         value = _ref2[1];
 
     var COMPONENTS = sQuery.getComponents.bind(_objectSpread({}, config))(element, key);
-    var SUB_COMPONENTS = sQuery.getSubComponents.bind(_objectSpread({}, config))(element, key); //Handle case where desired element for styles to be applied is manually controlled
+    var SUB_COMPONENTS = sQuery.getSubComponents.bind(_objectSpread({}, config))(element, key);
 
-    if (value instanceof Array && value[0]) {
-      if (value[0] instanceof HTMLElement) {
-        handleStyleSheet(value[0], value[1], config, context);
+    if (value.styles) {
+      if (value.condition) {
+        context = context.concat(value.condition);
       }
+
+      if (value.element) {
+        element = value.element;
+      }
+
+      return handleStyleSheet(element, value.styles, config, context);
+    }
+
+    if (value instanceof Array) {
+      if (typeof value[0] === 'undefined') {
+        return;
+      }
+
+      if (value.every(function (val) {
+        return val && _typeof(val) === 'object' && val.constructor === Object;
+      })) {
+        return value.forEach(function (val) {
+          return handleStyleSheet(element, val, config, context);
+        });
+      } //Handle case where desired element for styles to be applied is manually controlled
+
+
+      if (value[0] instanceof HTMLElement) {
+        return handleStyleSheet(value[0], value[1], config, context);
+      } //Handle case where desired element for styles to be applied is manually controlled
+
 
       if (value[0] instanceof NodeList) {
         value[0].forEach(function (el) {
           return handleStyleSheet(el, value[1], config, context);
         });
+      } //Handle case condition to apply styles is to be manually controlled
+
+
+      if (typeof value[0] === 'function') {
+        return handleStyleSheet(element, value[1], config, context.concat(value[0]));
       }
 
       return;
@@ -2253,7 +2297,7 @@ var deepExtend = module.exports = function ()
 
 "use strict";
 
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/utilities/getConfig.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/utilities/getConfig.js
 /**
  * @param {*} defaults 
  * @param {*} custom 
@@ -2272,10 +2316,10 @@ function getConfig(defaults, custom, parser) {
 
   return extendedConfig;
 }
-// EXTERNAL MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/utilities/isValidSelector.js
+// EXTERNAL MODULE: ./node_modules/@onenexus/squery/src/utilities/isValidSelector.js
 var isValidSelector = __webpack_require__(8);
 
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/utilities/getDOMNodes.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/utilities/getDOMNodes.js
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 
@@ -2310,10 +2354,10 @@ function getDomNodes(query) {
     return document.querySelectorAll(".".concat(query, ", [class*=\"").concat(query, "-\"]"));
   }
 }
-// EXTERNAL MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/utilities/getNamespace.js
+// EXTERNAL MODULE: ./node_modules/@onenexus/squery/src/utilities/getNamespace.js
 var getNamespace = __webpack_require__(0);
 
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/squery.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/squery.js
 
 
 
@@ -2388,29 +2432,29 @@ __webpack_require__.d(src_namespaceObject, "Component", function() { return comp
 __webpack_require__.d(src_namespaceObject, "SubComponent", function() { return component_SubComponent; });
 __webpack_require__.d(src_namespaceObject, "BEM", function() { return BEM; });
 
-// EXTERNAL MODULE: /Users/edmund.reed/Projects/Lucid/Lucid/src/module.jsx
+// EXTERNAL MODULE: ./node_modules/@onenexus/lucid/src/module.jsx
 var src_module = __webpack_require__(2);
 
 // EXTERNAL MODULE: external "react"
 var external_react_ = __webpack_require__(1);
 var external_react_default = /*#__PURE__*/__webpack_require__.n(external_react_);
 
-// EXTERNAL MODULE: /Users/edmund.reed/Projects/Lucid/Lucid/src/utilities/getHtmlProps.js
+// EXTERNAL MODULE: ./node_modules/@onenexus/lucid/src/utilities/getHtmlProps.js
 var getHtmlProps = __webpack_require__(5);
 
-// EXTERNAL MODULE: /Users/edmund.reed/Projects/Lucid/Lucid/src/utilities/getModifiersFromProps.js
+// EXTERNAL MODULE: ./node_modules/@onenexus/lucid/src/utilities/getModifiersFromProps.js
 var getModifiersFromProps = __webpack_require__(4);
 
-// EXTERNAL MODULE: /Users/edmund.reed/Projects/Lucid/Lucid/src/utilities/generateClasses.js
+// EXTERNAL MODULE: ./node_modules/@onenexus/lucid/src/utilities/generateClasses.js
 var generateClasses = __webpack_require__(6);
 
-// EXTERNAL MODULE: /Users/edmund.reed/Projects/Lucid/Lucid/src/utilities/renderModifiers.js
+// EXTERNAL MODULE: ./node_modules/@onenexus/lucid/src/utilities/renderModifiers.js
 var renderModifiers = __webpack_require__(3);
 
-// EXTERNAL MODULE: /Users/edmund.reed/Projects/Lucid/Lucid/src/utilities/refHandler.js
+// EXTERNAL MODULE: ./node_modules/@onenexus/lucid/src/utilities/refHandler.js
 var refHandler = __webpack_require__(7);
 
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/Lucid/Lucid/src/component.jsx
+// CONCATENATED MODULE: ./node_modules/@onenexus/lucid/src/component.jsx
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
@@ -2499,6 +2543,13 @@ function (_React$Component) {
       Object(refHandler["a" /* default */])(this.REF.current, this.props);
     }
   }, {
+    key: "componentDidUpdate",
+    value: function componentDidUpdate() {
+      if (this.REF.current.repaint) {
+        this.REF.current.repaint();
+      }
+    }
+  }, {
     key: "renderTag",
     value: function renderTag(props, context, subComponent) {
       var modifierGlue = context.modifierGlue,
@@ -2540,7 +2591,7 @@ function (_React$Component) {
         ref: this.REF,
         className: classes,
         "data-component": props.name.constructor === Array ? props.name[0] : props.name
-      }, this.props.componentProps), props.children));
+      }, this.props.componentProps), props.content || props.children));
     }
   }, {
     key: "render",
@@ -2568,7 +2619,7 @@ var component_SubComponent = function SubComponent(props) {
     subComponent: true
   }, props), props.children);
 };
-// CONCATENATED MODULE: /Users/edmund.reed/Projects/Lucid/Lucid/src/index.js
+// CONCATENATED MODULE: ./node_modules/@onenexus/lucid/src/index.js
 
 
 var BEM = {
@@ -2582,10 +2633,10 @@ var BEM = {
   SubComponent: component_SubComponent
 });
 
-// EXTERNAL MODULE: /Users/edmund.reed/Projects/sQuery/sQuery/src/getters.js
+// EXTERNAL MODULE: ./node_modules/@onenexus/squery/src/getters.js
 var getters = __webpack_require__(11);
 
-// EXTERNAL MODULE: /Users/edmund.reed/Projects/Polymorph/Polymorph/src/polymorph.js
+// EXTERNAL MODULE: ./node_modules/@onenexus/polymorph/src/polymorph.js
 var polymorph = __webpack_require__(14);
 
 // EXTERNAL MODULE: ./node_modules/deep-extend/lib/deep-extend.js
@@ -2607,14 +2658,11 @@ function synergy_objectSpread(target) { for (var i = 1; i < arguments.length; i+
 
 function synergy_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+// import * as lucid from '../../../Lucid/Lucid/src';
+// import sQuery from '../../../sQuery/sQuery/src/getters';
+// import polymorph from '../../../Polymorph/Polymorph/src/polymorph';
 
 
- // import * as lucid from '../../../Lucid/Lucid/dist/lucid';
-// import polymorph from '../../../Polymorph/Polymorph/dist/polymorph';
-// import sQuery from '../../../sQuery/sQuery/dist/squery';
-// import * as lucid from '@onenexus/lucid/src';
-// import sQuery from '@onenexus/squery/src/squery';
-// import polymorph from '@onenexus/polymorph/src/polymorph';
 
 
 
