@@ -57,14 +57,17 @@ import '@onenexus/synergy';
 const styles = {
   'font-family': 'sans-serif',
 
-  panel: panel => ({
-    ...(panel.is('open') && {
-      heading: {
-        'background': '#00FFB2',
-        'color': '#FFFFFF'
+  panel: panel => ([
+    {
+      condition: () => panel.is('open'),
+      styles: {
+        heading: {
+          'background': '#00FFB2',
+          'color': '#FFFFFF'
+        }
       }
-    })
-  }),
+    }
+  ]),
 
   heading: {
     'background': '#1E90FF',
