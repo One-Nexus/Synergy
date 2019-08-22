@@ -1,87 +1,80 @@
-// import * as lucid from '../../../Lucid/Lucid/src';
-// import sQuery from '../../../sQuery/sQuery/src/getters';
-// import polymorph from '../../../Polymorph/Polymorph/src/polymorph';
-
 import * as lucid from '@onenexus/lucid/src';
-import sQuery from '@onenexus/squery/src/getters';
-import polymorph from '@onenexus/polymorph/src/polymorph';
-
 import deepextend from 'deep-extend';
 
 if (typeof window !== 'undefined') {
-    Object.assign(window, {
-        Synergy: window.Synergy || {},
-        ...lucid
-    });
+  Object.assign(window, {
+    Synergy: window.Synergy || {},
+    ...lucid
+  });
 
-    Object.assign(Synergy, {
-        styleParser: polymorph,
-        config: deepextend,
-        theme: theme
-    });
-
-    sQuery.init();
+  Object.assign(Synergy, {
+    config: deepextend,
+    theme: theme
+  });
 }
 
 /**
  * Synergy Theme
  */
-function theme(modules, theme = {}, globals = {}, app = {}) {
-    if (typeof theme === 'function') {
-        theme = theme(globals);
+function theme(modules, theme = {}, globals = {}, app = {}, handleConfig) {
+  if (typeof theme === 'function') {
+    theme = theme(globals);
+  }
+
+  if (theme.theme) {
+    theme = theme.theme;
+  }
+
+  if (app.Synergy && !app.options) {
+    app.options = app.Synergy;
+  }
+
+  Object.assign(Synergy, app.options);
+
+  Synergy.config(globals, Synergy.config(theme, app.theme));
+
+  Object.values(modules).forEach(MODULE => {
+    const namespace = (MODULE.defaultProps && MODULE.defaultProps.name) || MODULE.name;
+
+    if (handleConfig) {
+      let defaultConfig = MODULE.config || {};
+  
+      if (typeof defaultConfig === 'function') {
+        defaultConfig = defaultConfig(globals);
+      }
+
+      const themeConfig = theme.modules && evalConfig(theme.modules[namespace]);
+
+      Object.assign(MODULE, {
+        config: Synergy.config(defaultConfig, themeConfig)
+      });
     }
 
-    if (theme.theme) {
-        theme = theme.theme;
-    }
+    window[namespace] = MODULE;
+  });
 
-    if (app.Synergy && !app.options) {
-        app.options = app.Synergy;
-    }
+  if (typeof globals.foundation === 'function') {
+    globals.foundation(globals);
+  }
 
-    Object.assign(Synergy, app.options);
-
-    Synergy.config(globals, Synergy.config(theme, app.theme));
-
-    sQuery.init();
-
-    Object.values(modules).forEach(MODULE => {
-        let defaultConfig = MODULE.config || {};
-
-        if (typeof defaultConfig === 'function') {
-            defaultConfig = defaultConfig(globals);
-        }
-
-        const namespace = (MODULE.defaultProps && MODULE.defaultProps.name) || MODULE.name;
-        const themeConfig = theme.modules && evalConfig(theme.modules[namespace]);
-
-        window[namespace] = Object.assign(MODULE, {
-            config: Synergy.config(defaultConfig, themeConfig)
-        });
-    });
-
-    if (typeof globals.foundation === 'function') {
-        globals.foundation(globals);
-    }
-
-    delete globals.modules, window.ui = globals;
+  delete globals.modules, window.theme = globals;
 }
 
 /**
  * Evaluate module config properties
  */
 function evalConfig(config) {
-    if (!config) return;
+  if (!config) return;
 
-    Object.entries(config).forEach(([key, value]) => {
-        if (typeof value === 'object') {
-            return evalConfig(value);
-        } else {
-            if (typeof value !== 'function') return;
+  Object.entries(config).forEach(([key, value]) => {
+    if (typeof value === 'object') {
+      return evalConfig(value);
+    } else {
+      if (typeof value !== 'function') return;
 
-            return config[key] = value();
-        }
-    });
+      return config[key] = value();
+    }
+  });
 
-    return config;
+  return config;
 }

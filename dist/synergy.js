@@ -7,7 +7,7 @@
 		var a = typeof exports === 'object' ? factory(require("react")) : factory(root["react"]);
 		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
 	}
-})(window, function(__WEBPACK_EXTERNAL_MODULE__1__) {
+})(window, function(__WEBPACK_EXTERNAL_MODULE__0__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -91,75 +91,17 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 17);
+/******/ 	return __webpack_require__(__webpack_require__.s = 8);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getNamespace; });
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function getNamespace(query, strict, config) {
-  config = Object.assign(this || {}, config || {});
-  var _config = config,
-      namespace = _config.namespace,
-      modifierGlue = _config.modifierGlue,
-      componentGlue = _config.componentGlue;
-
-  if (query instanceof HTMLElement) {
-    if (query.hasAttribute('data-module')) {
-      return query.getAttribute('data-module');
-    }
-
-    if (query.classList.length) {
-      var targetClass;
-
-      if (namespace) {
-        targetClass = [].slice.call(query.classList).filter(function (className) {
-          return className.indexOf(namespace) === 0;
-        })[0];
-      }
-
-      if (!namespace || !targetClass) {
-        targetClass = query.classList[0];
-      }
-
-      if (strict) {
-        return targetClass.split(modifierGlue)[0];
-      }
-
-      return targetClass.split(modifierGlue)[0].split(componentGlue)[0];
-    }
-
-    if (namespace) {
-      return namespace;
-    }
-  }
-
-  if (typeof query === 'string' && query.match("^[a-zA-Z0-9_-]+$")) {
-    return query;
-  }
-
-  if (query && _typeof(query) === 'object' && query.name) {
-    return query.name;
-  }
-
-  if (query && query.constructor === Array) {
-    return query[1];
-  }
-}
+module.exports = __WEBPACK_EXTERNAL_MODULE__0__;
 
 /***/ }),
 /* 1 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE__1__;
-
-/***/ }),
-/* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -167,16 +109,17 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__1__;
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return Module; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return Wrapper; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Group; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _utilities_getHtmlProps__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
-/* harmony import */ var _utilities_getModifiersFromProps__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
-/* harmony import */ var _utilities_generateClasses__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6);
-/* harmony import */ var _utilities_renderModifiers__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(3);
-/* harmony import */ var _utilities_refHandler__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(7);
+/* harmony import */ var _utilities_evalConfig__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
+/* harmony import */ var _utilities_getModifiersFromProps__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3);
+/* harmony import */ var _utilities_mergeThemes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
+/* harmony import */ var _provider__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(2);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -201,47 +144,71 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
- // spoof env process to assist bundle size
+/** spoof env process to assist bundle size */
 
 if (typeof process === 'undefined') window.process = {
   env: {}
-};
-/** Used for generating unique module ID's */
+  /** Used for generating unique module ID's */
 
+};
 var increment = 1;
 /** Create a context object */
 
-var ModuleContext = react__WEBPACK_IMPORTED_MODULE_0___default.a.createContext();
-
-/**
- * Render a Synergy module
- *
- * @extends React.Component
- */
+var ModuleContext = react__WEBPACK_IMPORTED_MODULE_0___default.a.createContext({});
+/** Render a Synergy module */
 
 var Module =
 /*#__PURE__*/
 function (_React$Component) {
   _inherits(Module, _React$Component);
 
-  function Module(props) {
+  function Module(props, context) {
     var _this;
 
     _classCallCheck(this, Module);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Module).call(this, props));
     increment++;
-    _this.ui = props.ui || window.ui;
+    var Synergy = window.Synergy || {};
     _this.REF = react__WEBPACK_IMPORTED_MODULE_0___default.a.createRef();
-    _this.styleParser = props.styleParser || Synergy.styleParser;
-    _this.config = props.config || {};
+    _this.DATA = props.styles;
+    _this.THEME = Object(_utilities_mergeThemes__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"])(context, window.theme, props.theme);
+    var LUCIDDEFAULTS = {
+      generateClasses: true,
+      generateDataAttributes: true
+    };
+    var THEMECONFIG = _this.THEME.modules && Object(_utilities_evalConfig__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(_this.THEME.modules[props.name]);
+    var DEFAULTS = props.config;
 
-    if (window[props.name] && window[props.name].config) {
-      _this.config = Module.config(window[props.name].config, _this.config);
+    if (window.Synergy) {
+      var SYNERGY_MODULE = window[props.name] || {};
+      var config = SYNERGY_MODULE.config,
+          styles = SYNERGY_MODULE.styles;
+      if (config) DEFAULTS = config;
+      if (styles) _this.DATA = styles;
     }
 
+    DEFAULTS = typeof DEFAULTS === 'function' ? DEFAULTS(_this.THEME) : DEFAULTS;
+    _this.CONFIG = Module.config(LUCIDDEFAULTS, DEFAULTS, THEMECONFIG);
+    _this.ID = props.id || "module-".concat(increment);
+    _this.NAMESPACE = _this.CONFIG.name || props.name || props.tag || _this.ID;
+    _this.TAG = props.href && 'a' || props.component || props.tag || 'div';
+    _this.MODIFIERGLUE = props.modifierGlue || _this.CONFIG.modifierGlue || Synergy.modifierGlue || '--';
+    _this.COMPONENTGLUE = props.componentGlue || _this.CONFIG.componentGlue || Synergy.componentGlue || '__';
+    _this.SINGLECLASS = props.singleClass || _this.CONFIG.singleClass || false;
+    _this.GENERATECLASSES = props.generateClasses || _this.CONFIG.generateClasses;
+    _this.GENERATEDATAATTRIBUTES = props.generateDataAttributes || _this.CONFIG.generateDataAttributes;
+    _this.state = {
+      isHovered: false,
+      isFirstChild: false,
+      isLastChild: false,
+      before: null,
+      after: null
+    };
     return _this;
   }
+  /** Get Attributes */
+
 
   _createClass(Module, [{
     key: "getEventHandlers",
@@ -250,6 +217,10 @@ function (_React$Component) {
 
       for (var prop in properties) {
         if (Object.keys(window).includes(prop.toLowerCase())) {
+          if (prop === 'theme') {
+            continue;
+          }
+
           if (prop !== 'name') {
             eventHandlers[prop] = properties[prop];
           }
@@ -271,105 +242,307 @@ function (_React$Component) {
 
       return dataAttributes;
     }
+    /** Styling */
+
+  }, {
+    key: "stylesConfig",
+    value: function stylesConfig() {
+      var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          _ref$theme = _ref.theme,
+          theme = _ref$theme === void 0 ? this.THEME : _ref$theme,
+          _ref$config = _ref.config,
+          config = _ref$config === void 0 ? this.CONFIG : _ref$config,
+          _ref$context = _ref.context,
+          context = _ref$context === void 0 ? this.context : _ref$context;
+
+      return {
+        theme: theme,
+        config: config,
+        context: context,
+        state: _objectSpread({}, this.state, this.props),
+        element: this.REF.current
+      };
+    }
+  }, {
+    key: "getStyles",
+    value: function getStyles() {
+      var styles = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var options = arguments.length > 1 ? arguments[1] : undefined;
+
+      if (typeof styles === 'function') {
+        styles = styles(options);
+      }
+
+      if (styles instanceof Array) {
+        styles = this.flattenStyles(styles, options);
+      }
+
+      return styles;
+    }
+  }, {
+    key: "flattenStyles",
+    value: function flattenStyles(styles, options) {
+      return styles.reduce(function (accumulator, item) {
+        if (!item) return accumulator;
+
+        if (typeof item === 'function') {
+          item = item(options);
+        }
+
+        Object.entries(item).forEach(function (entry) {
+          var key = entry[0];
+          var val = entry[1];
+
+          if (accumulator.hasOwnProperty(key)) {
+            accumulator[key] = accumulator[key] instanceof Array ? accumulator[key].concat(val) : [accumulator[key], val];
+          } else {
+            accumulator[key] = val;
+          }
+        });
+        return accumulator;
+      }, {});
+    }
+  }, {
+    key: "paint",
+    value: function paint(node) {
+      var _this2 = this;
+
+      var styles = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      var options = arguments.length > 2 ? arguments[2] : undefined;
+
+      if (typeof styles === 'function') {
+        styles = styles(options);
+      }
+
+      if (styles instanceof Array) {
+        return styles.forEach(function (style) {
+          return _this2.paint(node, style, options);
+        });
+      }
+
+      Object.entries(styles).forEach(function (style) {
+        var key = style[0];
+        var value = style[1];
+
+        if ((key === ':hover' || key === 'is-hovered') && options.state.isHovered) {
+          return _this2.paint(node, value, options);
+        }
+
+        if (key.indexOf('with-') === 0 && options.context[key.replace('with-', '')]) {
+          return _this2.paint(node, value, options.context[key.replace('with-', '')]);
+        }
+
+        if (key.indexOf('is-') === 0) {
+          if (options[key.replace('is-', '')] || options.state[key.replace('is-', '')]) {
+            return _this2.paint(node, value, options);
+          }
+        }
+
+        if (typeof value === 'function') {
+          try {
+            value = value(node.style[key]);
+          } catch (error) {
+            return error;
+          }
+        }
+
+        if (value instanceof Array) {
+          node = value[0], styles = value[1];
+
+          try {
+            return _this2.paint(node(), styles, options);
+          } catch (error) {
+            return error;
+          }
+        }
+
+        try {
+          node.style[key] = value;
+        } catch (error) {
+          return error;
+        }
+      });
+    }
+  }, {
+    key: "setStyleStates",
+    value: function setStyleStates() {
+      var prevState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.state;
+      var _ref2 = [this.REF.current, this.REF.current.parentNode],
+          CURRENT = _ref2[0],
+          PARENT = _ref2[1];
+      var _ref3 = [prevState.isFirstChild, CURRENT === PARENT.firstChild],
+          prevIsFirstChild = _ref3[0],
+          isFirstChild = _ref3[1];
+      var _ref4 = [prevState.isLastChild, CURRENT === PARENT.lastChild],
+          prevIsLastChild = _ref4[0],
+          isLastChild = _ref4[1];
+      var _ref5 = [prevState.before, this.STYLES[':before']],
+          prevBefore = _ref5[0],
+          before = _ref5[1];
+      var _ref6 = [prevState.after, this.STYLES[':after']],
+          prevAfter = _ref6[0],
+          after = _ref6[1];
+
+      if (prevIsFirstChild !== isFirstChild) {
+        this.setState({
+          isFirstChild: isFirstChild
+        });
+      }
+
+      if (prevIsLastChild !== isLastChild) {
+        this.setState({
+          isLastChild: isLastChild
+        });
+      }
+
+      if (JSON.stringify(prevBefore) !== JSON.stringify(before)) {
+        this.setState({
+          before: before
+        });
+      }
+
+      if (JSON.stringify(prevAfter) !== JSON.stringify(after)) {
+        this.setState({
+          after: after
+        });
+      }
+    }
+    /** Event Handlers */
+
+  }, {
+    key: "handleMouseEnter",
+    value: function handleMouseEnter(event) {
+      this.props.onMouseEnter && this.props.onMouseEnter(event);
+      this.setState({
+        isHovered: true
+      });
+    }
+  }, {
+    key: "handleMouseLeave",
+    value: function handleMouseLeave(event) {
+      this.props.onMouseLeave && this.props.onMouseLeave(event);
+      this.setState({
+        isHovered: false
+      });
+    }
+    /** Lifecycle Methods */
+
   }, {
     key: "componentDidMount",
     value: function componentDidMount() {
-      Object(_utilities_refHandler__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"])(this.REF.current, this.props, this.styleParser, true, this.ui, this.config);
+      if (this.REF.current) {
+        this.setStyleStates();
+        this.paint(this.REF.current, this.DATA, this.stylesConfig());
+      }
     }
   }, {
     key: "componentDidUpdate",
-    value: function componentDidUpdate() {
-      if (this.REF.current.repaint) {
-        this.REF.current.repaint();
-      }
+    value: function componentDidUpdate(prevProps, prevState) {
+      this.setStyleStates(prevState);
+      this.paint(this.REF.current, this.DATA, this.stylesConfig());
     }
   }, {
     key: "render",
     value: function render() {
-      var Synergy = window.Synergy || {};
+      var _this3 = this;
+
       var props = this.props;
-      var modifierGlue = props.modifierGlue || Synergy.modifierGlue || '-';
-      var componentGlue = props.componentGlue || Synergy.componentGlue || '_';
-      var propModifiers = Object(_utilities_renderModifiers__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"])(Object(_utilities_getModifiersFromProps__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"])(props, Synergy.CSSClassProps), modifierGlue);
-      var passedModifiers = Object(_utilities_renderModifiers__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"])(props.modifiers, modifierGlue);
-      var modifiers = propModifiers + passedModifiers;
-      var classes = props.className ? props.className : '';
-      var multipleClasses = false;
-      if (typeof Synergy.multipleClasses !== 'undefined') multipleClasses = Synergy.multipleClasses;
-      if (typeof props.multipleClasses !== 'undefined') multipleClasses = props.multipleClasses;
-      var namespace = this.config.name || props.name;
-      var id = (props.before || props.after) && !props.id ? "synergy-module-".concat(increment) : props.id;
-      var Tag = props.tag || 'div';
-      var classNames = Object(_utilities_generateClasses__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"])({
-        props: props,
-        namespace: namespace,
-        modifiers: modifiers,
-        classes: classes,
-        modifierGlue: modifierGlue,
-        componentGlue: componentGlue,
-        multipleClasses: multipleClasses
+      var MODIFIERGLUE = this.MODIFIERGLUE,
+          COMPONENTGLUE = this.COMPONENTGLUE,
+          SINGLECLASS = this.SINGLECLASS,
+          GENERATECLASSES = this.GENERATECLASSES,
+          GENERATEDATAATTRIBUTES = this.GENERATEDATAATTRIBUTES;
+      /** */
+
+      var _ref7 = [props.className ? props.className + ' ' : '', this.NAMESPACE, []],
+          CLASSES = _ref7[0],
+          SELECTOR = _ref7[1],
+          MODIFIERS = _ref7[2];
+      MODIFIERS.push(props.modifiers);
+      MODIFIERS = MODIFIERS.concat(Object(_utilities_getModifiersFromProps__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"])(props));
+      MODIFIERS = MODIFIERS.filter(function (item, pos) {
+        return MODIFIERS.indexOf(item) === pos;
       });
-      if (Synergy.CSSClassProps) Synergy.CSSClassProps.forEach(function (prop) {
-        if (Object.keys(props).includes(prop)) {
-          classNames = classNames + ' ' + prop;
+      MODIFIERS = MODIFIERS.filter(Boolean);
+
+      if (SINGLECLASS) {
+        SELECTOR += MODIFIERS.length ? MODIFIERGLUE + MODIFIERS.join(MODIFIERGLUE) : '';
+      } else {
+        MODIFIERS.forEach(function (MODIFIER) {
+          return CLASSES += SELECTOR + MODIFIERGLUE + MODIFIER + ' ';
+        });
+      }
+
+      CLASSES += SELECTOR;
+      /** */
+
+      var _this$state = this.state,
+          before = _this$state.before,
+          after = _this$state.after;
+
+      var ATTRIBUTES = _objectSpread({}, this.getDataAttributes(props), this.getEventHandlers(props), props.attributes, {
+        onMouseEnter: this.handleMouseEnter.bind(this),
+        onMouseLeave: this.handleMouseLeave.bind(this),
+        className: GENERATECLASSES ? CLASSES : null,
+        'data-module': GENERATEDATAATTRIBUTES ? this.NAMESPACE : null
+      });
+
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(ModuleContext.Consumer, null, function (moduleContext) {
+        var _objectSpread2;
+
+        _this3.STYLES = _this3.getStyles(_this3.DATA, _this3.stylesConfig({
+          context: moduleContext
+        }));
+        /** */
+
+        var contextValues = _objectSpread({}, moduleContext, _this3.state, props, (_objectSpread2 = {
+          THEME: _this3.THEME,
+          CONFIG: _this3.CONFIG,
+          STYLES: _objectSpread({}, moduleContext.STYLES, _this3.STYLES),
+          MODIFIERGLUE: MODIFIERGLUE,
+          COMPONENTGLUE: COMPONENTGLUE,
+          SINGLECLASS: SINGLECLASS,
+          GENERATECLASSES: GENERATECLASSES,
+          GENERATEDATAATTRIBUTES: GENERATEDATAATTRIBUTES
+        }, _defineProperty(_objectSpread2, _this3.NAMESPACE, _objectSpread({}, _this3.state, props)), _defineProperty(_objectSpread2, "NAMESPACE", _this3.NAMESPACE), _objectSpread2));
+
+        var content = props.content || props.children;
+
+        if (typeof content === 'function') {
+          content = content({
+            theme: _this3.THEME,
+            config: _this3.CONFIG,
+            context: contextValues
+          });
         }
+
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(ModuleContext.Provider, {
+          value: contextValues
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_this3.TAG, _extends({
+          id: props.id ? _this3.ID : null,
+          ref: _this3.REF
+        }, ATTRIBUTES), before && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Component, {
+          name: ":before"
+        }, before.content), content, after && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Component, {
+          name: ":after"
+        }, after.content)));
       });
-      var contextValue = {
-        ui: this.ui,
-        styleParser: this.styleParser,
-        modifierGlue: modifierGlue,
-        componentGlue: componentGlue,
-        multipleClasses: multipleClasses,
-        config: this.config,
-        module: namespace,
-        props: props
-      };
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(ModuleContext.Provider, {
-        value: contextValue
-      }, props.before && props.before(function () {
-        return document.getElementById(id);
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Tag, _extends({
-        id: id,
-        className: classNames,
-        "data-module": namespace,
-        ref: this.REF
-      }, Object(_utilities_getHtmlProps__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(props), this.getDataAttributes(props), this.getEventHandlers(props), props.componentProps), props.content || props.children), props.after && props.after(function () {
-        return document.getElementById(id);
-      }));
     }
+    /** Static Methods/Properties */
+
   }]);
 
   return Module;
 }(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
 
-_defineProperty(Module, "config", function () {
-  for (var _len = arguments.length, params = new Array(_len), _key = 0; _key < _len; _key++) {
-    params[_key] = arguments[_key];
-  }
+_defineProperty(Module, "contextType", _provider__WEBPACK_IMPORTED_MODULE_4__[/* ThemeContext */ "a"]);
 
-  // `process` and `require` are exploited to help reduce bundle size
+_defineProperty(Module, "config", function () {
   if (true) {
     var _Synergy;
 
-    return (_Synergy = Synergy).config.apply(_Synergy, [{}].concat(params));
+    return (_Synergy = Synergy).config.apply(_Synergy, arguments);
   } else { var _Synergy2; }
-});
-
-_defineProperty(Module, "child", function (props) {
-  var childProps = Object.assign({}, props);
-  delete childProps.children;
-  var config = props.config || {};
-
-  if (window[props.name]) {
-    config = Module.config(window[props.name].config, config);
-  }
-
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.Children.map(props.children, function (child) {
-    return react__WEBPACK_IMPORTED_MODULE_0___default.a.cloneElement(child, {
-      context: childProps,
-      config: config
-    });
-  });
 });
 
 
@@ -378,33 +551,31 @@ var Wrapper =
 function (_Module) {
   _inherits(Wrapper, _Module);
 
-  function Wrapper(props) {
-    var _this2;
-
+  function Wrapper() {
     _classCallCheck(this, Wrapper);
 
-    _this2 = _possibleConstructorReturn(this, _getPrototypeOf(Wrapper).call(this, props));
-    _this2.module = props.module;
-    _this2.namespace = props.name || 'wrapper';
-
-    if (!_this2.module) {
-      if (props.children.length) {
-        _this2.module = props.children[0].type.name.toLowerCase();
-      } else {
-        _this2.module = props.children.type.name.toLowerCase();
-      }
-    }
-
-    _this2.dynamicProps = _defineProperty({}, _this2.module, true);
-    return _this2;
+    return _possibleConstructorReturn(this, _getPrototypeOf(Wrapper).apply(this, arguments));
   }
 
   _createClass(Wrapper, [{
     key: "render",
     value: function render() {
+      var MODULE = this.props.module;
+      var NAMESPACE = this.props.name || 'wrapper';
+
+      if (!MODULE) {
+        if (this.props.children.length) {
+          MODULE = this.props.children[0].type.name.toLowerCase();
+        } else {
+          MODULE = this.props.children.type.name.toLowerCase();
+        }
+      }
+
+      var DYNAMICPROPS = _defineProperty({}, MODULE, true);
+
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Module, _extends({
-        name: this.namespace
-      }, this.dynamicProps, this.props), this.props.children);
+        name: NAMESPACE
+      }, DYNAMICPROPS, this.props), this.props.children);
     }
   }]);
 
@@ -432,29 +603,26 @@ function (_Module2) {
 
   return Group;
 }(Module);
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(10)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(7)))
 
 /***/ }),
-/* 3 */
+/* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return renderModifiers; });
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ThemeContext; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 
-/**
- * @param {*} modifiers 
- */
-function renderModifiers(modifiers, modifierGlue) {
-  if (modifiers && _typeof(modifiers) === 'object' && modifiers.length) {
-    return (modifierGlue + modifiers).replace(/,/g, modifierGlue);
-  }
-
-  return '';
-}
+var ThemeContext = react__WEBPACK_IMPORTED_MODULE_0___default.a.createContext({});
+/* harmony default export */ __webpack_exports__["b"] = (function (props) {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(ThemeContext.Provider, {
+    value: props.theme
+  }, props.children);
+});
 
 /***/ }),
-/* 4 */
+/* 3 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -482,7 +650,7 @@ function getModifiersFromProps(props) {
     }
 
     if (typeof value === 'boolean' && value) {
-      if (blacklist && blacklist.indexOf(key) < 0) {
+      if (blacklist.indexOf(key) < 0) {
         modifiers.push(key);
       }
     }
@@ -492,711 +660,207 @@ function getModifiersFromProps(props) {
 }
 
 /***/ }),
+/* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return evalConfig; });
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function evalConfig(THEME) {
+  if (!THEME) return;
+  Object.entries(THEME).forEach(function (entry) {
+    var key = entry[0];
+    var value = entry[1];
+
+    if (_typeof(value) === 'object') {
+      return evalConfig(value);
+    }
+
+    if (typeof value === 'function') {
+      THEME[key] = value(THEME);
+    }
+  });
+  return THEME;
+}
+
+/***/ }),
 /* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getHtmlProps; });
-/* harmony import */ var html_attributes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(12);
-/* harmony import */ var html_attributes__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(html_attributes__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return mergeThemes; });
+function mergeThemes() {
+  var THEME = {};
 
-/**
- * Get element HTML attributes from props
- * @param {*} props 
- */
-
-function getHtmlProps(props) {
-  var HtmlProps = {};
-
-  for (var prop in props) {
-    if (prop === 'name') {
-      continue;
-    } else if (prop === 'modifiers') {
-      continue;
-    } else if (prop === 'tag') {
-      continue;
-    } else if (prop === 'elementname') {
-      HtmlProps.name = props[prop];
-    } else if (prop.indexOf('html') === 0) {
-      HtmlProps[prop] = props[prop];
-    } else if (Object.values(html_attributes__WEBPACK_IMPORTED_MODULE_0___default.a).includes(prop)) {
-      HtmlProps[prop] = props[prop];
-    }
+  for (var _len = arguments.length, themes = new Array(_len), _key = 0; _key < _len; _key++) {
+    themes[_key] = arguments[_key];
   }
 
-  ;
-  return HtmlProps;
+  [].concat(themes).forEach(function (theme) {
+    if (typeof theme === 'function') {
+      THEME = deepMergeObjects(THEME, theme(THEME));
+    } else {
+      THEME = deepMergeObjects(THEME, theme);
+    }
+  });
+  return THEME;
+}
+/** */
+
+function deepMergeObjects() {
+  if (true) {
+    var _Synergy;
+
+    return (_Synergy = Synergy).config.apply(_Synergy, arguments);
+  } else { var _Synergy2; }
 }
 
 /***/ }),
 /* 6 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return generateClasses; });
-/**
- * Generate CSS classes for a module
+/*!
+ * @description Recursive object extending
+ * @author Viacheslav Lotsmanov <lotsmanov89@gmail.com>
+ * @license MIT
+ *
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2013-2018 Viacheslav Lotsmanov
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-function generateClasses(_ref) {
-  var props = _ref.props,
-      namespace = _ref.namespace,
-      modifiers = _ref.modifiers,
-      classes = _ref.classes,
-      modifierGlue = _ref.modifierGlue,
-      componentGlue = _ref.componentGlue,
-      multipleClasses = _ref.multipleClasses;
-  var classNames = []; // Get modules from props
 
-  Object.entries(props).forEach(function (prop) {
-    var key = prop[0];
-    var value = prop[1];
-    var firstLetter = key[0];
-
-    if (firstLetter === firstLetter.toUpperCase()) {
-      var module = key.toLowerCase();
-
-      if (multipleClasses) {
-        classNames.push(module);
-
-        if (value.constructor === Array) {
-          value.forEach(function (modifier) {
-            classNames.push(module + modifierGlue + modifier);
-          });
-        } else if (typeof value === 'string') {
-          classNames.push(module + modifierGlue + value);
-        }
-      } else {
-        var propModifiers = '';
-
-        if (value.constructor === Array) {
-          propModifiers = modifierGlue + value.join(modifierGlue);
-        } else if (typeof value === 'string') {
-          propModifiers = modifierGlue + value;
-        }
-
-        classNames.push(module + propModifiers);
-      }
-    }
-  }); // if (namespace.indexOf(componentGlue > 0)) {
-  //     if (props.name instanceof Array) {
-  //         // @TODO
-  //     }
-  // }
-
-  if (multipleClasses) {
-    // @TODO refactor the whole thing because we are splitting
-    // what was originally unsplit to begin with
-    modifiers.split(modifierGlue).forEach(function (modifier) {
-      var className;
-
-      if (modifier) {
-        className = namespace + modifierGlue + modifier;
-      } else {
-        className = namespace;
-      }
-
-      classNames.push(className);
-    });
-  } else {
-    classNames.push(namespace + modifiers);
-  }
-
-  classes = classNames.join(' ') + (classes ? ' ' + classes : '');
-  return classes;
-}
-
-/***/ }),
-/* 7 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return refHandler; });
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
-
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
-
-/**
- * Handle the ref callback on the rendered React component
- */
-function refHandler(node, props, styleParser, parentModule, ui, config) {
-  if (node && node instanceof HTMLElement) {
-    Object.assign(node, {
-      isFirstChild: node === node.parentNode.firstChild,
-      isLastChild: node === node.parentNode.lastChild
-    });
-    var NAMESPACE = props.name || config.name;
-
-    if (parentModule) {
-      node.config = config;
-
-      if (styleParser) {
-        if (props.styles) {
-          if (props.styles.constructor === Array) {
-            styleParser.apply(void 0, [node].concat(_toConsumableArray(props.styles)));
-          } else {
-            styleParser(node, props.styles, config, ui);
-          }
-        } else if (window[NAMESPACE] && window[NAMESPACE].layout) {
-          styleParser(node, window[NAMESPACE].layout, config, ui);
-        }
-
-        Object.keys(props).forEach(function (prop) {
-          var fistLetter = prop[0];
-
-          if (fistLetter === fistLetter.toUpperCase()) {
-            if (window[prop] && window[prop].layout && window[prop].config) {
-              node.namespace = node.namespace || window[prop].config.name || prop;
-              styleParser(node, window[prop].layout, window[prop].config, ui);
-            }
-          }
-        });
-      }
-
-      if (props.init) {
-        props.init(node);
-      } else if (window[NAMESPACE] && window[NAMESPACE].init) {
-        window[NAMESPACE].init(node);
-      }
-    } // @NOTE: below currently replaced in favour of `componentDidMount`
-    //
-    // const observer = new MutationObserver(() => node.repaint && node.repaint());
-    // observer.observe(node, {
-    //     attributes: true, 
-    //     attributeFilter: ['class'],
-    //     childList: false, 
-    //     characterData: false
-    // });
-
-  }
-}
-
-/***/ }),
-/* 8 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return isValidSelector; });
-function isValidSelector(selector) {
-  if (!selector || typeof selector !== 'string') return false;
-  var stub = document.createElement('br');
-  stub.textContent = 'Hello!';
-
-  try {
-    selector && stub.querySelector(selector);
-  } catch (e) {
-    return false;
-  }
-
-  return true;
-}
-
-/***/ }),
-/* 9 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-
-// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/getModules.js
-function getModules(node, moduleName, config) {
-  config = Object.assign(this || {}, config || {});
-  var _config = config,
-      modifierGlue = _config.modifierGlue;
-
-  if (node instanceof NodeList || node instanceof Array) {
-    var matchedModules = [].slice.call(node).reduce(function (matches, node) {
-      var modules = [].slice.call(getModules(node, moduleName, config));
-      matches = matches.filter(function (match) {
-        return modules.every(function (module) {
-          return module !== match;
-        });
-      });
-      return matches.concat(modules);
-    }, []);
-    return matchedModules;
-  }
-
-  var potentialModules = node.querySelectorAll(".".concat(moduleName, ", [class*=\"").concat(moduleName + modifierGlue, "\"]"));
-  var modules = [].slice.call(potentialModules).filter(function (potentialModule) {
-    return [].slice.call(potentialModule.classList).some(function (className) {
-      return className.indexOf(moduleName) === 0;
-    });
-  });
-  return modules;
-}
-// EXTERNAL MODULE: ./node_modules/@onenexus/squery/src/utilities/getNamespace.js
-var getNamespace = __webpack_require__(0);
-
-// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/parent.js
-
-function parent_parent(node, query, config) {
-  config = Object.assign(this || {}, config || {});
-
-  if (node instanceof NodeList || node instanceof Array) {
-    return [].slice.call(node).map(function (node) {
-      return parent_parent(node, query, config);
-    });
-  }
-
-  var _config = config,
-      componentGlue = _config.componentGlue,
-      modifierGlue = _config.modifierGlue;
-  var namespace = config.namespace || Object(getNamespace["a" /* default */])(node, false, config);
-  var $query = query || namespace;
-
-  if ($query !== namespace) {
-    $query = namespace + componentGlue + $query;
-  }
-
-  var parentComponent = $query && node.closest(".".concat($query, ", [class*='").concat($query + modifierGlue, "']"));
-
-  if (parentComponent) {
-    return parentComponent;
-  }
-
-  namespace = config.namespace || Object(getNamespace["a" /* default */])(node, true, config);
-
-  if (namespace && namespace.indexOf(query > -1)) {
-    $query = namespace.substring(0, namespace.indexOf(query) + query.length);
-  }
-
-  var parentSubComponent = $query && node.closest(".".concat($query, ", [class*='").concat($query + modifierGlue, "']"));
-
-  if (parentSubComponent) {
-    return parentSubComponent;
-  }
-}
-// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/utilities/filterElements.js
-
-
-function filterElements(node, elements, subComponent, config) {
-  var namespace = config.namespace || Object(getNamespace["a" /* default */])(node, subComponent, config);
-  var sourceParent = parent_parent(node, namespace, config);
-  if (!sourceParent) return elements;
-  elements = [].slice.call(elements).filter(function (element) {
-    var targetParent = parent_parent(element, namespace, config);
-
-    if (!targetParent) {
-      return true;
-    }
-
-    return targetParent === sourceParent;
-  });
-  return elements;
-}
-// EXTERNAL MODULE: ./node_modules/@onenexus/squery/src/utilities/isValidSelector.js
-var isValidSelector = __webpack_require__(8);
-
-// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/getComponents.js
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-
-
-
-function getComponents(node, componentName, config) {
-  config = Object.assign(this || {}, config || {});
-  if (componentName && !Object(isValidSelector["a" /* default */])(componentName)) return [];
-
-  if (node instanceof NodeList || node instanceof Array) {
-    return [].slice.call(node).reduce(function (matches, node) {
-      return matches.concat([].slice.call(getComponents(node, componentName, config)));
-    }, []);
-  }
-
-  var _config = config,
-      subComponent = _config.subComponent,
-      modifierGlue = _config.modifierGlue,
-      componentGlue = _config.componentGlue;
-  var namespace = config.namespace || Object(getNamespace["a" /* default */])(node, subComponent, config);
-  var components;
-
-  if (!componentName) {
-    components = node.querySelectorAll("[class*='".concat(namespace + componentGlue, "']"));
-  } else {
-    var query = namespace + componentGlue + componentName;
-    components = node.querySelectorAll(".".concat(query, ", [class*='").concat(query + modifierGlue, "']"));
-  }
-
-  components = [].slice.call(components).filter(function (element) {
-    var sourceNamespace = Object(getNamespace["a" /* default */])(node, true, _objectSpread({}, config, {
-      namespace: namespace
-    }));
-    var targetNamespace = Object(getNamespace["a" /* default */])(element, true, _objectSpread({}, config, {
-      namespace: namespace
-    }));
-    var sourceDepth = (sourceNamespace.match(new RegExp(componentGlue, 'g')) || []).length;
-    var targetDepth = (targetNamespace.match(new RegExp(componentGlue, 'g')) || []).length; // Special condition: if no componentName passed and we want sub-components,
-    // find ALL child sub-components, as parent modules cannot have direct
-    // descendant sub-components
-
-    if (subComponent && !componentName && sourceNamespace.indexOf(componentGlue) === -1) {
-      return true;
-    }
-
-    if (subComponent && !sourceDepth) {
-      return false;
-    }
-
-    if (subComponent || !sourceDepth) {
-      sourceDepth++;
-    }
-
-    var modifierCriteria = true;
-    var targetClass = [].slice.call(element.classList).filter(function (className) {
-      return className.indexOf(namespace) === 0;
-    })[0];
-
-    if (config.modifier) {
-      modifierCriteria = targetClass.indexOf(config.modifier) > -1;
-    }
-
-    if (!subComponent && sourceDepth > 1) {
-      if (targetClass.split(componentGlue).length - 1 > 1) {
-        return false;
-      }
-
-      return modifierCriteria;
-    }
-
-    return modifierCriteria && targetDepth === sourceDepth;
-  });
-  components = filterElements(node, components, subComponent, config);
-  return components;
-}
-// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/hasModifier.js
-
-function hasModifier(node, modifier, config) {
-  config = Object.assign(this || {}, config || {});
-  if (!modifier) return;
-
-  if (modifier.constructor === Array) {
-    return modifier.every(function (modifier) {
-      return hasModifier(node, modifier, config);
-    });
-  }
-
-  if (node instanceof NodeList || node instanceof Array) {
-    return [].slice.call(node).every(function (node) {
-      return hasModifier(node, modifier, config);
-    });
-  }
-
-  var _config = config,
-      modifierGlue = _config.modifierGlue;
-  var namespace = config.namespace || node.namespace || Object(getNamespace["a" /* default */])(node, false, config);
-  return [].slice.call(node.classList).some(function (className) {
-    var matchIndex = className.indexOf(modifierGlue + modifier);
-    var namespaceMatch = className.indexOf(namespace) === 0;
-    var isModifierTest1 = className.indexOf(modifierGlue + modifier + modifierGlue) > -1;
-    var isModifierTest2 = matchIndex > -1 && matchIndex === className.length - modifier.length - modifierGlue.length;
-    return namespaceMatch && (isModifierTest1 || isModifierTest2);
-  });
-}
-// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/find.js
-function find_objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { find_defineProperty(target, key, source[key]); }); } return target; }
-
-function find_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-
-
-
-function find(node, query, config) {
-  config = Object.assign(this || {}, config || {});
-
-  if (_typeof(query) === 'object') {
-    if (node instanceof NodeList || node instanceof Array) {
-      return [].slice.call(node).reduce(function (matches, node) {
-        return matches.concat(getQueryFromObject(node, query, config));
-      }, []);
-    }
-
-    return getQueryFromObject(node, query, config);
-  }
-
-  if (typeof query === 'string') {
-    var modules = getModules(node, query, config);
-
-    if (modules.length) {
-      return modules;
-    }
-
-    var components = getComponents(node, query, config);
-
-    if (components.length) {
-      return components;
-    }
-  }
+function isSpecificValue(val) {
+  return val instanceof Buffer || val instanceof Date || val instanceof RegExp ? true : false;
 }
 
-function getQueryFromObject(node, query, config) {
-  config = Object.assign(this || {}, config || {});
-  var module = query.module,
-      component = query.component,
-      modifier = query.modifier;
-  var matches = [];
-
-  if (module) {
-    if (component) {
-      matches = getComponents(node, component, find_objectSpread({}, config, {
-        namespace: module,
-        modifier: modifier
-      }));
-    } else {
-      matches = getModules(node, module, config);
-    }
-  } else if (component) {
-    matches = getComponents(node, component, find_objectSpread({}, config, {
-      modifier: modifier
-    }));
+function cloneSpecificValue(val) {
+  if (val instanceof Buffer) {
+    var x = Buffer.alloc ? Buffer.alloc(val.length) : new Buffer(val.length);
+    val.copy(x);
+    return x;
+  } else if (val instanceof Date) {
+    return new Date(val.getTime());
+  } else if (val instanceof RegExp) {
+    return new RegExp(val);
+  } else {
+    throw new Error('Unexpected situation');
   }
-
-  if (modifier) {
-    matches = [].slice.call(matches).filter(function (match) {
-      return hasModifier(match, modifier, config);
-    });
-  }
-
-  return matches;
 }
-// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/getComponent.js
-
 /**
- * @TODO allow this API
- * const [title, content] = panel.getComponent(['title', 'content']);
+ * Recursive cloning array.
  */
 
-function getComponent(node, componentName, config) {
-  config = Object.assign(this || {}, config || {});
 
-  if (node instanceof NodeList || node instanceof Array) {
-    return [].slice.call(node).map(function (node) {
-      return getComponent(node, componentName, config);
-    });
-  }
-
-  ;
-  return getComponents(node, componentName, config)[0];
-}
-// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/getModifiers.js
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
-
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
-
-
-function getModifiers(node, config) {
-  config = Object.assign(this || {}, config || {});
-
-  if (node instanceof NodeList || node instanceof Array) {
-    var _modifiers = [].slice.call(node).reduce(function (matches, node) {
-      return matches.concat(getModifiers(node, config));
-    }, []); // remove duplicates
-
-
-    _modifiers = _toConsumableArray(new Set(_modifiers));
-    return _modifiers;
-  }
-
-  var _config = config,
-      namespace = _config.namespace,
-      modifierGlue = _config.modifierGlue;
-  var targetClass = [].slice.call(node.classList).filter(function (className) {
-    return className.indexOf(namespace || Object(getNamespace["a" /* default */])(node, false, config)) === 0;
-  })[0];
-  var modifiers = targetClass.split(modifierGlue).slice(1);
-  return modifiers;
-}
-// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/getSubComponents.js
-
-function getSubComponents(node, subComponentName, config) {
-  config = Object.assign(this || {}, config || {});
-  config.subComponent = true;
-  return getComponents(node, subComponentName, config);
-}
-// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/getSubComponent.js
-
-function getSubComponent(node, componentName, config) {
-  config = Object.assign(this || {}, config || {});
-
-  if (node instanceof NodeList || node instanceof Array) {
-    return [].slice.call(node).map(function (node) {
-      return getSubComponent(node, componentName, config);
-    });
-  }
-
-  ;
-  return getSubComponents(node, componentName, config)[0];
-}
-// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/isModule.js
-function isModule(node, moduleName, config) {
-  config = Object.assign(this || {}, config || {});
-  var DOMNodes = !(node instanceof NodeList || node instanceof Array) ? [node] : node;
-  return [].slice.call(DOMNodes).every(function (node) {
-    return node.matches(".".concat(moduleName, ", [class*=\"").concat(moduleName + config.modifierGlue, "\"]"));
+function deepCloneArray(arr) {
+  var clone = [];
+  arr.forEach(function (item, index) {
+    if (_typeof(item) === 'object' && item !== null) {
+      if (Array.isArray(item)) {
+        clone[index] = deepCloneArray(item);
+      } else if (isSpecificValue(item)) {
+        clone[index] = cloneSpecificValue(item);
+      } else {
+        clone[index] = deepExtend({}, item);
+      }
+    } else {
+      clone[index] = item;
+    }
   });
+  return clone;
 }
-// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/isComponent.js
 
-function isComponent(node, componentName, config) {
-  config = Object.assign(this || {}, config || {});
+function safeGetProperty(object, property) {
+  return property === '__proto__' ? undefined : object[property];
+}
+/**
+ * Extening object that entered in first argument.
+ *
+ * Returns extended object or false if have no target object or incorrect type.
+ *
+ * If you wish to clone source object (without modify it), just use empty new
+ * object as first argument, like this:
+ *   deepExtend({}, yourObj_1, [yourObj_N]);
+ */
 
-  if (node instanceof NodeList || node instanceof Array) {
-    return [].slice.call(node).every(function (node) {
-      return isComponent(node, componentName, config);
-    });
+
+var deepExtend = module.exports = function ()
+/*obj_1, [obj_2], [obj_N]*/
+{
+  if (arguments.length < 1 || _typeof(arguments[0]) !== 'object') {
+    return false;
   }
 
-  var _config = config,
-      componentGlue = _config.componentGlue;
-  var namespace = config.namespace || Object(getNamespace["a" /* default */])(node, false, config);
-  return [].slice.call(node.classList).some(function (className) {
-    if (config.subComponent) {
-      var isASubComponent = className.split(componentGlue).length - 1 > 1;
+  if (arguments.length < 2) {
+    return arguments[0];
+  }
 
-      var _isMatch = className.indexOf(componentName) === className.length - componentName.length;
+  var target = arguments[0]; // convert arguments to array and cut off target object
 
-      return isASubComponent && _isMatch;
+  var args = Array.prototype.slice.call(arguments, 1);
+  var val, src, clone;
+  args.forEach(function (obj) {
+    // skip argument if isn't an object, is null, or is an array
+    if (_typeof(obj) !== 'object' || obj === null || Array.isArray(obj)) {
+      return;
     }
 
-    var isAComponent = className.split(componentGlue).length - 1 === 1;
-    var query = namespace + componentGlue + componentName;
-    var isMatch = query.indexOf(componentGlue + componentName) > -1;
-    return className.indexOf(query) === 0 && isAComponent && isMatch;
+    Object.keys(obj).forEach(function (key) {
+      src = safeGetProperty(target, key); // source value
+
+      val = safeGetProperty(obj, key); // new value
+      // recursion prevention
+
+      if (val === target) {
+        return;
+        /**
+         * if new value isn't object then just overwrite by new value
+         * instead of extending.
+         */
+      } else if (_typeof(val) !== 'object' || val === null) {
+        target[key] = val;
+        return; // just clone arrays (and recursive clone objects inside)
+      } else if (Array.isArray(val)) {
+        target[key] = deepCloneArray(val);
+        return; // custom cloning and overwrite for specific objects
+      } else if (isSpecificValue(val)) {
+        target[key] = cloneSpecificValue(val);
+        return; // overwrite by new value if source isn't object or array
+      } else if (_typeof(src) !== 'object' || src === null || Array.isArray(src)) {
+        target[key] = deepExtend({}, val);
+        return; // source value and new value is objects both, extending...
+      } else {
+        target[key] = deepExtend(src, val);
+        return;
+      }
+    });
   });
-}
-// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/is.js
-function is_typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { is_typeof = function _typeof(obj) { return typeof obj; }; } else { is_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return is_typeof(obj); }
-
-
-
-
-
-function is(node, query, config) {
-  config = Object.assign(this || {}, config || {});
-  var namespace = config.namespace || Object(getNamespace["a" /* default */])(node, false, config);
-
-  if (is_typeof(query) === 'object') {
-    var module = query.module,
-        component = query.component,
-        modifier = query.modifier;
-
-    if (module) {
-      if (component) {
-        var namespaceMatch = namespace === module;
-        var componentMatch = isComponent(node, component, config);
-
-        if (modifier) {
-          return namespaceMatch && componentMatch && hasModifier(node, modifier, config);
-        }
-
-        return namespaceMatch && componentMatch;
-      }
-
-      if (modifier) {
-        return isModule(node, module, config) && hasModifier(node, modifier, config);
-      }
-
-      return isModule(node, module, config);
-    }
-
-    if (component) {
-      if (modifier) {
-        return isComponent(node, component, config) && hasModifier(node, modifier, config);
-      }
-
-      return isComponent(node, component, config);
-    }
-
-    if (modifier) {
-      return hasModifier(node, modifier, config);
-    }
-  }
-
-  if (typeof query === 'string') {
-    if (isModule(node, query, config)) {
-      return isModule(node, query, config);
-    }
-
-    if (isComponent(node, query, config)) {
-      return isComponent(node, query, config);
-    }
-
-    if (hasModifier(node, query, config)) {
-      return hasModifier(node, query, config);
-    }
-  }
-
-  return false;
-}
-// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/parentModule.js
-
-function parentModule(node, config) {
-  config = Object.assign(this || {}, config || {});
-
-  if (node instanceof NodeList || node instanceof Array) {
-    return [].slice.call(node).map(function (node) {
-      return parentModule(node, config);
-    });
-  }
-
-  var namespace = config.namespace || Object(getNamespace["a" /* default */])(node, false, config);
-  return node.closest(".".concat(namespace, ", [class*='").concat(namespace + config.modifierGlue, "']"));
-}
-// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/api/getters.js
-/* concated harmony reexport find */__webpack_require__.d(__webpack_exports__, "find", function() { return find; });
-/* concated harmony reexport getComponent */__webpack_require__.d(__webpack_exports__, "getComponent", function() { return getComponent; });
-/* concated harmony reexport getComponents */__webpack_require__.d(__webpack_exports__, "getComponents", function() { return getComponents; });
-/* concated harmony reexport getModifiers */__webpack_require__.d(__webpack_exports__, "getModifiers", function() { return getModifiers; });
-/* concated harmony reexport getModules */__webpack_require__.d(__webpack_exports__, "getModules", function() { return getModules; });
-/* concated harmony reexport getSubComponent */__webpack_require__.d(__webpack_exports__, "getSubComponent", function() { return getSubComponent; });
-/* concated harmony reexport getSubComponents */__webpack_require__.d(__webpack_exports__, "getSubComponents", function() { return getSubComponents; });
-/* concated harmony reexport has */__webpack_require__.d(__webpack_exports__, "has", function() { return hasModifier; });
-/* concated harmony reexport hasModifier */__webpack_require__.d(__webpack_exports__, "hasModifier", function() { return hasModifier; });
-/* concated harmony reexport is */__webpack_require__.d(__webpack_exports__, "is", function() { return is; });
-/* concated harmony reexport isComponent */__webpack_require__.d(__webpack_exports__, "isComponent", function() { return isComponent; });
-/* concated harmony reexport isModule */__webpack_require__.d(__webpack_exports__, "isModule", function() { return isModule; });
-/* concated harmony reexport parent */__webpack_require__.d(__webpack_exports__, "parent", function() { return parent_parent; });
-/* concated harmony reexport parentModule */__webpack_require__.d(__webpack_exports__, "parentModule", function() { return parentModule; });
-// find
- // getComponent
-
- // getComponents
-
- // getModifiers
-
- // getModules
-
- // getSubComponent
-
- // getSubComponents
-
- // hasModifier
-
- // is
-
- // isComponent
-
- // isModule
-
- // parent
-
- // parentModule
-
-
+  return target;
+};
 
 /***/ }),
-/* 10 */
+/* 7 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -1409,1067 +1073,37 @@ process.umask = function () {
 };
 
 /***/ }),
-/* 11 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var _squery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(16);
-/* harmony import */ var _utilities_init__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(13);
-/* harmony import */ var _api_getters__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9);
-
-
- // spoof env process to assist bundle size
-
-if (typeof process === 'undefined') window.process = {
-  env: {}
-};
-var sQuery = _squery__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"].bind(_api_getters__WEBPACK_IMPORTED_MODULE_2__);
-sQuery.init = _utilities_init__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].bind(_api_getters__WEBPACK_IMPORTED_MODULE_2__);
-
-for (var _i = 0, _Object$entries = Object.entries(_api_getters__WEBPACK_IMPORTED_MODULE_2__); _i < _Object$entries.length; _i++) {
-  var entry = _Object$entries[_i];
-  sQuery[entry[0]] = entry[1];
-}
-
-if (typeof window !== 'undefined') {
-  window.sQuery = sQuery;
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (sQuery);
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(10)))
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/*!
- * html-attributes
- * https://github.com/alexmingoia/html-attributes
- */
-
-/**
- * @module html-attributes
- */
-
-module.exports = {
-  "abbr": "abbr",
-  "accept": "accept",
-  "acceptCharset": "accept-charset",
-  "accessKey": "accesskey",
-  "action": "action",
-  "allowFullScreen": "allowfullscreen",
-  "allowTransparency": "allowtransparency",
-  "alt": "alt",
-  "async": "async",
-  "autoComplete": "autocomplete",
-  "autoFocus": "autofocus",
-  "autoPlay": "autoplay",
-  "cellPadding": "cellpadding",
-  "cellSpacing": "cellspacing",
-  "challenge": "challenge",
-  "charset": "charset",
-  "checked": "checked",
-  "cite": "cite",
-  "class": "class",
-  "className": "class",
-  "cols": "cols",
-  "colSpan": "colspan",
-  "command": "command",
-  "content": "content",
-  "contentEditable": "contenteditable",
-  "contextMenu": "contextmenu",
-  "controls": "controls",
-  "coords": "coords",
-  "crossOrigin": "crossorigin",
-  "data": "data",
-  "dateTime": "datetime",
-  "default": "default",
-  "defer": "defer",
-  "dir": "dir",
-  "disabled": "disabled",
-  "download": "download",
-  "draggable": "draggable",
-  "dropzone": "dropzone",
-  "encType": "enctype",
-  "for": "for",
-  "form": "form",
-  "formAction": "formaction",
-  "formEncType": "formenctype",
-  "formMethod": "formmethod",
-  "formNoValidate": "formnovalidate",
-  "formTarget": "formtarget",
-  "frameBorder": "frameBorder",
-  "headers": "headers",
-  "height": "height",
-  "hidden": "hidden",
-  "high": "high",
-  "href": "href",
-  "hrefLang": "hreflang",
-  "htmlFor": "for",
-  "httpEquiv": "http-equiv",
-  "icon": "icon",
-  "id": "id",
-  "inputMode": "inputmode",
-  "isMap": "ismap",
-  "itemId": "itemid",
-  "itemProp": "itemprop",
-  "itemRef": "itemref",
-  "itemScope": "itemscope",
-  "itemType": "itemtype",
-  "kind": "kind",
-  "label": "label",
-  "lang": "lang",
-  "list": "list",
-  "loop": "loop",
-  "manifest": "manifest",
-  "max": "max",
-  "maxLength": "maxlength",
-  "media": "media",
-  "mediaGroup": "mediagroup",
-  "method": "method",
-  "min": "min",
-  "minLength": "minlength",
-  "multiple": "multiple",
-  "muted": "muted",
-  "name": "name",
-  "noValidate": "novalidate",
-  "open": "open",
-  "optimum": "optimum",
-  "pattern": "pattern",
-  "ping": "ping",
-  "placeholder": "placeholder",
-  "poster": "poster",
-  "preload": "preload",
-  "radioGroup": "radiogroup",
-  "readOnly": "readonly",
-  "rel": "rel",
-  "required": "required",
-  "role": "role",
-  "rows": "rows",
-  "rowSpan": "rowspan",
-  "sandbox": "sandbox",
-  "scope": "scope",
-  "scoped": "scoped",
-  "scrolling": "scrolling",
-  "seamless": "seamless",
-  "selected": "selected",
-  "shape": "shape",
-  "size": "size",
-  "sizes": "sizes",
-  "sortable": "sortable",
-  "span": "span",
-  "spellCheck": "spellcheck",
-  "src": "src",
-  "srcDoc": "srcdoc",
-  "srcSet": "srcset",
-  "start": "start",
-  "step": "step",
-  "style": "style",
-  "tabIndex": "tabindex",
-  "target": "target",
-  "title": "title",
-  "translate": "translate",
-  "type": "type",
-  "typeMustMatch": "typemustmatch",
-  "useMap": "usemap",
-  "value": "value",
-  "width": "width",
-  "wmode": "wmode",
-  "wrap": "wrap"
-};
-
-/***/ }),
-/* 13 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return init; });
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
-
-function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-function init(custom, API) {
-  API = API || this;
-  var Synergy = window.Synergy || {};
-  var options = Object.assign({
-    elementProto: true,
-    nodeListProto: true,
-    preset: 'Synergy',
-    Synergy: true,
-    alterMethodName: ['sQuery'],
-    componentGlue: typeof sQuery !== 'undefined' && Synergy.componentGlue,
-    modifierGlue: typeof sQuery !== 'undefined' && Synergy.modifierGlue,
-    multipleClasses: typeof sQuery !== 'undefined' && Synergy.multipleClasses
-  }, custom);
-  options.alterMethodName = options.alterMethodName || [];
-  var PRESETS = {
-    BEM: ['__', '--', 'block', 'element', 'modifier', true],
-    Synergy: ['_', '-', 'module', 'component', 'modifier', false]
-  };
-
-  var _slice$call = [].slice.call(PRESETS[options.preset]),
-      _slice$call2 = _slicedToArray(_slice$call, 6),
-      componentGlue = _slice$call2[0],
-      modifierGlue = _slice$call2[1],
-      moduleNamespace = _slice$call2[2],
-      componentNamespace = _slice$call2[3],
-      modifierNamespace = _slice$call2[4],
-      multipleClasses = _slice$call2[5];
-
-  componentGlue = options.componentGlue || componentGlue;
-  modifierGlue = options.modifierGlue || modifierGlue;
-  multipleClasses = typeof options.multipleClasses === 'undefined' ? multipleClasses : options.multipleClasses;
-
-  if (options.Synergy) {
-    window.Synergy = Synergy;
-    Object.assign(window.Synergy, {
-      componentGlue: componentGlue,
-      modifierGlue: modifierGlue,
-      multipleClasses: multipleClasses
-    });
-  }
-
-  var methods = {};
-
-  var _loop = function _loop() {
-    var entry = _Object$entries[_i2];
-    var key = entry[0],
-        method = entry[1];
-    var methodName = key,
-        newMethodName = void 0;
-
-    if (options.alterMethodName.length) {
-      var moduleUpperCase = moduleNamespace[0].toUpperCase() + moduleNamespace.substring(1);
-      var componentUpperCase = componentNamespace[0].toUpperCase() + componentNamespace.substring(1);
-      var modifierUpperCase = modifierNamespace[0].toUpperCase() + modifierNamespace.substring(1);
-
-      if (methodName.indexOf('module') > -1) {
-        newMethodName = methodName.replace(new RegExp('module', 'g'), moduleNamespace);
-      }
-
-      if (methodName.indexOf('Module') > -1) {
-        newMethodName = methodName.replace(new RegExp('Module', 'g'), moduleUpperCase);
-      }
-
-      if (methodName.indexOf('component') > -1) {
-        newMethodName = methodName.replace(new RegExp('component', 'g'), componentNamespace);
-      }
-
-      if (methodName.indexOf('Component') > -1) {
-        newMethodName = methodName.replace(new RegExp('Component', 'g'), componentUpperCase);
-      } // @TODO do modifier renames
-
-
-      if (options.preset !== 'Synergy' && sQuery && options.alterMethodName.includes('sQuery')) {
-        sQuery[newMethodName] = function (node) {
-          var _this;
-
-          for (var _len = arguments.length, params = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-            params[_key - 1] = arguments[_key];
-          }
-
-          return (_this = this(node))[methodName].apply(_this, params);
-        };
-      }
-
-      methods[methodName] = newMethodName || methodName;
-    }
-
-    if (options.elementProto) {
-      methodName = options.alterMethodName.includes('elementProto') ? newMethodName : methodName;
-
-      if (Element.prototype[methodName] && Element.prototype[methodName].sQuery) {
-        Element.prototype[methodName] = undefined;
-      }
-
-      if (typeof document.body[methodName] === 'undefined') {
-        Element.prototype[methodName] = function () {
-          for (var _len2 = arguments.length, params = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-            params[_key2] = arguments[_key2];
-          }
-
-          return method.bind({
-            componentGlue: componentGlue,
-            modifierGlue: modifierGlue,
-            multipleClasses: multipleClasses
-          }).apply(void 0, [this].concat(params));
-        };
-
-        Element.prototype[methodName].sQuery = true;
-      }
-    }
-
-    if (options.nodeListProto) {
-      methodName = options.alterMethodName.includes('nodeListProto') ? newMethodName : methodName; // @todo conditionally add this if not exists (and delete if previously added by sQuery)
-
-      NodeList.prototype[methodName] = function () {
-        for (var _len3 = arguments.length, params = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-          params[_key3] = arguments[_key3];
-        }
-
-        return method.bind({
-          componentGlue: componentGlue,
-          modifierGlue: modifierGlue,
-          multipleClasses: multipleClasses
-        }).apply(void 0, [this].concat(params));
-      };
-
-      NodeList.prototype[methodName].sQuery = true;
-    }
-  };
-
-  for (var _i2 = 0, _Object$entries = Object.entries(API); _i2 < _Object$entries.length; _i2++) {
-    _loop();
-  }
-
-  if (typeof sQuery !== 'undefined') {
-    sQuery.config = Object.assign(options, {
-      methods: methods
-    });
-  }
-}
-
-/***/ }),
-/* 14 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return polymorph; });
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
-
-function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
-
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-// `process` and `require` are exploited to help reduce bundle size
-if (typeof process === 'undefined') window.process = {
-  env: {}
-};
-function polymorph(element, styles) {
-  var config = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-  var globals = arguments.length > 3 ? arguments[3] : undefined;
-  var Synergy = window.Synergy || {};
-  var sQuery = window.sQuery;
-
-  if (false) {}
-
-  var modifierGlue = config.modifierGlue || Synergy.modifierGlue || '-';
-  var componentGlue = config.componentGlue || Synergy.componentGlue || '_';
-  var CONFIG = {
-    componentGlue: componentGlue,
-    modifierGlue: modifierGlue
-  };
-  var STYLESHEET = styles;
-
-  if (typeof styles === 'function') {
-    STYLESHEET = styles(element, config, globals);
-  }
-
-  if (styles.constructor === Array) {
-    STYLESHEET = styles.map(function (style) {
-      return typeof style === 'function' ? style(element, config, globals) : style;
-    });
-  }
-
-  if (STYLESHEET.constructor === Array) {
-    if (STYLESHEET.every(function (value) {
-      return value && value.constructor === Object;
-    })) {
-      STYLESHEET.forEach(function (value) {
-        return handleStyleSheet(element, value, CONFIG);
-      });
-    }
-  } else {
-    handleStyleSheet(element, STYLESHEET, CONFIG);
-  }
-
-  element.repaint();
-}
-/**
- * 
- */
-
-function handleStyleSheet(element, stylesheet, config) {
-  var context = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : [];
-
-  if (!element.polymorph) {
-    var WRAPPER_ELEMENT = [].slice.call(element.parentNode.classList).some(function (className) {
-      return className.indexOf('group') === 0 || className.indexOf('wrapper') === 0;
-    }) && element.parentNode;
-    element.polymorph = {
-      rules: [],
-      COMPONENTS: sQuery.getComponents.bind(_objectSpread({}, config))(element),
-      SUB_COMPONENTS: sQuery.getSubComponents.bind(_objectSpread({}, config))(element)
-    };
-    var _element$polymorph = element.polymorph,
-        COMPONENTS = _element$polymorph.COMPONENTS,
-        SUB_COMPONENTS = _element$polymorph.SUB_COMPONENTS;
-
-    element.repaint = function (disableDependentElements) {
-      var allDependentElements = [];
-
-      if (WRAPPER_ELEMENT && WRAPPER_ELEMENT.repaint) {
-        WRAPPER_ELEMENT.repaint(true);
-      }
-
-      [element].concat(_toConsumableArray(COMPONENTS), _toConsumableArray(SUB_COMPONENTS)).forEach(function (el) {
-        if (el.polymorph) {
-          el.polymorph.rules.forEach(function (rule) {
-            if (rule.context.every(function (ruleContext) {
-              if (typeof ruleContext === 'function') {
-                return ruleContext();
-              }
-
-              if (ruleContext.value === 'hover') {
-                return ruleContext.source.polymorph.isHovered;
-              }
-
-              if (ruleContext.value === 'focus') {
-                return ruleContext.source.polymorph.isFocused;
-              }
-
-              return sQuery.hasModifier.bind(_objectSpread({}, config))(ruleContext.source, ruleContext.value);
-            })) {
-              var _allDependentElements;
-
-              // `doStyles()` applies the styles and returns dependent elements
-              var dependentElements = doStyles(el, rule.styles) || [];
-              dependentElements.length && (_allDependentElements = allDependentElements).push.apply(_allDependentElements, _toConsumableArray(dependentElements));
-            }
-          });
-
-          if (allDependentElements.includes(el)) {
-            allDependentElements.filter(function (item) {
-              return item !== el;
-            });
-          }
-        }
-      });
-
-      if (!disableDependentElements && allDependentElements.length) {
-        allDependentElements = allDependentElements.filter(function (item, pos) {
-          return allDependentElements.indexOf(item) == pos;
-        });
-        allDependentElements.forEach(function (el) {
-          return el.repaint && el.repaint(true);
-        });
-      }
-    };
-  }
-
-  element.polymorph.rules = element.polymorph.rules.concat({
-    context: context,
-    styles: stylesheet
-  });
-
-  if (typeof stylesheet === 'function') {
-    stylesheet = stylesheet(element);
-  }
-
-  if (!stylesheet) return;
-  Object.entries(stylesheet).forEach(function (_ref) {
-    var _ref2 = _slicedToArray(_ref, 2),
-        key = _ref2[0],
-        value = _ref2[1];
-
-    var COMPONENTS = sQuery.getComponents.bind(_objectSpread({}, config))(element, key);
-    var SUB_COMPONENTS = sQuery.getSubComponents.bind(_objectSpread({}, config))(element, key);
-
-    if (value.styles) {
-      if (value.condition) {
-        context = context.concat(value.condition);
-      }
-
-      if (value.element) {
-        element = value.element;
-      }
-
-      return handleStyleSheet(element, value.styles, config, context);
-    }
-
-    if (value instanceof Array) {
-      if (typeof value[0] === 'undefined') {
-        return;
-      }
-
-      if (value.every(function (val) {
-        return val && _typeof(val) === 'object' && val.constructor === Object;
-      })) {
-        return value.forEach(function (val) {
-          return handleStyleSheet(element, val, config, context);
-        });
-      } //Handle case where desired element for styles to be applied is manually controlled
-
-
-      if (value[0] instanceof HTMLElement) {
-        return handleStyleSheet(value[0], value[1], config, context);
-      } //Handle case where desired element for styles to be applied is manually controlled
-
-
-      if (value[0] instanceof NodeList) {
-        value[0].forEach(function (el) {
-          return handleStyleSheet(el, value[1], config, context);
-        });
-      } //Handle case condition to apply styles is to be manually controlled
-
-
-      if (typeof value[0] === 'function') {
-        return handleStyleSheet(element, value[1], config, context.concat(value[0]));
-      }
-
-      return;
-    } // Smart handle `components`
-
-
-    if (COMPONENTS.length) {
-      if (value.disableCascade) {
-        COMPONENTS = COMPONENTS.filter(function (component) {
-          return COMPONENTS.every(function (_component) {
-            return component.contains(_component);
-          });
-        });
-      }
-
-      return COMPONENTS.forEach(function (component) {
-        return handleStyleSheet(component, value, config, context);
-      });
-    } // Smart handle `sub-components`
-
-
-    if (SUB_COMPONENTS.length) {
-      if (value.disableCascade) {
-        SUB_COMPONENTS = SUB_COMPONENTS.filter(function (subComponent) {
-          var componentName = _toConsumableArray(element.classList).reduce(function ($, currentValue) {
-            if (currentValue.indexOf(config.componentGlue) > 1) {
-              var glueLength = config.componentGlue.length;
-              var nameStart = currentValue.lastIndexOf(config.componentGlue) + glueLength;
-              currentValue = currentValue.substring(nameStart, currentValue.length);
-              return currentValue.substring(0, currentValue.indexOf(config.modifierGlue));
-            }
-          }, []);
-
-          var parentSubComponent = sQuery.parent.bind(_objectSpread({}, config))(subComponent, componentName);
-          return element === parentSubComponent;
-        });
-      }
-
-      return SUB_COMPONENTS.forEach(function (component) {
-        return handleStyleSheet(component, value, config, context);
-      });
-    } // Handle `sub-components`
-
-
-    if (key.indexOf('sub-component(') > -1) {
-      var subComponent = key.replace('sub-component(', '').replace(/\)/g, '');
-      var subComponents = sQuery.getSubComponents.bind(_objectSpread({}, config))(element, subComponent);
-      return subComponents.forEach(function (component) {
-        return handleStyleSheet(component, value, config, context);
-      });
-    } // Handle `components`
-
-
-    if (key.indexOf('component(') > -1) {
-      var component = key.replace('component(', '').replace(/\)/g, '');
-      var components = sQuery.getComponents.bind(_objectSpread({}, config))(element, component);
-      return components.forEach(function (component) {
-        return handleStyleSheet(component, value, config, context);
-      });
-    } // Handle `modifiers`
-
-
-    if (key.indexOf('modifier(') > -1) {
-      var modifier = key.replace('modifier(', '').replace(/\)/g, '');
-      return handleStyleSheet(element, value, config, context.concat({
-        source: element,
-        value: modifier
-      }));
-    } // Handle `hover` interaction
-
-
-    if (key === ':hover') {
-      handleStyleSheet(element, value, config, context.concat({
-        source: element,
-        value: 'hover'
-      }));
-      element.addEventListener('mouseenter', function (event) {
-        element.polymorph.isHovered = true;
-        element.repaint();
-      });
-      element.addEventListener('mouseleave', function (event) {
-        element.polymorph.isHovered = false;
-        element.repaint();
-      });
-      return;
-    } // Handle `focus` interaction
-
-
-    if (key === ':focus') {
-      handleStyleSheet(element, value, config, context.concat({
-        source: element,
-        value: 'focus'
-      }));
-      element.addEventListener('focus', function (event) {
-        element.polymorph.isFocused = true;
-        element.repaint();
-      });
-      element.addEventListener('blur', function (event) {
-        element.polymorph.isFocused = false;
-        element.repaint();
-      });
-      return;
-    } // Handle Group/Wrapper elements
-
-
-    if (key === 'group' || key === 'wrapper') {
-      var wrapper = element.parentNode;
-      return wrapper.classList.forEach(function (className) {
-        if (className.indexOf('group') === 0 || className.indexOf('wrapper') === 0) {
-          handleStyleSheet(wrapper, value, config, context);
-        }
-      });
-    }
-  });
-  element.polymorph.rules.sort(function (a, b) {
-    if (!a.context.length && !b.context.length) {
-      return 0;
-    }
-
-    if (a.context.length && !b.context.length) {
-      return 1;
-    }
-
-    if (!a.context.length && b.context.length) {
-      return -1;
-    }
-
-    if (a.context.some(function (c) {
-      return c.value === 'hover';
-    }) && b.context.some(function (c) {
-      return c.value === 'hover';
-    })) {
-      return 0;
-    }
-
-    if (b.context.some(function (c) {
-      return c.value === 'hover';
-    })) {
-      return -1;
-    }
-
-    return 0;
-  });
-}
-/**
- * 
- */
-
-
-function doStyles(el, styles) {
-  if (typeof styles === 'function') {
-    styles = styles(el);
-  }
-
-  if (!styles) return;
-  Object.entries(styles).forEach(function (_ref3) {
-    var _ref4 = _slicedToArray(_ref3, 2),
-        key = _ref4[0],
-        value = _ref4[1];
-
-    if (typeof value === 'function') {
-      try {
-        return el.style[key] = value(el.style[key]);
-      } catch (error) {
-        return error;
-      }
-    } // https://stackoverflow.com/questions/55867116
-
-
-    if (!isNaN(key)) {
-      return;
-    }
-
-    return el.style[key] = value;
-  });
-  var dependentElements = Object.values(styles).reduce(function (accumulator, currentValue) {
-    if (currentValue instanceof Array && currentValue[0]) {
-      if (currentValue[0] instanceof NodeList || currentValue[0] instanceof Array) {
-        return accumulator.concat.apply(accumulator, _toConsumableArray(currentValue[0]));
-      }
-
-      return accumulator.concat(currentValue[0]);
-    }
-
-    return accumulator;
-  }, []);
-  return dependentElements;
-}
-/**
- * Wrapper for sQuery `hasModifier()`
- */
-
-
-polymorph.modifier = function (element, modifier, modifierGlue, componentGlue) {
-  var Synergy = window.Synergy || {};
-  modifierGlue = modifierGlue || Synergy.modifierGlue || '-';
-  componentGlue = componentGlue || Synergy.componentGlue || '_';
-  return sQuery.hasModifier.bind({
-    modifierGlue: modifierGlue,
-    componentGlue: componentGlue
-  })(element, modifier);
-};
-/**
- * Attach to Window
- */
-
-
-if (typeof window !== 'undefined') {
-  window.polymorph = polymorph;
-}
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(10)))
-
-/***/ }),
-/* 15 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/*!
- * @description Recursive object extending
- * @author Viacheslav Lotsmanov <lotsmanov89@gmail.com>
- * @license MIT
- *
- * The MIT License (MIT)
- *
- * Copyright (c) 2013-2018 Viacheslav Lotsmanov
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of
- * this software and associated documentation files (the "Software"), to deal in
- * the Software without restriction, including without limitation the rights to
- * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
- * the Software, and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
- * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
- * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
- * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
- * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function isSpecificValue(val) {
-  return val instanceof Buffer || val instanceof Date || val instanceof RegExp ? true : false;
-}
-
-function cloneSpecificValue(val) {
-  if (val instanceof Buffer) {
-    var x = Buffer.alloc ? Buffer.alloc(val.length) : new Buffer(val.length);
-    val.copy(x);
-    return x;
-  } else if (val instanceof Date) {
-    return new Date(val.getTime());
-  } else if (val instanceof RegExp) {
-    return new RegExp(val);
-  } else {
-    throw new Error('Unexpected situation');
-  }
-}
-/**
- * Recursive cloning array.
- */
-
-
-function deepCloneArray(arr) {
-  var clone = [];
-  arr.forEach(function (item, index) {
-    if (_typeof(item) === 'object' && item !== null) {
-      if (Array.isArray(item)) {
-        clone[index] = deepCloneArray(item);
-      } else if (isSpecificValue(item)) {
-        clone[index] = cloneSpecificValue(item);
-      } else {
-        clone[index] = deepExtend({}, item);
-      }
-    } else {
-      clone[index] = item;
-    }
-  });
-  return clone;
-}
-
-function safeGetProperty(object, property) {
-  return property === '__proto__' ? undefined : object[property];
-}
-/**
- * Extening object that entered in first argument.
- *
- * Returns extended object or false if have no target object or incorrect type.
- *
- * If you wish to clone source object (without modify it), just use empty new
- * object as first argument, like this:
- *   deepExtend({}, yourObj_1, [yourObj_N]);
- */
-
-
-var deepExtend = module.exports = function ()
-/*obj_1, [obj_2], [obj_N]*/
-{
-  if (arguments.length < 1 || _typeof(arguments[0]) !== 'object') {
-    return false;
-  }
-
-  if (arguments.length < 2) {
-    return arguments[0];
-  }
-
-  var target = arguments[0]; // convert arguments to array and cut off target object
-
-  var args = Array.prototype.slice.call(arguments, 1);
-  var val, src, clone;
-  args.forEach(function (obj) {
-    // skip argument if isn't an object, is null, or is an array
-    if (_typeof(obj) !== 'object' || obj === null || Array.isArray(obj)) {
-      return;
-    }
-
-    Object.keys(obj).forEach(function (key) {
-      src = safeGetProperty(target, key); // source value
-
-      val = safeGetProperty(obj, key); // new value
-      // recursion prevention
-
-      if (val === target) {
-        return;
-        /**
-         * if new value isn't object then just overwrite by new value
-         * instead of extending.
-         */
-      } else if (_typeof(val) !== 'object' || val === null) {
-        target[key] = val;
-        return; // just clone arrays (and recursive clone objects inside)
-      } else if (Array.isArray(val)) {
-        target[key] = deepCloneArray(val);
-        return; // custom cloning and overwrite for specific objects
-      } else if (isSpecificValue(val)) {
-        target[key] = cloneSpecificValue(val);
-        return; // overwrite by new value if source isn't object or array
-      } else if (_typeof(src) !== 'object' || src === null || Array.isArray(src)) {
-        target[key] = deepExtend({}, val);
-        return; // source value and new value is objects both, extending...
-      } else {
-        target[key] = deepExtend(src, val);
-        return;
-      }
-    });
-  });
-  return target;
-};
-
-/***/ }),
-/* 16 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/utilities/getConfig.js
-/**
- * @param {*} defaults 
- * @param {*} custom 
- * @param {*} parser 
- */
-function getConfig(defaults, custom, parser) {
-  var extendedConfig; // `process` and `require` are exploited to help reduce bundle size
-
-  if (true) {
-    extendedConfig = Synergy.config(defaults, custom);
-  } else {}
-
-  if (typeof parser === 'function') {
-    return parser(extendedConfig);
-  }
-
-  return extendedConfig;
-}
-// EXTERNAL MODULE: ./node_modules/@onenexus/squery/src/utilities/isValidSelector.js
-var isValidSelector = __webpack_require__(8);
-
-// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/utilities/getDOMNodes.js
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-
-/**
- * Find matching DOM nodes against passed Synergy query
- * 
- * @param {*} query 
- */
-
-function getDomNodes(query) {
-  if (query instanceof NodeList) {
-    return query;
-  }
-
-  if (query instanceof HTMLElement) {
-    return [query];
-  }
-
-  if (query instanceof Array) {
-    return getDomNodes(query[0]);
-  }
-
-  if (Object(isValidSelector["a" /* default */])(query) && document.querySelectorAll(query).length) {
-    return document.querySelectorAll(query);
-  }
-
-  if (_typeof(query) === 'object' && query.name) {
-    return getDomNodes(query.name);
-  }
-
-  if (typeof query === 'string' && query.match("^[a-zA-Z0-9_-]+$")) {
-    return document.querySelectorAll(".".concat(query, ", [class*=\"").concat(query, "-\"]"));
-  }
-}
-// EXTERNAL MODULE: ./node_modules/@onenexus/squery/src/utilities/getNamespace.js
-var getNamespace = __webpack_require__(0);
-
-// CONCATENATED MODULE: ./node_modules/@onenexus/squery/src/squery.js
-
-
-
-/** */
-
-function sQuery(SynergyQuery, callback, defaults, custom, parser, API) {
-  API = API || this;
-  var Synergy = window.Synergy || {};
-  sQuery.config = sQuery.config || {};
-  var methods = {};
-  var config = getConfig(defaults, custom, parser);
-  var modifierGlue = config.modifierGlue || Synergy.modifierGlue || '-';
-  var componentGlue = config.componentGlue || Synergy.componentGlue || '_';
-  var multipleClasses = config.multipleClasses || Synergy.multipleClasses || false;
-  var namespace = Object(getNamespace["a" /* default */])(SynergyQuery, false, {
-    componentGlue: componentGlue,
-    modifierGlue: modifierGlue
-  });
-  var DOMNodes = getDomNodes(SynergyQuery);
-
-  for (var _i = 0, _Object$entries = Object.entries(API); _i < _Object$entries.length; _i++) {
-    var entry = _Object$entries[_i];
-    var key = entry[0],
-        method = entry[1];
-
-    if (sQuery.config.methods && sQuery.config.methods[key]) {
-      key = sQuery.config.methods[key];
-    }
-
-    var internalConfig = {
-      namespace: namespace,
-      componentGlue: componentGlue,
-      modifierGlue: modifierGlue,
-      multipleClasses: multipleClasses
-    };
-
-    if (DOMNodes) {
-      methods[key] = method.bind(internalConfig, DOMNodes);
-    } else {
-      methods[key] = method.bind(internalConfig);
-    }
-  }
-
-  if (typeof callback === 'function') {
-    DOMNodes.forEach(function (node) {
-      return callback(node, config);
-    });
-  }
-
-  return Object.assign(methods, {
-    namespace: namespace,
-    nodes: DOMNodes,
-    node: DOMNodes ? DOMNodes[0] : null
-  });
-}
-
-/* harmony default export */ var squery = __webpack_exports__["a"] = (sQuery);
-
-/***/ }),
-/* 17 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 var src_namespaceObject = {};
 __webpack_require__.r(src_namespaceObject);
-__webpack_require__.d(src_namespaceObject, "default", function() { return src; });
 __webpack_require__.d(src_namespaceObject, "Module", function() { return src_module["d" /* default */]; });
 __webpack_require__.d(src_namespaceObject, "Wrapper", function() { return src_module["c" /* Wrapper */]; });
 __webpack_require__.d(src_namespaceObject, "Group", function() { return src_module["a" /* Group */]; });
 __webpack_require__.d(src_namespaceObject, "Component", function() { return component_Component; });
 __webpack_require__.d(src_namespaceObject, "SubComponent", function() { return component_SubComponent; });
-__webpack_require__.d(src_namespaceObject, "BEM", function() { return BEM; });
+__webpack_require__.d(src_namespaceObject, "Provider", function() { return provider["b" /* default */]; });
+__webpack_require__.d(src_namespaceObject, "styled", function() { return src_styled; });
 
 // EXTERNAL MODULE: ./node_modules/@onenexus/lucid/src/module.jsx
-var src_module = __webpack_require__(2);
+var src_module = __webpack_require__(1);
 
 // EXTERNAL MODULE: external "react"
-var external_react_ = __webpack_require__(1);
+var external_react_ = __webpack_require__(0);
 var external_react_default = /*#__PURE__*/__webpack_require__.n(external_react_);
 
-// EXTERNAL MODULE: ./node_modules/@onenexus/lucid/src/utilities/getHtmlProps.js
-var getHtmlProps = __webpack_require__(5);
-
 // EXTERNAL MODULE: ./node_modules/@onenexus/lucid/src/utilities/getModifiersFromProps.js
-var getModifiersFromProps = __webpack_require__(4);
-
-// EXTERNAL MODULE: ./node_modules/@onenexus/lucid/src/utilities/generateClasses.js
-var generateClasses = __webpack_require__(6);
-
-// EXTERNAL MODULE: ./node_modules/@onenexus/lucid/src/utilities/renderModifiers.js
-var renderModifiers = __webpack_require__(3);
-
-// EXTERNAL MODULE: ./node_modules/@onenexus/lucid/src/utilities/refHandler.js
-var refHandler = __webpack_require__(7);
+var getModifiersFromProps = __webpack_require__(3);
 
 // CONCATENATED MODULE: ./node_modules/@onenexus/lucid/src/component.jsx
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
-
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -2487,22 +1121,19 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 
 
 
-
-
-
-var ComponentContext = external_react_default.a.createContext();
 /**
  * Render a Synergy component
  */
 
 var component_Component =
 /*#__PURE__*/
-function (_React$Component) {
-  _inherits(Component, _React$Component);
+function (_Module) {
+  _inherits(Component, _Module);
 
   function Component(props) {
     var _this;
@@ -2511,107 +1142,85 @@ function (_React$Component) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Component).call(this, props));
     _this.REF = external_react_default.a.createRef();
+    _this.NAMESPACE = props.name || props.tag;
     return _this;
   }
 
   _createClass(Component, [{
-    key: "getEventHandlers",
-    value: function getEventHandlers(properties) {
-      var _this2 = this;
-
-      var handlers = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-      if (properties.constructor === Array) {
-        properties.forEach(function (group) {
-          return _this2.getEventHandlers(group, handlers);
-        });
-      } else for (var key in properties) {
-        var value = properties[key];
-
-        if (Object.keys(window).includes(key.toLowerCase())) {
-          if (typeof value === 'function') {
-            handlers[key] = value;
-          }
-        }
-      }
-
-      return handlers;
-    }
-  }, {
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      Object(refHandler["a" /* default */])(this.REF.current, this.props);
-    }
-  }, {
-    key: "componentDidUpdate",
-    value: function componentDidUpdate() {
-      if (this.REF.current.repaint) {
-        this.REF.current.repaint();
-      }
-    }
-  }, {
-    key: "renderTag",
-    value: function renderTag(props, context, subComponent) {
-      var modifierGlue = context.modifierGlue,
-          componentGlue = context.componentGlue;
-      var module = props.module || context.module;
-      var propModifiers = Object(renderModifiers["a" /* default */])(Object(getModifiersFromProps["a" /* default */])(props, Synergy.CSSClassProps), modifierGlue);
-      var getContextModifiers = Object(getModifiersFromProps["a" /* default */])(context.props && context.props[props.name], Synergy.CSSClassProps);
-      var contextModifiers = Object(renderModifiers["a" /* default */])(getContextModifiers, modifierGlue);
-      var passedModifiers = Object(renderModifiers["a" /* default */])(props.modifiers, modifierGlue);
-      var modifiers = propModifiers + passedModifiers + contextModifiers;
-      var eventHandlers = this.getEventHandlers([props, context.config[props.name] ? context.config[props.name] : {}]);
-      var Tag = props.href && 'a' || props.component || props.tag || 'div';
-      var contextValues = {
-        component: context.component
-      };
-      var namespace;
-
-      if (subComponent) {
-        contextValues.subComponent = [].concat(_toConsumableArray(context.subComponent || []), [props.name]);
-        var subComponents = contextValues.subComponent.length ? contextValues.subComponent.join(componentGlue) : '';
-        namespace = "".concat(module + componentGlue + (context.component || props.name) + componentGlue + subComponents);
-      } else {
-        contextValues.component = props.name;
-        namespace = module + componentGlue + props.name;
-      }
-
-      var classes = Object(generateClasses["a" /* default */])({
-        props: props,
-        namespace: namespace,
-        modifiers: modifiers,
-        classes: props.className ? props.className : '',
-        modifierGlue: modifierGlue,
-        componentGlue: componentGlue,
-        multipleClasses: context.multipleClasses
-      });
-      return external_react_default.a.createElement(ComponentContext.Provider, {
-        value: contextValues
-      }, external_react_default.a.createElement(Tag, _extends({}, Object(getHtmlProps["a" /* default */])(props), eventHandlers, {
-        ref: this.REF,
-        className: classes,
-        "data-component": props.name.constructor === Array ? props.name[0] : props.name
-      }, this.props.componentProps), props.content || props.children));
-    }
-  }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
+      var _objectSpread2;
 
-      return external_react_default.a.createElement(src_module["b" /* ModuleContext */].Consumer, null, function (context) {
-        if (_this3.props.subComponent) {
-          return external_react_default.a.createElement(ComponentContext.Consumer, null, function (componentContext) {
-            return _this3.renderTag(_this3.props, _objectSpread({}, context, componentContext), true);
-          });
-        }
+      /** */
+      this.DATA = this.context.STYLES[this.NAMESPACE];
+      this.STYLES = this.getStyles(this.DATA, this.stylesConfig({
+        theme: this.context.THEME,
+        config: this.context.CONFIG
+      }));
+      var props = this.props;
+      var _this$context = this.context,
+          MODIFIERGLUE = _this$context.MODIFIERGLUE,
+          COMPONENTGLUE = _this$context.COMPONENTGLUE;
+      var STRICT_NAMESPACE = (this.context.STRICT_NAMESPACE || this.context.NAMESPACE) + COMPONENTGLUE + this.NAMESPACE;
+      var TAG = props.href && 'a' || props.component || props.tag || 'div';
+      /** */
 
-        return _this3.renderTag(_this3.props, context);
+      var CLASSES = props.className ? props.className + ' ' : '',
+          MODIFIERS = [];
+      var SELECTOR = props.subComponent ? STRICT_NAMESPACE : this.context.NAMESPACE + COMPONENTGLUE + this.NAMESPACE;
+      MODIFIERS.push(props.modifiers);
+      MODIFIERS = MODIFIERS.concat(Object(getModifiersFromProps["a" /* default */])(props));
+      MODIFIERS = MODIFIERS.filter(function (item, pos) {
+        return MODIFIERS.indexOf(item) === pos;
       });
+      MODIFIERS = MODIFIERS.filter(Boolean);
+
+      if (this.context.SINGLECLASS) {
+        SELECTOR += MODIFIERS.length ? MODIFIERGLUE + MODIFIERS.join(MODIFIERGLUE) : '';
+      } else {
+        MODIFIERS.forEach(function (MODIFIER) {
+          return CLASSES += SELECTOR + MODIFIERGLUE + MODIFIER + ' ';
+        });
+      }
+
+      CLASSES += SELECTOR;
+      /** */
+
+      var _this$state = this.state,
+          before = _this$state.before,
+          after = _this$state.after;
+
+      var ATTRIBUTES = _objectSpread({}, this.getDataAttributes(props), this.getEventHandlers(props), props.attributes, {
+        onMouseEnter: this.handleMouseEnter.bind(this),
+        onMouseLeave: this.handleMouseLeave.bind(this),
+        className: this.context.GENERATECLASSES ? CLASSES : null,
+        'data-component': this.context.GENERATEDATAATTRIBUTES ? this.NAMESPACE : null,
+        'data-sub-component': this.context.GENERATEDATAATTRIBUTES ? props.subComponent : null
+        /** */
+
+      });
+
+      var contextValues = _objectSpread({}, this.context, this.state, props, (_objectSpread2 = {}, _defineProperty(_objectSpread2, this.NAMESPACE, _objectSpread({}, this.state, props, {
+        state: _objectSpread({}, this.state, props),
+        context: this.context
+      })), _defineProperty(_objectSpread2, "STYLES", _objectSpread({}, this.context.STYLES, this.STYLES)), _defineProperty(_objectSpread2, "STRICT_NAMESPACE", STRICT_NAMESPACE), _objectSpread2));
+
+      return external_react_default.a.createElement(src_module["b" /* ModuleContext */].Provider, {
+        value: contextValues
+      }, external_react_default.a.createElement(TAG, _extends({
+        ref: this.REF
+      }, ATTRIBUTES), before && external_react_default.a.createElement(Component, {
+        name: ":before"
+      }, before.content), props.content || props.children, after && external_react_default.a.createElement(Component, {
+        name: ":after"
+      }, after.content)));
     }
   }]);
 
   return Component;
-}(external_react_default.a.Component);
+}(src_module["d" /* default */]);
+
+_defineProperty(component_Component, "contextType", src_module["b" /* ModuleContext */]);
 
 
 var component_SubComponent = function SubComponent(props) {
@@ -2619,28 +1228,31 @@ var component_SubComponent = function SubComponent(props) {
     subComponent: true
   }, props), props.children);
 };
+// EXTERNAL MODULE: ./node_modules/@onenexus/lucid/src/provider.jsx
+var provider = __webpack_require__(2);
+
+// CONCATENATED MODULE: ./node_modules/@onenexus/lucid/src/styled.js
+function styled_extends() { styled_extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return styled_extends.apply(this, arguments); }
+
+
+
+var styled_styled = function styled(name, props) {
+  var tag = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'div';
+  return React.createElement(component_Component, styled_extends({
+    name: name,
+    tag: tag
+  }, props), props.children);
+};
+
+/* harmony default export */ var src_styled = (styled_styled);
 // CONCATENATED MODULE: ./node_modules/@onenexus/lucid/src/index.js
 
 
-var BEM = {
-  Block: src_module["d" /* default */],
-  Element: component_Component,
-  SubElement: component_SubComponent
-};
-/* harmony default export */ var src = ({
-  Module: src_module["d" /* default */],
-  Component: component_Component,
-  SubComponent: component_SubComponent
-});
 
-// EXTERNAL MODULE: ./node_modules/@onenexus/squery/src/getters.js
-var getters = __webpack_require__(11);
 
-// EXTERNAL MODULE: ./node_modules/@onenexus/polymorph/src/polymorph.js
-var polymorph = __webpack_require__(14);
 
 // EXTERNAL MODULE: ./node_modules/deep-extend/lib/deep-extend.js
-var deep_extend = __webpack_require__(15);
+var deep_extend = __webpack_require__(6);
 var deep_extend_default = /*#__PURE__*/__webpack_require__.n(deep_extend);
 
 // CONCATENATED MODULE: ./src/synergy.js
@@ -2658,11 +1270,6 @@ function synergy_objectSpread(target) { for (var i = 1; i < arguments.length; i+
 
 function synergy_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-// import * as lucid from '../../../Lucid/Lucid/src';
-// import sQuery from '../../../sQuery/sQuery/src/getters';
-// import polymorph from '../../../Polymorph/Polymorph/src/polymorph';
-
-
 
 
 
@@ -2671,21 +1278,20 @@ if (typeof window !== 'undefined') {
     Synergy: window.Synergy || {}
   }, src_namespaceObject));
   Object.assign(Synergy, {
-    styleParser: polymorph["a" /* default */],
     config: deep_extend_default.a,
-    theme: synergy_theme
+    theme: theme
   });
-  getters["a" /* default */].init();
 }
 /**
  * Synergy Theme
  */
 
 
-function synergy_theme(modules) {
+function theme(modules) {
   var theme = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
   var globals = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
   var app = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+  var handleConfig = arguments.length > 4 ? arguments[4] : undefined;
 
   if (typeof theme === 'function') {
     theme = theme(globals);
@@ -2701,26 +1307,30 @@ function synergy_theme(modules) {
 
   Object.assign(Synergy, app.options);
   Synergy.config(globals, Synergy.config(theme, app.theme));
-  getters["a" /* default */].init();
   Object.values(modules).forEach(function (MODULE) {
-    var defaultConfig = MODULE.config || {};
+    var namespace = MODULE.defaultProps && MODULE.defaultProps.name || MODULE.name;
 
-    if (typeof defaultConfig === 'function') {
-      defaultConfig = defaultConfig(globals);
+    if (handleConfig) {
+      var defaultConfig = MODULE.config || {};
+
+      if (typeof defaultConfig === 'function') {
+        defaultConfig = defaultConfig(globals);
+      }
+
+      var themeConfig = theme.modules && evalConfig(theme.modules[namespace]);
+      Object.assign(MODULE, {
+        config: Synergy.config(defaultConfig, themeConfig)
+      });
     }
 
-    var namespace = MODULE.defaultProps && MODULE.defaultProps.name || MODULE.name;
-    var themeConfig = theme.modules && evalConfig(theme.modules[namespace]);
-    window[namespace] = Object.assign(MODULE, {
-      config: Synergy.config(defaultConfig, themeConfig)
-    });
+    window[namespace] = MODULE;
   });
 
   if (typeof globals.foundation === 'function') {
     globals.foundation(globals);
   }
 
-  delete globals.modules, window.ui = globals;
+  delete globals.modules, window.theme = globals;
 }
 /**
  * Evaluate module config properties

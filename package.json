@@ -1,6 +1,6 @@
 {
   "name": "@onenexus/synergy",
-  "version": "4.0.0-beta.11",
+  "version": "4.0.0-beta.13",
   "description": "A framework for building modular, configurable and scalable UI components for React-DOM projects",
   "main": "dist/synergy.js",
   "author": "(Edmund Reed)[http://twitter.com/esr360] <esr360@live.com>",
@@ -27,9 +27,9 @@
   },
   "dependencies": {
     "@onenexus/cell": "1.0.0-beta.5",
-    "@onenexus/lucid": "1.0.0-beta.4",
-    "@onenexus/polymorph": "1.0.0-beta.4",
-    "@onenexus/squery": "1.0.0-beta.6",
+    "@onenexus/lucid": "1.0.0-beta.8",
+    "@onenexus/polymorph": "1.0.0-beta.5",
+    "@onenexus/squery": "1.0.0-beta.7",
     "deep-extend": "^0.5.1",
     "react": "^16.4.0",
     "react-dom": "^16.4.0"
@@ -42,7 +42,7 @@
     "@babel/register": "^7.0.0",
     "babel-loader": "^8.0.5",
     "eslint": "^4.14.0",
-    "jsdoc": "^3.6.2",
+    "jsdoc": "^3.6.3",
     "jsdom": "^13.1.0",
     "jsdom-global": "^3.0.2",
     "mocha": "^3.4.2",
