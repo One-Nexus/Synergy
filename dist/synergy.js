@@ -1319,7 +1319,8 @@ function init(_ref) {
       globals = _ref$globals === void 0 ? {} : _ref$globals,
       _ref$app = _ref.app,
       app = _ref$app === void 0 ? {} : _ref$app,
-      handleConfig = _ref.handleConfig;
+      _ref$handleConfig = _ref.handleConfig,
+      handleConfig = _ref$handleConfig === void 0 ? true : _ref$handleConfig;
 
   if (typeof theme === 'function') {
     theme = theme(globals);

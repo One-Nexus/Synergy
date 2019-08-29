@@ -16,7 +16,7 @@ if (typeof window !== 'undefined') {
 /**
  * Synergy Theme
  */
-function init({ modules, theme = {}, globals = {}, app = {}, handleConfig }) {
+function init({ modules, theme = {}, globals = {}, app = {}, handleConfig = true }) {
   if (typeof theme === 'function') {
     theme = theme(globals);
   }
