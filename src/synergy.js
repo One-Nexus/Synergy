@@ -9,14 +9,14 @@ if (typeof window !== 'undefined') {
 
   Object.assign(Synergy, {
     config: deepextend,
-    theme: theme
+    init: init
   });
 }
 
 /**
  * Synergy Theme
  */
-function theme(modules, theme = {}, globals = {}, app = {}, handleConfig) {
+function init({ modules, theme = {}, globals = {}, app = {}, handleConfig }) {
   if (typeof theme === 'function') {
     theme = theme(globals);
   }

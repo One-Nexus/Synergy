@@ -105,10 +105,8 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__0__;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(process) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return ModuleContext; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return Module; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return Wrapper; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Group; });
+/* WEBPACK VAR INJECTION */(function(process) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ModuleContext; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return Module; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _utilities_evalConfig__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
@@ -367,6 +365,7 @@ function (_React$Component) {
     key: "setStyleStates",
     value: function setStyleStates() {
       var prevState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.state;
+      if (!this.REF.current) return;
       var _ref2 = [this.REF.current, this.REF.current.parentNode],
           CURRENT = _ref2[0],
           PARENT = _ref2[1];
@@ -490,10 +489,17 @@ function (_React$Component) {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(ModuleContext.Consumer, null, function (moduleContext) {
         var _objectSpread2;
 
+        _this3.DATA = _this3.DATA || props.styles;
         _this3.STYLES = _this3.getStyles(_this3.DATA, _this3.stylesConfig({
           context: moduleContext
         }));
+        var WRAPPERSTYLES = _this3.STYLES.wrapper || _this3.STYLES.group;
+
+        if (WRAPPERSTYLES && moduleContext.setWrapperStyles) {
+          moduleContext.setWrapperStyles(WRAPPERSTYLES);
+        }
         /** */
+
 
         var contextValues = _objectSpread({}, moduleContext, _this3.state, props, (_objectSpread2 = {
           THEME: _this3.THEME,
@@ -504,9 +510,9 @@ function (_React$Component) {
           SINGLECLASS: SINGLECLASS,
           GENERATECLASSES: GENERATECLASSES,
           GENERATEDATAATTRIBUTES: GENERATEDATAATTRIBUTES
-        }, _defineProperty(_objectSpread2, _this3.NAMESPACE, _objectSpread({}, _this3.state, props)), _defineProperty(_objectSpread2, "NAMESPACE", _this3.NAMESPACE), _objectSpread2));
+        }, _defineProperty(_objectSpread2, _this3.NAMESPACE, _objectSpread({}, _this3.state, props)), _defineProperty(_objectSpread2, "NAMESPACE", _this3.NAMESPACE), _defineProperty(_objectSpread2, "SETWRAPPERSTYLES", _this3.props.setWrapperStyles), _objectSpread2));
 
-        var content = props.content || props.children;
+        var content = props.content || props.render || props.children;
 
         if (typeof content === 'function') {
           content = content({
@@ -546,63 +552,6 @@ _defineProperty(Module, "config", function () {
 });
 
 
-var Wrapper =
-/*#__PURE__*/
-function (_Module) {
-  _inherits(Wrapper, _Module);
-
-  function Wrapper() {
-    _classCallCheck(this, Wrapper);
-
-    return _possibleConstructorReturn(this, _getPrototypeOf(Wrapper).apply(this, arguments));
-  }
-
-  _createClass(Wrapper, [{
-    key: "render",
-    value: function render() {
-      var MODULE = this.props.module;
-      var NAMESPACE = this.props.name || 'wrapper';
-
-      if (!MODULE) {
-        if (this.props.children.length) {
-          MODULE = this.props.children[0].type.name.toLowerCase();
-        } else {
-          MODULE = this.props.children.type.name.toLowerCase();
-        }
-      }
-
-      var DYNAMICPROPS = _defineProperty({}, MODULE, true);
-
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Module, _extends({
-        name: NAMESPACE
-      }, DYNAMICPROPS, this.props), this.props.children);
-    }
-  }]);
-
-  return Wrapper;
-}(Module);
-var Group =
-/*#__PURE__*/
-function (_Module2) {
-  _inherits(Group, _Module2);
-
-  function Group() {
-    _classCallCheck(this, Group);
-
-    return _possibleConstructorReturn(this, _getPrototypeOf(Group).apply(this, arguments));
-  }
-
-  _createClass(Group, [{
-    key: "render",
-    value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Wrapper, _extends({
-        name: "group"
-      }, this.props), this.props.children);
-    }
-  }]);
-
-  return Group;
-}(Module);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(7)))
 
 /***/ }),
@@ -640,10 +589,10 @@ function getModifiersFromProps(props) {
         key = _ref[0],
         value = _ref[1];
     var firstLetter = prop[0]; // if prop is name of module, do not include in list
-
-    if (firstLetter === firstLetter.toUpperCase()) {
-      continue;
-    }
+    // UPDATE: in retrospect, this actually would be useful, so commenting out
+    // if (firstLetter === firstLetter.toUpperCase()) {
+    //   continue;
+    // }
 
     if (prop === 'subComponent') {
       continue;
@@ -1080,9 +1029,9 @@ process.umask = function () {
 __webpack_require__.r(__webpack_exports__);
 var src_namespaceObject = {};
 __webpack_require__.r(src_namespaceObject);
-__webpack_require__.d(src_namespaceObject, "Module", function() { return src_module["d" /* default */]; });
-__webpack_require__.d(src_namespaceObject, "Wrapper", function() { return src_module["c" /* Wrapper */]; });
-__webpack_require__.d(src_namespaceObject, "Group", function() { return src_module["a" /* Group */]; });
+__webpack_require__.d(src_namespaceObject, "Module", function() { return src_module["b" /* default */]; });
+__webpack_require__.d(src_namespaceObject, "Wrapper", function() { return wrapper_Wrapper; });
+__webpack_require__.d(src_namespaceObject, "Group", function() { return wrapper_Group; });
 __webpack_require__.d(src_namespaceObject, "Component", function() { return component_Component; });
 __webpack_require__.d(src_namespaceObject, "SubComponent", function() { return component_SubComponent; });
 __webpack_require__.d(src_namespaceObject, "Provider", function() { return provider["b" /* default */]; });
@@ -1205,7 +1154,7 @@ function (_Module) {
         context: this.context
       })), _defineProperty(_objectSpread2, "STYLES", _objectSpread({}, this.context.STYLES, this.STYLES)), _defineProperty(_objectSpread2, "STRICT_NAMESPACE", STRICT_NAMESPACE), _objectSpread2));
 
-      return external_react_default.a.createElement(src_module["b" /* ModuleContext */].Provider, {
+      return external_react_default.a.createElement(src_module["a" /* ModuleContext */].Provider, {
         value: contextValues
       }, external_react_default.a.createElement(TAG, _extends({
         ref: this.REF
@@ -1218,14 +1167,88 @@ function (_Module) {
   }]);
 
   return Component;
-}(src_module["d" /* default */]);
+}(src_module["b" /* default */]);
 
-_defineProperty(component_Component, "contextType", src_module["b" /* ModuleContext */]);
+_defineProperty(component_Component, "contextType", src_module["a" /* ModuleContext */]);
 
 
 var component_SubComponent = function SubComponent(props) {
   return external_react_default.a.createElement(component_Component, _extends({
     subComponent: true
+  }, props), props.children);
+};
+// CONCATENATED MODULE: ./node_modules/@onenexus/lucid/src/wrapper.jsx
+function wrapper_typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { wrapper_typeof = function _typeof(obj) { return typeof obj; }; } else { wrapper_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return wrapper_typeof(obj); }
+
+function wrapper_extends() { wrapper_extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return wrapper_extends.apply(this, arguments); }
+
+function wrapper_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function wrapper_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function wrapper_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function wrapper_createClass(Constructor, protoProps, staticProps) { if (protoProps) wrapper_defineProperties(Constructor.prototype, protoProps); if (staticProps) wrapper_defineProperties(Constructor, staticProps); return Constructor; }
+
+function wrapper_possibleConstructorReturn(self, call) { if (call && (wrapper_typeof(call) === "object" || typeof call === "function")) { return call; } return wrapper_assertThisInitialized(self); }
+
+function wrapper_getPrototypeOf(o) { wrapper_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return wrapper_getPrototypeOf(o); }
+
+function wrapper_assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function wrapper_inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) wrapper_setPrototypeOf(subClass, superClass); }
+
+function wrapper_setPrototypeOf(o, p) { wrapper_setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return wrapper_setPrototypeOf(o, p); }
+
+
+
+var wrapper_Wrapper =
+/*#__PURE__*/
+function (_React$Component) {
+  wrapper_inherits(Wrapper, _React$Component);
+
+  function Wrapper(props) {
+    var _this;
+
+    wrapper_classCallCheck(this, Wrapper);
+
+    _this = wrapper_possibleConstructorReturn(this, wrapper_getPrototypeOf(Wrapper).call(this, props));
+    _this.state = {};
+    _this.applyStyles = _this.applyStyles.bind(wrapper_assertThisInitialized(_this));
+    return _this;
+  }
+
+  wrapper_createClass(Wrapper, [{
+    key: "applyStyles",
+    value: function applyStyles(styles) {
+      if (JSON.stringify(styles) !== JSON.stringify(this.state.styles)) {
+        this.setState({
+          styles: styles
+        });
+      }
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _PROPS;
+
+      var NAMESPACE = this.props.name || 'wrapper';
+      var CHILD = this.props.children.length ? this.props.children[0] : this.props.children;
+      var MODULE = this.props.module || CHILD.props.name || CHILD.type.name;
+      var PROPS = (_PROPS = {}, wrapper_defineProperty(_PROPS, MODULE, true), wrapper_defineProperty(_PROPS, "styles", this.state.styles), wrapper_defineProperty(_PROPS, "setWrapperStyles", this.applyStyles), _PROPS);
+      return external_react_default.a.createElement(Module, wrapper_extends({
+        name: NAMESPACE
+      }, this.props, PROPS), this.props.children);
+    }
+  }]);
+
+  return Wrapper;
+}(external_react_default.a.Component);
+
+
+var wrapper_Group = function Group(props) {
+  return external_react_default.a.createElement(wrapper_Wrapper, wrapper_extends({
+    name: "group"
   }, props), props.children);
 };
 // EXTERNAL MODULE: ./node_modules/@onenexus/lucid/src/provider.jsx
@@ -1246,6 +1269,7 @@ var styled_styled = function styled(name, props) {
 
 /* harmony default export */ var src_styled = (styled_styled);
 // CONCATENATED MODULE: ./node_modules/@onenexus/lucid/src/index.js
+
 
 
 
@@ -1279,7 +1303,7 @@ if (typeof window !== 'undefined') {
   }, src_namespaceObject));
   Object.assign(Synergy, {
     config: deep_extend_default.a,
-    theme: theme
+    init: init
   });
 }
 /**
@@ -1287,11 +1311,15 @@ if (typeof window !== 'undefined') {
  */
 
 
-function theme(modules) {
-  var theme = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-  var globals = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-  var app = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
-  var handleConfig = arguments.length > 4 ? arguments[4] : undefined;
+function init(_ref) {
+  var modules = _ref.modules,
+      _ref$theme = _ref.theme,
+      theme = _ref$theme === void 0 ? {} : _ref$theme,
+      _ref$globals = _ref.globals,
+      globals = _ref$globals === void 0 ? {} : _ref$globals,
+      _ref$app = _ref.app,
+      app = _ref$app === void 0 ? {} : _ref$app,
+      handleConfig = _ref.handleConfig;
 
   if (typeof theme === 'function') {
     theme = theme(globals);
@@ -1339,10 +1367,10 @@ function theme(modules) {
 
 function evalConfig(config) {
   if (!config) return;
-  Object.entries(config).forEach(function (_ref) {
-    var _ref2 = _slicedToArray(_ref, 2),
-        key = _ref2[0],
-        value = _ref2[1];
+  Object.entries(config).forEach(function (_ref2) {
+    var _ref3 = _slicedToArray(_ref2, 2),
+        key = _ref3[0],
+        value = _ref3[1];
 
     if (synergy_typeof(value) === 'object') {
       return evalConfig(value);
