@@ -360,6 +360,11 @@ function (_React$Component) {
           return error;
         }
       });
+      var WRAPPERSTYLES = this.STYLES.wrapper || this.STYLES.group;
+
+      if (WRAPPERSTYLES && this.SETWRAPPERSTYLES) {
+        this.SETWRAPPERSTYLES(WRAPPERSTYLES);
+      }
     }
   }, {
     key: "setStyleStates",
@@ -493,13 +498,8 @@ function (_React$Component) {
         _this3.STYLES = _this3.getStyles(_this3.DATA, _this3.stylesConfig({
           context: moduleContext
         }));
-        var WRAPPERSTYLES = _this3.STYLES.wrapper || _this3.STYLES.group;
-
-        if (WRAPPERSTYLES && moduleContext.setWrapperStyles) {
-          moduleContext.setWrapperStyles(WRAPPERSTYLES);
-        }
+        _this3.SETWRAPPERSTYLES = moduleContext.setWrapperStyles;
         /** */
-
 
         var contextValues = _objectSpread({}, moduleContext, _this3.state, props, (_objectSpread2 = {
           THEME: _this3.THEME,
