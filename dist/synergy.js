@@ -1346,7 +1346,7 @@ function init(_ref) {
         defaultConfig = defaultConfig(globals);
       }
 
-      var themeConfig = theme.modules && evalConfig(theme.modules[namespace]);
+      var themeConfig = theme.modules && evalConfig(theme.modules[namespace], theme);
       Object.assign(MODULE, {
         config: Synergy.config(defaultConfig, themeConfig)
       });
@@ -1366,7 +1366,7 @@ function init(_ref) {
  */
 
 
-function evalConfig(config) {
+function evalConfig(config, theme) {
   if (!config) return;
   Object.entries(config).forEach(function (_ref2) {
     var _ref3 = _slicedToArray(_ref2, 2),
@@ -1374,10 +1374,10 @@ function evalConfig(config) {
         value = _ref3[1];
 
     if (synergy_typeof(value) === 'object') {
-      return evalConfig(value);
+      return evalConfig(value, theme);
     } else {
       if (typeof value !== 'function') return;
-      return config[key] = value();
+      return config[key] = value(theme);
     }
   });
   return config;

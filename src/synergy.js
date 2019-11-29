@@ -43,7 +43,7 @@ function init({ modules, theme = {}, globals = {}, app = {}, handleConfig = true
         defaultConfig = defaultConfig(globals);
       }
 
-      const themeConfig = theme.modules && evalConfig(theme.modules[namespace]);
+      const themeConfig = theme.modules && evalConfig(theme.modules[namespace], theme);
 
       Object.assign(MODULE, {
         config: Synergy.config(defaultConfig, themeConfig)
@@ -63,16 +63,16 @@ function init({ modules, theme = {}, globals = {}, app = {}, handleConfig = true
 /**
  * Evaluate module config properties
  */
-function evalConfig(config) {
+function evalConfig(config, theme) {
   if (!config) return;
 
   Object.entries(config).forEach(([key, value]) => {
     if (typeof value === 'object') {
-      return evalConfig(value);
+      return evalConfig(value, theme);
     } else {
       if (typeof value !== 'function') return;
 
-      return config[key] = value();
+      return config[key] = value(theme);
     }
   });
 
