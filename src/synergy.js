@@ -1,78 +1,81 @@
 import * as lucid from '@onenexus/lucid/src';
 import deepextend from 'deep-extend';
 
-if (typeof window !== 'undefined') {
-  Object.assign(window, {
-    Synergy: window.Synergy || {},
-    ...lucid
-  });
+const Synergy = window.Synergy || {};
 
-  Object.assign(Synergy, {
-    config: deepextend,
-    init: init
-  });
-}
+Object.assign(Synergy, {
+  config: deepextend,
+  init: init
+});
 
-/**
- * Synergy Theme
- */
-function init({ modules, theme = {}, globals = {}, app = {}, handleConfig = true }) {
-  if (typeof theme === 'function') {
-    theme = theme(globals);
+export default Synergy;
+
+export function init({ modules, config = {}, theme = {}, callback }) {
+  const defaults = {
+    attachLucidToWindow: true,
+    attachModulesToWindow: true,
+    attachThemeToWindow: true,
+    attachSynergyToWindow: true,
+    handleModuleConfig: true
   }
 
-  if (theme.theme) {
-    theme = theme.theme;
+  config = { ...defaults, ...config }
+
+  Object.assign(Synergy, config);
+
+  if (config.attachLucidToWindow) {
+    Object.assign(window, lucid);
   }
 
-  if (app.Synergy && !app.options) {
-    app.options = app.Synergy;
-  }
+  if (config.attachModulesToWindow) {
+    Object.values(modules).forEach(MODULE => {
+      const namespace = (MODULE.defaultProps && MODULE.defaultProps.name) || MODULE.name;
 
-  Object.assign(Synergy, app.options);
+      if (config.handleModuleConfig) {
+        let defaultConfig = MODULE.config || {};
+    
+        if (typeof defaultConfig === 'function') {
+          defaultConfig = defaultConfig(theme);
+        }
 
-  Synergy.config(globals, Synergy.config(theme, app.theme));
+        const themeConfig = theme.modules && evalConfig(theme.modules[namespace], theme);
 
-  Object.values(modules).forEach(MODULE => {
-    const namespace = (MODULE.defaultProps && MODULE.defaultProps.name) || MODULE.name;
-
-    if (handleConfig) {
-      let defaultConfig = MODULE.config || {};
-  
-      if (typeof defaultConfig === 'function') {
-        defaultConfig = defaultConfig(globals);
+        Object.assign(MODULE, {
+          config: deepextend(defaultConfig, themeConfig)
+        });
       }
 
-      const themeConfig = theme.modules && evalConfig(theme.modules[namespace], theme);
-
-      Object.assign(MODULE, {
-        config: Synergy.config(defaultConfig, themeConfig)
-      });
-    }
-
-    window[namespace] = MODULE;
-  });
-
-  if (typeof globals.foundation === 'function') {
-    globals.foundation(globals);
+      window[namespace] = MODULE;
+    });
   }
 
-  delete globals.modules, window.theme = globals;
+  if (config.attachThemeToWindow) {
+    window.theme = theme;
+  }
+
+  if (config.attachSynergyToWindow) {
+    window.Synergy = Synergy;
+  }
+
+  if (typeof callback === 'function') {
+    callback({ modules, config, theme });
+  }
 }
 
 /**
  * Evaluate module config properties
  */
 function evalConfig(config, theme) {
-  if (!config) return;
+  if (!config) {
+    return;
+  }
 
   Object.entries(config).forEach(([key, value]) => {
     if (typeof value === 'object') {
       return evalConfig(value, theme);
-    } else {
-      if (typeof value !== 'function') return;
-
-      return config[key] = value(theme);
+    }
+    else {
+      return (typeof value === 'function') ? config[key] = value(theme) : false;
     }
   });
 

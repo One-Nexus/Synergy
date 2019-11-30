@@ -109,9 +109,9 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__0__;
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return Module; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _utilities_evalConfig__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
+/* harmony import */ var _utilities_evalConfig__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 /* harmony import */ var _utilities_getModifiersFromProps__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3);
-/* harmony import */ var _utilities_mergeThemes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
+/* harmony import */ var _utilities_mergeThemes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6);
 /* harmony import */ var _provider__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(2);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -610,63 +610,6 @@ function getModifiersFromProps(props) {
 
 /***/ }),
 /* 4 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return evalConfig; });
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function evalConfig(THEME) {
-  if (!THEME) return;
-  Object.entries(THEME).forEach(function (entry) {
-    var key = entry[0];
-    var value = entry[1];
-
-    if (_typeof(value) === 'object') {
-      return evalConfig(value);
-    }
-
-    if (typeof value === 'function') {
-      THEME[key] = value(THEME);
-    }
-  });
-  return THEME;
-}
-
-/***/ }),
-/* 5 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return mergeThemes; });
-function mergeThemes() {
-  var THEME = {};
-
-  for (var _len = arguments.length, themes = new Array(_len), _key = 0; _key < _len; _key++) {
-    themes[_key] = arguments[_key];
-  }
-
-  [].concat(themes).forEach(function (theme) {
-    if (typeof theme === 'function') {
-      THEME = deepMergeObjects(THEME, theme(THEME));
-    } else {
-      THEME = deepMergeObjects(THEME, theme);
-    }
-  });
-  return THEME;
-}
-/** */
-
-function deepMergeObjects() {
-  if (true) {
-    var _Synergy;
-
-    return (_Synergy = Synergy).config.apply(_Synergy, arguments);
-  } else { var _Synergy2; }
-}
-
-/***/ }),
-/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -807,6 +750,63 @@ var deepExtend = module.exports = function ()
   });
   return target;
 };
+
+/***/ }),
+/* 5 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return evalConfig; });
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function evalConfig(THEME) {
+  if (!THEME) return;
+  Object.entries(THEME).forEach(function (entry) {
+    var key = entry[0];
+    var value = entry[1];
+
+    if (_typeof(value) === 'object') {
+      return evalConfig(value);
+    }
+
+    if (typeof value === 'function') {
+      THEME[key] = value(THEME);
+    }
+  });
+  return THEME;
+}
+
+/***/ }),
+/* 6 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return mergeThemes; });
+function mergeThemes() {
+  var THEME = {};
+
+  for (var _len = arguments.length, themes = new Array(_len), _key = 0; _key < _len; _key++) {
+    themes[_key] = arguments[_key];
+  }
+
+  [].concat(themes).forEach(function (theme) {
+    if (typeof theme === 'function') {
+      THEME = deepMergeObjects(THEME, theme(THEME));
+    } else {
+      THEME = deepMergeObjects(THEME, theme);
+    }
+  });
+  return THEME;
+}
+/** */
+
+function deepMergeObjects() {
+  if (true) {
+    var _Synergy;
+
+    return (_Synergy = Synergy).config.apply(_Synergy, arguments);
+  } else { var _Synergy2; }
+}
 
 /***/ }),
 /* 7 */
@@ -1276,10 +1276,11 @@ var styled_styled = function styled(name, props) {
 
 
 // EXTERNAL MODULE: ./node_modules/deep-extend/lib/deep-extend.js
-var deep_extend = __webpack_require__(6);
+var deep_extend = __webpack_require__(4);
 var deep_extend_default = /*#__PURE__*/__webpack_require__.n(deep_extend);
 
 // CONCATENATED MODULE: ./src/synergy.js
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "init", function() { return init; });
 function synergy_typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { synergy_typeof = function _typeof(obj) { return typeof obj; }; } else { synergy_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return synergy_typeof(obj); }
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
@@ -1296,78 +1297,79 @@ function synergy_defineProperty(obj, key, value) { if (key in obj) { Object.defi
 
 
 
-
-if (typeof window !== 'undefined') {
-  Object.assign(window, synergy_objectSpread({
-    Synergy: window.Synergy || {}
-  }, src_namespaceObject));
-  Object.assign(Synergy, {
-    config: deep_extend_default.a,
-    init: init
-  });
-}
-/**
- * Synergy Theme
- */
-
-
+var Synergy = window.Synergy || {};
+Object.assign(Synergy, {
+  config: deep_extend_default.a,
+  init: init
+});
+/* harmony default export */ var synergy = __webpack_exports__["default"] = (Synergy);
 function init(_ref) {
   var modules = _ref.modules,
+      _ref$config = _ref.config,
+      config = _ref$config === void 0 ? {} : _ref$config,
       _ref$theme = _ref.theme,
       theme = _ref$theme === void 0 ? {} : _ref$theme,
-      _ref$globals = _ref.globals,
-      globals = _ref$globals === void 0 ? {} : _ref$globals,
-      _ref$app = _ref.app,
-      app = _ref$app === void 0 ? {} : _ref$app,
-      _ref$handleConfig = _ref.handleConfig,
-      handleConfig = _ref$handleConfig === void 0 ? true : _ref$handleConfig;
+      callback = _ref.callback;
+  var defaults = {
+    attachLucidToWindow: true,
+    attachModulesToWindow: true,
+    attachThemeToWindow: true,
+    attachSynergyToWindow: true,
+    handleModuleConfig: true
+  };
+  config = synergy_objectSpread({}, defaults, config);
+  Object.assign(Synergy, config);
 
-  if (typeof theme === 'function') {
-    theme = theme(globals);
+  if (config.attachLucidToWindow) {
+    Object.assign(window, src_namespaceObject);
   }
 
-  if (theme.theme) {
-    theme = theme.theme;
-  }
+  if (config.attachModulesToWindow) {
+    Object.values(modules).forEach(function (MODULE) {
+      var namespace = MODULE.defaultProps && MODULE.defaultProps.name || MODULE.name;
 
-  if (app.Synergy && !app.options) {
-    app.options = app.Synergy;
-  }
+      if (config.handleModuleConfig) {
+        var defaultConfig = MODULE.config || {};
 
-  Object.assign(Synergy, app.options);
-  Synergy.config(globals, Synergy.config(theme, app.theme));
-  Object.values(modules).forEach(function (MODULE) {
-    var namespace = MODULE.defaultProps && MODULE.defaultProps.name || MODULE.name;
+        if (typeof defaultConfig === 'function') {
+          defaultConfig = defaultConfig(theme);
+        }
 
-    if (handleConfig) {
-      var defaultConfig = MODULE.config || {};
-
-      if (typeof defaultConfig === 'function') {
-        defaultConfig = defaultConfig(globals);
+        var themeConfig = theme.modules && evalConfig(theme.modules[namespace], theme);
+        Object.assign(MODULE, {
+          config: deep_extend_default()(defaultConfig, themeConfig)
+        });
       }
 
-      var themeConfig = theme.modules && evalConfig(theme.modules[namespace], theme);
-      Object.assign(MODULE, {
-        config: Synergy.config(defaultConfig, themeConfig)
-      });
-    }
-
-    window[namespace] = MODULE;
-  });
-
-  if (typeof globals.foundation === 'function') {
-    globals.foundation(globals);
+      window[namespace] = MODULE;
+    });
   }
 
-  delete globals.modules, window.theme = globals;
+  if (config.attachThemeToWindow) {
+    window.theme = theme;
+  }
+
+  if (config.attachSynergyToWindow) {
+    window.Synergy = Synergy;
+  }
+
+  if (typeof callback === 'function') {
+    callback({
+      modules: modules,
+      config: config,
+      theme: theme
+    });
+  }
 }
 /**
  * Evaluate module config properties
  */
 
-
 function evalConfig(config, theme) {
-  if (!config) return;
+  if (!config) {
+    return;
+  }
+
   Object.entries(config).forEach(function (_ref2) {
     var _ref3 = _slicedToArray(_ref2, 2),
         key = _ref3[0],
@@ -1376,8 +1378,7 @@ function evalConfig(config, theme) {
     if (synergy_typeof(value) === 'object') {
       return evalConfig(value, theme);
     } else {
-      if (typeof value !== 'function') return;
-      return config[key] = value(theme);
+      return typeof value === 'function' ? config[key] = value(theme) : false;
     }
   });
   return config;
