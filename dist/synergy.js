@@ -1279,8 +1279,39 @@ var styled_styled = function styled(name, props) {
 var deep_extend = __webpack_require__(4);
 var deep_extend_default = /*#__PURE__*/__webpack_require__.n(deep_extend);
 
+// CONCATENATED MODULE: ./src/Container.js
+function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+
+
+/* harmony default export */ var Container = (function (_ref) {
+  var globals = _ref.globals,
+      _ref$ui = _ref.ui,
+      modules = _ref$ui.modules,
+      theme = _ref$ui.theme,
+      options = _ref.options,
+      callback = _ref.callback,
+      props = _objectWithoutProperties(_ref, ["globals", "ui", "options", "callback"]);
+
+  Object.assign(window, globals);
+  modules = props.modules || modules;
+  theme = props.theme || theme;
+  init({
+    modules: modules,
+    theme: theme,
+    options: options,
+    callback: callback
+  });
+  var Tag = props.element || typeof Provider !== 'undefined' ? Provider : 'div';
+  var render = props.render || props.children;
+  return React.createElement(Tag, {
+    theme: theme
+  }, typeof render === 'function' ? render() : render);
+});
 // CONCATENATED MODULE: ./src/synergy.js
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "init", function() { return init; });
+/* concated harmony reexport Container */__webpack_require__.d(__webpack_exports__, "Container", function() { return Container; });
 function synergy_typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { synergy_typeof = function _typeof(obj) { return typeof obj; }; } else { synergy_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return synergy_typeof(obj); }
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
@@ -1297,16 +1328,18 @@ function synergy_defineProperty(obj, key, value) { if (key in obj) { Object.defi
 
 
 
+
 var Synergy = window.Synergy || {};
 Object.assign(Synergy, {
   config: deep_extend_default.a,
   init: init
 });
 /* harmony default export */ var synergy = __webpack_exports__["default"] = (Synergy);
+
 function init(_ref) {
   var modules = _ref.modules,
-      _ref$config = _ref.config,
-      config = _ref$config === void 0 ? {} : _ref$config,
+      _ref$options = _ref.options,
+      options = _ref$options === void 0 ? {} : _ref$options,
       _ref$theme = _ref.theme,
       theme = _ref$theme === void 0 ? {} : _ref$theme,
       callback = _ref.callback;
@@ -1317,18 +1350,18 @@ function init(_ref) {
     attachSynergyToWindow: true,
     handleModuleConfig: true
   };
-  config = synergy_objectSpread({}, defaults, config);
-  Object.assign(Synergy, config);
+  options = synergy_objectSpread({}, defaults, options);
+  Object.assign(Synergy, options);
 
-  if (config.attachLucidToWindow) {
+  if (options.attachLucidToWindow) {
     Object.assign(window, src_namespaceObject);
   }
 
-  if (config.attachModulesToWindow) {
+  if (options.attachModulesToWindow) {
     Object.values(modules).forEach(function (MODULE) {
       var namespace = MODULE.defaultProps && MODULE.defaultProps.name || MODULE.name;
 
-      if (config.handleModuleConfig) {
+      if (options.handleModuleConfig) {
         var defaultConfig = MODULE.config || {};
 
         if (typeof defaultConfig === 'function') {
@@ -1345,25 +1378,22 @@ function init(_ref) {
     });
   }
 
-  if (config.attachThemeToWindow) {
+  if (options.attachThemeToWindow) {
     window.theme = theme;
   }
 
-  if (config.attachSynergyToWindow) {
+  if (options.attachSynergyToWindow) {
     window.Synergy = Synergy;
   }
 
   if (typeof callback === 'function') {
     callback({
       modules: modules,
-      config: config,
+      options: options,
       theme: theme
     });
   }
-}
-/**
- * Evaluate module config properties
- */
+} // Evaluate module config properties
 
 function evalConfig(config, theme) {
   if (!config) {

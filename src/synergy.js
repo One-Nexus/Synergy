@@ -1,5 +1,6 @@
 import * as lucid from '@onenexus/lucid/src';
 import deepextend from 'deep-extend';
+import Container from './Container';
 
 const Synergy = window.Synergy || {};
 
@@ -10,7 +11,9 @@ Object.assign(Synergy, {
 
 export default Synergy;
 
-export function init({ modules, config = {}, theme = {}, callback }) {
+export { Container }
+
+export function init({ modules, options = {}, theme = {}, callback }) {
   const defaults = {
     attachLucidToWindow: true,
     attachModulesToWindow: true,
@@ -19,19 +22,19 @@ export function init({ modules, config = {}, theme = {}, callback }) {
     handleModuleConfig: true
   }
 
-  config = { ...defaults, ...config }
+  options = { ...defaults, ...options }
 
-  Object.assign(Synergy, config);
+  Object.assign(Synergy, options);
 
-  if (config.attachLucidToWindow) {
+  if (options.attachLucidToWindow) {
     Object.assign(window, lucid);
   }
 
-  if (config.attachModulesToWindow) {
+  if (options.attachModulesToWindow) {
     Object.values(modules).forEach(MODULE => {
       const namespace = (MODULE.defaultProps && MODULE.defaultProps.name) || MODULE.name;
 
-      if (config.handleModuleConfig) {
+      if (options.handleModuleConfig) {
         let defaultConfig = MODULE.config || {};
     
         if (typeof defaultConfig === 'function') {
@@ -49,22 +52,20 @@ export function init({ modules, config = {}, theme = {}, callback }) {
     });
   }
 
-  if (config.attachThemeToWindow) {
+  if (options.attachThemeToWindow) {
     window.theme = theme;
   }
 
-  if (config.attachSynergyToWindow) {
+  if (options.attachSynergyToWindow) {
     window.Synergy = Synergy;
   }
 
   if (typeof callback === 'function') {
-    callback({ modules, config, theme });
+    callback({ modules, options, theme });
   }
 }
 
-/**
- * Evaluate module config properties
- */
+// Evaluate module config properties
 function evalConfig(config, theme) {
   if (!config) {
     return;

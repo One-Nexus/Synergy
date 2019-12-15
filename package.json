@@ -1,6 +1,6 @@
 {
   "name": "@onenexus/synergy",
-  "version": "4.0.0-beta.19",
+  "version": "4.0.0-beta.20",
   "description": "A framework for building modular, configurable and scalable UI components for React-DOM projects",
   "main": "dist/synergy.js",
   "author": "(Edmund Reed)[http://twitter.com/esr360] <esr360@live.com>",
@@ -26,11 +26,11 @@
     "url": "https://github.com/esr360/Synergy.git"
   },
   "dependencies": {
-    "@onenexus/cell": "1.0.0-beta.13",
+    "@onenexus/cell": "1.0.0-beta.14",
     "@onenexus/lucid": "1.0.0-beta.10",
     "deep-extend": "^0.5.1",
-    "react": "^16.4.0",
-    "react-dom": "^16.4.0"
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",
