@@ -1287,12 +1287,11 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
 
 /* harmony default export */ var Container = (function (_ref) {
   var globals = _ref.globals,
-      _ref$ui = _ref.ui,
-      modules = _ref$ui.modules,
-      theme = _ref$ui.theme,
+      modules = _ref.modules,
+      theme = _ref.theme,
       options = _ref.options,
       callback = _ref.callback,
-      props = _objectWithoutProperties(_ref, ["globals", "ui", "options", "callback"]);
+      props = _objectWithoutProperties(_ref, ["globals", "modules", "theme", "options", "callback"]);
 
   Object.assign(window, globals);
   modules = props.modules || modules;

@@ -1,6 +1,6 @@
 import { init } from './synergy';
 
-export default ({ globals, ui: { modules, theme }, options, callback, ...props }) => {
+export default ({ globals, modules, theme, options, callback, ...props }) => {
   Object.assign(window, globals);
 
   modules = props.modules || modules;
