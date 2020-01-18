@@ -13,7 +13,7 @@ export default ({ globals, modules, theme, options, callback, ...props }) => {
 
   return (
     <Tag theme={theme}>
-      { typeof render === 'function' ? render() : render }
+      { typeof render === 'function' ? render(theme) : render }
     </Tag>
   );
 }

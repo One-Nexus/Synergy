@@ -1,6 +1,6 @@
 {
   "name": "@onenexus/synergy",
-  "version": "4.0.0-beta.22",
+  "version": "4.0.0-beta.23",
   "description": "A framework for building modular, configurable and scalable UI components for React-DOM projects",
   "main": "dist/synergy.js",
   "author": "(Edmund Reed)[http://twitter.com/esr360] <esr360@live.com>",
@@ -26,9 +26,11 @@
     "url": "https://github.com/esr360/Synergy.git"
   },
   "dependencies": {
-    "@onenexus/cell": "1.0.0-beta.17",
-    "@onenexus/lucid": "1.0.0-beta.10",
-    "deep-extend": "^0.5.1"
+    "@onenexus/cell": "^1.0.0-beta.20",
+    "@onenexus/lucid": "^1.0.0-beta.11",
+    "deep-extend": "^0.5.1",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",
@@ -45,10 +47,6 @@
     "uglifyjs-webpack-plugin": "^2.1.1",
     "webpack": "^4.28.4",
     "webpack-cli": "^3.2.1"
-  },
-  "peerDependencies": {
-    "react": "^16.4.0",
-    "react-dom": "^16.4.0"
   },
   "scripts": {
     "lint": "eslint './src/js/**/*.js'",

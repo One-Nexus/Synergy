@@ -6,7 +6,9 @@ const Synergy = window.Synergy || {};
 
 Object.assign(Synergy, {
   config: deepextend,
-  init: init
+  init: init,
+  minWidth: (query) => window.matchMedia(`(min-width: ${query}`).matches,
+  maxWidth: (query) => window.matchMedia(`(max-width: ${query}`).matches
 });
 
 export default Synergy;
@@ -31,25 +33,7 @@ export function init({ modules, options = {}, theme = {}, callback }) {
   }
 
   if (options.attachModulesToWindow) {
-    Object.values(modules).forEach(MODULE => {
-      const namespace = (MODULE.defaultProps && MODULE.defaultProps.name) || MODULE.name;
-
-      if (options.handleModuleConfig) {
-        let defaultConfig = MODULE.config || {};
-    
-        if (typeof defaultConfig === 'function') {
-          defaultConfig = defaultConfig(theme);
-        }
-
-        const themeConfig = theme.modules && evalConfig(theme.modules[namespace], theme);
-
-        Object.assign(MODULE, {
-          config: deepextend(defaultConfig, themeConfig)
-        });
-      }
-
-      window[namespace] = MODULE;
-    });
+    Object.assign(window, modules);
   }
 
   if (options.attachThemeToWindow) {
@@ -63,22 +47,6 @@ export function init({ modules, options = {}, theme = {}, callback }) {
   if (typeof callback === 'function') {
     callback({ modules, options, theme });
   }
-}
 
-// Evaluate module config properties
-function evalConfig(config, theme) {
-  if (!config) {
-    return;
-  }
-
-  Object.entries(config).forEach(([key, value]) => {
-    if (typeof value === 'object') {
-      return evalConfig(value, theme);
-    }
-    else {
-      return (typeof value === 'function') ? config[key] = value(theme) : false;
-    }
-  });
-
-  return config;
+  return { modules, options, theme }
 }

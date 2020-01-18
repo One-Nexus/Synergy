@@ -91,7 +91,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 8);
+/******/ 	return __webpack_require__(__webpack_require__.s = 9);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -109,10 +109,12 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__0__;
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return Module; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _utilities_evalConfig__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
-/* harmony import */ var _utilities_getModifiersFromProps__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3);
-/* harmony import */ var _utilities_mergeThemes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6);
-/* harmony import */ var _provider__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(2);
+/* harmony import */ var html_void_elements__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
+var html_void_elements__WEBPACK_IMPORTED_MODULE_1___namespace = /*#__PURE__*/__webpack_require__.t(3, 1);
+/* harmony import */ var _utilities_evalConfig__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
+/* harmony import */ var _utilities_getModifiersFromProps__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4);
+/* harmony import */ var _utilities_mergeThemes__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(6);
+/* harmony import */ var _provider__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(2);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
@@ -136,6 +138,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 
@@ -170,39 +173,32 @@ function (_React$Component) {
     var Synergy = window.Synergy || {};
     _this.REF = react__WEBPACK_IMPORTED_MODULE_0___default.a.createRef();
     _this.DATA = props.styles;
-    _this.THEME = Object(_utilities_mergeThemes__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"])(context, window.theme, props.theme);
+    _this.THEME = Object(_utilities_mergeThemes__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"])(context, window.theme, props.theme);
     var LUCIDDEFAULTS = {
       generateClasses: true,
       generateDataAttributes: true
     };
-    var THEMECONFIG = _this.THEME.modules && Object(_utilities_evalConfig__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(_this.THEME.modules[props.name]);
-    var DEFAULTS = props.config;
+    var GLOBAL_MODULE = window[props.name];
+    var RAW_DEFAULTS = GLOBAL_MODULE && GLOBAL_MODULE.defaultProps && GLOBAL_MODULE.defaultProps.config;
+    var PROPCONFIG = typeof props.config === 'function' ? props.config(_this.THEME) : props.config;
+    var DEFAULTS = typeof RAW_DEFAULTS === 'function' ? RAW_DEFAULTS(_this.THEME) : RAW_DEFAULTS;
+    var THEMECONFIG = _this.THEME.modules && Object(_utilities_evalConfig__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"])(_this.THEME.modules[props.name], _this.THEME);
 
-    if (window.Synergy) {
-      var SYNERGY_MODULE = window[props.name] || {};
-      var config = SYNERGY_MODULE.config,
-          styles = SYNERGY_MODULE.styles;
-      if (config) DEFAULTS = config;
-      if (styles) _this.DATA = styles;
+    if (PROPCONFIG && PROPCONFIG.displace) {
+      DEFAULTS = {}, THEMECONFIG = {};
     }
 
-    DEFAULTS = typeof DEFAULTS === 'function' ? DEFAULTS(_this.THEME) : DEFAULTS;
-    _this.CONFIG = Module.config(LUCIDDEFAULTS, DEFAULTS, THEMECONFIG);
+    _this.CONFIG = Module.config(LUCIDDEFAULTS, DEFAULTS, THEMECONFIG, PROPCONFIG);
     _this.ID = props.id || "module-".concat(increment);
     _this.NAMESPACE = _this.CONFIG.name || props.name || props.tag || _this.ID;
     _this.TAG = props.href && 'a' || props.component || props.tag || 'div';
     _this.MODIFIERGLUE = props.modifierGlue || _this.CONFIG.modifierGlue || Synergy.modifierGlue || '--';
     _this.COMPONENTGLUE = props.componentGlue || _this.CONFIG.componentGlue || Synergy.componentGlue || '__';
-    _this.SINGLECLASS = props.singleClass || _this.CONFIG.singleClass || false;
+    _this.SINGLECLASS = props.singleClass || _this.CONFIG.singleClass || false; // @TODO move to LUCIDDEFAULTS
+
     _this.GENERATECLASSES = props.generateClasses || _this.CONFIG.generateClasses;
     _this.GENERATEDATAATTRIBUTES = props.generateDataAttributes || _this.CONFIG.generateDataAttributes;
-    _this.state = {
-      isHovered: false,
-      isFirstChild: false,
-      isLastChild: false,
-      before: null,
-      after: null
-    };
+    _this.state = {};
     return _this;
   }
   /** Get Attributes */
@@ -226,6 +222,20 @@ function (_React$Component) {
       }
 
       return eventHandlers;
+    }
+  }, {
+    key: "getInputAttributes",
+    value: function getInputAttributes(properties) {
+      var inputAttributes = {};
+      var whitelist = ['type', 'value', 'readonly', 'disabled', 'size', 'maxlength', 'autocomplete', 'autofocus', 'min', 'max', 'multiple', 'pattern', 'placeholder', 'required', 'step'];
+
+      for (var prop in properties) {
+        if (whitelist.includes(prop)) {
+          inputAttributes[prop] = properties[prop];
+        }
+      }
+
+      return inputAttributes;
     }
   }, {
     key: "getDataAttributes",
@@ -258,7 +268,7 @@ function (_React$Component) {
         config: config,
         context: context,
         state: _objectSpread({}, this.state, this.props),
-        element: this.REF.current
+        element: this.REF.current || document.createElement('span')
       };
     }
   }, {
@@ -308,6 +318,10 @@ function (_React$Component) {
       var styles = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
       var options = arguments.length > 2 ? arguments[2] : undefined;
 
+      var _ref2 = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {},
+          prevNamespace = _ref2.prevNamespace,
+          prevContext = _ref2.prevContext;
+
       if (typeof styles === 'function') {
         styles = styles(options);
       }
@@ -317,21 +331,104 @@ function (_React$Component) {
           return _this2.paint(node, style, options);
         });
       }
+      /**
+       * Cell Query
+       */
+
 
       Object.entries(styles).forEach(function (style) {
         var key = style[0];
         var value = style[1];
-
-        if ((key === ':hover' || key === 'is-hovered') && options.state.isHovered) {
-          return _this2.paint(node, value, options);
-        }
-
-        if (key.indexOf('with-') === 0 && options.context[key.replace('with-', '')]) {
-          return _this2.paint(node, value, options.context[key.replace('with-', '')]);
-        }
+        /**
+         * Determine if current node is queried modifier/state
+         */
 
         if (key.indexOf('is-') === 0) {
-          if (options[key.replace('is-', '')] || options.state[key.replace('is-', '')]) {
+          var CONTEXT = key.replace('is-', '');
+
+          if (options.state.name === ':before' || options.state.name === ':after') {
+            options = options.context[options.state.referer];
+          }
+
+          if (options[CONTEXT] || options.state[CONTEXT]) {
+            return _this2.paint(node, value, options);
+          }
+
+          return;
+        }
+        /**
+         * Determine if parent module/block is queried modifier/state
+         */
+
+
+        if (key.indexOf('$-is-') === 0 || key.indexOf('$:') === 0) {
+          var MODULE = options.context.NAMESPACE;
+
+          var _CONTEXT = key.indexOf('$:') === 0 ? key.slice(1, key.length) : key.slice(5, key.length);
+
+          if (options.context[MODULE][_CONTEXT]) {
+            return _this2.paint(node, value, options);
+          }
+
+          return;
+        }
+        /**
+         * Determine if previously specified parent component is queried modifier/state
+         */
+
+
+        if (key.indexOf('and-is-') === 0 || key.indexOf('and:') === 0) {
+          var _CONTEXT2 = key.indexOf('and:') === 0 ? key.replace('and', '') : key.replace('and-is-', '');
+
+          if (options.context[prevNamespace][_CONTEXT2]) {
+            return _this2.paint(node, value, options, {
+              prevNamespace: prevNamespace
+            });
+          }
+
+          return;
+        }
+        /**
+         * Determine if specified parent component is queried modifier/state
+         */
+
+
+        if (key.indexOf('-is-') > -1 || key.indexOf(':') > 0) {
+          var COMPONENT = key.indexOf(':') > 0 ? key.slice(0, key.indexOf(':')) : key.slice(0, key.indexOf('-is-'));
+
+          var _CONTEXT3 = key.indexOf(':') > 0 ? key.slice(key.indexOf(':'), key.length) : key.slice(key.indexOf('-is-') + 4, key.length);
+
+          if (options.context[COMPONENT][_CONTEXT3]) {
+            return _this2.paint(node, value, options, {
+              prevNamespace: COMPONENT
+            });
+          }
+
+          return;
+        }
+        /**
+         * Determine if current node is a child of the queried component/module
+         */
+
+
+        if (key.indexOf('in-') === 0) {
+          var _COMPONENT = key.replace('in-', '');
+
+          if (options.context[_COMPONENT]) {
+            return _this2.paint(node, value, options, {
+              prevNamespace: _COMPONENT
+            });
+          }
+
+          return;
+        }
+        /**
+         * Key defines pseudo-state
+         */
+
+
+        if (key.indexOf(':') === 0) {
+          if (options.state[key]) {
             return _this2.paint(node, value, options);
           }
         }
@@ -371,21 +468,15 @@ function (_React$Component) {
     value: function setStyleStates() {
       var prevState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.state;
       if (!this.REF.current) return;
-      var _ref2 = [this.REF.current, this.REF.current.parentNode],
-          CURRENT = _ref2[0],
-          PARENT = _ref2[1];
-      var _ref3 = [prevState.isFirstChild, CURRENT === PARENT.firstChild],
-          prevIsFirstChild = _ref3[0],
-          isFirstChild = _ref3[1];
-      var _ref4 = [prevState.isLastChild, CURRENT === PARENT.lastChild],
-          prevIsLastChild = _ref4[0],
-          isLastChild = _ref4[1];
-      var _ref5 = [prevState.before, this.STYLES[':before']],
-          prevBefore = _ref5[0],
-          before = _ref5[1];
-      var _ref6 = [prevState.after, this.STYLES[':after']],
-          prevAfter = _ref6[0],
-          after = _ref6[1];
+      var _ref3 = [this.REF.current, this.REF.current.parentNode],
+          CURRENT = _ref3[0],
+          PARENT = _ref3[1];
+      var _ref4 = [prevState.isFirstChild, CURRENT === PARENT.firstChild],
+          prevIsFirstChild = _ref4[0],
+          isFirstChild = _ref4[1];
+      var _ref5 = [prevState.isLastChild, CURRENT === PARENT.lastChild],
+          prevIsLastChild = _ref5[0],
+          isLastChild = _ref5[1];
 
       if (prevIsFirstChild !== isFirstChild) {
         this.setState({
@@ -399,16 +490,8 @@ function (_React$Component) {
         });
       }
 
-      if (JSON.stringify(prevBefore) !== JSON.stringify(before)) {
-        this.setState({
-          before: before
-        });
-      }
-
-      if (JSON.stringify(prevAfter) !== JSON.stringify(after)) {
-        this.setState({
-          after: after
-        });
+      if (!this.StyleStatesApplied) {
+        this.StyleStatesApplied = true;
       }
     }
     /** Event Handlers */
@@ -418,7 +501,8 @@ function (_React$Component) {
     value: function handleMouseEnter(event) {
       this.props.onMouseEnter && this.props.onMouseEnter(event);
       this.setState({
-        isHovered: true
+        isHovered: true,
+        ':hover': true
       });
     }
   }, {
@@ -426,7 +510,8 @@ function (_React$Component) {
     value: function handleMouseLeave(event) {
       this.props.onMouseLeave && this.props.onMouseLeave(event);
       this.setState({
-        isHovered: false
+        isHovered: false,
+        ':hover': false
       });
     }
     /** Lifecycle Methods */
@@ -436,13 +521,15 @@ function (_React$Component) {
     value: function componentDidMount() {
       if (this.REF.current) {
         this.setStyleStates();
-        this.paint(this.REF.current, this.DATA, this.stylesConfig());
       }
     }
   }, {
     key: "componentDidUpdate",
     value: function componentDidUpdate(prevProps, prevState) {
-      this.setStyleStates(prevState);
+      if (!prevState.length && JSON.stringify(this.state) === JSON.stringify(prevState)) {
+        this.setStyleStates(prevState);
+      }
+
       this.paint(this.REF.current, this.DATA, this.stylesConfig());
     }
   }, {
@@ -458,12 +545,12 @@ function (_React$Component) {
           GENERATEDATAATTRIBUTES = this.GENERATEDATAATTRIBUTES;
       /** */
 
-      var _ref7 = [props.className ? props.className + ' ' : '', this.NAMESPACE, []],
-          CLASSES = _ref7[0],
-          SELECTOR = _ref7[1],
-          MODIFIERS = _ref7[2];
+      var _ref6 = [props.className ? props.className + ' ' : '', this.NAMESPACE, []],
+          CLASSES = _ref6[0],
+          SELECTOR = _ref6[1],
+          MODIFIERS = _ref6[2];
       MODIFIERS.push(props.modifiers);
-      MODIFIERS = MODIFIERS.concat(Object(_utilities_getModifiersFromProps__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"])(props));
+      MODIFIERS = MODIFIERS.concat(Object(_utilities_getModifiersFromProps__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"])(props));
       MODIFIERS = MODIFIERS.filter(function (item, pos) {
         return MODIFIERS.indexOf(item) === pos;
       });
@@ -480,11 +567,7 @@ function (_React$Component) {
       CLASSES += SELECTOR;
       /** */
 
-      var _this$state = this.state,
-          before = _this$state.before,
-          after = _this$state.after;
-
-      var ATTRIBUTES = _objectSpread({}, this.getDataAttributes(props), this.getEventHandlers(props), props.attributes, {
+      var ATTRIBUTES = _objectSpread({}, this.getDataAttributes(props), this.getEventHandlers(props), this.getInputAttributes(props), props.attributes, {
         onMouseEnter: this.handleMouseEnter.bind(this),
         onMouseLeave: this.handleMouseLeave.bind(this),
         className: GENERATECLASSES ? CLASSES : null,
@@ -492,16 +575,16 @@ function (_React$Component) {
       });
 
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(ModuleContext.Consumer, null, function (moduleContext) {
-        var _objectSpread2;
-
         _this3.DATA = _this3.DATA || props.styles;
+        _this3.SETWRAPPERSTYLES = moduleContext.setWrapperStyles;
         _this3.STYLES = _this3.getStyles(_this3.DATA, _this3.stylesConfig({
           context: moduleContext
         }));
-        _this3.SETWRAPPERSTYLES = moduleContext.setWrapperStyles;
+        var before = _this3.STYLES[':before'];
+        var after = _this3.STYLES[':after'];
         /** */
 
-        var contextValues = _objectSpread({}, moduleContext, _this3.state, props, (_objectSpread2 = {
+        var contextValues = _objectSpread({}, moduleContext, _this3.state, props, _defineProperty({
           THEME: _this3.THEME,
           CONFIG: _this3.CONFIG,
           STYLES: _objectSpread({}, moduleContext.STYLES, _this3.STYLES),
@@ -510,7 +593,11 @@ function (_React$Component) {
           SINGLECLASS: SINGLECLASS,
           GENERATECLASSES: GENERATECLASSES,
           GENERATEDATAATTRIBUTES: GENERATEDATAATTRIBUTES
-        }, _defineProperty(_objectSpread2, _this3.NAMESPACE, _objectSpread({}, _this3.state, props)), _defineProperty(_objectSpread2, "NAMESPACE", _this3.NAMESPACE), _defineProperty(_objectSpread2, "SETWRAPPERSTYLES", _this3.props.setWrapperStyles), _objectSpread2));
+        }, _this3.NAMESPACE, _objectSpread({}, _this3.state, props)), !props.permeable && {
+          NAMESPACE: _this3.NAMESPACE
+        }, {
+          SETWRAPPERSTYLES: _this3.props.setWrapperStyles
+        });
 
         var content = props.content || props.render || props.children;
 
@@ -524,13 +611,18 @@ function (_React$Component) {
 
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(ModuleContext.Provider, {
           value: contextValues
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_this3.TAG, _extends({
+        }, html_void_elements__WEBPACK_IMPORTED_MODULE_1__.includes(_this3.TAG) ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_this3.TAG, _extends({
+          id: props.id ? _this3.ID : null,
+          ref: _this3.REF
+        }, ATTRIBUTES)) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_this3.TAG, _extends({
           id: props.id ? _this3.ID : null,
           ref: _this3.REF
         }, ATTRIBUTES), before && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Component, {
-          name: ":before"
+          name: ":before",
+          referer: _this3.NAMESPACE
         }, before.content), content, after && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Component, {
-          name: ":after"
+          name: ":after",
+          referer: _this3.NAMESPACE
         }, after.content)));
       });
     }
@@ -541,7 +633,7 @@ function (_React$Component) {
   return Module;
 }(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
 
-_defineProperty(Module, "contextType", _provider__WEBPACK_IMPORTED_MODULE_4__[/* ThemeContext */ "a"]);
+_defineProperty(Module, "contextType", _provider__WEBPACK_IMPORTED_MODULE_5__[/* ThemeContext */ "a"]);
 
 _defineProperty(Module, "config", function () {
   if (true) {
@@ -552,7 +644,7 @@ _defineProperty(Module, "config", function () {
 });
 
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(7)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(8)))
 
 /***/ }),
 /* 2 */
@@ -572,6 +664,12 @@ var ThemeContext = react__WEBPACK_IMPORTED_MODULE_0___default.a.createContext({}
 
 /***/ }),
 /* 3 */
+/***/ (function(module) {
+
+module.exports = ["area","base","basefont","bgsound","br","col","command","embed","frame","hr","image","img","input","isindex","keygen","link","menuitem","meta","nextid","param","source","track","wbr"];
+
+/***/ }),
+/* 4 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -596,6 +694,11 @@ function getModifiersFromProps(props) {
 
     if (prop === 'subComponent') {
       continue;
+    } // @TODO add these (with above subComponent) to whitelist array instead
+
+
+    if (prop === 'permeable') {
+      continue;
     }
 
     if (typeof value === 'boolean' && value) {
@@ -609,7 +712,64 @@ function getModifiersFromProps(props) {
 }
 
 /***/ }),
-/* 4 */
+/* 5 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return evalConfig; });
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function evalConfig(config, theme) {
+  if (!config) return;
+  Object.entries(config).forEach(function (entry) {
+    var key = entry[0];
+    var value = entry[1];
+
+    if (_typeof(value) === 'object') {
+      return evalConfig(value, theme);
+    }
+
+    if (typeof value === 'function') {
+      config[key] = value(theme);
+    }
+  });
+  return config;
+}
+
+/***/ }),
+/* 6 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return mergeThemes; });
+function mergeThemes() {
+  var THEME = {};
+
+  for (var _len = arguments.length, themes = new Array(_len), _key = 0; _key < _len; _key++) {
+    themes[_key] = arguments[_key];
+  }
+
+  [].concat(themes).forEach(function (theme) {
+    if (typeof theme === 'function') {
+      THEME = deepMergeObjects(THEME, theme(THEME));
+    } else {
+      THEME = deepMergeObjects(THEME, theme);
+    }
+  });
+  return THEME;
+}
+/** */
+
+function deepMergeObjects() {
+  if (true) {
+    var _Synergy;
+
+    return (_Synergy = Synergy).config.apply(_Synergy, arguments);
+  } else { var _Synergy2; }
+}
+
+/***/ }),
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -752,64 +912,7 @@ var deepExtend = module.exports = function ()
 };
 
 /***/ }),
-/* 5 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return evalConfig; });
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function evalConfig(THEME) {
-  if (!THEME) return;
-  Object.entries(THEME).forEach(function (entry) {
-    var key = entry[0];
-    var value = entry[1];
-
-    if (_typeof(value) === 'object') {
-      return evalConfig(value);
-    }
-
-    if (typeof value === 'function') {
-      THEME[key] = value(THEME);
-    }
-  });
-  return THEME;
-}
-
-/***/ }),
-/* 6 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return mergeThemes; });
-function mergeThemes() {
-  var THEME = {};
-
-  for (var _len = arguments.length, themes = new Array(_len), _key = 0; _key < _len; _key++) {
-    themes[_key] = arguments[_key];
-  }
-
-  [].concat(themes).forEach(function (theme) {
-    if (typeof theme === 'function') {
-      THEME = deepMergeObjects(THEME, theme(THEME));
-    } else {
-      THEME = deepMergeObjects(THEME, theme);
-    }
-  });
-  return THEME;
-}
-/** */
-
-function deepMergeObjects() {
-  if (true) {
-    var _Synergy;
-
-    return (_Synergy = Synergy).config.apply(_Synergy, arguments);
-  } else { var _Synergy2; }
-}
-
-/***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -1022,7 +1125,7 @@ process.umask = function () {
 };
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1044,8 +1147,11 @@ var src_module = __webpack_require__(1);
 var external_react_ = __webpack_require__(0);
 var external_react_default = /*#__PURE__*/__webpack_require__.n(external_react_);
 
+// EXTERNAL MODULE: ./node_modules/html-void-elements/index.json
+var html_void_elements = __webpack_require__(3);
+
 // EXTERNAL MODULE: ./node_modules/@onenexus/lucid/src/utilities/getModifiersFromProps.js
-var getModifiersFromProps = __webpack_require__(3);
+var getModifiersFromProps = __webpack_require__(4);
 
 // CONCATENATED MODULE: ./node_modules/@onenexus/lucid/src/component.jsx
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -1071,6 +1177,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 
@@ -1102,16 +1209,24 @@ function (_Module) {
 
       /** */
       this.DATA = this.context.STYLES[this.NAMESPACE];
-      this.STYLES = this.getStyles(this.DATA, this.stylesConfig({
-        theme: this.context.THEME,
-        config: this.context.CONFIG
-      }));
+      this.SETWRAPPERSTYLES = this.context.setWrapperStyles;
+      var before, after;
+
+      if (this.StyleStatesApplied) {
+        this.STYLES = this.getStyles(this.DATA, this.stylesConfig({
+          theme: this.context.THEME,
+          config: this.context.CONFIG
+        }));
+        before = this.STYLES[':before'];
+        after = this.STYLES[':after'];
+      }
+
       var props = this.props;
       var _this$context = this.context,
           MODIFIERGLUE = _this$context.MODIFIERGLUE,
           COMPONENTGLUE = _this$context.COMPONENTGLUE;
-      var STRICT_NAMESPACE = (this.context.STRICT_NAMESPACE || this.context.NAMESPACE) + COMPONENTGLUE + this.NAMESPACE;
       var TAG = props.href && 'a' || props.component || props.tag || 'div';
+      var STRICT_NAMESPACE = (props.subComponent ? this.context.STRICT_NAMESPACE : this.context.NAMESPACE) + COMPONENTGLUE + this.NAMESPACE;
       /** */
 
       var CLASSES = props.className ? props.className + ' ' : '',
@@ -1135,11 +1250,7 @@ function (_Module) {
       CLASSES += SELECTOR;
       /** */
 
-      var _this$state = this.state,
-          before = _this$state.before,
-          after = _this$state.after;
-
-      var ATTRIBUTES = _objectSpread({}, this.getDataAttributes(props), this.getEventHandlers(props), props.attributes, {
+      var ATTRIBUTES = _objectSpread({}, this.getDataAttributes(props), this.getEventHandlers(props), this.getInputAttributes(props), props.attributes, {
         onMouseEnter: this.handleMouseEnter.bind(this),
         onMouseLeave: this.handleMouseLeave.bind(this),
         className: this.context.GENERATECLASSES ? CLASSES : null,
@@ -1156,12 +1267,16 @@ function (_Module) {
 
       return external_react_default.a.createElement(src_module["a" /* ModuleContext */].Provider, {
         value: contextValues
-      }, external_react_default.a.createElement(TAG, _extends({
+      }, html_void_elements.includes(TAG) ? external_react_default.a.createElement(TAG, _extends({
+        ref: this.REF
+      }, ATTRIBUTES)) : external_react_default.a.createElement(TAG, _extends({
         ref: this.REF
       }, ATTRIBUTES), before && external_react_default.a.createElement(Component, {
-        name: ":before"
+        name: ":before",
+        referer: this.NAMESPACE
       }, before.content), props.content || props.children, after && external_react_default.a.createElement(Component, {
-        name: ":after"
+        name: ":after",
+        referer: this.NAMESPACE
       }, after.content)));
     }
   }]);
@@ -1235,7 +1350,7 @@ function (_React$Component) {
       var NAMESPACE = this.props.name || 'wrapper';
       var CHILD = this.props.children.length ? this.props.children[0] : this.props.children;
       var MODULE = this.props.module || CHILD.props.name || CHILD.type.name;
-      var PROPS = (_PROPS = {}, wrapper_defineProperty(_PROPS, MODULE, true), wrapper_defineProperty(_PROPS, "styles", this.state.styles), wrapper_defineProperty(_PROPS, "setWrapperStyles", this.applyStyles), _PROPS);
+      var PROPS = (_PROPS = {}, wrapper_defineProperty(_PROPS, MODULE, true), wrapper_defineProperty(_PROPS, "styles", this.state.styles), wrapper_defineProperty(_PROPS, "setWrapperStyles", this.applyStyles), wrapper_defineProperty(_PROPS, "permeable", true), _PROPS);
       return external_react_default.a.createElement(Module, wrapper_extends({
         name: NAMESPACE
       }, this.props, PROPS), this.props.children);
@@ -1276,7 +1391,7 @@ var styled_styled = function styled(name, props) {
 
 
 // EXTERNAL MODULE: ./node_modules/deep-extend/lib/deep-extend.js
-var deep_extend = __webpack_require__(4);
+var deep_extend = __webpack_require__(7);
 var deep_extend_default = /*#__PURE__*/__webpack_require__.n(deep_extend);
 
 // CONCATENATED MODULE: ./src/Container.js
@@ -1306,21 +1421,11 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
   var render = props.render || props.children;
   return React.createElement(Tag, {
     theme: theme
-  }, typeof render === 'function' ? render() : render);
+  }, typeof render === 'function' ? render(theme) : render);
 });
 // CONCATENATED MODULE: ./src/synergy.js
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "init", function() { return init; });
 /* concated harmony reexport Container */__webpack_require__.d(__webpack_exports__, "Container", function() { return Container; });
-function synergy_typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { synergy_typeof = function _typeof(obj) { return typeof obj; }; } else { synergy_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return synergy_typeof(obj); }
-
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
-
-function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
 function synergy_objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { synergy_defineProperty(target, key, source[key]); }); } return target; }
 
 function synergy_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -1331,7 +1436,13 @@ function synergy_defineProperty(obj, key, value) { if (key in obj) { Object.defi
 var Synergy = window.Synergy || {};
 Object.assign(Synergy, {
   config: deep_extend_default.a,
-  init: init
+  init: init,
+  minWidth: function minWidth(query) {
+    return window.matchMedia("(min-width: ".concat(query)).matches;
+  },
+  maxWidth: function maxWidth(query) {
+    return window.matchMedia("(max-width: ".concat(query)).matches;
+  }
 });
 /* harmony default export */ var synergy = __webpack_exports__["default"] = (Synergy);
 
@@ -1357,24 +1468,7 @@ function init(_ref) {
   }
 
   if (options.attachModulesToWindow) {
-    Object.values(modules).forEach(function (MODULE) {
-      var namespace = MODULE.defaultProps && MODULE.defaultProps.name || MODULE.name;
-
-      if (options.handleModuleConfig) {
-        var defaultConfig = MODULE.config || {};
-
-        if (typeof defaultConfig === 'function') {
-          defaultConfig = defaultConfig(theme);
-        }
-
-        var themeConfig = theme.modules && evalConfig(theme.modules[namespace], theme);
-        Object.assign(MODULE, {
-          config: deep_extend_default()(defaultConfig, themeConfig)
-        });
-      }
-
-      window[namespace] = MODULE;
-    });
+    Object.assign(window, modules);
   }
 
   if (options.attachThemeToWindow) {
@@ -1392,25 +1486,12 @@ function init(_ref) {
       theme: theme
     });
   }
-} // Evaluate module config properties
 
-function evalConfig(config, theme) {
-  if (!config) {
-    return;
-  }
-
-  Object.entries(config).forEach(function (_ref2) {
-    var _ref3 = _slicedToArray(_ref2, 2),
-        key = _ref3[0],
-        value = _ref3[1];
-
-    if (synergy_typeof(value) === 'object') {
-      return evalConfig(value, theme);
-    } else {
-      return typeof value === 'function' ? config[key] = value(theme) : false;
-    }
-  });
-  return config;
+  return {
+    modules: modules,
+    options: options,
+    theme: theme
+  };
 }
 
 /***/ })
