@@ -599,7 +599,7 @@ function (_React$Component) {
           SETWRAPPERSTYLES: _this3.props.setWrapperStyles
         });
 
-        var content = props.content || props.render || props.children;
+        var content = typeof props.content !== 'boolean' && props.content || props.render || props.children;
 
         if (typeof content === 'function') {
           content = content({
