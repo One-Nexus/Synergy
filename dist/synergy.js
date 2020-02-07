@@ -78,7 +78,7 @@ module.exports =
 /******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
 /******/
 /******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "/";
+/******/ 	__webpack_require__.p = "";
 /******/
 /******/
 /******/ 	// Load entry module and return exports
@@ -1210,20 +1210,20 @@ function deepMergeObjects_deepMergeObjects() {
     return __webpack_require__(1).apply(void 0, arguments);
   }
 }
-// CONCATENATED MODULE: ./src/synergy.js
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "useTheme", function() { return synergy_useTheme; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "evalTheme", function() { return synergy_evalTheme; });
+// CONCATENATED MODULE: ./src/index.js
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "useTheme", function() { return src_useTheme; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "evalTheme", function() { return src_evalTheme; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "init", function() { return init; });
 /* concated harmony reexport Container */__webpack_require__.d(__webpack_exports__, "Container", function() { return Container; });
-function synergy_objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { synergy_defineProperty(target, key, source[key]); }); } return target; }
+function src_objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { src_defineProperty(target, key, source[key]); }); } return target; }
 
-function synergy_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-
+function src_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 
-var synergy_Synergy = window.Synergy || {};
-Object.assign(synergy_Synergy, src_namespaceObject, {
+
+
+var src_Synergy = window.Synergy || {};
+Object.assign(src_Synergy, src_namespaceObject, {
   deepextend: deepMergeObjects_deepMergeObjects,
   init: init,
   minWidth: function minWidth(query) {
@@ -1233,9 +1233,9 @@ Object.assign(synergy_Synergy, src_namespaceObject, {
     return window.matchMedia("(max-width: ".concat(query)).matches;
   }
 });
-var synergy_useTheme = synergy_Synergy.useTheme,
-    synergy_evalTheme = synergy_Synergy.evalTheme;
-/* harmony default export */ var synergy = __webpack_exports__["default"] = (synergy_Synergy);
+var src_useTheme = src_Synergy.useTheme,
+    src_evalTheme = src_Synergy.evalTheme;
+/* harmony default export */ var src = __webpack_exports__["default"] = (src_Synergy);
 
 
 function init(_ref) {
@@ -1254,8 +1254,8 @@ function init(_ref) {
     attachSynergyToWindow: true,
     handleModuleConfig: true
   };
-  options = synergy_objectSpread({}, defaults, options);
-  Object.assign(synergy_Synergy, options);
+  options = src_objectSpread({}, defaults, options);
+  Object.assign(src_Synergy, options);
 
   if (options.attachLucidComponentsToWindow) {
     var Module = module_Module,
@@ -1287,7 +1287,7 @@ function init(_ref) {
   }
 
   if (options.attachSynergyToWindow) {
-    window.Synergy = synergy_Synergy;
+    window.Synergy = src_Synergy;
   }
 
   if (typeof callback === 'function') {

@@ -1,4 +1,4 @@
-import { init } from './synergy';
+import { init } from '.';
 
 export default ({ globals, modules, theme, utils, options, callback, ...props }) => {
   Object.assign(window, globals);

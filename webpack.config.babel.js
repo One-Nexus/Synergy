@@ -1,18 +1,15 @@
-import path from 'path';
 import UglifyJsPlugin from 'uglifyjs-webpack-plugin';
 import webpack from 'webpack';
 
 export default function() {
   return {
     entry: {
-      'synergy': './src/synergy.js',
-      'synergy.min': './src/synergy.js',
+      'synergy': './src/index.js',
+      'synergy.min': './src/index.js',
     },
 
     output: {
-      path: path.resolve(__dirname, 'dist/'),
       filename: '[name].js',
-      publicPath: '/',
       libraryTarget: 'commonjs2'
     },
 
