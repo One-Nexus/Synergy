@@ -13,7 +13,7 @@ export default function() {
       path: path.resolve(__dirname, 'dist/'),
       filename: '[name].js',
       publicPath: '/',
-      libraryTarget: 'umd'
+      libraryTarget: 'commonjs2'
     },
 
     plugins: [
@@ -38,13 +38,22 @@ export default function() {
     },
 
     externals: {
-      'react': 'react',
-      'react-dom': 'react-dom'
+      'react': 'React',
+      'react-dom': 'ReactDOM'
     },
 
     module: {
       rules: [{
         test: /\.(js|jsx)$/,
+        // include: [path.join(__dirname, 'src/'), /node_modules/],
+        // exclude: (MODULE) => {
+        //   if (~MODULE.indexOf('/node_modules/') && !(~MODULE.indexOf('/@onenexus/'))) {
+        //     return true;
+        //   }
+
+        //   return false;
+        // },
+        // exclude: [],
         resolve: { 
           extensions: ['.js', '.jsx'] 
         },

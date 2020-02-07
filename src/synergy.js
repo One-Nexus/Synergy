@@ -1,25 +1,28 @@
 import * as lucid from '@onenexus/lucid/src';
-import deepextend from 'deep-extend';
 import Container from './Container';
+import deepextend from './deepMergeObjects';
 
 const Synergy = window.Synergy || {};
 
-Object.assign(Synergy, {
-  config: deepextend,
+Object.assign(Synergy, lucid, {
+  deepextend: deepextend,
   init: init,
   minWidth: (query) => window.matchMedia(`(min-width: ${query}`).matches,
   maxWidth: (query) => window.matchMedia(`(max-width: ${query}`).matches
 });
 
+const { useTheme, evalTheme } = Synergy;
+
 export default Synergy;
 
-export { Container }
+export { Container, useTheme, evalTheme, init }
 
-export function init({ modules, options = {}, theme = {}, callback }) {
+function init({ modules, options = {}, theme = {}, utils, callback }) {
   const defaults = {
-    attachLucidToWindow: true,
+    attachLucidComponentsToWindow: true,
     attachModulesToWindow: true,
-    attachThemeToWindow: true,
+    attachThemeToWindow: false,
+    attachUtilsToWindow: false,
     attachSynergyToWindow: true,
     handleModuleConfig: true
   }
@@ -28,8 +31,24 @@ export function init({ modules, options = {}, theme = {}, callback }) {
 
   Object.assign(Synergy, options);
 
-  if (options.attachLucidToWindow) {
-    Object.assign(window, lucid);
+  if (options.attachLucidComponentsToWindow) {
+    const {
+      Module,
+      Wrapper,
+      Group,
+      Component,
+      SubComponent,
+      Provider
+    } = lucid;
+
+    Object.assign(window, {
+      Module,
+      Wrapper,
+      Group,
+      Component,
+      SubComponent,
+      Provider
+    });
   }
 
   if (options.attachModulesToWindow) {
@@ -40,13 +59,17 @@ export function init({ modules, options = {}, theme = {}, callback }) {
     window.theme = theme;
   }
 
+  if (options.attachUtilsToWindow) {
+    window.utils = utils;
+  }
+
   if (options.attachSynergyToWindow) {
     window.Synergy = Synergy;
   }
 
   if (typeof callback === 'function') {
-    callback({ modules, options, theme });
+    callback({ modules, options, theme, utils });
   }
 
-  return { modules, options, theme }
+  return { modules, options, theme, utils }
 }
