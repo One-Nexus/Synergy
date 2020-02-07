@@ -16,6 +16,10 @@ export default function() {
       libraryTarget: 'commonjs2'
     },
 
+    resolve: { 
+      extensions: ['.js', '.jsx'] 
+    },
+
     plugins: [
       new webpack.DefinePlugin({
         'process.env': {
@@ -45,28 +49,14 @@ export default function() {
     module: {
       rules: [{
         test: /\.(js|jsx)$/,
-        // include: [path.join(__dirname, 'src/'), /node_modules/],
-        // exclude: (MODULE) => {
-        //   if (~MODULE.indexOf('/node_modules/') && !(~MODULE.indexOf('/@onenexus/'))) {
-        //     return true;
-        //   }
-
-        //   return false;
-        // },
-        // exclude: [],
-        resolve: { 
-          extensions: ['.js', '.jsx'] 
-        },
-        use: {
-          loader: 'babel-loader'
-        }
+        exclude: (MODULE) => ~MODULE.indexOf('/node_modules/') && !(~MODULE.indexOf('/@onenexus/')),
+        use: 'babel-loader'
       }]
     },
 
-    node: { Buffer: false },
-
-    stats: { colors: true },
-
-    devtool: false
+    node: {
+      process: false,
+      Buffer: false 
+    }
   }
 }

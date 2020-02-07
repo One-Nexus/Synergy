@@ -82,20 +82,286 @@ module.exports =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 9);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module) {
+
+module.exports = ["area","base","basefont","bgsound","br","col","command","embed","frame","hr","image","img","input","isindex","keygen","link","menuitem","meta","nextid","param","source","track","wbr"];
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/*!
+ * @description Recursive object extending
+ * @author Viacheslav Lotsmanov <lotsmanov89@gmail.com>
+ * @license MIT
+ *
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2013-2018 Viacheslav Lotsmanov
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+
+
+function isSpecificValue(val) {
+	return (
+		val instanceof Buffer
+		|| val instanceof Date
+		|| val instanceof RegExp
+	) ? true : false;
+}
+
+function cloneSpecificValue(val) {
+	if (val instanceof Buffer) {
+		var x = Buffer.alloc
+			? Buffer.alloc(val.length)
+			: new Buffer(val.length);
+		val.copy(x);
+		return x;
+	} else if (val instanceof Date) {
+		return new Date(val.getTime());
+	} else if (val instanceof RegExp) {
+		return new RegExp(val);
+	} else {
+		throw new Error('Unexpected situation');
+	}
+}
+
+/**
+ * Recursive cloning array.
+ */
+function deepCloneArray(arr) {
+	var clone = [];
+	arr.forEach(function (item, index) {
+		if (typeof item === 'object' && item !== null) {
+			if (Array.isArray(item)) {
+				clone[index] = deepCloneArray(item);
+			} else if (isSpecificValue(item)) {
+				clone[index] = cloneSpecificValue(item);
+			} else {
+				clone[index] = deepExtend({}, item);
+			}
+		} else {
+			clone[index] = item;
+		}
+	});
+	return clone;
+}
+
+function safeGetProperty(object, property) {
+	return property === '__proto__' ? undefined : object[property];
+}
+
+/**
+ * Extening object that entered in first argument.
+ *
+ * Returns extended object or false if have no target object or incorrect type.
+ *
+ * If you wish to clone source object (without modify it), just use empty new
+ * object as first argument, like this:
+ *   deepExtend({}, yourObj_1, [yourObj_N]);
+ */
+var deepExtend = module.exports = function (/*obj_1, [obj_2], [obj_N]*/) {
+	if (arguments.length < 1 || typeof arguments[0] !== 'object') {
+		return false;
+	}
+
+	if (arguments.length < 2) {
+		return arguments[0];
+	}
+
+	var target = arguments[0];
+
+	// convert arguments to array and cut off target object
+	var args = Array.prototype.slice.call(arguments, 1);
+
+	var val, src, clone;
+
+	args.forEach(function (obj) {
+		// skip argument if isn't an object, is null, or is an array
+		if (typeof obj !== 'object' || obj === null || Array.isArray(obj)) {
+			return;
+		}
+
+		Object.keys(obj).forEach(function (key) {
+			src = safeGetProperty(target, key); // source value
+			val = safeGetProperty(obj, key); // new value
+
+			// recursion prevention
+			if (val === target) {
+				return;
+
+			/**
+			 * if new value isn't object then just overwrite by new value
+			 * instead of extending.
+			 */
+			} else if (typeof val !== 'object' || val === null) {
+				target[key] = val;
+				return;
+
+			// just clone arrays (and recursive clone objects inside)
+			} else if (Array.isArray(val)) {
+				target[key] = deepCloneArray(val);
+				return;
+
+			// custom cloning and overwrite for specific objects
+			} else if (isSpecificValue(val)) {
+				target[key] = cloneSpecificValue(val);
+				return;
+
+			// overwrite by new value if source isn't object or array
+			} else if (typeof src !== 'object' || src === null || Array.isArray(src)) {
+				target[key] = deepExtend({}, val);
+				return;
+
+			// source value and new value is objects both, extending...
+			} else {
+				target[key] = deepExtend(src, val);
+				return;
+			}
+		});
+	});
+
+	return target;
+};
+
+
+/***/ }),
+/* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return UIContext; });
+__webpack_require__.r(__webpack_exports__);
+var src_namespaceObject = {};
+__webpack_require__.r(src_namespaceObject);
+__webpack_require__.d(src_namespaceObject, "Module", function() { return module_Module; });
+__webpack_require__.d(src_namespaceObject, "Wrapper", function() { return wrapper_Wrapper; });
+__webpack_require__.d(src_namespaceObject, "Group", function() { return wrapper_Group; });
+__webpack_require__.d(src_namespaceObject, "Component", function() { return component_Component; });
+__webpack_require__.d(src_namespaceObject, "SubComponent", function() { return component_SubComponent; });
+__webpack_require__.d(src_namespaceObject, "Provider", function() { return provider; });
+__webpack_require__.d(src_namespaceObject, "styled", function() { return src_styled; });
+__webpack_require__.d(src_namespaceObject, "useTheme", function() { return useTheme; });
+__webpack_require__.d(src_namespaceObject, "evalTheme", function() { return evalTheme; });
+
+// EXTERNAL MODULE: ./node_modules/html-void-elements/index.json
+var html_void_elements = __webpack_require__(0);
+
+// CONCATENATED MODULE: ./node_modules/@onenexus/lucid/src/utilities/evalTheme.js
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function evalTheme(theme) {
+  var core = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : theme;
+  if (!theme) return;
+  if (Array.isArray(theme)) return theme;
+  var result = {};
+  Object.entries(theme).forEach(function (entry) {
+    var key = entry[0];
+    var value = entry[1];
+
+    if (_typeof(value) === 'object') {
+      result[key] = evalTheme(value, core);
+    } else {
+      if (typeof value === 'function') {
+        result[key] = value(core);
+      } else {
+        result[key] = value;
+      }
+    }
+  });
+  return result;
+}
+// CONCATENATED MODULE: ./node_modules/@onenexus/lucid/src/utilities/getModifiersFromProps.js
+/**
+ * @param {*} props 
+ * @param {*} blacklist 
+ */
+function getModifiersFromProps(props) {
+  var blacklist = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+  var modifiers = [];
+
+  for (var prop in props) {
+    var _ref = [prop, props[prop]],
+        key = _ref[0],
+        value = _ref[1];
+    var firstLetter = prop[0]; // if prop is name of module, do not include in list
+    // UPDATE: in retrospect, this actually would be useful, so commenting out
+    // if (firstLetter === firstLetter.toUpperCase()) {
+    //   continue;
+    // }
+
+    if (prop === 'subComponent') {
+      continue;
+    } // @TODO add these (with above subComponent) to whitelist array instead
+
+
+    if (prop === 'permeable') {
+      continue;
+    }
+
+    if (typeof value === 'boolean' && value) {
+      if (blacklist.indexOf(key) < 0) {
+        modifiers.push(key);
+      }
+    }
+  }
+
+  return modifiers;
+}
+// CONCATENATED MODULE: ./node_modules/@onenexus/lucid/src/utilities/deepMergeObjects.js
+function deepMergeObjects() {
+  if (true) {
+    var _Synergy;
+
+    return (_Synergy = Synergy).deepextend.apply(_Synergy, arguments);
+  } else { var _Synergy2; }
+}
+// CONCATENATED MODULE: ./node_modules/@onenexus/lucid/src/utilities/mergeThemes.js
+
+function mergeThemes() {
+  var THEME = {};
+
+  for (var _len = arguments.length, themes = new Array(_len), _key = 0; _key < _len; _key++) {
+    themes[_key] = arguments[_key];
+  }
+
+  [].concat(themes).forEach(function (theme) {
+    if (typeof theme === 'function') {
+      THEME = deepMergeObjects(THEME, theme(THEME));
+    } else {
+      THEME = deepMergeObjects(THEME, theme);
+    }
+  });
+  return THEME;
+}
+// CONCATENATED MODULE: ./node_modules/@onenexus/lucid/src/provider.jsx
 var UIContext = React.createContext({
   theme: {},
   utils: {}
 });
-/* harmony default export */ __webpack_exports__["b"] = (function (props) {
+/* harmony default export */ var provider = (function (props) {
   return React.createElement(UIContext.Provider, {
     value: {
       theme: props.theme,
@@ -103,22 +369,8 @@ var UIContext = React.createContext({
     }
   }, props.children);
 });
-
-/***/ }),
-/* 1 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ModuleContext; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return Module; });
-/* harmony import */ var html_void_elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4);
-var html_void_elements__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/__webpack_require__.t(4, 1);
-/* harmony import */ var _utilities_evalTheme__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
-/* harmony import */ var _utilities_getModifiersFromProps__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
-/* harmony import */ var _utilities_mergeThemes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6);
-/* harmony import */ var _utilities_deepMergeObjects__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(2);
-/* harmony import */ var _provider__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(0);
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+// CONCATENATED MODULE: ./node_modules/@onenexus/lucid/src/module.jsx
+function module_typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { module_typeof = function _typeof(obj) { return typeof obj; }; } else { module_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return module_typeof(obj); }
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
@@ -130,7 +382,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+function _possibleConstructorReturn(self, call) { if (call && (module_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
@@ -161,7 +413,7 @@ var increment = 1;
 var ModuleContext = React.createContext({});
 /** Render a Synergy module */
 
-var Module =
+var module_Module =
 /*#__PURE__*/
 function (_React$Component) {
   _inherits(Module, _React$Component);
@@ -178,7 +430,7 @@ function (_React$Component) {
     var Synergy = window.Synergy || {};
     _this.REF = React.createRef();
     _this.DATA = props.styles;
-    _this.THEME = Object(_utilities_evalTheme__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(Object(_utilities_mergeThemes__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"])(context.theme, window.theme, props.theme));
+    _this.THEME = evalTheme(mergeThemes(context.theme, window.theme, props.theme));
     _this.UTILS = context.utils || window.utils;
     var LUCIDDEFAULTS = {
       generateClasses: true,
@@ -198,7 +450,7 @@ function (_React$Component) {
       DEFAULTS = {}, THEMECONFIG = {};
     }
 
-    _this.CONFIG = Object(_utilities_deepMergeObjects__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"])(LUCIDDEFAULTS, DEFAULTS, THEMECONFIG, PROPCONFIG);
+    _this.CONFIG = deepMergeObjects(LUCIDDEFAULTS, DEFAULTS, THEMECONFIG, PROPCONFIG);
     _this.ID = props.id || "module-".concat(increment);
     _this.NAMESPACE = _this.CONFIG.name || props.name || props.tag || _this.ID;
     _this.TAG = props.href && 'a' || props.component || props.tag || 'div';
@@ -582,7 +834,7 @@ function (_React$Component) {
           SELECTOR = _ref6[1],
           MODIFIERS = _ref6[2];
       MODIFIERS.push(props.modifiers);
-      MODIFIERS = MODIFIERS.concat(Object(_utilities_getModifiersFromProps__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"])(props));
+      MODIFIERS = MODIFIERS.concat(getModifiersFromProps(props));
       MODIFIERS = MODIFIERS.filter(function (item, pos) {
         return MODIFIERS.indexOf(item) === pos;
       });
@@ -641,7 +893,7 @@ function (_React$Component) {
 
         return React.createElement(ModuleContext.Provider, {
           value: contextValues
-        }, html_void_elements__WEBPACK_IMPORTED_MODULE_0__.includes(_this3.TAG) ? React.createElement(_this3.TAG, _extends({
+        }, html_void_elements.includes(_this3.TAG) ? React.createElement(_this3.TAG, _extends({
           id: props.id ? _this3.ID : null,
           ref: _this3.REF
         }, ATTRIBUTES)) : React.createElement(_this3.TAG, _extends({
@@ -663,536 +915,33 @@ function (_React$Component) {
   return Module;
 }(React.Component);
 
-_defineProperty(Module, "contextType", _provider__WEBPACK_IMPORTED_MODULE_5__[/* UIContext */ "a"]);
+_defineProperty(module_Module, "contextType", UIContext);
 
-
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(7)))
-
-/***/ }),
-/* 2 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return deepMergeObjects; });
-function deepMergeObjects() {
-  if (true) {
-    var _Synergy;
-
-    return (_Synergy = Synergy).deepextend.apply(_Synergy, arguments);
-  } else { var _Synergy2; }
-}
-
-/***/ }),
-/* 3 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return evalTheme; });
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function evalTheme(theme) {
-  var core = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : theme;
-  if (!theme) return;
-  if (Array.isArray(theme)) return theme;
-  var result = {};
-  Object.entries(theme).forEach(function (entry) {
-    var key = entry[0];
-    var value = entry[1];
-
-    if (_typeof(value) === 'object') {
-      result[key] = evalTheme(value, core);
-    } else {
-      if (typeof value === 'function') {
-        result[key] = value(core);
-      } else {
-        result[key] = value;
-      }
-    }
-  });
-  return result;
-}
-
-/***/ }),
-/* 4 */
-/***/ (function(module) {
-
-module.exports = ["area","base","basefont","bgsound","br","col","command","embed","frame","hr","image","img","input","isindex","keygen","link","menuitem","meta","nextid","param","source","track","wbr"];
-
-/***/ }),
-/* 5 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getModifiersFromProps; });
-/**
- * @param {*} props 
- * @param {*} blacklist 
- */
-function getModifiersFromProps(props) {
-  var blacklist = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
-  var modifiers = [];
-
-  for (var prop in props) {
-    var _ref = [prop, props[prop]],
-        key = _ref[0],
-        value = _ref[1];
-    var firstLetter = prop[0]; // if prop is name of module, do not include in list
-    // UPDATE: in retrospect, this actually would be useful, so commenting out
-    // if (firstLetter === firstLetter.toUpperCase()) {
-    //   continue;
-    // }
-
-    if (prop === 'subComponent') {
-      continue;
-    } // @TODO add these (with above subComponent) to whitelist array instead
-
-
-    if (prop === 'permeable') {
-      continue;
-    }
-
-    if (typeof value === 'boolean' && value) {
-      if (blacklist.indexOf(key) < 0) {
-        modifiers.push(key);
-      }
-    }
-  }
-
-  return modifiers;
-}
-
-/***/ }),
-/* 6 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return mergeThemes; });
-/* harmony import */ var _deepMergeObjects__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
-
-function mergeThemes() {
-  var THEME = {};
-
-  for (var _len = arguments.length, themes = new Array(_len), _key = 0; _key < _len; _key++) {
-    themes[_key] = arguments[_key];
-  }
-
-  [].concat(themes).forEach(function (theme) {
-    if (typeof theme === 'function') {
-      THEME = Object(_deepMergeObjects__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(THEME, theme(THEME));
-    } else {
-      THEME = Object(_deepMergeObjects__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(THEME, theme);
-    }
-  });
-  return THEME;
-}
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports) {
-
-// shim for using process in browser
-var process = module.exports = {}; // cached from whatever global is present so that test runners that stub it
-// don't break things.  But we need to wrap it in a try catch in case it is
-// wrapped in strict mode code which doesn't define any globals.  It's inside a
-// function because try/catches deoptimize in certain engines.
-
-var cachedSetTimeout;
-var cachedClearTimeout;
-
-function defaultSetTimout() {
-  throw new Error('setTimeout has not been defined');
-}
-
-function defaultClearTimeout() {
-  throw new Error('clearTimeout has not been defined');
-}
-
-(function () {
-  try {
-    if (typeof setTimeout === 'function') {
-      cachedSetTimeout = setTimeout;
-    } else {
-      cachedSetTimeout = defaultSetTimout;
-    }
-  } catch (e) {
-    cachedSetTimeout = defaultSetTimout;
-  }
-
-  try {
-    if (typeof clearTimeout === 'function') {
-      cachedClearTimeout = clearTimeout;
-    } else {
-      cachedClearTimeout = defaultClearTimeout;
-    }
-  } catch (e) {
-    cachedClearTimeout = defaultClearTimeout;
-  }
-})();
-
-function runTimeout(fun) {
-  if (cachedSetTimeout === setTimeout) {
-    //normal enviroments in sane situations
-    return setTimeout(fun, 0);
-  } // if setTimeout wasn't available but was latter defined
-
-
-  if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-    cachedSetTimeout = setTimeout;
-    return setTimeout(fun, 0);
-  }
-
-  try {
-    // when when somebody has screwed with setTimeout but no I.E. maddness
-    return cachedSetTimeout(fun, 0);
-  } catch (e) {
-    try {
-      // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-      return cachedSetTimeout.call(null, fun, 0);
-    } catch (e) {
-      // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-      return cachedSetTimeout.call(this, fun, 0);
-    }
-  }
-}
-
-function runClearTimeout(marker) {
-  if (cachedClearTimeout === clearTimeout) {
-    //normal enviroments in sane situations
-    return clearTimeout(marker);
-  } // if clearTimeout wasn't available but was latter defined
-
-
-  if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-    cachedClearTimeout = clearTimeout;
-    return clearTimeout(marker);
-  }
-
-  try {
-    // when when somebody has screwed with setTimeout but no I.E. maddness
-    return cachedClearTimeout(marker);
-  } catch (e) {
-    try {
-      // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-      return cachedClearTimeout.call(null, marker);
-    } catch (e) {
-      // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-      // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-      return cachedClearTimeout.call(this, marker);
-    }
-  }
-}
-
-var queue = [];
-var draining = false;
-var currentQueue;
-var queueIndex = -1;
-
-function cleanUpNextTick() {
-  if (!draining || !currentQueue) {
-    return;
-  }
-
-  draining = false;
-
-  if (currentQueue.length) {
-    queue = currentQueue.concat(queue);
-  } else {
-    queueIndex = -1;
-  }
-
-  if (queue.length) {
-    drainQueue();
-  }
-}
-
-function drainQueue() {
-  if (draining) {
-    return;
-  }
-
-  var timeout = runTimeout(cleanUpNextTick);
-  draining = true;
-  var len = queue.length;
-
-  while (len) {
-    currentQueue = queue;
-    queue = [];
-
-    while (++queueIndex < len) {
-      if (currentQueue) {
-        currentQueue[queueIndex].run();
-      }
-    }
-
-    queueIndex = -1;
-    len = queue.length;
-  }
-
-  currentQueue = null;
-  draining = false;
-  runClearTimeout(timeout);
-}
-
-process.nextTick = function (fun) {
-  var args = new Array(arguments.length - 1);
-
-  if (arguments.length > 1) {
-    for (var i = 1; i < arguments.length; i++) {
-      args[i - 1] = arguments[i];
-    }
-  }
-
-  queue.push(new Item(fun, args));
-
-  if (queue.length === 1 && !draining) {
-    runTimeout(drainQueue);
-  }
-}; // v8 likes predictible objects
-
-
-function Item(fun, array) {
-  this.fun = fun;
-  this.array = array;
-}
-
-Item.prototype.run = function () {
-  this.fun.apply(null, this.array);
-};
-
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-process.version = ''; // empty string to avoid regexp issues
-
-process.versions = {};
-
-function noop() {}
-
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
-process.prependListener = noop;
-process.prependOnceListener = noop;
-
-process.listeners = function (name) {
-  return [];
-};
-
-process.binding = function (name) {
-  throw new Error('process.binding is not supported');
-};
-
-process.cwd = function () {
-  return '/';
-};
-
-process.chdir = function (dir) {
-  throw new Error('process.chdir is not supported');
-};
-
-process.umask = function () {
-  return 0;
-};
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/*!
- * @description Recursive object extending
- * @author Viacheslav Lotsmanov <lotsmanov89@gmail.com>
- * @license MIT
- *
- * The MIT License (MIT)
- *
- * Copyright (c) 2013-2018 Viacheslav Lotsmanov
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of
- * this software and associated documentation files (the "Software"), to deal in
- * the Software without restriction, including without limitation the rights to
- * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
- * the Software, and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
- * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
- * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
- * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
- * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function isSpecificValue(val) {
-  return val instanceof Buffer || val instanceof Date || val instanceof RegExp ? true : false;
-}
-
-function cloneSpecificValue(val) {
-  if (val instanceof Buffer) {
-    var x = Buffer.alloc ? Buffer.alloc(val.length) : new Buffer(val.length);
-    val.copy(x);
-    return x;
-  } else if (val instanceof Date) {
-    return new Date(val.getTime());
-  } else if (val instanceof RegExp) {
-    return new RegExp(val);
-  } else {
-    throw new Error('Unexpected situation');
-  }
-}
-/**
- * Recursive cloning array.
- */
-
-
-function deepCloneArray(arr) {
-  var clone = [];
-  arr.forEach(function (item, index) {
-    if (_typeof(item) === 'object' && item !== null) {
-      if (Array.isArray(item)) {
-        clone[index] = deepCloneArray(item);
-      } else if (isSpecificValue(item)) {
-        clone[index] = cloneSpecificValue(item);
-      } else {
-        clone[index] = deepExtend({}, item);
-      }
-    } else {
-      clone[index] = item;
-    }
-  });
-  return clone;
-}
-
-function safeGetProperty(object, property) {
-  return property === '__proto__' ? undefined : object[property];
-}
-/**
- * Extening object that entered in first argument.
- *
- * Returns extended object or false if have no target object or incorrect type.
- *
- * If you wish to clone source object (without modify it), just use empty new
- * object as first argument, like this:
- *   deepExtend({}, yourObj_1, [yourObj_N]);
- */
-
-
-var deepExtend = module.exports = function ()
-/*obj_1, [obj_2], [obj_N]*/
-{
-  if (arguments.length < 1 || _typeof(arguments[0]) !== 'object') {
-    return false;
-  }
-
-  if (arguments.length < 2) {
-    return arguments[0];
-  }
-
-  var target = arguments[0]; // convert arguments to array and cut off target object
-
-  var args = Array.prototype.slice.call(arguments, 1);
-  var val, src, clone;
-  args.forEach(function (obj) {
-    // skip argument if isn't an object, is null, or is an array
-    if (_typeof(obj) !== 'object' || obj === null || Array.isArray(obj)) {
-      return;
-    }
-
-    Object.keys(obj).forEach(function (key) {
-      src = safeGetProperty(target, key); // source value
-
-      val = safeGetProperty(obj, key); // new value
-      // recursion prevention
-
-      if (val === target) {
-        return;
-        /**
-         * if new value isn't object then just overwrite by new value
-         * instead of extending.
-         */
-      } else if (_typeof(val) !== 'object' || val === null) {
-        target[key] = val;
-        return; // just clone arrays (and recursive clone objects inside)
-      } else if (Array.isArray(val)) {
-        target[key] = deepCloneArray(val);
-        return; // custom cloning and overwrite for specific objects
-      } else if (isSpecificValue(val)) {
-        target[key] = cloneSpecificValue(val);
-        return; // overwrite by new value if source isn't object or array
-      } else if (_typeof(src) !== 'object' || src === null || Array.isArray(src)) {
-        target[key] = deepExtend({}, val);
-        return; // source value and new value is objects both, extending...
-      } else {
-        target[key] = deepExtend(src, val);
-        return;
-      }
-    });
-  });
-  return target;
-};
-
-/***/ }),
-/* 9 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-var src_namespaceObject = {};
-__webpack_require__.r(src_namespaceObject);
-__webpack_require__.d(src_namespaceObject, "Module", function() { return src_module["b" /* default */]; });
-__webpack_require__.d(src_namespaceObject, "Wrapper", function() { return wrapper_Wrapper; });
-__webpack_require__.d(src_namespaceObject, "Group", function() { return wrapper_Group; });
-__webpack_require__.d(src_namespaceObject, "Component", function() { return component_Component; });
-__webpack_require__.d(src_namespaceObject, "SubComponent", function() { return component_SubComponent; });
-__webpack_require__.d(src_namespaceObject, "Provider", function() { return provider["b" /* default */]; });
-__webpack_require__.d(src_namespaceObject, "styled", function() { return src_styled; });
-__webpack_require__.d(src_namespaceObject, "useTheme", function() { return useTheme; });
-__webpack_require__.d(src_namespaceObject, "evalTheme", function() { return evalTheme["a" /* default */]; });
-
-// EXTERNAL MODULE: ./node_modules/@onenexus/lucid/src/module.jsx
-var src_module = __webpack_require__(1);
-
-// EXTERNAL MODULE: ./node_modules/html-void-elements/index.json
-var html_void_elements = __webpack_require__(4);
-
-// EXTERNAL MODULE: ./node_modules/@onenexus/lucid/src/utilities/getModifiersFromProps.js
-var getModifiersFromProps = __webpack_require__(5);
 
 // CONCATENATED MODULE: ./node_modules/@onenexus/lucid/src/component.jsx
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function component_typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { component_typeof = function _typeof(obj) { return typeof obj; }; } else { component_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return component_typeof(obj); }
 
-function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+function component_extends() { component_extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return component_extends.apply(this, arguments); }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+function component_objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { component_defineProperty(target, key, source[key]); }); } return target; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function component_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+function component_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+function component_createClass(Constructor, protoProps, staticProps) { if (protoProps) component_defineProperties(Constructor.prototype, protoProps); if (staticProps) component_defineProperties(Constructor, staticProps); return Constructor; }
 
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+function component_possibleConstructorReturn(self, call) { if (call && (component_typeof(call) === "object" || typeof call === "function")) { return call; } return component_assertThisInitialized(self); }
 
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+function component_assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+function component_getPrototypeOf(o) { component_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return component_getPrototypeOf(o); }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+function component_inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) component_setPrototypeOf(subClass, superClass); }
 
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+function component_setPrototypeOf(o, p) { component_setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return component_setPrototypeOf(o, p); }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function component_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 
 
@@ -1204,20 +953,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 var component_Component =
 /*#__PURE__*/
 function (_Module) {
-  _inherits(Component, _Module);
+  component_inherits(Component, _Module);
 
   function Component(props) {
     var _this;
 
-    _classCallCheck(this, Component);
+    component_classCallCheck(this, Component);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Component).call(this, props));
+    _this = component_possibleConstructorReturn(this, component_getPrototypeOf(Component).call(this, props));
     _this.REF = React.createRef();
     _this.NAMESPACE = props.name || props.tag;
     return _this;
   }
 
-  _createClass(Component, [{
+  component_createClass(Component, [{
     key: "render",
     value: function render() {
       var _objectSpread2;
@@ -1248,7 +997,7 @@ function (_Module) {
           MODIFIERS = [];
       var SELECTOR = props.subComponent ? STRICT_NAMESPACE : this.context.NAMESPACE + COMPONENTGLUE + this.NAMESPACE;
       MODIFIERS.push(props.modifiers);
-      MODIFIERS = MODIFIERS.concat(Object(getModifiersFromProps["a" /* default */])(props));
+      MODIFIERS = MODIFIERS.concat(getModifiersFromProps(props));
       MODIFIERS = MODIFIERS.filter(function (item, pos) {
         return MODIFIERS.indexOf(item) === pos;
       });
@@ -1265,7 +1014,7 @@ function (_Module) {
       CLASSES += SELECTOR;
       /** */
 
-      var ATTRIBUTES = _objectSpread({}, this.getDataAttributes(props), this.getEventHandlers(props), this.getInputAttributes(props), props.attributes, {
+      var ATTRIBUTES = component_objectSpread({}, this.getDataAttributes(props), this.getEventHandlers(props), this.getInputAttributes(props), props.attributes, {
         onMouseEnter: this.handleMouseEnter.bind(this),
         onMouseLeave: this.handleMouseLeave.bind(this),
         onFocus: this.handleFocus.bind(this),
@@ -1277,16 +1026,16 @@ function (_Module) {
 
       });
 
-      var contextValues = _objectSpread({}, this.context, this.state, props, (_objectSpread2 = {}, _defineProperty(_objectSpread2, this.NAMESPACE, _objectSpread({}, this.state, props, {
-        state: _objectSpread({}, this.state, props),
+      var contextValues = component_objectSpread({}, this.context, this.state, props, (_objectSpread2 = {}, component_defineProperty(_objectSpread2, this.NAMESPACE, component_objectSpread({}, this.state, props, {
+        state: component_objectSpread({}, this.state, props),
         context: this.context
-      })), _defineProperty(_objectSpread2, "STYLES", _objectSpread({}, this.context.STYLES, this.STYLES)), _defineProperty(_objectSpread2, "STRICT_NAMESPACE", STRICT_NAMESPACE), _objectSpread2));
+      })), component_defineProperty(_objectSpread2, "STYLES", component_objectSpread({}, this.context.STYLES, this.STYLES)), component_defineProperty(_objectSpread2, "STRICT_NAMESPACE", STRICT_NAMESPACE), _objectSpread2));
 
-      return React.createElement(src_module["a" /* ModuleContext */].Provider, {
+      return React.createElement(ModuleContext.Provider, {
         value: contextValues
-      }, html_void_elements.includes(TAG) ? React.createElement(TAG, _extends({
+      }, html_void_elements.includes(TAG) ? React.createElement(TAG, component_extends({
         ref: this.REF
-      }, ATTRIBUTES)) : React.createElement(TAG, _extends({
+      }, ATTRIBUTES)) : React.createElement(TAG, component_extends({
         ref: this.REF
       }, ATTRIBUTES), before && React.createElement(Component, {
         name: ":before",
@@ -1299,13 +1048,13 @@ function (_Module) {
   }]);
 
   return Component;
-}(src_module["b" /* default */]);
+}(module_Module);
 
-_defineProperty(component_Component, "contextType", src_module["a" /* ModuleContext */]);
+component_defineProperty(component_Component, "contextType", ModuleContext);
 
 
 var component_SubComponent = function SubComponent(props) {
-  return React.createElement(component_Component, _extends({
+  return React.createElement(component_Component, component_extends({
     subComponent: true
   }, props), props.children);
 };
@@ -1381,9 +1130,6 @@ var wrapper_Group = function Group(props) {
     name: "group"
   }, props), props.children);
 };
-// EXTERNAL MODULE: ./node_modules/@onenexus/lucid/src/provider.jsx
-var provider = __webpack_require__(0);
-
 // CONCATENATED MODULE: ./node_modules/@onenexus/lucid/src/styled.js
 function styled_extends() { styled_extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return styled_extends.apply(this, arguments); }
 
@@ -1401,14 +1147,11 @@ var styled_styled = function styled(name, props) {
 // CONCATENATED MODULE: ./node_modules/@onenexus/lucid/src/useTheme.js
 
 /* harmony default export */ var useTheme = (function () {
-  var _React$useContext = React.useContext(provider["a" /* UIContext */]),
+  var _React$useContext = React.useContext(UIContext),
       theme = _React$useContext.theme;
 
   return theme;
 });
-// EXTERNAL MODULE: ./node_modules/@onenexus/lucid/src/utilities/evalTheme.js
-var evalTheme = __webpack_require__(3);
-
 // CONCATENATED MODULE: ./node_modules/@onenexus/lucid/src/index.js
 
 
@@ -1454,7 +1197,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
   }) : render);
 });
 // CONCATENATED MODULE: ./src/deepMergeObjects.js
-function deepMergeObjects() {
+function deepMergeObjects_deepMergeObjects() {
   if (Object({"SYNERGY":true}).ONE_NEXUS) {
     var _ONE_NEXUS;
 
@@ -1464,7 +1207,7 @@ function deepMergeObjects() {
 
     return (_ONE_NEXUS2 = ONE_NEXUS).deepextend.apply(_ONE_NEXUS2, arguments);
   } else {
-    return __webpack_require__(8).apply(void 0, arguments);
+    return __webpack_require__(1).apply(void 0, arguments);
   }
 }
 // CONCATENATED MODULE: ./src/synergy.js
@@ -1479,9 +1222,9 @@ function synergy_defineProperty(obj, key, value) { if (key in obj) { Object.defi
 
 
 
-var Synergy = window.Synergy || {};
-Object.assign(Synergy, src_namespaceObject, {
-  deepextend: deepMergeObjects,
+var synergy_Synergy = window.Synergy || {};
+Object.assign(synergy_Synergy, src_namespaceObject, {
+  deepextend: deepMergeObjects_deepMergeObjects,
   init: init,
   minWidth: function minWidth(query) {
     return window.matchMedia("(min-width: ".concat(query)).matches;
@@ -1490,9 +1233,9 @@ Object.assign(Synergy, src_namespaceObject, {
     return window.matchMedia("(max-width: ".concat(query)).matches;
   }
 });
-var synergy_useTheme = Synergy.useTheme,
-    synergy_evalTheme = Synergy.evalTheme;
-/* harmony default export */ var synergy = __webpack_exports__["default"] = (Synergy);
+var synergy_useTheme = synergy_Synergy.useTheme,
+    synergy_evalTheme = synergy_Synergy.evalTheme;
+/* harmony default export */ var synergy = __webpack_exports__["default"] = (synergy_Synergy);
 
 
 function init(_ref) {
@@ -1512,15 +1255,15 @@ function init(_ref) {
     handleModuleConfig: true
   };
   options = synergy_objectSpread({}, defaults, options);
-  Object.assign(Synergy, options);
+  Object.assign(synergy_Synergy, options);
 
   if (options.attachLucidComponentsToWindow) {
-    var Module = src_module["b" /* default */],
+    var Module = module_Module,
         Wrapper = wrapper_Wrapper,
         Group = wrapper_Group,
         Component = component_Component,
         SubComponent = component_SubComponent,
-        Provider = provider["b" /* default */];
+        Provider = provider;
     Object.assign(window, {
       Module: Module,
       Wrapper: Wrapper,
@@ -1544,7 +1287,7 @@ function init(_ref) {
   }
 
   if (options.attachSynergyToWindow) {
-    window.Synergy = Synergy;
+    window.Synergy = synergy_Synergy;
   }
 
   if (typeof callback === 'function') {
