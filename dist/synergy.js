@@ -89,7 +89,7 @@ module.exports =
 /* 0 */
 /***/ (function(module, exports) {
 
-module.exports = require("React");
+module.exports = require("react");
 
 /***/ }),
 /* 1 */

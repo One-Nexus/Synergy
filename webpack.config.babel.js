@@ -13,6 +13,11 @@ export default function() {
       libraryTarget: 'commonjs2'
     },
 
+    externals: {
+      'react': 'react',
+      'react-dom' : 'reactDOM'
+    },
+
     resolve: { 
       extensions: ['.js', '.jsx'] 
     },
@@ -36,11 +41,6 @@ export default function() {
           }
         })
       ]
-    },
-
-    externals: {
-      'react': 'React',
-      'react-dom': 'ReactDOM'
     },
 
     module: {
