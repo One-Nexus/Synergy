@@ -11,11 +11,35 @@ Object.assign(Synergy, lucid, {
   maxWidth: (query) => window.matchMedia(`(max-width: ${query}`).matches
 });
 
-const { useTheme, evalTheme } = Synergy;
+const { 
+  Module, 
+  Wrapper, 
+  Group, 
+  Component, 
+  SubComponent, 
+  Provider, 
+  useTheme, 
+  useConfig, 
+  useUtils, 
+  evalTheme 
+} = Synergy;
+
+export { 
+  Container, 
+  Module, 
+  Wrapper, 
+  Group, 
+  Component, 
+  SubComponent, 
+  Provider, 
+  useTheme, 
+  useConfig, 
+  useUtils, 
+  evalTheme, 
+  init 
+}
 
 export default Synergy;
-
-export { Container, useTheme, evalTheme, init }
 
 function init({ modules, options = {}, theme = {}, utils, callback }) {
   const defaults = {
@@ -23,8 +47,7 @@ function init({ modules, options = {}, theme = {}, utils, callback }) {
     attachModulesToWindow: true,
     attachThemeToWindow: false,
     attachUtilsToWindow: false,
-    attachSynergyToWindow: true,
-    handleModuleConfig: true
+    attachSynergyToWindow: true
   }
 
   options = { ...defaults, ...options }
@@ -32,15 +55,6 @@ function init({ modules, options = {}, theme = {}, utils, callback }) {
   Object.assign(Synergy, options);
 
   if (options.attachLucidComponentsToWindow) {
-    const {
-      Module,
-      Wrapper,
-      Group,
-      Component,
-      SubComponent,
-      Provider
-    } = lucid;
-
     Object.assign(window, {
       Module,
       Wrapper,
