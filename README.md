@@ -9,16 +9,16 @@
 
 ###### Features
 
-* Style elements using either [Sass](https://github.com/One-Nexus/Synergy/wiki/Using-Sass-With-Synergy) or [JavaScript](https://github.com/One-Nexus/Synergy/wiki/Styling-Modules#styling-a-module-with-javascript) ([learn more](https://github.com/One-Nexus/Synergy/wiki/Styling-Modules))
-* Make cosmetic UI updates to your app without modifying source code ([learn more](https://github.com/One-Nexus/Synergy/wiki/Module-Configuration#apply-cosmetic-css-via-configuration))
-* Easily configure modules and create themes for your app ([learn more](https://github.com/One-Nexus/Synergy/wiki/Themes))
-* Add UI interactions without requiring class components, hooks or state ([learn more](https://github.com/One-Nexus/Synergy/wiki/Interactions))
-* Everything you need to create component libraries/UI styleguides
+* Style Modules using either [Sass](https://github.com/One-Nexus/Synergy/wiki/Using-Sass-With-Synergy) or [JavaScript](https://github.com/One-Nexus/Synergy/wiki/Styling-Modules#styling-a-module-with-javascript)
+* Make cosmetic UI updates to your app without modifying source code ([learn more](https://github.com/One-Nexus/Lucid/wiki/Config#retreiving-cosmetic-styles-from-config))
+* Easily [configure modules](https://github.com/One-Nexus/Synergy/wiki/Module-Configuration) and create [themes](https://github.com/One-Nexus/Synergy/wiki/Themes) for your app
+* Ideal for creating presentational React components
+* ...for use with Component Libraries/UI Styleguides/Design Systems
 
 ###### Useful Wiki Pages
 
 * [Installation & Setup](https://github.com/One-Nexus/Synergy/wiki/Installation)
-* [Modules, Components & Modifiers](https://github.com/One-Nexus/Synergy/wiki/Modules,-Components-and-Modifiers)
+* [Intro: Modules, Components & Modifiers](https://github.com/One-Nexus/Synergy/wiki/Modules,-Components-and-Modifiers)
 * [Creating a Synergy Module](https://github.com/One-Nexus/Synergy/wiki/Creating-a-Module)
 * [Module Configuration](https://github.com/One-Nexus/Synergy/wiki/Module-Configuration)
 * [Themes](https://github.com/One-Nexus/Synergy/wiki/Themes)
@@ -46,60 +46,55 @@
 npm install --save react react-dom @onenexus/synergy;
 ```
 
-> [View a live demo of this example in CodeSandbox](https://codesandbox.io/s/95k4y)
+> [View a live demo of this example in CodeSandbox](https://codesandbox.io/s/synergy-demo-t5qkd)
 
 ###### accordion.jsx
 
 ```jsx
 import React, { useState } from 'react';
-import '@onenexus/synergy';
+import { Module, Component } from '@onenexus/synergy';
 
 const styles = {
-  'font-family': 'sans-serif',
+  fontFamily: 'sans-serif',
 
-  panel: panel => ([
-    {
-      condition: () => panel.is('open'),
-      styles: {
-        heading: {
-          'background': '#00FFB2',
-          'color': '#FFFFFF'
-        }
-      }
-    }
-  ]),
+  heading: ({ context }) => ({
+    backgroundColor: '#1E90FF',
+    color: 'white',
+    padding: '1em',
+    cursor: 'pointer',
+    
+    ...(context.panel.open && {
+      backgroundColor: '#00FFB2'
+    }),
 
-  heading: {
-    'background': '#1E90FF',
-    'color': '#005A9C',
-    'padding': '1em',
     ':hover': {
-      'background': '#01BFFF',
-      'color': '#FFFFFF'
+      backgroundColor: '#01BFFF'
     }
-  },
+  }),
 
-  content: content => ({
-    'padding': '1em',
-    'color': '#444444',
-    'display': content.parent('panel').is('open') ? 'block' : 'none'
+  content: ({ context }) => ({
+    padding: '1em',
+    color: '#444444',
+    display: context.panel.open ? 'block' : 'none'
   })
-};
+}
 
-const Accordion = ({ panels }) => (
-  <Module name='accordion' styles={styles}>
-    {panels.map(({ heading, content }) => {
-      const [isOpen, toggle] = useState(false);
+const Accordion = ({ panels, ...props }) => {
+  const [current, toggle] = useState(0);
 
-      return (
-        <Component name='panel' open={isOpen}>
-          <Component name='heading' content={heading} onClick={() => toggle(!isOpen)} />
+  return (
+    <Module name='Accordion' styles={styles} { ...props }>
+      {panels.map(({ heading, content }, i) => (
+        <Component name='panel' open={i === current}>
+          <Component name='heading' onClick={() => toggle(i === current ? -1 : i)}>
+            {heading}
+          </Component>
           <Component name='content' content={content} />
         </Component>
-      );
-    })}
-  </Module>
-);
+      ))}
+    </Module>
+  );
+}
 
 export default Accordion;
 ```
@@ -129,30 +124,16 @@ const Screen = () => (
 ReactDOM.render(<Screen />, document.getElementById('app'));
 ```
 
-> This example is short and concise for demo purposes; for a more complete example utilising more features see the [Module Example](https://github.com/One-Nexus/Synergy/wiki/Creating-a-Module) page
-
-## Overview
-
-A Synergy module is essentially a UI component that's been broken up into the following areas of concern:
-
-* Configuration
-* Styles
-* Interactions
-* Interface
-
-These are the main concerns of a UI module; Synergy allows you to work on each concern independently before bringing them together to form a Synergy module.
-
-<p align="center"><img src="http://www.onenexus.io/synergy/module-illustration.png?v=1" width="600px" /></p>
-
-> Synergy is ideal for creating presentational React components when using the [Container Component Pattern](https://reactpatterns.com/#container-component) ([learn more](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0))
-
-For more information see the [About Synergy](https://github.com/One-Nexus/Synergy/wiki/About-Synergy) page.
+> This example is short and concise for demo purposes; for a more complete example utilising more features see the [Creating a Module](https://github.com/One-Nexus/Synergy/wiki/Creating-a-Module) page
 
 ---
 
-<a href="https://twitter.com/ESR360">
-  <img src="http://edmundreed.com/assets/images/twitter.gif?v=1" width="250px" />
-</a>
 <a href="https://github.com/ESR360">
-  <img src="http://edmundreed.com/assets/images/github.gif?v=1" width="250px" />
+  <img src="http://edmundreed.com/assets/images/github.gif?v=1" width="230px" />
+</a>
+<a href="https://twitter.com/ESR360">
+  <img src="http://edmundreed.com/assets/images/twitter.gif?v=1" width="230px" />
+</a>
+<a href="https://www.instagram.com/edmund_reed/">
+  <img src="http://edmundreed.com/assets/images/insta.png" width="230px" />
 </a>
