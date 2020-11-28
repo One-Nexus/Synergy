@@ -3,7 +3,7 @@
 [![npm version](https://badge.fury.io/js/%40onenexus%2Fsynergy.svg)](https://www.npmjs.com/package/@onenexus/synergy)
 [![npm downloads](https://img.shields.io/npm/dm/@onenexus/synergy.svg)](https://www.npmjs.com/package/@onenexus/synergy)
 
-<img height="56px" src="http://www.onenexus.io/synergy/github-logo.png" />
+<img src="https://edmundreed.com/projects/synergy/banner.png" />
 
 > Synergy is a framework for building modular, configurable and scalable UI components for React-DOM projects
 
