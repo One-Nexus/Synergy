@@ -1,4 +1,5 @@
-import * as lucid from '@onenexus/lucid/src';
+// import * as lucid from '@onenexus/lucid/src';
+import * as lucid from '../../../Lucid/Lucid/src';
 import Container from './Container';
 import deepextend from './deepMergeObjects';
 
@@ -21,7 +22,7 @@ const {
   useTheme, 
   useConfig, 
   useUtils, 
-  evalTheme 
+  evalTheme,
 } = Synergy;
 
 export { 
@@ -61,7 +62,7 @@ function init({ modules, options = {}, theme = {}, utils, callback }) {
       Group,
       Component,
       SubComponent,
-      Provider
+      Provider,
     });
   }
 
