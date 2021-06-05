@@ -21,6 +21,7 @@ const {
   Provider, 
   useTheme, 
   useConfig, 
+  useModuleContext,
   useUtils, 
   evalTheme,
 } = Synergy;
@@ -34,7 +35,8 @@ export {
   SubComponent, 
   Provider, 
   useTheme, 
-  useConfig, 
+  useConfig,
+  useModuleContext, 
   useUtils, 
   evalTheme, 
   init 
