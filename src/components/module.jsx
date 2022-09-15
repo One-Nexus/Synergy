@@ -14,6 +14,12 @@ const Module = (props) => {
 
   /** */
 
+  let scopeId = scope || CONFIG?.scope;
+  
+  if (scopeId && typeof scopeId !== 'string') {
+    scopeId = Object.values(scopeId.default)?.[0];
+  }
+
   let namespace = name || tag;
 
   const THEME  = prevContext.theme || useTheme();
@@ -21,8 +27,14 @@ const Module = (props) => {
   const PROPCONFIG = typeof config === 'function' ? config(THEME) : config;
   const CONFIG = getConfig(namespace, isComponent, prevContext, [PROPCONFIG || {}, THEMECONFIG || {}]);
 
-  if (scope || CONFIG?.scope) {
-    namespace = `${scope || CONFIG.scope}-${namespace}`;
+  const useScopeAsNamespace = 'useScopeAsNamespace' in THEME ? THEME.useScopeAsNamespace : false;
+
+  if (CONFIG?.name && !name) {
+    namespace = CONFIG?.name;
+  }
+
+  if (scopeId) {
+    namespace = useScopeAsNamespace ? scopeId : `${scopeId}-${namespace}`;
   }
 
   const blockNamespace = prevContext.parentModule + '__' + namespace;
