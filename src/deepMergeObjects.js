@@ -6,6 +6,6 @@ export default function deepMergeObjects(...params) {
     return ONE_NEXUS.deepextend(...params);
   } 
   else {
-    return require('deep-extend')(...params);
+    return require('deepmerge')(...params);
   }
 }

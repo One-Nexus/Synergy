@@ -1,4 +1,3 @@
-import UglifyJsPlugin from 'uglifyjs-webpack-plugin';
 import webpack from 'webpack';
 
 export default function() {
@@ -29,19 +28,6 @@ export default function() {
         }
       })
     ],
-
-    optimization: {
-      minimizer: [
-        new UglifyJsPlugin({
-          include: /\.min\.js$/,
-          uglifyOptions: {
-            output: {
-              comments: false
-            }
-          }
-        })
-      ]
-    },
 
     module: {
       rules: [{
