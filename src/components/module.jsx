@@ -15,9 +15,11 @@ const Module = (props) => {
   /** */
 
   let scopeId = scope || CONFIG?.scope;
-  
+
   if (scopeId && typeof scopeId !== 'string') {
     scopeId = Object.values(scopeId.default)?.[0];
+  } else if (!scopeId && styles) {
+    scopeId = Object.values(styles.default)?.[0];
   }
 
   let namespace = name || tag;
@@ -25,15 +27,16 @@ const Module = (props) => {
   const THEME  = prevContext.theme || useTheme();
   const THEMECONFIG = THEME.modules?.[name];
   const PROPCONFIG = typeof config === 'function' ? config(THEME) : config;
-  const CONFIG = getConfig(namespace, isComponent, prevContext, [PROPCONFIG || {}, THEMECONFIG || {}]);
+  const CONFIG = getConfig(namespace, isComponent, prevContext, [THEMECONFIG || {}, PROPCONFIG || {}]);
 
-  const useScopeAsNamespace = 'useScopeAsNamespace' in THEME ? THEME.useScopeAsNamespace : false;
+  const scopedCSS = (THEME?.scopedCSS ?? CONFIG?.scopedCSS) ?? false;
+  const useScopeAsNamespace = (THEME?.useScopeAsNamespace ?? CONFIG?.useScopeAsNamespace) ?? false;
 
   if (CONFIG?.name && !name) {
     namespace = CONFIG?.name;
   }
 
-  if (scopeId) {
+  if (scopeId && scopedCSS) {
     namespace = useScopeAsNamespace ? scopeId : `${scopeId}-${namespace}`;
   }
 
