@@ -25,9 +25,9 @@ const Module = (props) => {
   let namespace = name || tag;
 
   const THEME  = prevContext.theme || useTheme();
-  const THEMECONFIG = THEME.modules?.[name];
-  const PROPCONFIG = typeof config === 'function' ? config(THEME) : config;
-  const CONFIG = getConfig(namespace, isComponent, prevContext, [THEMECONFIG || {}, PROPCONFIG || {}]);
+  const THEMECONFIG = THEME.modules?.[name] || {};
+  const PROPCONFIG = typeof config === 'function' ? config(THEME) : config || {};
+  const CONFIG = getConfig(namespace, isComponent, prevContext, [THEMECONFIG, PROPCONFIG]);
 
   const scopedCSS = (THEME?.scopedCSS ?? CONFIG?.scopedCSS) ?? false;
   const useScopeAsNamespace = (THEME?.useScopeAsNamespace ?? CONFIG?.useScopeAsNamespace) ?? false;
@@ -43,14 +43,11 @@ const Module = (props) => {
   const blockNamespace = prevContext.parentModule + '__' + namespace;
   const fullNamespace = prevContext.blockNamespace + '__' + namespace;
 
-  const STATE  = {
-    ...(prevContext.isFusion && prevContext.state),
-    ...rest
-  }
-
   const CLASSNAME = generateElementClasses(props, { 
     NAMESPACE: (isComponent || isSubComponent) ? blockNamespace : namespace
   });
+
+  const isFusion = isFunctionComponent(props.as) && !isComponent;
 
   const ATTRIBUTES = Tag !== React.Fragment && {
     ...attributes,
@@ -58,6 +55,8 @@ const Module = (props) => {
     ...getWhitelistAttributes(rest),
 
     ...(!isFunctionComponent(Tag) && { ref }),
+
+    ...(isFusion && rest),
 
     ...(Tag.name === 'Component' && props.as && { 
       name: props.as.name || props.as,
@@ -74,7 +73,6 @@ const Module = (props) => {
     ...prevContext,
 
     theme: THEME,
-    state: STATE,
     config: CONFIG,
     rootConfig: isComponent ? prevContext.rootConfig : CONFIG,
 
@@ -84,12 +82,13 @@ const Module = (props) => {
 
     ...((!isComponent && props.as) && { owner: namespace }),
 
-    [namespace]: {
-      ...STATE, setTag
-    },
+    [namespace]: { setTag },
 
-    isFusion: isFunctionComponent(props.as) && !isComponent,
+    isFusion
   }
+
+  console.log(CLASSNAME, prevContext);
+
 
   /** */
 
@@ -118,27 +117,6 @@ const Module = (props) => {
       </Tag>
     </ModuleContext.Provider>
   );
-}
-
-Module.Fragment = ({ children, ...props }) => <div style={{ display: 'contents' }} {...props}>{children}</div>
-
-Module.modifiers = props => ([...Object.keys(props), ...(props.modifiers || [])]);
-
-Module.findValueFromState = (object, state) => object[Object.keys(state).find($ => object[$])];
-
-Module.findPropFromConfig = (state, object) => {
-  const key = Module.modifiers(state).find($ => object[$])
-  const value = object[key];
-
-  return [key, value];
-}
-
-Module.props = (props) => {
-  const newProps = { ...props };
-
-  delete newProps.component;
-
-  return newProps;
 }
 
 export default Module; 

@@ -6,7 +6,7 @@ export default function generateElementClasses(props, {
   MODIFIERGLUE = "--", 
   SINGLECLASS = true
 }) {
-  let CLASSES = props.className ? props.className + ' ' : '', MODIFIERS = [];
+  let CLASSES = '', MODIFIERS = [];
 
   if (GENERATECLASSES) {
     props.modifiers && MODIFIERS.push(...props.modifiers);
@@ -22,6 +22,8 @@ export default function generateElementClasses(props, {
   
     CLASSES += NAMESPACE
   }
+
+  // console.log(props.className, CLASSES);
 
   return CLASSES;
 }
