@@ -47,6 +47,10 @@ const Module = (props) => {
     NAMESPACE: (isComponent || isSubComponent) ? blockNamespace : namespace
   });
 
+  const FUSION_CLASS = prevContext.owner && prevContext.isFusion && generateElementClasses(props, { 
+    NAMESPACE: `${prevContext.owner}__${namespace}`
+  });
+
   const isFusion = isFunctionComponent(props.as) && !isComponent;
 
   const ATTRIBUTES = Tag !== React.Fragment && {
@@ -64,7 +68,7 @@ const Module = (props) => {
     }),
 
     style: style,
-    className: className ? `${className} ${CLASSNAME}` : `${CLASSNAME}`,
+    className: (FUSION_CLASS ? `${FUSION_CLASS} ` : '') + (className ? `${className} ${CLASSNAME}` : `${CLASSNAME}`),
   }
 
   /** */
@@ -84,10 +88,8 @@ const Module = (props) => {
 
     [namespace]: { setTag },
 
-    isFusion
+    isFusion: isFusion || prevContext.isFusion
   }
-
-  console.log(CLASSNAME, prevContext);
 
 
   /** */
