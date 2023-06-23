@@ -47,9 +47,7 @@ const Module = (props) => {
     NAMESPACE: (isComponent || isSubComponent) ? blockNamespace : namespace
   });
 
-  const FUSION_CLASS = prevContext.owner && prevContext.isFusion && generateElementClasses(props, { 
-    NAMESPACE: `${prevContext.owner}__${namespace}`
-  });
+  const FUSION_CLASS = prevContext.owner && prevContext.isFusion && `${prevContext.owner}__${namespace}`;
 
   const isFusion = isFunctionComponent(props.as) && !isComponent;
 
